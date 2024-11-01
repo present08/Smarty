@@ -2,6 +2,13 @@
   text-align: center;
 }
 
+* {
+  list-style-type: none;
+  text-decoration-line: none;
+  padding: 0;
+  margin: 0;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -32,7 +39,41 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.img-move {
+  width: 70%;
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(50px);
+    /* 아래쪽으로 이동 */
+  }
+
+  100% {
+    transform: translateY(0px);
+    /* 원래 위치로 돌아옴 */
+  }
+}
+
+.banner-img {
+  animation: moveVertical 4s infinite alternate;
+  width: 100%;
+  /* 이미지 너비를 100%로 설정 */
+}
+
+@font-face {
+  font-family: 'BMHANNA_11yrs_ttf';
+  src: url('./fonts/BMHANNA_11yrs_ttf.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'BMHANNA_11yrs_ttf', sans-serif;
 }

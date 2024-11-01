@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.green.smarty.mapper.FacilityMapperTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-24T08:58:02" hostname="DESKTOP-988689E" time="1.801">
+  <properties/>
+  <testcase name="get()" classname="com.green.smarty.mapper.FacilityMapperTests" time="1.801"/>
+  <system-out><![CDATA[17:57:59.382 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.green.smarty.mapper.FacilityMapperTests]: FacilityMapperTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:57:59.522 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.green.smarty.SmartyApplication for test class com.green.smarty.mapper.FacilityMapperTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2024-10-24T17:58:00.089+09:00  INFO 8704 --- [smarty] [    Test worker] c.g.smarty.mapper.FacilityMapperTests    : Starting FacilityMapperTests using Java 17.0.12 with PID 8704 (started by evie in C:\TF33\Smarty)
+2024-10-24T17:58:00.094+09:00  INFO 8704 --- [smarty] [    Test worker] c.g.smarty.mapper.FacilityMapperTests    : No active profile set, falling back to 1 default profile: "default"
+2024-10-24T17:58:02.459+09:00  INFO 8704 --- [smarty] [    Test worker] c.g.smarty.mapper.FacilityMapperTests    : Started FacilityMapperTests in 2.655 seconds (process running for 4.167)
+2024-10-24T17:58:03.770+09:00  INFO 8704 --- [smarty] [    Test worker] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2024-10-24T17:58:04.221+09:00  INFO 8704 --- [smarty] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection com.mysql.cj.jdbc.ConnectionImpl@1f521c69
+2024-10-24T17:58:04.226+09:00  INFO 8704 --- [smarty] [    Test worker] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2024-10-24T17:58:04.294+09:00  INFO 8704 --- [smarty] [    Test worker] c.g.smarty.mapper.FacilityMapperTests    : 시설 하나 조회! oldDTO = FacilityDTO(facility_id=fc_1729757209803, facility_name=수영장, day_rate=8000.0, night_rate=6000.0, open_time=06:00:00, close_time=20:00:00)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

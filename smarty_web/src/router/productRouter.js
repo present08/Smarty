@@ -1,26 +1,26 @@
 import { lazy, Suspense } from "react"
 
-const facilityRouter = () => {
+const productRouter = () => {
 
     const Loading = <div>Loading...</div>
-    const FacilityAdd = lazy(() => import("../pages/facilities/newFacility"))
-    const FacilityRead = lazy(() => import("../pages/facilities/facilityRead/FacilityRead"))
-    const FacilityModify = lazy(() => import("../pages/facilities/facilityModify/FacilityModify"))
+    const ProductAdd = lazy(() => import("../pages/products/newProduct/NewProduct"))
+    const ProductRead = lazy(() => import("../pages/products/productRead/ProductRead"))
+    const ProductModify = lazy(() => import("../pages/products/productModify/ProductModify"))
 
   return [
     {
         path: "add",
-        element: <Suspense fallback={Loading}><FacilityAdd /></Suspense>
+        element: <Suspense fallback={Loading}><ProductAdd /></Suspense>
     },
     {
-        path: "read/:facilityId",
-        element: <Suspense fallback={Loading}><FacilityRead /></Suspense>
+        path: "read/:productId",
+        element: <Suspense fallback={Loading}><ProductRead /></Suspense>
     },
     {
-        path: "modify/:facilityId",
-        element: <Suspense fallback={Loading}><FacilityModify /></Suspense>
+        path: "modify/:productId",
+        element: <Suspense fallback={Loading}><ProductModify /></Suspense>
     }
   ]
 }
 
-export default facilityRouter
+export default productRouter

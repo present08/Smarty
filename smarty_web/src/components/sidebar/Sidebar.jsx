@@ -13,12 +13,10 @@ export default function Sidebar() {
             <div className="sidebarMenu">
                 <h3 className="sidebarTitle">Dashboard</h3>
                 <ul className="sidebarList">
-                    <Link to="/" className='link'>
-                        <li className="sidebarListItem">
-                            <Home className='sidebarIcon' />
-                            Home
-                        </li>
-                    </Link>
+                    <li className="sidebarListItem">
+                        <Home className='sidebarIcon' />
+                        Home
+                    </li>
                     <li className="sidebarListItem">
                         <Troubleshoot className='sidebarIcon' />
                         Analytics
@@ -28,24 +26,18 @@ export default function Sidebar() {
             <div className="sidebarMenu">
                 <h3 className="sidebarTitle">Quick Menu</h3>
                 <ul className="sidebarList">
-                    <Link to="/facilities" className='link'>
-                        <li className="sidebarListItem">
-                            <SportsMartialArts className='sidebarIcon' />
-                            Facilities
-                        </li>
-                    </Link>
-                    <Link to="/users" className='link'>
-                        <li className="sidebarListItem">
-                            <PersonOutline className='sidebarIcon' />
-                            Users
-                        </li>
-                    </Link>
-                    <Link to="/products" className='link'>
-                        <li className="sidebarListItem">
-                            <Storefront className='sidebarIcon' />
-                            Products
-                        </li>
-                    </Link>
+                    <li className="sidebarListItem">
+                        <SportsMartialArts className='sidebarIcon' />
+                        Facilities
+                    </li>
+                    <li className="sidebarListItem">
+                        <PersonOutline className='sidebarIcon' />
+                        Users
+                    </li>
+                    <li className="sidebarListItem">
+                        <Storefront className='sidebarIcon' />
+                        Products
+                    </li>
                     <li className="sidebarListItem">
                         <BarChart className='sidebarIcon' />
                         Reports

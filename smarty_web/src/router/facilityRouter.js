@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react"
 const facilityRouter = () => {
 
     const Loading = <div>Loading...</div>
-    const FacilityAdd = lazy(() => import("../pages/facilities/newFacility"))
+    const FacilityAdd = lazy(() => import("../pages/facilities/newFacility/NewFacility"))
     const FacilityRead = lazy(() => import("../pages/facilities/facilityRead/FacilityRead"))
     const FacilityModify = lazy(() => import("../pages/facilities/facilityModify/FacilityModify"))
 

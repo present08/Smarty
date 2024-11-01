@@ -8,9 +8,7 @@ export default function Topbar() {
         <div className="topbarWrapper">
             {/* 로고 */}
             <div className="topLeft">
-                <Link to="/" className="link">
-                    <span className="logo">Admin</span>
-                </Link>
+                <span className="logo">Admin</span>
             </div>
             {/* 알림, 언어, 설정 프로필 아이콘 */}
             <div className="topRight">

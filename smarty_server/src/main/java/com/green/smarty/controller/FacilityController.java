@@ -44,11 +44,6 @@ public class FacilityController {
         return "등록 성공";
     }
 
-    @GetMapping("/view/{file_name}")
-    public ResponseEntity<Resource> viewFileGet(@PathVariable String file_name) {
-        return customFileUtil.getFile(file_name);
-    }
-
     // Read (시설 조회)
     @GetMapping("/list")
     public List<FacilityDTO> list() {

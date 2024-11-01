@@ -26,14 +26,31 @@ CREATE TABLE login_history_tbl (
     FOREIGN KEY (user_id) REFERENCES user_tbl(user_id)
 );
 
--- 시설 테이블 생성 (운영시간 포함)
-CREATE TABLE facility_tbl (
-    facility_id VARCHAR(100) PRIMARY KEY NOT NULL,
-    facility_name VARCHAR(100) NOT NULL,
-    day_rate DOUBLE NOT NULL,
-    night_rate DOUBLE NOT NULL,
-    open_time TIME NOT NULL,  -- 시설 개방 시간
-    close_time TIME NOT NULL   -- 시설 폐장 시간
+-- 시설 테이블 수정
+create table facility_tbl (
+	facility_id varchar(100) primary key not null,
+    facility_name varchar(100) not null,
+    quantity int,
+    open_time time,
+    close_time time,
+    default_time int,
+    basic_fee int,
+    extra_fee int,
+    contact varchar(100),
+    info text,
+    caution text,
+    court boolean default false,
+    product boolean default false,
+    facility_status boolean default false,
+    facility_images boolean default false
+);
+
+
+-- 시설 첨부파일 테이블
+create table facility_attach_tbl (
+	facility_id varchar(100) not null,
+	file_name varchar(100) not null,
+    foreign key (facility_id) references facility(facility_id)
 );
 
 -- 대여 테이블 생성
@@ -176,11 +193,12 @@ CREATE TABLE enrollment_tbl (
     FOREIGN KEY (class_id) REFERENCES class_tbl(class_id)
 );
 
+
 -- 예약시스템 세분화를 위한 특정시설 내에 코트/레일 세분화 추가
-create table court_tbl(
+create table court_tbl (
 	court_id varchar(100) primary key not null,
-    court_name varchar(100) not null,
     facility_id varchar(100) not null,
-    FOREIGN KEY (facility_id) REFERENCES facility_tbl(facility_id)
+    court_name varchar(100) not null,
+    foreign key (facility_id) references facility(facility_id)
 );
 

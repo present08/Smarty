@@ -1,0 +1,79 @@
+.newFacility {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.addFacilityTitle {
+    flex: 1;
+}
+.addFacilityContent {
+    flex: 10;
+}
+
+.addFacilityForm {
+    display: flex;
+    width: 100%;
+}
+
+.addFacilityFormLeft {
+    flex: 1;
+    padding: 20px;
+    border-right: 1px solid #d7d6d6;
+}
+
+.leftItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.leftItem>label,
+.rightItem>label {
+    font-weight: 300;
+    font-size: 15px;
+    color: #555;
+}
+.leftItem>input {
+    border: none;
+    border-bottom: 1px solid #555;
+}
+
+.addFacilityFormRight {
+    flex: 1;
+    padding: 20px;
+}
+
+.rightItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.facilityButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.addFacilityButton {
+    border: none;
+    width: 80px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    background-color: teal;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 10px;
+}
+
+.cancelFacilityButton {
+    border: none;
+    width: 80px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    background-color: red;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 10px;
+}

@@ -1,0 +1,48 @@
+.sidebar {
+    flex: 1;
+    /* 사이드바의 너비 */
+    height: calc(100vh - 60px);
+    /* Topbar의 높이를 뺀 전체 화면 높이 */
+    box-shadow: 2px 2px 5px -1px rgba(185, 185, 185, 0.75);
+    background-color: #ffffff;
+    /* 배경색을 하얀색으로 변경 */
+    color: #333333;
+    /* 텍스트 색상을 어두운 색으로 변경 */
+    /* overflow-y: auto; */
+    /* 내용이 넘칠 때 스크롤 */
+}
+
+.sidebarWrapper {
+    padding: 20px;
+    /* 사이드바 내부 여백 */
+    height: 100%;
+    /* 사이드바 전체 높이에 맞춤 */
+}
+
+.sidebarMenu {
+    margin-bottom: 10px;
+    /* 메뉴 사이 간격 */
+}
+
+.sidebarList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebarListItem {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    color: #333333;
+    /* 사이드바 아이템 글자 색상 */
+}
+
+.sidebarListItem.active,
+.sidebarListItem:hover {
+    background-color: #f0f0f0;
+    /* 하이라이트 색상 */
+    color: #003F66;
+}

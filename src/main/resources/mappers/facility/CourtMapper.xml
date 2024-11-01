@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.facility.CourtMapper">
+
+    <!-- 코트를 등록하는 쿼리. 자동 생성된 court_id를 VO에 설정하기 위해 useGeneratedKeys 사용 -->
+    <insert id="register" parameterType="com.green.smarty.vo.facility.CourtVO" useGeneratedKeys="true" keyProperty="court_id">
+        INSERT INTO court_tbl (court_id, court_name, facility_id)
+        VALUES (#{court_id}, #{court_name}, #{facility_id})
+    </insert>
+
+    <!-- 특정 코트를 ID로 조회하는 쿼리 -->
+    <select id="findCourtById" resultType="com.green.smarty.vo.facility.CourtVO" parameterType="String">
+        SELECT * FROM court_tbl WHERE court_id = #{court_id}
+    </select>
+
+    <!-- 코트의 정보를 수정하는 쿼리 -->
+    <update id="modify" parameterType="com.green.smarty.vo.facility.CourtVO">
+        UPDATE court_tbl
+        SET court_name = #{court_name}, facility_id = #{facility_id}
+        WHERE court_id = #{court_id}
+    </update>
+
+    <!-- 특정 코트를 삭제하는 쿼리 -->
+    <delete id="removeCourt" parameterType="String">
+        DELETE FROM court_tbl WHERE court_id = #{court_id}
+    </delete>
+
+    <!-- 모든 코트를 조회하는 쿼리 -->
+    <select id="getAllCourts" resultType="com.green.smarty.vo.facility.CourtVO">
+        SELECT * FROM court_tbl
+    </select>
+
+
+</mapper>

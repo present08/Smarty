@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.product.ProductMapper">
+
+    <insert id="register" parameterType="com.green.smarty.vo.product.ProductVO" useGeneratedKeys="true" keyProperty="product_id">
+        insert into product_tbl (product_id, facility_id, product_name, price)
+        values (#{product_id}, #{facility_id}, #{product_name}, #{price})
+    </insert>
+
+    <select id="getAllProducts" resultType="com.green.smarty.vo.product.ProductVO">
+        SELECT * FROM product_tbl
+    </select>
+
+    <!-- 특정 대여물품 조회 -->
+    <select id="getProductById" parameterType="String" resultType="com.green.smarty.vo.product.ProductVO">
+        SELECT * FROM product_tbl WHERE product_id = #{productId};
+    </select>
+
+    <!-- 대여물품 정보 수정 -->
+    <update id="modify" parameterType="com.green.smarty.vo.product.ProductVO">
+        UPDATE product_tbl
+        SET facility_id = #{facility_id}, product_name = #{product_name}, price = #{price}
+        WHERE product_id = #{product_id};
+    </update>
+
+    <!-- 대여물품 삭제 -->
+    <delete id="removeProduct" parameterType="String">
+        DELETE FROM product_tbl WHERE product_id = #{product_id};
+    </delete>
+
+    <!-- 특정 시설의 모든 대여물품 -->
+    <select id="getProductsByFacilityId" parameterType="string" resultType="com.green.smarty.vo.product.ProductVO">
+        SELECT * FROM product_tbl WHERE facility_id = #{facilityId}
+    </select>
+
+    </mapper>

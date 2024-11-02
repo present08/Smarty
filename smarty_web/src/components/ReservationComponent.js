@@ -8,7 +8,7 @@ const initTime = {
     default: 3
 }
 
-const ReservationComponent = () => {
+const ReservationComponent = ({props}) => {
     const [date, setDate] = useState('')
     const [time, setTime] = useState(initTime)
     const [partTime, setPartTime] = useState(0)
@@ -20,7 +20,13 @@ const ReservationComponent = () => {
     const newDate = (date) => {
         setDate(date);
     }
+
     useEffect(() => {
+        setTime(props)
+        timeSet();
+    }, [])
+    
+    const timeSet = () =>{
         const newTimeLine = [];
         setPartTime((time.end - time.start) / time.default)
         let dt = time.default;
@@ -40,7 +46,7 @@ const ReservationComponent = () => {
             }
         }
         setTimeLine(newTimeLine);
-    }, [])
+    }
 
 
     const handleClick = (tl) => {

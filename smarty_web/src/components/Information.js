@@ -35,12 +35,12 @@ const Desc = styled.div`
   border: 4px solid #e7edf1;
 `;
 
-const Information = () => {
+const Information = ({props}) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const menuArr = [
-    { name: '이용안내 및 허가조건', content: '여기에 DB 데이터 넣기1' },
-    { name: '이용수칙 및 환불기준 ', content: '여기에 DB 데이터 넣기2' },
+    { name: '이용안내 및 허가조건', content: props.info },
+    { name: '이용수칙 및 환불기준 ', content: props.caution },
     // { name: 'Tab3', content: 'Tab menu THREE' },
   ];
 
@@ -52,7 +52,7 @@ const Information = () => {
     <div className='tab_container'>
       <TabMenu>
         {menuArr.map((el, index) => (
-          <li className={index === currentTab ? "submenu focused" : "submenu"}
+          <li key={index} className={index === currentTab ? "submenu focused" : "submenu"}
             onClick={() => selectMenuHandler(index)}>{el.name}</li>
         ))}
       </TabMenu>

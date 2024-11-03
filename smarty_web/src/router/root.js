@@ -6,28 +6,29 @@ const {createBrowserRouter} = require("react-router-dom")
 
 const Loading = <div>Loading...</div>
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"))
-const FacilityList = lazy(() => import("../pages/facilities/facilityList/FacilityList"))
-const ProductList = lazy(() => import("../pages/products/productList/ProductList"))
-const UserList = lazy(() => import("../pages/users/userList/UserList"))
+const FacilityIndex = lazy(() => import("../pages/facilities/IndexPage"))
+const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
+const UserIndex = lazy(() => import("../pages/users/IndexPage"))
 
 const root = createBrowserRouter([
     {
         path: "",
-        element: <Suspense fallback={Loading}><Dashboard /></Suspense>
+        element: <Suspense fallback={Loading}><Dashboard /></Suspense>,
+        errorElement: <div>잘못된 접근입니다.</div>
     },
     {
         path: "facilities",
-        element: <Suspense fallback={Loading}><FacilityList /></Suspense>,
+        element: <Suspense fallback={Loading}><FacilityIndex /></Suspense>,
         children: facilityRouter()
     },
     {
         path: "products",
-        element: <Suspense fallback={Loading}><ProductList /></Suspense>,
+        element: <Suspense fallback={Loading}><ProductIndex /></Suspense>,
         children: productRouter()
     },
     {
         path: "users",
-        element: <Suspense fallback={Loading}><UserList /></Suspense>,
+        element: <Suspense fallback={Loading}><UserIndex /></Suspense>,
         children: userRouter()
     }
 ])

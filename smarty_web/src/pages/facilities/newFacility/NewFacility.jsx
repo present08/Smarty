@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import "./newFacility.css"
 import { postAdd } from "../../../api/facilityApi"
+import { useNavigate } from "react-router-dom"
 
 const initState = {
     facility_id: '',
@@ -27,6 +28,7 @@ export default function NewFacility() {
     const [productFlag, setProductFlag] = useState(null)
     const [statusFlag, setStatusFlag] = useState(null)
     const uploadImages = useRef()
+    const navigate = useNavigate()
     
     const handleInput = (e) => {
         data[e.target.name] = e.target.value
@@ -58,6 +60,7 @@ export default function NewFacility() {
 
         console.log(formData)
         postAdd(formData)
+        navigate({path: "/facilities"})
     }
 
   return (
@@ -65,9 +68,9 @@ export default function NewFacility() {
         <h2 className="addFacilityTitle">Facility Registration</h2>
         <div className="addFacilityContent">           
             <form 
-                action="" 
+                action="#" 
                 method="post"
-                // encType="multipart/form-data"
+                encType="multipart/form-data"
                 className="addFacilityForm"
             >
                 <div className="addFacilityFormLeft">
@@ -185,7 +188,7 @@ export default function NewFacility() {
                         />                        
                     </div>
                 </div>
-                
+                {/* boolean값 서버로 전달 실패중, 해결 필요!! */}
                 <div className="addFacilityFormRight">
                     <div className="rightItem">
                         <label>세부 시설</label>
@@ -194,7 +197,7 @@ export default function NewFacility() {
                             id="true" 
                             type={"radio"} 
                             value="true"
-                            onClick={(e) => setCourtFlag(e.target.value)}                            
+                            onClick={(e) => setCourtFlag(true)}                            
                         />
                         <label htmlFor="true"> 등록</label>
                         <input 
@@ -202,7 +205,7 @@ export default function NewFacility() {
                             id="false"
                             type={"radio"} 
                             value="false"
-                            onClick={(e) => setCourtFlag(e.target.value)}                            
+                            onClick={(e) => setCourtFlag(false)}                            
                         />
                         <label htmlFor="false"> 미등록</label>
                     </div>
@@ -218,7 +221,7 @@ export default function NewFacility() {
                             id="true" 
                             type={"radio"} 
                             value="true"
-                            onClick={(e) => setProductFlag(e.target.value)}                            
+                            onClick={(e) => setProductFlag(true)}                            
                         />
                         <label htmlFor="true"> 등록</label>
                         <input 
@@ -226,7 +229,7 @@ export default function NewFacility() {
                             id="false"
                             type={"radio"} 
                             value="false"
-                            onClick={(e) => setProductFlag(e.target.value)}                            
+                            onClick={(e) => setProductFlag(false)}                            
                         />
                         <label htmlFor="false"> 미등록</label>
                     </div>
@@ -241,15 +244,15 @@ export default function NewFacility() {
                             id="true" 
                             type={"radio"} 
                             value="true"
-                            onClick={(e) => setStatusFlag(e.target.value)} 
+                            onClick={(e) => setStatusFlag(true)} 
                         />
                         <label htmlFor="true"> 가능</label>
                         <input 
                             name="facility_status" 
                             id="false" 
                             type={"radio"} 
-                            value="false"
-                            onClick={(e) => setStatusFlag(e.target.value)} 
+                            value="false" 
+                            onClick={(e) => setStatusFlag(false)} 
                         />
                         <label htmlFor="false"> 불가</label>
                     </div>

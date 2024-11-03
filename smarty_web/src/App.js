@@ -1,13 +1,10 @@
 import "./app.css"
-import { BrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/layout/Layout";
+import { RouterProvider } from "react-router-dom";
 import root from './router/root';
 
 function App() {
   return (
-      <Layout>
-        <RouterProvider router={root} />
-      </Layout> 
+    <RouterProvider router={root} />
   );
 }
 

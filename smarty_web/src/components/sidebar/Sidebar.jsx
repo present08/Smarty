@@ -1,5 +1,5 @@
 import "./sidebar.css"
-import { Home, Troubleshoot, TrendingUp,
+import { Home, Troubleshoot,
     PersonOutline, Storefront, SportsMartialArts, BarChart,
     MailOutline, DynamicFeed, ChatBubbleOutline,
     WorkOutline, Report, 
@@ -14,8 +14,10 @@ export default function Sidebar() {
                 <h3 className="sidebarTitle">Dashboard</h3>
                 <ul className="sidebarList">
                     <li className="sidebarListItem">
-                        <Home className='sidebarIcon' />
-                        Home
+                        <Link to="/" className="link">
+                            <Home className='sidebarIcon' />
+                            Home
+                         </Link>
                     </li>
                     <li className="sidebarListItem">
                         <Troubleshoot className='sidebarIcon' />
@@ -27,16 +29,22 @@ export default function Sidebar() {
                 <h3 className="sidebarTitle">Quick Menu</h3>
                 <ul className="sidebarList">
                     <li className="sidebarListItem">
-                        <SportsMartialArts className='sidebarIcon' />
-                        Facilities
+                        <Link to="/facilities" className="link">
+                            <SportsMartialArts className='sidebarIcon' />
+                            Facilities
+                        </Link>
                     </li>
                     <li className="sidebarListItem">
-                        <PersonOutline className='sidebarIcon' />
-                        Users
+                        <Link to="/users" className="link">
+                            <PersonOutline className='sidebarIcon' />
+                            Users
+                        </Link>
                     </li>
                     <li className="sidebarListItem">
-                        <Storefront className='sidebarIcon' />
-                        Products
+                        <Link to="/products" className="link">
+                            <Storefront className='sidebarIcon' />
+                            Products
+                        </Link>
                     </li>
                     <li className="sidebarListItem">
                         <BarChart className='sidebarIcon' />

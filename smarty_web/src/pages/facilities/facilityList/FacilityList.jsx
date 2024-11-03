@@ -39,7 +39,7 @@ export default function FacilityList() {
         <div className="facilityList">
             <div className="facilityTitleContainer">
                 <h1 className="facilityTitle">Facility</h1>
-                <Link to="/newFacility">
+                <Link to="/facilities/add">
                     <button className="facilityAddButton">Create</button>
                 </Link>
             </div>

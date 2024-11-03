@@ -6,5 +6,5 @@ import App from './App';
 // 기본 라우팅 설정 후 App 컴포넌트 내에서 경로 설정
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+        <App />
 );

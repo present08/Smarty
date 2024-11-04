@@ -8,7 +8,7 @@ const CustomCalender = (props) => {
   const [value, setValue] = useState(new Date());
 
   useEffect(() => {
-    props.newDate(moment(value).format("YYYY년 MM월 DD일"))
+    props.newDate(moment(value).format("YYYY-MM-DD"))
   }, [value])
 
   return (

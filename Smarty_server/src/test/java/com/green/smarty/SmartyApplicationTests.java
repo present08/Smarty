@@ -1,5 +1,7 @@
 package com.green.smarty;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.green.smarty.mapper.ReservationMapper;
+import com.green.smarty.vo.CourtVO;
 import com.green.smarty.vo.FacilityVO;
+import com.green.smarty.vo.ReservationVO;
+import com.green.smarty.vo.UserVO;
 
 @SpringBootTest
 class SmartyApplicationTests {
@@ -41,4 +46,46 @@ class SmartyApplicationTests {
 			}
 	}
 
+	@Test
+	public void insertUser(){
+		UserVO vo = UserVO.builder()
+			.user_id("kaka")
+			.user_name("kaka")
+			.email("kaka@kaka")
+			.password("1234")
+			.phone("010-1234-4567")
+			.address("경기도 성남시")
+			.birthday(LocalDate.of(2024, 1, 23))
+			.join_date(LocalDateTime.now())
+			.login_date(LocalDate.now())
+			.user_status(true)
+			.level("silver")
+			.build();
+		int result = reservationMapper.insertUser(vo);
+		System.out.println(result);
+	}
+
+	@Test
+	public void insertReservation(){
+		ReservationVO vo = ReservationVO.builder()
+			.reservation_id("R_"+1234)
+			.reservation_start(LocalDateTime.of(2024, 11, 4, 9, 00, 00))
+			.reservation_end(LocalDateTime.of(2024, 11, 4, 12, 00, 00))
+			.court_id("C_1234")
+			.build();
+		int insert = reservationMapper.insertReservation(vo);
+		System.out.println(insert);
+	}
+
+	@Test
+	public void insert_court(){
+		CourtVO vo = CourtVO.builder()
+			.court_id("C_"+1234)
+			.court_name("1번코트")
+			.facility_id("fc_1730518212730")
+			.court_status(true)
+			.build();
+		int result = reservationMapper.insertCourt(vo);
+		System.out.println(result);
+	}
 }

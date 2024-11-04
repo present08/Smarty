@@ -1,9 +1,11 @@
-import ReservationPage from './pages/ReservationPage';
+import { RouterProvider } from "react-router-dom";
+import root from './router/root'
+
 function App() {
   return (
-    <div>
-      <ReservationPage/>
-    </div>
+    <>
+     <RouterProvider router={root}></RouterProvider> 
+    </>
   );
 }
 

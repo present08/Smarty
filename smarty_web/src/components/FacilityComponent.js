@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './FacilityComponent.css'
 
 const FacilityComponent = ({props}) => {
-  props.app = 'internet'
-  const infoArr = ['시설명', '이용요금(주중)','이용요금(할증)','기본이용시간(h)' ,'예약방법', '문의전화']
-  const infoArr1 = ['facility_name','basic_fee','extra_fee','default_time','app','contact']
+  const infoArr = ['시설명', '이용요금(주중)','이용요금(할증)','기본이용시간(h)', '문의전화']
+  const infoArr1 = ['facility_name','basic_fee','extra_fee','default_time','contact']
+  
 
   return (
     <div className='container'>

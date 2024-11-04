@@ -8,25 +8,51 @@ const initTime = {
     default: 3
 }
 
-const ReservationComponent = ({props}) => {
+const ReservationComponent = (props) => {
+    const { facilityData, reserved } = props;
     const [date, setDate] = useState('')
     const [time, setTime] = useState(initTime)
     const [partTime, setPartTime] = useState(0)
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
+    const [disabledID, setDisabledID] = useState(0)
+
 
     // calendar props date Data
     const newDate = (date) => {
         setDate(date);
+        for (let i = 0; i < reserved.length; i++) {
+            if (date === reserved[i].start_date) {
+
+            }
+        }
+        updateTimeLine(disabledID)
     }
 
+    const updateTimeLine = (i) => {
+        console.log(i, date)
+        setTimeLine(prevTimeLine =>
+            prevTimeLine.map(item => {
+                if (item.id === i && date === item.date) {
+                    return { ...item, disabled: true };
+                }
+                return { ...item, disabled: false };
+            })
+        );
+    };
+
+
     useEffect(() => {
-        setTime(props)
+        setTime({
+            start: props.open_time,
+            end: props.close_time,
+            default: props.default_time
+        })
         timeSet();
     }, [])
-    
-    const timeSet = () =>{
+
+    const timeSet = () => {
         const newTimeLine = [];
         setPartTime((time.end - time.start) / time.default)
         let dt = time.default;
@@ -34,7 +60,7 @@ const ReservationComponent = ({props}) => {
         let disabled = false
         for (let i = 0; i < time.end - time.start; i++) {
             if (i < dt) {
-                const tl = { startTime: time.start + i, endTime: time.start + i + 1, active: false, id: cnt, disabled: disabled }
+                const tl = { startTime: time.start + i, endTime: time.start + i + 1, active: false, id: cnt, disabled }
                 newTimeLine.push(tl);
             }
             if (newTimeLine.length == dt) {
@@ -47,7 +73,36 @@ const ReservationComponent = ({props}) => {
         }
         setTimeLine(newTimeLine);
     }
+    //     const timeSet = () => {
+    //     const newTimeLine = [];
+    //     const duration = time.end - time.start;
+    //     const defaultTimeCount = duration / time.default;
 
+    //     let disabled = false;
+    //     let cnt = 0;
+
+    //     for (let i = 0; i < duration; i++) {
+    //         if (i < cnt * time.default) {
+    //             newTimeLine.push({
+    //                 startTime: time.start + i,
+    //                 endTime: time.start + i + 1,
+    //                 active: false,
+    //                 id: cnt,
+    //                 disabled,
+    //             });
+    //         }
+
+    //         if (newTimeLine.length === (cnt + 1) * time.default) {
+    //             cnt++;
+    //         }
+
+    //         // Disable the last few time slots if necessary
+    //         disabled = (i >= duration - time.default);
+    //     }
+
+    //     setPartTime(defaultTimeCount);
+    //     setTimeLine(newTimeLine);
+    // };
 
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
@@ -99,7 +154,7 @@ const ReservationComponent = ({props}) => {
                     </thead>
                     <tbody style={{ textAlign: 'center' }}>
                         <tr>
-                            <td data-content="시설명">시설명</td>
+                            <td data-content="시설명">{props.facility_name}</td>
                             <td data-content="예약일자">{date}</td>
                             <td data-content="예약시간">{fristNum + ':00 ~ '}{lastNum + ':00'}</td>
                             <td data-content="이용요금"></td>

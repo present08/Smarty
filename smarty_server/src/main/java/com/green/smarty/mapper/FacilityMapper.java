@@ -9,9 +9,9 @@ import java.util.List;
 public interface FacilityMapper {
 
     void register(FacilityDTO facilityDTO);
-    void fileUpload(String facility_id, String file_name);
-    List<FacilityDTO> list();
-    FacilityDTO get(String id);
-//    void modify(FacilityDTO facilityDTO);
-//    void remove(String id);
+    void fileUpload(String facility_id, String origin_path, String thumbnail_path, String file_name);
+    List<FacilityDTO> getList();
+    FacilityDTO read(String facility_id);
+    void modify(FacilityDTO facilityDTO);
+    void remove(String id);
 }

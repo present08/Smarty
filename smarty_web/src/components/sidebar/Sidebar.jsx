@@ -64,8 +64,10 @@ export default function Sidebar() {
                         FeedBack
                     </li>
                     <li className="sidebarListItem">
-                        <ChatBubbleOutline className='sidebarIcon' />
-                        Messages
+                        <Link to="test" className="link">
+                            <ChatBubbleOutline className='sidebarIcon' />
+                            PageTest
+                        </Link>
                     </li>
                 </ul>            
             </div>

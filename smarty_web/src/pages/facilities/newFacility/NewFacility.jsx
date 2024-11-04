@@ -1,7 +1,6 @@
 import { useRef, useState } from "react"
 import "./newFacility.css"
 import { postAdd } from "../../../api/facilityApi"
-import { useNavigate } from "react-router-dom"
 
 const initState = {
     facility_id: '',
@@ -24,23 +23,30 @@ const initState = {
 export default function NewFacility() {
 
     const [data, setData] = useState({...initState})
-    const [courtFlag, setCourtFlag] = useState(null)
-    const [productFlag, setProductFlag] = useState(null)
-    const [statusFlag, setStatusFlag] = useState(null)
+
+
+    const [courtFlag, setCourtFlag] = useState(true)
+    const [productFlag, setProductFlag] = useState(true)
+    const [statusFlag, setStatusFlag] = useState(true)
     const uploadImages = useRef()
-    const navigate = useNavigate()
     
     const handleInput = (e) => {
         data[e.target.name] = e.target.value
+        setData({...data})
+        console.log(data)
+    }
+    const handleClick = (e) => {
         data.court = courtFlag
         data.product = productFlag
         data.facility_status = statusFlag
         setData({...data})
+        console.log(data)
     }
-    const handleClick = (e) => {
+
+    const handleAdd = (e) => {
         const files = uploadImages.current.files
         const formData = new FormData()
-        
+   
         for(let i = 0; i < files.length; i++) {
             formData.append("files", files[i]);
         }
@@ -58,21 +64,20 @@ export default function NewFacility() {
         formData.append("product", data.product)
         formData.append("facility_status", data.facility_status)
 
-        console.log(formData)
         postAdd(formData)
-        navigate({path: "/facilities"})
     }
 
   return (
     <div className="newFacility">
         <h2 className="addFacilityTitle">Facility Registration</h2>
         <div className="addFacilityContent">           
-            <form 
-                action="#" 
+            {/* <form 
+                action="" 
                 method="post"
                 encType="multipart/form-data"
                 className="addFacilityForm"
-            >
+            > */}
+            <div className="addFacilityForm">
                 <div className="addFacilityFormLeft">
                     <div className="leftItem">
                         <label htmlFor="facility_name">시설명</label>
@@ -188,24 +193,23 @@ export default function NewFacility() {
                         />                        
                     </div>
                 </div>
-                {/* boolean값 서버로 전달 실패중, 해결 필요!! */}
                 <div className="addFacilityFormRight">
                     <div className="rightItem">
                         <label>세부 시설</label>
-                        <input 
+                        <input
                             name="court" 
                             id="true" 
                             type={"radio"} 
-                            value="true"
-                            onClick={(e) => setCourtFlag(true)}                            
+                            value={true}
+                            onClick={(e) => handleClick(setCourtFlag(e.target.value))}
                         />
                         <label htmlFor="true"> 등록</label>
                         <input 
                             name="court" 
                             id="false"
                             type={"radio"} 
-                            value="false"
-                            onClick={(e) => setCourtFlag(false)}                            
+                            value={false}
+                            onClick={(e) => handleClick(setCourtFlag(e.target.value))}                         
                         />
                         <label htmlFor="false"> 미등록</label>
                     </div>
@@ -216,20 +220,20 @@ export default function NewFacility() {
                     </div>
                     <div className="rightItem">
                         <label>물품</label>
-                        <input 
+                        <input
                             name="product" 
                             id="true" 
                             type={"radio"} 
-                            value="true"
-                            onClick={(e) => setProductFlag(true)}                            
+                            value={true}
+                            onClick={(e) => handleClick(setProductFlag(e.target.value))}                         
                         />
                         <label htmlFor="true"> 등록</label>
                         <input 
                             name="product" 
                             id="false"
                             type={"radio"} 
-                            value="false"
-                            onClick={(e) => setProductFlag(false)}                            
+                            value={false}
+                            onClick={(e) => handleClick(setProductFlag(e.target.value))}                          
                         />
                         <label htmlFor="false"> 미등록</label>
                     </div>
@@ -239,20 +243,20 @@ export default function NewFacility() {
 
                     <div className="rightItem">
                         <label>시설 개방</label>
-                        <input 
+                        <input
                             name="facility_status" 
                             id="true" 
                             type={"radio"} 
-                            value="true"
-                            onClick={(e) => setStatusFlag(true)} 
+                            value={true}
+                            onClick={(e) => handleClick(setStatusFlag(e.target.value))}
                         />
                         <label htmlFor="true"> 가능</label>
                         <input 
                             name="facility_status" 
                             id="false" 
                             type={"radio"} 
-                            value="false" 
-                            onClick={(e) => setStatusFlag(false)} 
+                            value={false} 
+                            onClick={(e) => handleClick(setStatusFlag(e.target.value))}
                         />
                         <label htmlFor="false"> 불가</label>
                     </div>
@@ -267,11 +271,12 @@ export default function NewFacility() {
                         />
                     </div>
                     <div className="facilityButtons">
-                        <button className="addFacilityButton" onClick={handleClick}>등록</button>
+                        <button className="addFacilityButton" onClick={handleAdd}>등록</button>
                         <button className="cancelFacilityButton">취소</button>
                     </div>
                 </div>
-            </form>
+            {/* </form> */}
+            </div>
         </div>
     </div>
   )

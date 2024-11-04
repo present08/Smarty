@@ -5,30 +5,47 @@
 <mapper namespace="com.green.smarty.mapper.FacilityMapper">
 
     <insert id="register" parameterType="FacilityDTO">
-        insert into facility (facility_id, facility_name, quantity, open_time, close_time, default_time,
-        basic_fee, extra_fee, contact, info, caution, court, facility_status, facility_images)
-        values (#{facility_id}, #{facility_name}, #{quantity}, #{open_time}, #{close_time}, #{default_time},
-        #{basic_fee}, #{extra_fee}, #{contact}, #{info}, #{caution}, #{court}, #{facility_status}, #{facility_images})
+        insert into facility (facility_id, facility_name, open_time, close_time, default_time,
+        basic_fee, extra_fee, contact, info, caution, court, product, facility_status, facility_images)
+        values (#{facility_id}, #{facility_name}, #{open_time}, #{close_time}, #{default_time},
+        #{basic_fee}, #{extra_fee}, #{contact}, #{info}, #{caution}, #{court}, #{product}, #{facility_status}, #{facility_images})
     </insert>
 
     <insert id="fileUpload" parameterType="String">
-        insert into facility_attach (facility_id, file_name) values (#{facility_id}, #{file_name})
+        insert into facility_attach (facility_id, origin_path, thumbnail_path, file_name)
+        values (#{facility_id}, #{origin_path}, #{thumbnail_path}, #{file_name})
     </insert>
 
-    <select id="list" resultType="FacilityDTO">
-        select * from facility
+<!--    <resultMap id="getListWithFiles" type="facility">-->
+<!--        <id property="facility_id" column="facility_id" />-->
+<!--        <result property="facility_name" column="facility_name"/>-->
+<!--        <result property="court" column="court"/>-->
+<!--        <result property="product" column="product"/>-->
+<!--        <result property="facility_status" column="facility_status"/>-->
+<!--        <result property="facility_images" column="facility_images"/>-->
+<!--        <collection property="file_name" ofType="Item">-->
+<!--            <result property="file_name" column="file_name" />-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+    <select id="getList" resultType="java.util.Map">
+        select A.facility_id, A.facility_name, A.court, A.product, A.facility_status, A.facility_images,
+            B.file_name
+        from facility A left outer join facility_attach B on A.facility_id = B.facility_id;
     </select>
 
-    <select id="get" resultType="String">
+    <select id="read" resultType="FacilityDTO">
         select * from facility where facility_id=#{facility_id}
     </select>
 
-<!--    <update id="modify" parameterType="FacilityDTO">-->
-<!--        update facility_tbl set facility_name=#{facility_name}, day_rate=#{day_rate}, night_rate=#{night_rate},-->
-<!--        open_time=#{open_time}, close_time=#{close_time} where facility_id=#{facility_id}-->
-<!--    </update>-->
+    <update id="modify" parameterType="FacilityDTO">
+        update facility set facility_name=#{facility_name}, open_time=#{open_time}, close_time=#{close_time},
+        default_time=#{default_time}, basic_fee=#{basic_fee}, extra_fee=#{extra_fee}, contact=#{contact},
+        info=#{info}, caution=#{caution}, court=#{court}, product=#{product}, facility_status=#{facility_status}
+        where facility_id=#{facility_id}
+    </update>
 
-<!--    <delete id="remove" parameterType="String">-->
-<!--        delete from facility_tbl where facility_id=#{facility_id}-->
-<!--    </delete>-->
+    <delete id="remove" parameterType="String">
+        delete from facility where facility_id=#{facility_id}
+    </delete>
 </mapper>

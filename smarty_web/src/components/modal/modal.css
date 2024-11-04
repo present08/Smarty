@@ -1,0 +1,45 @@
+.modalContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(0, 0, 0, 0.8);
+}
+
+.modalBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: 500px;
+    width: 800px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.modalBoxTop {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end; 
+}
+
+.closeButton {
+    font-size: 40px !important;
+      
+}
+.modalBoxContent {
+    flex: 10;
+}
+
+.modalBoxBottom {
+    flex: 1;
+}
+.checkButton {
+    width: 100px;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+}

@@ -18,61 +18,51 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/api/facility")
+@RequestMapping("/api/facilities")
 public class FacilityController {
 
     @Autowired
     private FacilityService facilityService;
 
-    @Autowired
-    private CustomFileUtil customFileUtil;
-
     // Create (시설 등록)
     @PostMapping("/")
     public String register(@ModelAttribute FacilityDTO facilityDTO) throws IOException {
-
         log.info("컨트롤러 시설 등록! facilityDTO = " + facilityDTO);
-
-        List<MultipartFile> files = facilityDTO.getFiles();
-        List<String> file_name = customFileUtil.saveFiles(files);
-        // facilityDTO의 첨부파일 기반으로 파일, 파일명 리스트 생성
-        // 첨부파일이 없는 경우 기본값인 빈배열이 저장됨
-        facilityDTO.setFile_name(file_name);
-
-        log.info("컨트롤러 업로드 파일명! fileNames = " + file_name);
-        facilityService.register(facilityDTO);
-        return "등록 성공";
+        String id = facilityService.register(facilityDTO);
+        log.info("등록된 시설 id = " + id + ", facilityDTO = " + facilityDTO);
+        return "등록된 시설 id = " + id + ", facilityDTO = " + facilityDTO;
     }
 
     // Read (시설 조회)
     @GetMapping("/list")
-    public List<FacilityDTO> list() {
+    public List<FacilityDTO> getList() {
         log.info("컨트롤러 시설 전체 조회!");
-        List<FacilityDTO> list = facilityService.list();
+        List<FacilityDTO> list = facilityService.getList();
         return list;
     }
-//
-//    @GetMapping("/{id}")
-//    public FacilityDTO get(@PathVariable(name = "id") String id) {
-//        log.info("컨트롤러 시설 하나 조회! id = " + id);
-//        return facilityService.get(id);
-//    }
-//
-//    // Update (시설 수정)
-//    @PutMapping("/{id}")
-//    public FacilityDTO modify(
-//            @PathVariable(name = "id") String id,
-//            @RequestBody FacilityDTO facilityDTO) {
-//
-//        FacilityDTO updateDTO = facilityService.modify(facilityDTO);
-//        log.info("컨트롤러 수정 완료! updateDTO = " + updateDTO);
-//        return updateDTO;
-//    }
-//
-//    // Delete (시설 삭제)
-//    @DeleteMapping("/{id}")
-//    public void remove(@PathVariable(name = "id") String id) {
-//        log.info("컨트롤러 삭제! id = " + id);
-//        facilityService.remove(id);
-//    }
+
+    @GetMapping("/{facility_id}")
+    public FacilityDTO read(@PathVariable(name = "facility_id") String id) {
+        log.info("컨트롤러 시설 하나 조회! id = " + id);
+        return facilityService.read(id);
+    }
+
+    // Update (시설 수정)
+    @PutMapping("/{facility_id}")
+    public FacilityDTO modify(
+            @PathVariable(name = "facility_id") String id,
+            @RequestBody FacilityDTO facilityDTO) {
+        log.info("컨트롤러 시설 수정! id = " + id);
+        FacilityDTO updateDTO = facilityService.modify(facilityDTO);
+        log.info("컨트롤러 수정 완료! updateDTO = " + updateDTO);
+        return updateDTO;
+    }
+
+    // Delete (시설 삭제)
+    @DeleteMapping("/{facility_id}")
+    public String remove(@PathVariable(name = "facility_id") String id) {
+        log.info("컨트롤러 시설 삭제! id = " + id);
+        facilityService.remove(id);
+        return "시설 삭제 완료";
+    }
 }

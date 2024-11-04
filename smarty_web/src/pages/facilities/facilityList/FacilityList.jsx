@@ -3,26 +3,25 @@ import "./facilityList.css"
 import { getList } from "../../../api/facilityApi"
 import { Link } from "react-router-dom"
 
-const initState = {
-    facility_id: '',
-    facility_name: '',
-    quantity: 0,
-    open_time: '',
-    close_time: '',
-    default_time: 0,
-    basic_fee: 0,
-    extra_fee: 0,
-    contact: '',
-    info: '',
-    caution: '',
-    court: false,
-    facility_status: false,
-    files: [],
-    file_name: []
-}
+// const initState = {
+//     facility_id: '',
+//     facility_name: '',
+//     open_time: '',
+//     close_time: '',
+//     default_time: 0,
+//     basic_fee: 0,
+//     extra_fee: 0,
+//     contact: '',
+//     info: '',
+//     caution: '',
+//     court: false,
+//     product: false,
+//     facility_status: false,
+//     files: [],
+// }
 
 export default function FacilityList() {
-    const [data, setData] = useState(initState)
+    const [data, setData] = useState([])
 
     // const handleDelete = (id) => {
     //     setData(data.filter(item => item.facility_id !== id))
@@ -44,7 +43,7 @@ export default function FacilityList() {
                 </Link>
             </div>
             <div className="facilityData">
-                {data.facility_id}
+                {data.map(i => console.log(i))}
             </div>
         </div>
     )

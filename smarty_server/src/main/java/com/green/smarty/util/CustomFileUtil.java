@@ -18,9 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @Log4j2
@@ -39,19 +37,26 @@ public class CustomFileUtil {
         log.info("업로드 파일 절대경로 = "+ uploadPath);
     }
 
-    // 파일 업로드 작업
-    public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException {
+    // 파일 업로드 작업 + 저장된 파일 이름과 경로(원본, 썸네일) 반환
+    public Map<String, List<String>> saveFiles(List<MultipartFile> files) throws RuntimeException {
 
         if(files == null || files.size() == 0) {
-            return List.of();
+            return new HashMap<>();
         }
-        List<String> uploadNames = new ArrayList<>();
+
+        List<String> file_name = new ArrayList<>();       // 파일명 리스트
+        List<String> origin_path = new ArrayList<>();        // 원본 경로 리스트
+        List<String> thumbnail_path = new ArrayList<>();         // 썸네일 경로 리스트
+        Map<String, List<String>> result = new HashMap<>(); // 최종적으로 반환할 맵
+
         for(MultipartFile multipartFile : files) {
             String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
             Path savePath = Paths.get(uploadPath, savedName);
             // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로 지정
+            origin_path.add(savePath.toString());    // 원본 경로 리스트 저장
 
             try{
+                // Files.copy() 메서드로 실제 파일 데이터를 해당 경로에 복사
                 Files.copy(multipartFile.getInputStream(), savePath);
                 // 이미지 파일이라면 썸네일 생성
                 String contentType = multipartFile.getContentType();
@@ -60,15 +65,18 @@ public class CustomFileUtil {
                     Thumbnails.of(savePath.toFile())
                             .size(200, 200)
                             .toFile(thumbnailPath.toFile());
+                    thumbnail_path.add(thumbnailPath.toString());    // 썸네일 경로 리스트 저장
                 }
-                uploadNames.add(savedName);
-                // Files.copy() 메서드로 실제 파일 데이터를 해당 경로에 복사하고, 파일 이름을 리스트에 저장
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
+            file_name.add(savedName);     // 파일 이름 리스트 저장
         }
-        return uploadNames;
-        //최종적으로 업로드된 파일 이름 리스트 반환
+        result.put("file_name", file_name);
+        result.put("origin_path", origin_path);
+        result.put("thumbnail_path", thumbnail_path);
+        return result;
+        //각각의 리스트를 키와 함께 Map에 담아 반환
     }
 
     // 파일 데이터를 읽어서 스프링에서 제공하는 Resource 타입으로 반환, 특정 파일 조회시 사용

@@ -4,4 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.CourtMapper">
 
+    <insert id="register" parameterType="CourtDTO" useGeneratedKeys="true" keyProperty="court_id">
+        insert into court (facility_id, court_name, court_status)
+        values (#{facility_id}, #{court_name}, #{court_status})
+    </insert>
+
+    <select id="getList" resultType="CourtDTO">
+        select * from court
+    </select>
+    <select id="read" resultType="CourtDTO">
+        select * from court where court_id=#{court_id}
+    </select>
 </mapper>

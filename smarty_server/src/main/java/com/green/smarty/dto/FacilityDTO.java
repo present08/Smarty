@@ -15,7 +15,6 @@ public class FacilityDTO {
     private String facility_id;
     private String facility_name;   // 시설 종류
 
-    private int quantity;           // 수용 가능 인원
     private String open_time;
     private String close_time;      // 운영 시간
     private int default_time;       // 기본 이용시간
@@ -35,13 +34,14 @@ public class FacilityDTO {
     @Builder.Default
     private List<MultipartFile> files = new ArrayList<>();
     @Builder.Default
-    private List<String> file_name = new ArrayList<>();     // 시설 관련 이미지 파일, 파일명
+    private List<String> file_name = new ArrayList<>();
+    // 첨부파일이 없는 경우 기본값인 빈배열이 저장됨 (에러 방지)
 
     // 시설 정보 수정 메서드
-    public void update(int quantity, String open_time, String close_time, int default_time,
+    public void update(String facility_name, String open_time, String close_time, int default_time,
                        int basic_fee, int extra_fee, String contact, String info, String caution,
-                       boolean court, boolean facility_status) {
-        this.quantity = quantity;
+                       boolean court, boolean product, boolean facility_status) {
+        this.facility_name = facility_name;
         this.open_time = open_time;
         this.close_time = close_time;
         this.default_time = default_time;
@@ -51,6 +51,7 @@ public class FacilityDTO {
         this.info = info;
         this.caution = caution;
         this.court = court;
+        this.product = product;
         this.facility_status = facility_status;
     }
 }

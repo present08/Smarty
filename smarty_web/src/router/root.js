@@ -9,6 +9,7 @@ const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"))
 const FacilityIndex = lazy(() => import("../pages/facilities/IndexPage"))
 const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
 const UserIndex = lazy(() => import("../pages/users/IndexPage"))
+const TestPage = lazy(() => import("../components/modal/Modal"))
 
 const root = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const root = createBrowserRouter([
         path: "users",
         element: <Suspense fallback={Loading}><UserIndex /></Suspense>,
         children: userRouter()
+    },
+    {
+        path: "test",
+        element: <Suspense fallback={Loading}><TestPage /></Suspense>,
     }
 ])
 

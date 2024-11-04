@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourtDTO {
 
-    private String court_id;
+    private int court_id;
     private String facility_id;
     private String court_name;
+    private boolean court_status;
 }

@@ -4,9 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.product.ProductStatusMapper">
 
+    <select id="getAllProductStatuses" resultType="com.green.smarty.vo.product.ProductStatusVO">
+        SELECT * FROM product_status_tbl;
+    </select>
+
     <!-- 특정 상품 상태 조회 -->
     <select id="getProductStatus" parameterType="String" resultType="com.green.smarty.vo.product.ProductStatusVO">
-        SELECT * FROM product_status_tbl WHERE product_id = #{productId};
+        SELECT * FROM status_tbl WHERE product_id = #{productId};
     </select>
 
     <!-- 상품 상태 업데이트 쿼리 -->

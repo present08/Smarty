@@ -36,4 +36,15 @@ public class QuantityServiceImpl implements QuantityService{
     public int setStock(String quantityId, int stock) {
         return quantityMapper.setStock(quantityId, stock);
     }
+
+
+    @Override
+    public List<QuantityVO> getTotalStockForAllProducts() {
+        return quantityMapper.getTotalStockForAllProducts();
+    }
+
+    @Override
+    public List<QuantityVO> getDetailsByProductId(String productId) {
+        return quantityMapper.getDetailsByProductId(productId);
+    }
 }

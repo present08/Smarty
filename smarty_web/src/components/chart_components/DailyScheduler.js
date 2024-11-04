@@ -73,7 +73,7 @@ export default DailyScheduler;
  */
 import React, { useState, useEffect } from 'react';
 import { Table, Tag } from 'antd';
-import { sendScheduleData } from '../api/pythonApi';  // Python API 호출
+import { sendScheduleData } from '../../api/pythonApi';  // Python API 호출
 
 function DailyScheduler({ selectedFacility, selectedDate }) {
   const [data, setData] = useState([]);

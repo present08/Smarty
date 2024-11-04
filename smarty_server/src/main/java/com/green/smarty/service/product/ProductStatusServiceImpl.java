@@ -15,6 +15,11 @@ public class ProductStatusServiceImpl implements ProductStatusService{
     private ProductStatusMapper productStatusMapper;
 
     @Override
+    public List<ProductStatusVO> getAllProductStatuses() {
+        return productStatusMapper.getAllProductStatuses();
+    }
+
+    @Override
     public void updateProductStatus(ProductStatusVO productStatus) {
         productStatusMapper.updateProductStatus(productStatus);
     }

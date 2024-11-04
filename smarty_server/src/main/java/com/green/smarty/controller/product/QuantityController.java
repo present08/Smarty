@@ -1,6 +1,7 @@
 package com.green.smarty.controller.product;
 
 import com.green.smarty.mapper.product.QuantityMapper;
+import com.green.smarty.service.product.QuantityService;
 import com.green.smarty.vo.product.QuantityVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,13 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class QuantityController {
     @Autowired
-    private QuantityMapper quantityMapper;
+    private QuantityService quantityService;
 
     @PostMapping("/{productId}")
     public void addQuantitiesToProduct(@PathVariable("productId") String productId, @RequestBody List<QuantityVO> quantities) {
         quantities.forEach(quantity -> {
             quantity.setProduct_id(productId);
-            quantityMapper.register(quantity);
+            quantityService.registerQuantity(quantity);
         });
     }
 
@@ -26,7 +27,7 @@ public class QuantityController {
     @PutMapping("/set-stock/{quantityId}")
     public String setStock(@PathVariable("quantityId") String quantityId,
                            @RequestParam("stock") int stock) {
-        int result = quantityMapper.setStock(quantityId, stock);
+        int result = quantityService.setStock(quantityId, stock);
         return result > 0 ? "전체 재고량이 성공적으로 수정되었습니다." : "전체 재고량 수정에 실패했습니다.";
     }
 
@@ -35,11 +36,22 @@ public class QuantityController {
     public String updateStock(@PathVariable("quantityId") String quantityId,
                               @RequestParam("quantity") int quantity,
                               @RequestParam("operationType") String operationType) {
-        int result = quantityMapper.updateStock(quantityId, quantity, operationType);
+        int result = quantityService.updateStock(quantityId, quantity, operationType);
         if (result > 0) {
             return "재고량이 성공적으로 업데이트되었습니다.";
         } else {
             return "재고량 업데이트에 실패했습니다.";
         }
+    }
+    // 전체 재고량 합산을 위한 엔드포인트
+    @GetMapping("/total-stock")
+    public List<QuantityVO> getTotalStockForAllProducts() {
+        return quantityService.getTotalStockForAllProducts();
+    }
+
+    // 특정 상품의 개별 quantity_id 조회 엔드포인트
+    @GetMapping("/details/{productId}")
+    public List<QuantityVO> getDetailsByProductId(@PathVariable("productId") String productId) {
+        return quantityService.getDetailsByProductId(productId);
     }
 }

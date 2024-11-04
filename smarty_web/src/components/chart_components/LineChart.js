@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsAccessibility from 'highcharts/modules/accessibility';
-import { getLineChartData } from '../api/pythonApi';
+import { getLineChartData } from '../../api/pythonApi';
 
 HighchartsAccessibility(Highcharts);  // 접근성 모듈 활성화
 

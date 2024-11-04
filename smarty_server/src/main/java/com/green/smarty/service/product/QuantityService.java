@@ -13,4 +13,7 @@ public interface QuantityService {
     int updateStock(String quantityId, int quantity, String operationType);
     // 전체 재고량 설정
     int setStock(String quantityId, int stock);
+    List<QuantityVO> getTotalStockForAllProducts();
+    List<QuantityVO> getDetailsByProductId(String productId);
+
 }

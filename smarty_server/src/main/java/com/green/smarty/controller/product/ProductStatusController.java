@@ -15,6 +15,11 @@ public class ProductStatusController {
     @Autowired
     private ProductStatusService productStatusService;
 
+    @GetMapping("/all")
+    public List<ProductStatusVO> getAllProductStatuses() {
+        return productStatusService.getAllProductStatuses();
+    }
+
     @PutMapping
     public void updateProductStatus(@RequestParam("productId") String productId, @RequestParam("status") String status) {
         ProductStatusVO productStatus = ProductStatusVO.builder()

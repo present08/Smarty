@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import BarChart from '../chart_components/BarChart';
-import LineChart from '../chart_components/LineChart';
-import PieChart from '../chart_components/PieChart';
-import DailyScheduler from '../chart_components/DailyScheduler';
+import BarChart from '../components/chart_components/BarChart';
+import LineChart from '../components/chart_components/LineChart';
+import PieChart from '../components/chart_components/PieChart';
+import DailyScheduler from '../components/chart_components/DailyScheduler';
 import DateHandler from '../handler/DateHandler';  // 날짜 핸들러 컴포넌트 임포트
 import FacilitiesHandler from '../handler/FacilitiesHandler';  // 시설 선택 핸들러
-import RentalStatisticsChart from '../chart_components/RentalStatisticsChart';
-import PersonallyChart from '../chart_components/PersonallyChart';
+import RentalStatisticsChart from '../components/chart_components/RentalStatisticsChart';
+import PersonallyChart from '../components/chart_components/PersonallyChart';
 
 function StatsPage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);  // 오늘 날짜를 기본값으로 설정

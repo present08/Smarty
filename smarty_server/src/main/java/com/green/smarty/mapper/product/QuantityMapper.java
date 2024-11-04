@@ -19,5 +19,7 @@ public interface QuantityMapper {
     // 재고량 업데이트
     int updateStock(@Param("quantity_id") String quantityId, @Param("quantity") int quantity, @Param("operation_type") String operationType);
 
+    List<QuantityVO> getTotalStockForAllProducts();
 
+    List<QuantityVO> getDetailsByProductId(String productId);
 }

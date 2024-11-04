@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { getPieChartData } from '../api/pythonApi';
+import { getPieChartData } from '../../api/pythonApi';
 
 function PieChart() {
     const [chartOptions, setChartOptions] = useState({

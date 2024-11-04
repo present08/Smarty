@@ -33,4 +33,14 @@
         AND (#{operation_type} = 'ADD' OR (#{operation_type} = 'SUBTRACT' AND stock >= #{quantity}));
     </update>
 
+    <select id="getTotalStockForAllProducts" resultType="com.green.smarty.vo.product.QuantityVO">
+        SELECT product_id, SUM(stock) AS total_stock
+        FROM quantity_tbl
+        GROUP BY product_id;
+    </select>
+
+    <select id="getDetailsByProductId" parameterType="string" resultType="com.green.smarty.vo.product.QuantityVO">
+        SELECT * FROM quantity_tbl
+        WHERE product_id = #{productId};
+    </select>
 </mapper>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { getRentalStatistics } from '../api/pythonApi';
+import { getRentalStatistics } from '../../api/pythonApi';
 
 const RentalStatisticsChart = ({ selectedDate, facilityName }) => {
     const [data, setData] = useState([]);

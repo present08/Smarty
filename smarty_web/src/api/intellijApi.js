@@ -58,6 +58,11 @@ export const fetchQuantitiesByProduct = (productId) => {
   return axios.get(`${quantityControllerPath}/${productId}`);
 };
 
+// 새로운 함수: 사이즈 정보를 포함한 quantity 데이터 가져오기
+export const fetchDetailsWithSizeByProductId = (productId) => {
+  return axios.get(`${quantityControllerPath}/details-with-size/${productId}`);
+};
+
 // 전체 재고량 가져오기
 export const fetchTotalStockByProduct = () => {
   return axios.get(`${quantityControllerPath}/total-stock`);

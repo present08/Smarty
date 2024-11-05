@@ -44,11 +44,14 @@ public class ProductController {
         return productService.getProductById(productId);
     }
 
-    // 특정 시설의 모든 대여물품 조회
+
     @GetMapping("/facility/{facilityId}")
     public List<ProductVO> getProductsByFacilityId(@PathVariable("facilityId") String facilityId) {
-        return productService.getProductsByFacilityId(facilityId);
+        if ("all".equals(facilityId)) {
+            return productService.getAllProducts(); // 전체 제품 반환
+        } else {
+            return productService.getProductsByFacilityId(facilityId); // 특정 시설의 제품만 반환
+        }
     }
-
 
 }

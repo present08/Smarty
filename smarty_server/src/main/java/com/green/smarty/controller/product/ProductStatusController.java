@@ -28,7 +28,7 @@ public class ProductStatusController {
                 .build();
         productStatusService.updateProductStatus(productStatus);
     }
-
+    
     @GetMapping("/{productId}")
     public List<ProductStatusVO> getProductStatus(@PathVariable("productId") String productId) {
         return productStatusService.getProductStatus(productId);

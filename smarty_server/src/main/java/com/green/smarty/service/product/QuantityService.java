@@ -3,6 +3,7 @@ package com.green.smarty.service.product;
 import com.green.smarty.vo.product.QuantityVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QuantityService {
     // 새로운 재고 등록
@@ -15,5 +16,7 @@ public interface QuantityService {
     int setStock(String quantityId, int stock);
     List<QuantityVO> getTotalStockForAllProducts();
     List<QuantityVO> getDetailsByProductId(String productId);
+    List<Map<String, Object>> getDetailsWithSizeByProductId(String productId); // 새로운 메서드
+
 
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, InputNumber, Select, notification, Button, Modal } from 'antd';
-import { fetchProductByFacility, fetchFacilities, fetchProductStatus, updateProductStatus, updateStock } from '../../api/intellijApi';
+import { fetchProductByFacility, fetchFacilities, fetchProductStatus, fetchDetailsWithSizeByProductId, updateProductStatus, updateStock } from '../../api/intellijApi';
 import * as XLSX from 'xlsx';
 
 const { Option } = Select;
@@ -8,14 +8,14 @@ const { Option } = Select;
 const Management = () => {
     const [data, setData] = useState([]); // 데이터 상태를 저장
     const [facilities, setFacilities] = useState([]); // 시설 목록 상태
-    const [selectedFacility, setSelectedFacility] = useState('all'); // 선택된 시설
+    const [selectedFacility, setSelectedFacility] = useState(''); // 기본값을 빈 문자열로 설정
     const [pendingChanges, setPendingChanges] = useState([]); // 변경 사항 추적
     const [isModalVisible, setIsModalVisible] = useState(false); // 모달 창 상태
 
     useEffect(() => {
         fetchFacilities()
             .then(response => {
-                setFacilities(response.data); // 시설 목록 설정
+                setFacilities([{ facility_id: '', facility_name: '================' }, ...response.data]);
             })
             .catch(error => {
                 console.error("시설 목록을 불러오는 중 오류 발생 : ", error);
@@ -23,16 +23,35 @@ const Management = () => {
     }, []);
 
     useEffect(() => {
-        // 선택된 시설에 따라 데이터를 불러옴
-        if (selectedFacility === 'all') {
-            fetchProductStatus()
-                .then(response => setData(response.data)) // 전체 물품 상태 데이터를 설정
-                .catch(error => console.error("전체 물품 상태 데이터를 불러오는 중 오류 발생:", error));
-        } else {
-            fetchProductByFacility(selectedFacility)
-                .then(response => setData(response.data)) // 특정 시설의 물품 상태 데이터를 설정
-                .catch(error => console.error(`${selectedFacility}의 물품 상태 데이터를 불러오는 중 오류 발생:`, error));
-        }
+        const fetchData = async () => {
+            try {
+                let products;
+                if (selectedFacility) {
+                    products = await fetchProductByFacility(selectedFacility);
+                } else {
+                    setData([]);
+                    return;
+                }
+
+                const productsWithQuantities = await Promise.all(products.data.map(async (product) => {
+                    const quantitiesResponse = await fetchDetailsWithSizeByProductId(product.product_id);
+                    
+                    return quantitiesResponse.data.map(quantity => {
+                        const sizeSuffix = quantity.cloth_size || quantity.shoe_size ? `_${quantity.cloth_size || quantity.shoe_size}` : ''; 
+                        return {
+                            ...quantity,
+                            product_name: product.product_name + sizeSuffix // 상품명 + 사이즈
+                        };
+                    });
+                }));
+
+                setData(productsWithQuantities.flat());
+            } catch (error) {
+                console.error("상품 데이터를 불러오는 중 오류 발생:", error);
+            }
+        };
+
+        fetchData();
     }, [selectedFacility]);
 
     // 상태 변경 핸들러 (변경 사항을 pendingChanges에 추가)
@@ -124,49 +143,37 @@ const Management = () => {
     return (
         <div>
             <h1>대여 품목 관리 대시보드</h1>
-            {/* 시설 선택 Dropdown */}
             <Select
                 style={{ width: 200, marginBottom: 20 }}
                 onChange={(value) => setSelectedFacility(value)}
-                defaultValue="all"
+                value={selectedFacility}
             >
-                <Option value="all">모든 시설</Option>
                 {facilities.map(facility => (
                     <Option key={facility.facility_id} value={facility.facility_id}>
                         {facility.facility_name}
                     </Option>
                 ))}
             </Select>
-            {/* 엑셀 내보내기 버튼 */}
             <Button type='primary' onClick={exportToExcel} style={{ marginBottom: 20 }}>
                 엑셀 파일로 내보내기
             </Button>
-            {/* 테이블 렌더링 */}
             <Table
                 dataSource={data}
                 columns={[
-                    { title: '상품명', dataIndex: 'product_name', key: 'product_name' }, // 상품명 열
-                    { title: '상품 ID', dataIndex: 'product_id', key: 'product_id' }, // 상품 ID 열
-                    {
-                        title: '전체 재고량',
-                        dataIndex: 'total_stock',
-                        key: 'total_stock',
-                        render: (text) => text || 'N/A' // 전체 재고량 표시, 없을 경우 N/A
-                    },
+                    { title: '상품명', dataIndex: 'product_name', key: 'product_name' },
+                    { title: '수량 ID', dataIndex: 'quantity_id', key: 'quantity_id' },
                     {
                         title: '재고',
                         dataIndex: 'stock',
                         key: 'stock',
                         render: (text, record) => (
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                {/* 재고 감소 버튼 */}
                                 <Button onClick={() => handleStockChange(-1, record)}>&lt;</Button>
                                 <InputNumber
-                                    value={record.stock} // 현재 재고 수량
+                                    value={record.stock}
                                     readOnly
                                     style={{ width: 60, margin: '0 10px' }}
                                 />
-                                {/* 재고 증가 버튼 */}
                                 <Button onClick={() => handleStockChange(1, record)}>&gt;</Button>
                             </div>
                         )
@@ -188,13 +195,11 @@ const Management = () => {
                             </Select>
                         )
                     },
-                    { title: '업데이트 시각', dataIndex: 'updated_at', key: 'updated_at' } // 업데이트 시각 열
+                    { title: '업데이트 시각', dataIndex: 'updated_at', key: 'updated_at' }
                 ]}
-                rowKey="quantity_id" // 고유 키 설정
+                rowKey="quantity_id"
             />
-            {/* 변경 확인 버튼 */}
             <Button type='primary' onClick={showModal} style={{ marginTop: 20 }}>변경 확인</Button>
-            {/* 모달 창 */}
             <Modal
                 title='변경 사항 확인'
                 open={isModalVisible}

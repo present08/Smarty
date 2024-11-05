@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -46,5 +47,10 @@ public class QuantityServiceImpl implements QuantityService{
     @Override
     public List<QuantityVO> getDetailsByProductId(String productId) {
         return quantityMapper.getDetailsByProductId(productId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDetailsWithSizeByProductId(String productId) {
+        return quantityMapper.getDetailsWithSizeByProductId(productId);
     }
 }

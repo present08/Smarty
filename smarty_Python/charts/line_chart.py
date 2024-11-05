@@ -25,7 +25,8 @@ def get_line_data():
     db = get_class_data()
     cursor = db.cursor()
 
-    query = """SELECT 
+    query = """
+    SELECT 
     f.facility_name,
 
     -- 예약으로 인한 수입 계산
@@ -68,19 +69,7 @@ def get_line_data():
             AND DATE(rt.rental_date) = DATE(r.reservation_start)
     ), 0) AS rental_income,
 
-    -- 강좌 등록비 계산
-    COALESCE(( 
-        SELECT 
-            SUM(c.price)
-        FROM 
-            enrollment_tbl e
-        JOIN 
-            class_tbl c ON e.class_id = c.class_id
-        WHERE 
-            e.user_id = r.user_id
-    ), 0) AS class_income,
-
-    -- 총 수입 계산 (예약 수입 + 대여 물품비 + 수업 등록비)
+    -- 총 수입 계산 (예약 수입 + 대여 물품비)
     (
         COALESCE(SUM(
             CASE 
@@ -117,37 +106,29 @@ def get_line_data():
         WHERE 
             rt.user_id = r.user_id 
             AND DATE(rt.rental_date) = DATE(r.reservation_start)
-        ) + 
-
-        (SELECT 
-            COALESCE(SUM(c.price), 0)
-        FROM 
-            enrollment_tbl e
-        JOIN 
-            class_tbl c ON e.class_id = c.class_id
-        WHERE 
-            e.user_id = r.user_id
         )
     ) AS total_income
 
-    FROM 
-        reservation_tbl r
-    JOIN 
-        court_tbl ct ON r.court_id = ct.court_id
-    JOIN 
-        facility_tbl f ON ct.facility_id = f.facility_id
-    WHERE 
-        DATE(r.reservation_start) = %s  -- 날짜 필터링
+FROM 
+    reservation_tbl r
+JOIN 
+    court_tbl ct ON r.court_id = ct.court_id
+JOIN 
+    facility_tbl f ON ct.facility_id = f.facility_id
+WHERE 
+    DATE(r.reservation_start) = %s  -- 날짜 필터링
 
-    GROUP BY 
-        f.facility_name,
-        DATE(r.reservation_start)
-    ORDER BY 
-        f.facility_name,
-        DATE(r.reservation_start);
+GROUP BY 
+    f.facility_name,
+    DATE(r.reservation_start)
+ORDER BY 
+    f.facility_name,
+    DATE(r.reservation_start);
+
     """
     cursor.execute(query, (query_date,))
     results = cursor.fetchall()
+    print(results)
     cursor.close()
     db.close()
 
@@ -157,7 +138,8 @@ def get_line_data():
         data.append(
             {
                 "facility_name": row[0],
-                "total_income": row[1]
+                "total_income": row[3]
             }
         )
+    print(data)
     return jsonify({"date": query_date, "data": data})

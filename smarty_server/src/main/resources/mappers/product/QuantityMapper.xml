@@ -43,4 +43,12 @@
         SELECT * FROM quantity_tbl
         WHERE product_id = #{productId};
     </select>
+
+    <select id="getDetailsWithSizeByProductId" parameterType="string" resultType="map">
+        SELECT q.quantity_id, q.product_id, q.stock, q.size_id, s.cloth_size, s.shoe_size
+        FROM quantity_tbl q
+        LEFT JOIN size_tbl s ON q.size_id = s.size_id
+        WHERE q.product_id = #{productId};
+    </select>
+
 </mapper>

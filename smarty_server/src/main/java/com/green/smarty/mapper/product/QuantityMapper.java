@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface QuantityMapper {
@@ -22,4 +23,6 @@ public interface QuantityMapper {
     List<QuantityVO> getTotalStockForAllProducts();
 
     List<QuantityVO> getDetailsByProductId(String productId);
+
+    List<Map<String, Object>> getDetailsWithSizeByProductId(String productId); // 새로운 메서드
 }

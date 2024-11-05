@@ -1,4 +1,7 @@
 .modalContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,6 +30,7 @@
 
 .closeButton {
     font-size: 40px !important;
+    cursor: pointer;
       
 }
 .modalBoxContent {
@@ -37,9 +41,12 @@
     flex: 1;
 }
 .checkButton {
-    width: 100px;
+    width: 80px;
     height: 40px;
     font-size: 20px;
     border: none;
     border-radius: 10px;
+    background-color: #195E8E;
+    color: white;
+    cursor: pointer;
 }

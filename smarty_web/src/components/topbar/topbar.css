@@ -3,9 +3,6 @@
     height: 60px;
     background-color: white;
     border-bottom: 1px solid #EEEAE6;
-    position: sticky;
-    top: 0;
-    z-index: 999;
 }
 
 .topbarWrapper {

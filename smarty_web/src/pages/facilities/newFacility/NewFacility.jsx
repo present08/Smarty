@@ -1,11 +1,11 @@
 import { useRef, useState } from "react"
 import "./newFacility.css"
 import { postAdd } from "../../../api/facilityApi"
+import Modal from "../../../components/modal/Modal"
+import NewCourt from "../newCourt/NewCourt"
 
 const initState = {
-    facility_id: '',
     facility_name: '',
-    quantity: 0,
     open_time: '',
     close_time: '',
     default_time: 0,
@@ -22,243 +22,262 @@ const initState = {
 
 export default function NewFacility() {
 
-    const [data, setData] = useState({...initState})
-
-
-    const [courtFlag, setCourtFlag] = useState(true)
-    const [productFlag, setProductFlag] = useState(true)
-    const [statusFlag, setStatusFlag] = useState(true)
+    // FacilityDTO 구성
+    const [facility, setFacility] = useState({...initState})
+    // FacilityDTO boolean 필드값 상태관리
+    const [courtFlag, setCourtFlag] = useState(false)
+    const [productFlag, setProductFlag] = useState(false)
+    const [statusFlag, setStatusFlag] = useState(false)
+    // FacilityDTO 첨부파일 저장 변수
     const uploadImages = useRef()
+
+    // CourtDTO 구성
+    const [court, setCourt] = useState([])
+
+    // 코트, 물품등록시 모달창 상태관리
+    const [courtModal, setCourtModal] = useState(false)
+    const [productModal, setProductModal] = useState(false)
+
+    const [courtNum, setCourtNum] = useState(0)
     
+    // 시설등록 input value 업데이트 함수
     const handleInput = (e) => {
-        data[e.target.name] = e.target.value
-        setData({...data})
-        console.log(data)
+        facility[e.target.name] = e.target.value
+        setFacility({...facility})
+        console.log(facility)
     }
-    const handleClick = (e) => {
-        data.court = courtFlag
-        data.product = productFlag
-        data.facility_status = statusFlag
-        setData({...data})
-        console.log(data)
+    // 시설등록 radio value 업데이트 함수
+    const handleRadio = (e) => {
+        setStatusFlag(e.target.value)
+        facility.facility_status = statusFlag
+        setFacility({...facility})
     }
 
-    const handleAdd = (e) => {
+    // 세부시설 등록 버튼 클릭 시 실행 함수
+    const handleCourtButton = (e) => {
+        setCourtFlag(true)
+        facility.court = courtFlag
+        setFacility({...facility})
+        setCourtModal(true)
+        console.log("시설 : ", courtFlag)
+    }
+    // 대여물품 등록 버튼 클릭 시 실행 함수
+    const handleProductButton = (e) => {
+        setProductFlag(true)
+        facility.product = productFlag
+        setFacility({...facility})
+        setProductModal(true)
+        console.log("물품 : ", productFlag)
+    }
+    // 모달창 닫기 함수
+    const closeModal = () => {
+        if(courtModal) setCourtModal(false)
+        else setProductModal(false)    
+    }
+
+
+    // facility에 입력된 데이터로 formData 구성하여 API 호출
+    const handleFacilityAdd = (e) => {
         const files = uploadImages.current.files
-        const formData = new FormData()
+        const facilityForm = new FormData()
    
         for(let i = 0; i < files.length; i++) {
-            formData.append("files", files[i]);
+            facilityForm.append("files", files[i]);
         }
-        formData.append("facility_name", data.facility_name)
-        formData.append("quantity", data.quantity)
-        formData.append("open_time", data.open_time)
-        formData.append("close_time", data.close_time)
-        formData.append("default_time", data.default_time)
-        formData.append("basic_fee", data.basic_fee)
-        formData.append("extra_fee", data.extra_fee)
-        formData.append("contact", data.contact)
-        formData.append("info", data.info)
-        formData.append("caution", data.caution)
-        formData.append("court", data.court)
-        formData.append("product", data.product)
-        formData.append("facility_status", data.facility_status)
+        facilityForm.append("facility_name", facility.facility_name)
+        facilityForm.append("open_time", facility.open_time)
+        facilityForm.append("close_time", facility.close_time)
+        facilityForm.append("default_time", facility.default_time)
+        facilityForm.append("basic_fee", facility.basic_fee)
+        facilityForm.append("extra_fee", facility.extra_fee)
+        facilityForm.append("contact", facility.contact)
+        facilityForm.append("info", facility.info)
+        facilityForm.append("caution", facility.caution)
+        facilityForm.append("court", facility.court)
+        facilityForm.append("product", facility.product)
+        facilityForm.append("facility_status", facility.facility_status)
 
-        postAdd(formData)
+        postAdd(facilityForm)
+        console.log(facility)
     }
 
   return (
     <div className="newFacility">
-        <h2 className="addFacilityTitle">Facility Registration</h2>
-        <div className="addFacilityContent">           
-            {/* <form 
-                action="" 
-                method="post"
-                encType="multipart/form-data"
-                className="addFacilityForm"
-            > */}
-            <div className="addFacilityForm">
-                <div className="addFacilityFormLeft">
+
+        <div className="addFacilityTitle">시설 등록</div>
+        <div className="addFacilityForm">            
+            <div className="addFacilityFormLeft">
+                <div className="leftItemTitle">기본 정보</div>
+                <div className="leftItemContent">
                     <div className="leftItem">
                         <label htmlFor="facility_name">시설명</label>
                         <input 
                             name="facility_name"
                             id="facility_name"
                             type={"text"} 
-                            value={data.facility_name}
+                            value={facility.facility_name}
                             onChange={handleInput}
                             placeholder="ex) 수영장" 
                         />
                     </div>
-
                     <div className="leftItem">
-                        <label htmlFor="quantity">수용가능 인원</label>
-                        <input 
-                            name="quantity" 
-                            id="quantity" 
-                            type={"text"}
-                            value={data.quantity} 
-                            onChange={handleInput}
-                            placeholder="ex) 500" 
-                        />
-                    </div>
-
-                    <div className="leftItem">
-                        <label htmlFor="open_time">개장 </label>
+                        <label htmlFor="open_time">개장시간 </label>
                         <input
                             name="open_time"
                             id="open_time" 
                             type={"time"} 
-                            value={data.open_time}
+                            value={facility.open_time}
                             onChange={handleInput}
                         />
-                        <label htmlFor="close_time">폐장 </label>
+                        <label htmlFor="close_time">폐장시간 </label>
                         <input
                             name="close_time" 
                             id="close_time" 
                             type={"time"} 
-                            value={data.close_time}
+                            value={facility.close_time}
                             onChange={handleInput} 
                         />
                     </div>
-
                     <div className="leftItem">
-                        <label htmlFor="default_time">기본시간</label>
+                        <label htmlFor="default_time">기본 이용시간</label>
                         <input
                             name="default_time" 
                             id="default_time" 
                             type={"text"}
-                            value={data.default_time}
+                            value={facility.default_time}
                             onChange={handleInput} 
                             placeholder="ex) 1" 
                         />
                     </div>
-
                     <div className="leftItem">
-                        <label htmlFor="basic_fee">일반 가격</label>
+                        <label htmlFor="basic_fee">기본요금</label>
                         <input
                             name="basic_fee" 
                             id="basic_fee" 
                             type={"text"}
-                            value={data.basic_fee}
+                            value={facility.basic_fee}
                             onChange={handleInput} 
                             placeholder="ex) 10000" 
                         />
-                        <label htmlFor="extra_fee">할증 가격</label>
+                        <label htmlFor="extra_fee">할증요금</label>
                         <input
                             name="extra_fee" 
                             id="extra_fee" 
                             type={"text"}
-                            value={data.extra_fee}
+                            value={facility.extra_fee}
                             onChange={handleInput} 
                             placeholder="ex) 13000" 
                         />
                     </div>
 
-                    <div className="leftItem">
+                    <div className="addFacilityFormSub">
+                        <div className="addFacilityFormSubTitle">추가 등록</div>
+                        <div className="subItemContent">
+                            <div className="subItem">
+                                <button className="subItemButton"
+                                onClick={() => handleCourtButton()}>
+                                    세부시설
+                                </button>
+                                {courtModal?
+                                    <Modal 
+                                        title={'시설 등록'}
+                                        content={(
+                                        <div className="modalContent">
+                                            <div className="modalBoxTitle">
+                                                등록할 상세 시설 갯수
+                                            </div>
+                                            <input 
+                                                type="number"
+                                                min={0} 
+                                                className="modalBoxCount"
+                                                onChange={(e) => setCourtNum(e.target.value)}
+                                            />
+                                            {courtNum >0?
+                                            <NewCourt courtNum /> : <></>}
+                                        </div>
+                                        )}
+                                        callbackFn={closeModal} 
+                                    />
+                                    : <></>
+                                }
+                            </div>
+                            <div className="subItem">
+                                <button className="subItemButton"
+                                onClick={() => handleProductButton()}>
+                                    대여물품
+                                </button>
+                                {productModal?
+                                    <Modal 
+                                    title={'물픔 등록'}
+                                    content={'물품 등록 화면'}
+                                    callbackFn={closeModal} />
+                                    : <></>
+                                }
+                            </div>
+                            <div className="subItem">
+                                <div className="subItemTitle">시설 개방</div>
+                                <input
+                                    name="facility_status" 
+                                    id="true" 
+                                    type={"radio"} 
+                                    value={true}
+                                    onClick={(e) => handleRadio(e)}
+                                />
+                                <label htmlFor="true"> 가능</label>
+                                <input 
+                                    name="facility_status" 
+                                    id="false" 
+                                    type={"radio"} 
+                                    value={false} 
+                                    onClick={(e) => handleRadio(e)}
+                                />
+                                <label htmlFor="false"> 불가</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div className="addFacilityFormRight">
+                <div className="rightItemTitle">세부 사항</div>
+                <div className="rightItemContent">
+
+                    <div className="rightItem">
                         <label htmlFor="contact">연락처</label>
                         <input
                             name="contact" 
                             id="contact" 
                             type={"text"}
-                            value={data.contact}
+                            value={facility.contact}
                             onChange={handleInput} 
                             placeholder="ex) 070-XXXX-XXXX"
                         />
                     </div>
 
-                    <div className="leftItem">
+                    <div className="rightItem">
                         <label htmlFor="info">이용안내</label>
                         <textarea
                             name="info" 
                             id="info" 
                             cols="70" 
-                            rows="5"
-                            value={data.info}
+                            rows="7"
+                            value={facility.info}
                             onChange={handleInput} 
                             placeholder="시설 이용에 관한 안내 사항을 입력해주세요." 
                         />                        
                     </div>
 
-                    <div className="leftItem">
+                    <div className="rightItem">
                         <label htmlFor="caution">주의사항</label>
                         <textarea
                             name="caution" 
                             id="caution" 
                             cols="70" 
-                            rows="5"
-                            value={data.caution}
+                            rows="7"
+                            value={facility.caution}
                             onChange={handleInput} 
                             placeholder="시설 이용 시 주의해야할 사항을 입력해주세요." 
                         />                        
-                    </div>
-                </div>
-                <div className="addFacilityFormRight">
-                    <div className="rightItem">
-                        <label>세부 시설</label>
-                        <input
-                            name="court" 
-                            id="true" 
-                            type={"radio"} 
-                            value={true}
-                            onClick={(e) => handleClick(setCourtFlag(e.target.value))}
-                        />
-                        <label htmlFor="true"> 등록</label>
-                        <input 
-                            name="court" 
-                            id="false"
-                            type={"radio"} 
-                            value={false}
-                            onClick={(e) => handleClick(setCourtFlag(e.target.value))}                         
-                        />
-                        <label htmlFor="false"> 미등록</label>
-                    </div>
-                    <div className="rightItem">
-                        <div className="addCourt">
-                            
-                        </div>
-                    </div>
-                    <div className="rightItem">
-                        <label>물품</label>
-                        <input
-                            name="product" 
-                            id="true" 
-                            type={"radio"} 
-                            value={true}
-                            onClick={(e) => handleClick(setProductFlag(e.target.value))}                         
-                        />
-                        <label htmlFor="true"> 등록</label>
-                        <input 
-                            name="product" 
-                            id="false"
-                            type={"radio"} 
-                            value={false}
-                            onClick={(e) => handleClick(setProductFlag(e.target.value))}                          
-                        />
-                        <label htmlFor="false"> 미등록</label>
-                    </div>
-                    <div className="rightItem option">
-                        
-                    </div>
-
-                    <div className="rightItem">
-                        <label>시설 개방</label>
-                        <input
-                            name="facility_status" 
-                            id="true" 
-                            type={"radio"} 
-                            value={true}
-                            onClick={(e) => handleClick(setStatusFlag(e.target.value))}
-                        />
-                        <label htmlFor="true"> 가능</label>
-                        <input 
-                            name="facility_status" 
-                            id="false" 
-                            type={"radio"} 
-                            value={false} 
-                            onClick={(e) => handleClick(setStatusFlag(e.target.value))}
-                        />
-                        <label htmlFor="false"> 불가</label>
                     </div>
 
                     <div className="rightItem">
@@ -270,12 +289,12 @@ export default function NewFacility() {
                             ref={uploadImages}
                         />
                     </div>
+
                     <div className="facilityButtons">
-                        <button className="addFacilityButton" onClick={handleAdd}>등록</button>
+                        <button className="addFacilityButton" onClick={handleFacilityAdd}>등록</button>
                         <button className="cancelFacilityButton">취소</button>
                     </div>
                 </div>
-            {/* </form> */}
             </div>
         </div>
     </div>

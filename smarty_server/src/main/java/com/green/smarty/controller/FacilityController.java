@@ -1,7 +1,9 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.dto.FacilityDTO;
+import com.green.smarty.service.CourtService;
 import com.green.smarty.service.FacilityService;
+import com.green.smarty.service.ProductService;
 import com.green.smarty.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +25,10 @@ public class FacilityController {
 
     @Autowired
     private FacilityService facilityService;
+    @Autowired
+    private CourtService courtService;
+    @Autowired
+    private ProductService productService;
 
     // Create (시설 등록)
     @PostMapping("/")
@@ -30,6 +36,10 @@ public class FacilityController {
         log.info("컨트롤러 시설 등록! facilityDTO = " + facilityDTO);
         String id = facilityService.register(facilityDTO);
         log.info("등록된 시설 id = " + id + ", facilityDTO = " + facilityDTO);
+
+//        if(facilityDTO.isCourt()) courtService.register()
+//        if(facilityDTO.isProduct()) productService.register()
+
         return "등록된 시설 id = " + id + ", facilityDTO = " + facilityDTO;
     }
 

@@ -9,7 +9,7 @@ const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"))
 const FacilityIndex = lazy(() => import("../pages/facilities/IndexPage"))
 const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
 const UserIndex = lazy(() => import("../pages/users/IndexPage"))
-const TestPage = lazy(() => import("../components/modal/Modal"))
+const TestPage = lazy(() => import("../pages/facilities/newCourt/NewCourt"))
 
 const root = createBrowserRouter([
     {

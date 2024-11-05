@@ -1,19 +1,31 @@
 import "./modal.css";
 import { Close } from '@mui/icons-material';
-import { Children } from "react";
 
-export default function Modal({Children}) {
+export default function Modal({title, content, callbackFn}) {
   return (
     <div className="modalContainer">
         <div className="modalBox">
             <div className="modalBoxTop">
-                <Close className="closeButton"/>
+                <Close 
+                    className="closeButton"
+                    onClick={() => {
+                        if(callbackFn) callbackFn()
+                    }}
+                />
+                {title}
             </div>
             <div className="modalBoxContent">
-                {Children}
+                {content}
             </div>
             <div className="modalBoxBottom">
-                <button className="checkButton">등록</button>
+                <button 
+                    className="checkButton"
+                    onClick={() => {
+                        if(callbackFn) callbackFn()
+                    }}
+                >
+                    등록
+                </button>
             </div>
         </div>       
     </div>

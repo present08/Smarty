@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import "./newFacility.css"
 import { postAdd } from "../../../api/facilityApi"
 import Modal from "../../../components/modal/Modal"
@@ -31,14 +31,27 @@ export default function NewFacility() {
     // FacilityDTO 첨부파일 저장 변수
     const uploadImages = useRef()
 
-    // CourtDTO 구성
-    const [court, setCourt] = useState([])
-
     // 코트, 물품등록시 모달창 상태관리
     const [courtModal, setCourtModal] = useState(false)
     const [productModal, setProductModal] = useState(false)
 
-    const [courtNum, setCourtNum] = useState(0)
+    // 자식 컴포넌트에서 부모 컴포넌트로 props 전달 방법
+    // 전달받은 값을 저장할 useState, 값 전달 역할을 할 함수를 선언
+    // 자식 컴포넌트로 함수 전달
+    // 자식 컴포넌트에서 함수를 실행하면 부모 컴포넌트의 함수가 실행되면서 인자값을 전달받음
+    const [courtResult, setCourtResult] = useState(Array.from({length : 0}, (_, i) => ({
+        court_name: '',
+        court_status: ''
+      })))
+    const courtPass = (result) => {
+        console.log("전달받은결과 " + result)
+        setCourtResult(result)
+    }
+
+    useEffect(() => {
+      console.log("전달받은결과 " + courtResult)
+    }, [courtResult])
+    
     
     // 시설등록 input value 업데이트 함수
     const handleInput = (e) => {
@@ -159,11 +172,14 @@ export default function NewFacility() {
                             onChange={handleInput} 
                             placeholder="ex) 10000" 
                         />
-                        <label htmlFor="extra_fee">할증요금</label>
+                        <label htmlFor="extra_fee">가격 변동률</label>
                         <input
                             name="extra_fee" 
                             id="extra_fee" 
-                            type={"text"}
+                            type={"range"}
+                            min={0}
+                            max={1}
+                            step={0.1}
                             value={facility.extra_fee}
                             onChange={handleInput} 
                             placeholder="ex) 13000" 
@@ -176,26 +192,12 @@ export default function NewFacility() {
                             <div className="subItem">
                                 <button className="subItemButton"
                                 onClick={() => handleCourtButton()}>
-                                    세부시설
+                                    코트(레일)
                                 </button>
+                                <span className="subItemtext">{courtResult.length}개의 코트 등록</span>
                                 {courtModal?
                                     <Modal 
-                                        title={'시설 등록'}
-                                        content={(
-                                        <div className="modalContent">
-                                            <div className="modalBoxTitle">
-                                                등록할 상세 시설 갯수
-                                            </div>
-                                            <input 
-                                                type="number"
-                                                min={0} 
-                                                className="modalBoxCount"
-                                                onChange={(e) => setCourtNum(e.target.value)}
-                                            />
-                                            {courtNum >0?
-                                            <NewCourt courtNum /> : <></>}
-                                        </div>
-                                        )}
+                                        content={<NewCourt courtPass={courtPass} />}
                                         callbackFn={closeModal} 
                                     />
                                     : <></>
@@ -206,6 +208,7 @@ export default function NewFacility() {
                                 onClick={() => handleProductButton()}>
                                     대여물품
                                 </button>
+                                <span className="subItemtext">{courtResult.length}개의 물품 등록</span>
                                 {productModal?
                                     <Modal 
                                     title={'물픔 등록'}

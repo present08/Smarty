@@ -6,9 +6,11 @@
 
     <insert id="register" parameterType="FacilityDTO">
         insert into facility (facility_id, facility_name, open_time, close_time, default_time,
-        basic_fee, extra_fee, contact, info, caution, court, product, facility_status, facility_images)
+        basic_fee, rate_adjustment, hot_time, contact, info, caution, court, product,
+        facility_status, facility_images)
         values (#{facility_id}, #{facility_name}, #{open_time}, #{close_time}, #{default_time},
-        #{basic_fee}, #{extra_fee}, #{contact}, #{info}, #{caution}, #{court}, #{product}, #{facility_status}, #{facility_images})
+        #{basic_fee}, #{rate_adjustment}, #{hot_time} #{contact}, #{info}, #{caution}, #{court}, #{product},
+        #{facility_status}, #{facility_images})
     </insert>
 
     <insert id="fileUpload" parameterType="String">

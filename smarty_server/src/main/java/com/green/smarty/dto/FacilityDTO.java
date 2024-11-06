@@ -17,10 +17,13 @@ public class FacilityDTO {
 
     private String open_time;
     private String close_time;      // 운영 시간
-    private int default_time;       // 기본 이용시간
+    private int default_time;       // 기본 이용시간, 할인/할증 구간 나누는 기준
 
     private int basic_fee;
-    private int extra_fee;          // 기본 및 할증가격
+    private float rate_adjustment;  // 가격 조정율 ex) 0.3
+    private int hot_time;
+    // 0: 기본요금 적용, 1: 조조할인 적용, 2: 심야할증 적용, 3: 할인, 할증 모두 적용
+
 
     private String contact;
     private String info;
@@ -39,14 +42,15 @@ public class FacilityDTO {
 
     // 시설 정보 수정 메서드
     public void update(String facility_name, String open_time, String close_time, int default_time,
-                       int basic_fee, int extra_fee, String contact, String info, String caution,
+                       int basic_fee, float rate_adjustment, int hot_time, String contact, String info, String caution,
                        boolean court, boolean product, boolean facility_status) {
         this.facility_name = facility_name;
         this.open_time = open_time;
         this.close_time = close_time;
         this.default_time = default_time;
         this.basic_fee = basic_fee;
-        this.extra_fee = extra_fee;
+        this.rate_adjustment = rate_adjustment;
+        this.hot_time = hot_time;
         this.contact = contact;
         this.info = info;
         this.caution = caution;

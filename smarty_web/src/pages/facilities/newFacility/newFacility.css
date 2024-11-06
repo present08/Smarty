@@ -71,10 +71,14 @@
 }
 .subItem {
     display: flex;
+    align-items: center;
     gap: 10px;
     margin-bottom: 10px;
 }
-
+.subItemtext {
+    font-size: 13px;
+    color: #555;
+}
 .leftItem {
     display: flex;
     gap: 10px;

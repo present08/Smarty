@@ -12,12 +12,11 @@ export default function Modal({title, content, callbackFn}) {
                         if(callbackFn) callbackFn()
                     }}
                 />
-                {title}
             </div>
             <div className="modalBoxContent">
                 {content}
             </div>
-            <div className="modalBoxBottom">
+            {/* <div className="modalBoxBottom">
                 <button 
                     className="checkButton"
                     onClick={() => {
@@ -26,7 +25,7 @@ export default function Modal({title, content, callbackFn}) {
                 >
                     등록
                 </button>
-            </div>
+            </div> */}
         </div>       
     </div>
   )

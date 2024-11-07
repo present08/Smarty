@@ -9,6 +9,7 @@ const CustomCalender = (props) => {
 
   useEffect(() => {
     props.newDate(moment(value).format("YYYY-MM-DD"))
+    props.Date1(moment(value).format("YYYY-MM-DD"))
   }, [value])
 
   return (
@@ -19,7 +20,6 @@ const CustomCalender = (props) => {
         formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
         prev2Label={null} next2Label={null}
       />
-      <p>{moment(value).format("YYYY년 MM월 DD일")} </p>
     </div>
   );
 };

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../css/nav.css'
-import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch, AiOutlineUser } from "react-icons/ai";
-import axios from 'axios';
+import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
+import { checkLoginStatus, Logout } from '../api/userApi';
 
 const host = 'http://localhost:8080';
 
-const MainNav = () => {
-
+const MainNav = ({props}) => {
     // 검색창 모달 구현하기
     const [searchModal, setSearchModal] = useState(false);
+    const [userId, setUserId] = useState('');
     const modalBackcground = useRef();
 
     // 검색창
@@ -32,29 +32,22 @@ const MainNav = () => {
 
     // 로그인 상태를 확인하는 함수
     useEffect(() => {
-        const checkLoginStatus = async () => {
-            try {
-                const response = await axios.get(`${host}/api/auth/status`, { withCredentials: true });
-                setIsLoggedIn(response.data.isLoggedIn);
-                localStorage.setItem('isLoggedIn', response.data.isLoggedIn);
-            } catch (error) {
-                console.log("로그인 상태 확인 중 에러 발생: ", error);
-            }
-        };
-
-        checkLoginStatus();
+        checkLoginStatus().then(e => {
+            setIsLoggedIn(e.isLoggedIn);
+            localStorage.setItem('isLoggedIn', e.isLoggedIn);
+            props(localStorage.getItem('user'))
+        })
     }, []); // 컴포넌트 마운트 시 한 번만 실행
 
-    const handleLogout = async () => {
-        try {
-            await axios.post(`${host}/api/auth/logout`, {}, { withCredentials: true }); // withCredentials 추가
+    const handleLogout = () => {
+        Logout().then(e => {
             alert("로그아웃 성공");
             setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', 'false');
-            window.location.reload(); // 새로고침
-        } catch (error) {
-            alert('로그아웃 중 오류 발생: ', error);
-        }
+            // window.location.reload(); // 새로고침
+        }).catch( (error) =>  {
+            console.log("로그인 상태 확인 중 에러 발생: ", error);
+        })
     };
 
     return (

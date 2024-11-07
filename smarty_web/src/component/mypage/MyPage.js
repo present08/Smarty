@@ -15,34 +15,37 @@ import ReceiptButton from './ReceiptButton';
 import UserNavber from './UserNavber';
 import QrButton from './QrButton';
 import UserGrade from './UserGrade';
+import { getReservationInfo } from '../../api/userApi';
 
 const host = 'http://localhost:8080';
 
 const MyPage = () => {
 
     const [isOn, setIsOn] = useState(false);
+    const [userId, setUserId] = useState('');
 
     const toggleButton = () => {
         setIsOn(prev => !prev);
     };
 
-
     const [currentUser, setCurrentUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const checkLoginStatus = async () => {
-            try {
-                const response = await axios.get(`${host}/api/auth/status`, { withCredentials: true });
-                setIsLoggedIn(response.data.isLoggedIn);
-                localStorage.setItem('isLoggedIn', response.data.isLoggedIn);
-            } catch (error) {
-                console.log("로그인 상태 확인 중 에러 발생: ", error);
-            }
-        };
 
-        checkLoginStatus();
-    }, []);
+    // useEffect(() => {
+    //     const checkLoginStatus = async () => {
+    //         try {
+    //             const response = await axios.get(`${host}/api/auth/status`, { withCredentials: true });
+    //             setIsLoggedIn(response.data.isLoggedIn);
+    //             localStorage.setItem('isLoggedIn', response.data.isLoggedIn);
+    //         } catch (error) {
+    //             console.log("로그인 상태 확인 중 에러 발생: ", error);
+    //         }
+    //     };
+
+    //     checkLoginStatus();
+    // }, []);
+
 
     const handleLogout = async () => {
         try {
@@ -62,6 +65,7 @@ const MyPage = () => {
             if (response.status === 200) {
                 const user = response.data;
                 console.log("현재 로그인된 사용자 정보:", user);
+                setUserId(user.user_id)
                 localStorage.setItem("user", JSON.stringify(user));
                 return user;
             } else {
@@ -78,6 +82,12 @@ const MyPage = () => {
             setCurrentUser(user);
         });
     }, []);
+
+    useEffect(() => {
+        console.log(userId)
+        getReservationInfo(userId).then(e => console.log(e));
+    }, [currentUser])
+    
 
 
     return (
@@ -96,7 +106,7 @@ const MyPage = () => {
                         <UserRating />
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
-                        <UserCalendar />
+                        <UserCalendar  />
                         <UserReservation />
                     </div>
                 </div>

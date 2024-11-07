@@ -7,6 +7,7 @@
 
 .reservation_title {
     text-align: center;
+    margin-top: 2rem;
 }
 
 .reservation_title:after {
@@ -19,12 +20,20 @@
     margin-top: 20px;
 }
 
-.reservation_btn{
-    display:block;
-    width:200px;
-    padding:30px;
-    margin:0 auto;
-    border:none;
+.buttonBox {
+    display: flex;
+    width: 73%;
+    height: 10%;
+    margin: 0 auto;
+    justify-content: flex-end;
+}
+
+.reservation_btn {
+    display: block;
+    width: 210px;
+    padding: 20px;
+    margin: 0 auto;
+    border: none;
     background-color: #011b2f;
     color: aliceblue;
     font-size: large;
@@ -88,7 +97,7 @@
 
 .reservation_final {
     width: 100%;
-    margin-top:100px;
+    margin-top: 100px;
 }
 
 
@@ -98,7 +107,7 @@
     color: #011b2f;
     display: inline-block;
     border-radius: 30px;
-    margin:30px 0 ;
+    margin: 30px 0;
     vertical-align: top;
 }
 
@@ -106,7 +115,7 @@
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom:100px;
+    margin-bottom: 100px;
 
 }
 

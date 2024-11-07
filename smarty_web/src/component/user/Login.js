@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { login } from '../../api/userApi';
 
 const host = 'http://localhost:8080'
 
@@ -43,28 +44,26 @@ const Login = () => {
         navigate("/user/find-password")
     }
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-
-        try {
-            const response = await axios.post(`${host}/api/auth/login`, { user_id, password }, { withCredentials: true });
+        login(user_id, password).then(e => {
             // 로그인 성공 시, 토큰 저장 등 처리
-            console.log('로그인 성공:', response.data);
+            console.log('로그인 성공:', e);
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('user', 'response.data');
-            alert(`${response.data.user_name}님 환영합니다`)
+            localStorage.setItem('user', e.user_id);
+            alert(`${e.user_name}님 환영합니다`)
             if (isRemember) {
                 setCookie("rememberUserId", user_id)
             }
             navigate("/")
-        } catch (err) {
+        }).catch((err) => {
             setError('로그인 실패:아이디 또는 비밀번호가 잘못되었습니다.');
             console.error(err);
             if (err.response.data === "Invalid user_id or password.") {
                 alert("ID 또는 비밀번호 확인해주세요.")
             }
-        }
-    };
+        })
+    }
 
     return (
         <div style={{

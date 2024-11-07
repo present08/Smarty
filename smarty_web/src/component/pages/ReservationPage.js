@@ -22,10 +22,14 @@ const ReservationPage = () => {
     const [reserved, setReserved] = useState([])
     const [date, setDate] = useState(year + '-' + month + '-' + (day < 10 ? "0" + day : day))
     const [reservationFlag, setReservationFlag] = useState(false)
+    const [userId, setUserId] = useState('')
     const location = useLocation();
     const focusRef = useRef(null);
     const newDate = (date) => {
         setDate(date);
+    }
+    const newId = (name) =>{
+        setUserId(name);
     }
     useEffect(() => {
         getCourt(location.state.facility_id, location.state.court, date)
@@ -45,13 +49,19 @@ const ReservationPage = () => {
 
     return (
         <>
-            <MainNav />
+            <MainNav props={newId}/>
             <Wrapper />
             <h1 className='reservation_title'>통합 예약</h1>
-            <FacilityComponent props={facilityData} /> <button onClick={() => reservationClick()} className='reservation_btn'>예약하기</button>
+            <FacilityComponent props={facilityData} />
+            <div className='buttonBox'>
+                <div>
+                    <button onClick={() => reservationClick()} className='reservation_btn'>예약하기</button>
+                </div>
+            </div>
+
             <Information props={facilityData} />
             <div ref={focusRef} ></div>
-            {reservationFlag ? <ReservationComponent facilityData={facilityData} reserved={reserved} newDate={newDate} /> : <></>}
+            {reservationFlag ? <ReservationComponent facilityData={facilityData} reserved={reserved} newDate={newDate} userId={userId}/> : <></>}
             <Footer />
         </>
     )

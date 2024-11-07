@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { signUp } from '../../api/userApi';
 
 const host = 'http://localhost:8080';
 
@@ -17,7 +18,15 @@ const SignUp = () => {
     const [success, setSuccess] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState(''); // QR 코드 URL 상태
     const [selectEmail, setSelectEmail] = useState('')
-
+    const userData = {
+        user_id: userId,
+        user_name: userName,
+        email,
+        password,
+        phone,
+        address,
+        birthday,
+    };
 
     const navigate = useNavigate();
 
@@ -26,29 +35,16 @@ const SignUp = () => {
         console.log(email)
     }, [selectEmail])
 
-
-    const handleSignUp = async (e) => {
+    const handleSignUp = (e) => {
         e.preventDefault();
-        const userData = {
-            user_id: userId,
-            user_name: userName,
-            email,
-            password,
-            phone,
-            address,
-            birthday,
-        };
-
-        try {
-            if (window.confirm("회원가입 하시겠습니까?")) {
-
-                const signupResponse = await axios.post(`${host}/api/auth/signup`, userData, { responseType: 'arraybuffer' });
-                console.log('회원가입 성공:', signupResponse.data);
-                setSuccess('회원가입이 완료되었습니다. 로그인 해주세요.');
+        if (window.confirm("회원가입 하시겠습니까?")) {
+            signUp(userData).then(e => {
+                console.log('회원가입 성공:', e);
+                alert('회원가입이 완료되었습니다. 로그인 해주세요.');
 
                 // 바이트 배열을 base64로 변환
                 const base64String = btoa(
-                    new Uint8Array(signupResponse.data)
+                    new Uint8Array(e)
                         .reduce((data, byte) => data + String.fromCharCode(byte), '')
                 );
                 const qrCodeUrl = `data:image/png;base64,${base64String}`;
@@ -57,26 +53,69 @@ const SignUp = () => {
                 setTimeout(() => {
                     navigate("/user/login");
                 }, 5000);
-                setError('');
 
-
-            }
-        } catch (err) {
-            setError('회원가입 실패: 다시 시도해 주세요.');
-            if (err.response.data === "UserID or UserEmail already exists.") {
-                alert("ID 또는 Email 중복되었습니다 다시시도해주세요.");
-            }
+            }).catch((err) => {
+                setError('회원가입 실패: 다시 시도해 주세요.');
+                console.log(err)
+                if (err.response.data === "UserID or UserEmail already exists.") {
+                    alert("ID 또는 Email 중복되었습니다 다시시도해주세요.");
+                }
+            })
         }
-    };
+    }
 
 
-    const Title = styled.h2`
-      display: flex;
-      font-size:40px;
-      @media (max-width: 600px) {
-        font-size:20px;
-      }
-    `;
+
+    // const handleSignUp = async (e) => {
+    //     e.preventDefault();
+    //     const userData = {
+    //         user_id: userId,
+    //         user_name: userName,
+    //         email,
+    //         password,
+    //         phone,
+    //         address,
+    //         birthday,
+    //     };
+
+    //     try {
+    //         if (window.confirm("회원가입 하시겠습니까?")) {
+
+    //             const signupResponse = await axios.post(`${host}/api/auth/signup`, userData, { responseType: 'arraybuffer' });
+    //             console.log('회원가입 성공:', signupResponse.data);
+    //             setSuccess('회원가입이 완료되었습니다. 로그인 해주세요.');
+
+    //             // 바이트 배열을 base64로 변환
+    //             const base64String = btoa(
+    //                 new Uint8Array(signupResponse.data)
+    //                     .reduce((data, byte) => data + String.fromCharCode(byte), '')
+    //             );
+    //             const qrCodeUrl = `data:image/png;base64,${base64String}`;
+    //             setQrCodeUrl(qrCodeUrl); // QR 코드 URL 상태 업데이트
+
+    //             setTimeout(() => {
+    //                 navigate("/user/login");
+    //             }, 5000);
+    //             setError('');
+
+
+    //         }
+    //     } catch (err) {
+    //         setError('회원가입 실패: 다시 시도해 주세요.');
+    //         if (err.response.data === "UserID or UserEmail already exists.") {
+    //             alert("ID 또는 Email 중복되었습니다 다시시도해주세요.");
+    //         }
+    //     }
+    // };
+
+
+    // const Title = styled.h2`
+    //   display: flex;
+    //   font-size:40px;
+    //   @media (max-width: 600px) {
+    //     font-size:20px;
+    //   }
+    // `;
 
 
 
@@ -107,11 +146,11 @@ const SignUp = () => {
                     paddingLeft: '5%',
                     paddingBottom: '10%'
                 }}>
-                    <Title style={{
+                    <h1 style={{
                         color: '#9db6cf',
                         paddingBottom: '5px',
                         margin: 0
-                    }}>SIGNUP</Title>
+                    }}>SIGNUP</h1>
                     <form onSubmit={handleSignUp}>
                         <div style={{ textAlign: 'left' }}>
                             <label htmlFor="user_id" style={{
@@ -123,7 +162,7 @@ const SignUp = () => {
                             <input
                                 type="text"
                                 id="user_id"
-                                value={userId}
+                                // value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
                                 placeholder="아이디를 입력하세요."
                                 required
@@ -149,7 +188,7 @@ const SignUp = () => {
                             <input
                                 type="text"
                                 id="user_name"
-                                value={userName}
+                                // value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
                                 placeholder="이름을 입력하세요."
                                 required
@@ -188,15 +227,17 @@ const SignUp = () => {
                                         borderRadius: '10px',
                                         paddingLeft: '10px'
                                     }}
-                                />
-                                <input type="text" disabled={selectEmail !== '' ? true : false} value={selectEmail} style={{
-                                    width: '100px',
-                                    height: '40px',
-                                    marginLeft: '10px',
-                                    borderRadius: '10px',
-                                    backgroundColor: '#f2f3f4',
-                                    border: 0,
-                                }} />
+                                />@
+                                <input type="text" disabled={selectEmail !== '' ? true : false}
+                                    placeholder={selectEmail}
+                                    style={{
+                                        width: '100px',
+                                        height: '40px',
+                                        marginLeft: '10px',
+                                        borderRadius: '10px',
+                                        backgroundColor: '#f2f3f4',
+                                        border: 0,
+                                    }} />
                                 <select onChange={(e) => setSelectEmail(e.target.value)} style={{
                                     width: '100px',
                                     height: '40px',
@@ -205,7 +246,7 @@ const SignUp = () => {
                                     backgroundColor: '#f2f3f4',
                                     border: 0,
                                 }}>
-                                    <option value='' selected >직접입력</option>
+                                    <option value='' >직접입력</option>
                                     <option value="naver.com">naver.com</option>
                                     <option value="google.com">google.com</option>
                                     <option value="daum.net">daum.net</option>
@@ -224,7 +265,7 @@ const SignUp = () => {
                             <input
                                 type="password"
                                 id="password"
-                                value={password}
+                                // value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="비밀번호를 입력하세요."
                                 required
@@ -250,7 +291,7 @@ const SignUp = () => {
                             <input
                                 type="text"
                                 id="phone"
-                                value={phone}
+                                // value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="휴대번호를 입력하세요."
                                 style={{
@@ -275,7 +316,7 @@ const SignUp = () => {
                             <input
                                 type="text"
                                 id="address"
-                                value={address}
+                                // value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="주소를 입력하세요."
                                 style={{
@@ -300,7 +341,7 @@ const SignUp = () => {
                             <input
                                 type="date"
                                 id="birthday"
-                                value={birthday}
+                                // value={birthday}
                                 onChange={(e) => setBirthday(e.target.value)}
                                 style={{
                                     width: '400px',

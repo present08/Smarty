@@ -6,128 +6,98 @@ import { updatePlan } from '../../api/ReservationAPI.js';
 import moment from 'moment';
 import axios from 'axios';
 
-const host = 'http://localhost:8080';
+const host = 'http://localhost:8080/api/auth';
 
 const ReservationComponent = (props) => {
 
-    const { facilityData, reserved, newDate } = props;
 
+    const { facilityData, reserved, newDate, userId } = props;
+    const [date, setDate] = useState('')
+    const [partTime, setPartTime] = useState(0)
+    const [timeLine, setTimeLine] = useState([])
+    const [fristNum, setFristNum] = useState(0)
+    const [lastNum, setLastNum] = useState(0)
+    const [price, setPrice] = useState(facilityData.basic_fee)
     const [currentUser, setCurrentUser] = useState(null);
-    const [date, setDate] = useState('');
-    const [partTime, setPartTime] = useState(0);
-    const [timeLine, setTimeLine] = useState([]);
-    const [fristNum, setFristNum] = useState(0);
-    const [lastNum, setLastNum] = useState(0);
-    const [price, setPrice] = useState(facilityData.basic_fee);
-    const [postData, setPostData] = useState({
+
+    const initData = {
         reservation_id: null,
-        user_id: null,
+        user_id: "",
         court_id: "C_000000",
         reservation_start: "",
         reservation_end: "",
         court_name: "",
         facility_id: facilityData.facility_id,
         court_status: true
-    });
+    }
+    const [postData, setPostData] = useState(initData)
 
+    // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
-        console.log(date);
-    };
-
+        console.log(date)
+    }
     useEffect(() => {
-        setTimeLine(reserved);
-    }, [reserved]);
+        setTimeLine(reserved)
+    }, [reserved])
 
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
             if (tl.id === item.id) {
-                return { ...item, active: 1 };
+                return { ...item, active: 1 }
             }
-            return { ...item, active: 0 };
-        });
-        setTimeLine(newTimeLine);
-        setPrice(facilityData.basic_fee);
-        extra_price(tl.id);
+            return { ...item, active: 0 }
+        })
+        setTimeLine(newTimeLine)
+        // console.log(tl.id)
+        setPrice(facilityData.basic_fee)
+        extra_price(tl.id)
     };
 
     const extra_price = (id) => {
-        const frist_time = timeLine.find(item => item.id === id)?.start || '';
-        const last_time = timeLine.find(item => item.id === id)?.end + 1 || '';
-        if (frist_time === timeLine[0].start) {
-            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment);
-        } else if (last_time === timeLine[timeLine.length - 1].end) {
-            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment);
+        const frist_time = timeLine.find(item => item.id === id)?.start || ''
+        const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
+        if (frist_time == timeLine[0].start) {
+            console.log(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
+            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
+        } else if (last_time == timeLine[timeLine.length - 1].end) {
+            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
+            console.log(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
         }
-    };
+    }
 
     useEffect(() => {
-        const frist = timeLine.find(item => item.active === 1)?.start || '';
-        const last = timeLine.filter(item => item.active).slice(-1)[0]?.end || '';
-        setFristNum(frist < 10 ? '0' + frist : frist);
-        setLastNum(last < 10 ? '0' + last : last);
-    }, [timeLine]);
+        const frist = timeLine.find(item => item.active == 1)?.start || ''
+        const last = timeLine.filter(item => item.active).slice(-1)[0]?.end || ''
+        frist < 10 ? setFristNum('0' + frist) : setFristNum(frist)
+        last < 10 ? setLastNum('0' + last) : setLastNum(last)
+    }, [handleClick])
 
     useEffect(() => {
         const start_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), fristNum);
         const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
-        setPostData(prevData => ({
-            ...prevData,
-            user_id: currentUser ? currentUser.user_id : null,
+        setPostData({
+            reservation_id: null,
+            court_id: "C_000000",
+            court_name: "",
+            court_status: true,
+            facility_id: facilityData.facility_id,
+            user_id: userId,
             reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
-        }));
-    }, [lastNum, currentUser]);
+        })
+
+    }, [lastNum])
 
     const insertReservation = () => {
         updatePlan(postData, facilityData.facility_id)
             .then(e => {
-                alert("예약완료");
-                setTimeLine(e);
-                // postData 초기화
-                setPostData({
-                    reservation_id: null,
-                    user_id: null,
-                    court_id: "C_000000",
-                    reservation_start: "",
-                    reservation_end: "",
-                    court_name: "",
-                    facility_id: facilityData.facility_id,
-                    court_status: true
-                });
+                alert("예약완료")
+                setTimeLine(e)
             })
-            .catch(error => {
-                console.error("예약 오류:", error);
-                alert("예약 중 오류가 발생했습니다. 다시 시도해주세요.");
-            });
-    };
-
-    const fetchCurrentUser = async () => {
-        try {
-            const response = await axios.get(`${host}/api/auth/me`, { withCredentials: true });
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("현재 로그인된 사용자 정보:", user);
-                localStorage.setItem("user", JSON.stringify(user));
-                return user;
-            } else {
-                console.log("사용자가 인증되지 않았습니다.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchCurrentUser().then(user => {
-            setCurrentUser(user);
-        });
-    }, []);
-
-    if (!currentUser) {
-        return <div>로그인이 필요합니다.</div>; // 로그인 필요시 안내
     }
+
+
 
     return (
         <div className='reservation_container'>
@@ -172,8 +142,7 @@ const ReservationComponent = (props) => {
                 <button onClick={insertReservation} className='reservation_btn'>예약하기</button>
             </div>
         </div>
-    );
+    )
 }
 
-export default ReservationComponent;
-
+export default ReservationComponent

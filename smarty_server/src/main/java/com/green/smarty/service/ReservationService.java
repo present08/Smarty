@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.vo.ReservationUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +71,11 @@ public class ReservationService {
 
         List<Map<String, Integer>> result = createTimeBtn(vo.getFacility_id(), vo.getCourt_id(), date);
 
+        return result;
+    }
+
+    public List<ReservationUserDTO> getReservationUserDate(String user_id){
+        List<ReservationUserDTO> result = reservationMapper.getReservationUserDate(user_id);
         return result;
     }
 

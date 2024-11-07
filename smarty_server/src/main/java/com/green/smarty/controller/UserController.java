@@ -2,7 +2,9 @@ package com.green.smarty.controller;
 
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
+import com.green.smarty.service.ReservationService;
 import com.green.smarty.service.UserService;
+import com.green.smarty.vo.ReservationUserDTO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,9 +35,13 @@ public class UserController {
     @Autowired
     private QRCodeService qrCodeService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
+        System.out.println(userVO);
         // 가입 날짜와 로그인 날짜 자동 설정
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
@@ -201,5 +208,12 @@ public class UserController {
             UserVO user = userMapper.getById(userVO.getUserId());
         System.out.println("업데이트 완료 :" + user);
             return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/reservationUser")
+    public List<ReservationUserDTO> getReservationUserDate(@RequestParam String user_id){
+        System.out.println(user_id);
+        List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
+        return result;
     }
 }

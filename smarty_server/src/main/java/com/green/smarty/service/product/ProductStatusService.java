@@ -8,6 +8,6 @@ import java.util.List;
 public interface ProductStatusService {
     List<ProductStatusVO> getAllProductStatuses(); // 모든 상품 상태 조회
     void updateProductStatus(ProductStatusVO productStatus);
-    List<ProductStatusVO> getProductStatus(@Param("productId") String productId);
+    List<ProductStatusVO> getProductStatusByQuantityId(@Param("quantity_id") String quantityId);
 
 }

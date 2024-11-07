@@ -25,7 +25,7 @@ public class ProductStatusServiceImpl implements ProductStatusService{
     }
 
     @Override
-    public List<ProductStatusVO> getProductStatus(String productId) {
-        return productStatusMapper.getProductStatus(productId);
+    public List<ProductStatusVO> getProductStatusByQuantityId(String productId) {
+        return productStatusMapper.getProductStatusByQuantityId(productId);
     }
 }

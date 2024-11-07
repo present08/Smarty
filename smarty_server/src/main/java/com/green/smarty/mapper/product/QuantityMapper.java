@@ -3,6 +3,7 @@ package com.green.smarty.mapper.product;
 import com.green.smarty.vo.product.QuantityVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,9 @@ import java.util.Map;
 public interface QuantityMapper {
     int register (QuantityVO vo);
     int modify (QuantityVO vo);
+    // Quantity_tbl에서 quantity_id 가져오기
+    @Select("SELECT quantity_id FROM quantity_tbl")
+    List<String> getAllQuantityIds();
     // 모든 상품의 재고 조회
     List<QuantityVO> getAllQuantities();
     // 특정 상품의 재고 조회

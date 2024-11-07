@@ -74,11 +74,9 @@ export const fetchDetailsByProductId = (productId) => {
 };
 
 // 재고 수정
-export const updateStock = (quantityId, stock) => {
-  return axios.put(`${quantityControllerPath}/set-stock/${quantityId}`, null, {
-      params: {
-          stock,
-      },
+export const updateStock = (quantity_id, stock) => { // quantityId -> quantity_id로 수정
+  return axios.put(`${quantityControllerPath}/set-stock/${quantity_id}`, null, {
+      params: { stock },
   });
 };
 
@@ -87,20 +85,23 @@ export const fetchSizes = () => {
   return axios.get(sizeControllerPath);
 };
 
-// 대여품 상태 가져오기(관리자용)
-export const fetchProductStatus = () => {
-  return axios.get(`${productStatusControllerPath}/all`); // 수정: 전체 상태 조회 엔드포인트 명확히
-};
-
 // 상품별 사이즈 추가
 export const addSizesToProduct = (productId, sizes) => {
   return axios.post(`${sizeControllerPath}/${productId}`, sizes);
 };
 
-// 대여품 상태 갱신
-export const updateProductStatus = (statusId, newStatus) => {
-  return axios.put(`${productStatusControllerPath}/${statusId}`, { status: newStatus });
-}; 
+// 대여품 상태 가져오기 (관리자용)
+export const fetchProductStatusByQuantityId = async (quantity_id) => { // quantityId -> quantity_id로 수정
+  const url = `${productStatusControllerPath}/quantity/${quantity_id}`;
+  const response = await axios.get(url);
+  return response.data; // 상태 정보 반환
+};
+
+// 대여품 상태 갱신 (관리자용)
+export const updateProductStatus = (quantity_id, newStatus) => { // quantityId -> quantity_id로 수정
+    const url = `${productStatusControllerPath}?quantity_id=${quantity_id}&status=${newStatus}`; // 쿼리 매개변수 수정
+    return axios.put(url);
+};
 
 // Spring Boot에서 예약정보 가져오기
 export const fetchReservations = () => {

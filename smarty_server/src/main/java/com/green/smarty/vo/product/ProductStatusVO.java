@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class ProductStatusVO {
-    private String statusId;
-    private String productId;
+    private String status_id;
+    private String quantity_id;
     private String status;
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated_at;
 }

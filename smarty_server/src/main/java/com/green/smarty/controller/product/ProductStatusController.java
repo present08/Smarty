@@ -21,16 +21,21 @@ public class ProductStatusController {
     }
 
     @PutMapping
-    public void updateProductStatus(@RequestParam("productId") String productId, @RequestParam("status") String status) {
+    public void updateProductStatus(@RequestParam("quantity_id") String quantityId, @RequestParam("status") String status) {
         ProductStatusVO productStatus = ProductStatusVO.builder()
-                .productId(productId)
+                .quantity_id(quantityId)
                 .status(status)
                 .build();
         productStatusService.updateProductStatus(productStatus);
+        System.out.println("Updated status for quantity_id: " + quantityId + " to status: " + status); // 추가된 로그
+
     }
-    
-    @GetMapping("/{productId}")
-    public List<ProductStatusVO> getProductStatus(@PathVariable("productId") String productId) {
-        return productStatusService.getProductStatus(productId);
-    }
+
+    @GetMapping("/quantity/{quantity_id}")
+    public ProductStatusVO getProductStatusByQuantityId(@PathVariable("quantity_id") String quantityId) {
+        ProductStatusVO status = productStatusService.getProductStatusByQuantityId(quantityId).stream().findFirst().orElse(null);
+        if (status == null) {
+            System.out.println("No status found for quantity_id: " + quantityId); // 추가된 로그
+        }
+        return status;    }
 }

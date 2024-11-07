@@ -4,20 +4,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.product.ProductStatusMapper">
 
+    <insert id="insertProductStatus" parameterType="com.green.smarty.vo.product.ProductStatusVO"  useGeneratedKeys="true" keyProperty="status_id">
+        INSERT INTO product_status_tbl (status_id, quantity_id, status)
+        VALUES (#{statusId}, #{quantityId}, #{status})
+    </insert>
+
     <select id="getAllProductStatuses" resultType="com.green.smarty.vo.product.ProductStatusVO">
         SELECT * FROM product_status_tbl;
     </select>
 
     <!-- 특정 상품 상태 조회 -->
     <select id="getProductStatus" parameterType="String" resultType="com.green.smarty.vo.product.ProductStatusVO">
-        SELECT * FROM status_tbl WHERE product_id = #{productId};
+        SELECT * FROM product_status_tbl WHERE quantity_id = #{quantity_id};
     </select>
 
     <!-- 상품 상태 업데이트 쿼리 -->
     <update id="updateProductStatus" parameterType="com.green.smarty.vo.product.ProductStatusVO">
         UPDATE product_status_tbl
         SET status = #{status}, updated_at = NOW()
-        WHERE product_id = #{productId};
+        WHERE quantity_id = #{quantity_id};
     </update>
+
+    <select id="getProductStatusByQuantityId" parameterType="String" resultType="com.green.smarty.vo.product.ProductStatusVO">
+        SELECT * FROM product_status_tbl WHERE quantity_id = #{quantity_id};
+    </select>
 
 </mapper>

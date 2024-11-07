@@ -86,12 +86,13 @@ const ReservationComponent = (props) => {
         // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
     }, [lastNum])
 
-
     const insertReservation = () => {
-        updatePlan(postData, facilityData.facility_id).then(e => console.log(e))
+        updatePlan(postData, facilityData.facility_id)
+            .then(e => {
+                alert("예약완료")
+                setTimeLine(e)
+            })
     }
-
-
 
     return (
         <div className='reservation_container'>

@@ -41,7 +41,6 @@ public class ReservationService {
                 }
             }
         }
-        System.out.println(list);
         List<Map<String, Integer>> timeBtn = new ArrayList<>();
         for (int i = 0; i < (end - start); i++) {
             Map<String, Integer> timeMap = new HashMap<>();
@@ -61,16 +60,17 @@ public class ReservationService {
         return timeBtn;
     }
 
-    public String insertReservation(ReservationVO vo) {
+    public List<Map<String, Integer>> insertReservation(ReservationVO vo) {
         List<ReservationVO> selectVO = reservationMapper.getReservationAll();
         int last_id = Integer.parseInt(selectVO.get(selectVO.size() - 1).getReservation_id().split("_")[1]);
 
         vo.setReservation_id("R_" + String.format("%06d", last_id + 1));
+        reservationMapper.insertReservation(vo);
+        String date = vo.getReservation_start().toString().split("T")[0];
 
-        System.out.println(vo);
-        int result = reservationMapper.insertReservation(vo);
-        System.out.println(result);
-        return "등록완료";
+        List<Map<String, Integer>> result = createTimeBtn(vo.getFacility_id(), vo.getCourt_id(), date);
+
+        return result;
     }
 
 }

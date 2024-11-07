@@ -40,8 +40,8 @@ public class ReservationController {
     }
 
     @PostMapping("/{facility_id}")
-    public String dateToTime(@RequestBody ReservationVO vo) {
-        String result = reservationService.insertReservation(vo);
+    public List<Map<String, Integer>> dateToTime(@RequestBody ReservationVO vo) {
+        List<Map<String, Integer>> result = reservationService.insertReservation(vo);
         return result;
     }
 

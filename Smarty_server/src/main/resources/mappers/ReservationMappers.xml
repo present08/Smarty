@@ -21,7 +21,6 @@
         insert into court(court_id, court_name, facility_id, court_status) values(#{court_id}, #{court_name}, #{facility_id}, #{court_status})
     </insert>
 
-
     <!-- select -->
     <select id="getFacility" parameterType="String" resultType="com.green.smarty.vo.FacilityVO">
         select * from facility where facility_id = #{facility_id}

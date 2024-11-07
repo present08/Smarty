@@ -6,6 +6,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 const host = 'http://localhost:8080';
 
 const UserButton = () => {
+
     const [currentUser, setCurrentUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [address, setAddress] = useState('');
@@ -96,9 +97,10 @@ const UserButton = () => {
                                     width: '100%', height: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center',
                                 }}>
                                     <div style={{ marginTop: '3rem', width: '70%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                        <h3>
+                                        <h3 style={{ fontSize: '26px', marginBottom: '1rem' }}>
                                             {currentUser.user_name}님 회원 정보 수정
                                         </h3>
+                                        <p style={{ color: 'gray' }}>수정 후 재로그인이 필요합니다.</p>
                                         <label htmlFor="address" style={{
                                             fontSize: '25px',
                                             color: 'gray',

@@ -17,7 +17,7 @@ const CenterIntroduction = () => {
                         <nav>
                             <Link to="/" style={{ textDecoration: 'none', color: 'black', padding: '10px', paddingLeft: '0' }}>HOME</Link>
                             <p >&gt;</p>
-                            <Link to="/center" style={{ textDecoration: 'none', color: '#28537a', fontWeight: 'bold', padding: '10px', marginRight: '10px' }}>센터소개</Link>
+                            <Link to="/center_intro" style={{ textDecoration: 'none', color: '#28537a', fontWeight: 'bold', padding: '10px', marginRight: '10px' }}>센터소개</Link>
                         </nav>
                     </div>
                     <div className='centro_cont'>
@@ -28,8 +28,10 @@ const CenterIntroduction = () => {
                         </div>
                         <div className='centro_text'>
                             <p>
-                                저희 복합문화체육시설 SMARTY센터는 다양한 문화와 스포츠 활동을 한 공간에서 즐길 수 있도록 설계된 다목적 공간입니다. <br />
-                                최첨단 시설과 함께 다양한 프로그램을 통해 회원님들의 건강과 여가를 위한 최상의 서비스를 제공합니다.
+                                SMARTY센터는 다양한 연령층과 관심사를 가진 분들이 함께 어울릴 수 있는 커뮤니티 중심의 공간입니다.<br />
+                                최신 헬스장, 실내 수영장, 골프 연습장, 요가 및 필라테스 스튜디오, 다목적 강의실 등 최첨단 시설을 갖추고 있습니다.<br />
+                                또한, 체육 및 문화 프로그램은 물론, 특별한 이벤트와 전시, 워크숍 등을 통해 회원님들의 삶의 질을 향상시킬 수 있는 다양한 기회를 제공합니다.<br />
+                                SMARTY센터는 건강과 여가를 중시하는 공간으로, 모든 회원님들에게 맞춤형 서비스를 제공하며, 즐거움과 활력을 불어넣는 소중한 장소입니다.
                             </p>
                         </div>
                     </div>

@@ -12,7 +12,6 @@ import UserButton from './UserButton';
 import SituationButton from './CancellationButton';
 import { CiBellOff } from 'react-icons/ci';
 import ReceiptButton from './ReceiptButton';
-import { FaQ } from 'react-icons/fa6';
 import UserNavber from './UserNavber';
 import QrButton from './QrButton';
 import UserGrade from './UserGrade';
@@ -20,6 +19,13 @@ import UserGrade from './UserGrade';
 const host = 'http://localhost:8080';
 
 const MyPage = () => {
+
+    const [isOn, setIsOn] = useState(false);
+
+    const toggleButton = () => {
+        setIsOn(prev => !prev);
+    };
+
 
     const [currentUser, setCurrentUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -100,8 +106,11 @@ const MyPage = () => {
                     <div style={{
                         width: '100%', height: "15%", display: 'flex', alignItems: 'center',
                     }}>
-                        <div style={{ width: '20%', }}>
-                            <CiBellOff style={{ width: '25px', height: '25px' }} />
+                        <div style={{ width: '30%', display: 'flex', alignItems: 'center' }}>
+                            <CiBellOff onClick={toggleButton} style={{ width: '30px', height: '30px', marginRight: '0.5rem', marginLeft: '0.5rem' }} />
+                            <button style={{ padding: '10px', backgroundColor: isOn ? 'green' : 'red', color: 'white', border: 'none', borderRadius: '50px' }}>
+                                {isOn ? 'ON' : 'OFF'}
+                            </button>
                         </div>
                         <div style={{
                             width: '80%', display: 'flex', justifyContent: 'flex-end', marginRight: '1rem'

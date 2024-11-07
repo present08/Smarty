@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import '../css/footer.css'
 
 const Footer = () => {
     return (
@@ -18,50 +18,27 @@ const Footer = () => {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <h1 style={{ color: 'white' }}>SMARTY</h1>
+                <h1 style={{ color: 'aliceblue' }}>SMARTY</h1>
             </div>
-            <div style={{
-                width: '40%',
-                flex: 1,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin: '0 auto'
-            }}>
-                <ul style={{
-                    display: 'flex',
-                    margin: 0,
-                    padding: 0
-                }}>
+            <div className='gitLink'>
+                <ul>
                     <li>
-                        <Link to={"/"} style={{
-                            color: '#9e9e9e', marginRight: '1rem'
-                        }}>이용안내</Link>
+                        <a href="https://www.notion.so/1124e1c610d98050b92dd9291f67466c?pvs=4" target="_blank" rel="noopener noreferrer" >Se-hyun</a>
                     </li>
                     <li>
-                        <Link to={"/center/center_in"} style={{
-                            color: '#9e9e9e', marginRight: '1rem'
-                        }}>센터소개</Link>
+                        <a href="https://github.com/present08" target="_blank" rel="noopener noreferrer">Mu-am</a>
                     </li>
                     <li>
-                        <Link to={"/"} style={{
-                            color: '#9e9e9e', marginRight: '1rem'
-                        }}>수강신청</Link>
+                        <a href="https://github.com/HJ9948" target="_blank" rel="noopener noreferrer">Hyun-jae</a>
                     </li>
                     <li>
-                        <Link to={"/"} style={{
-                            color: '#9e9e9e', marginRight: '1rem'
-                        }}>일일입장</Link>
+                        <a href="https://github.com/2KJoong" target="_blank" rel="noopener noreferrer">Kyung-joong</a>
                     </li>
                     <li>
-                        <Link to={"/"} style={{
-                            color: '#9e9e9e', marginRight: '1rem'
-                        }}>물품대여</Link>
+                        <a href="https://www.notion.so/128043c6bc9180c0aa80c5e6974dcc1e?pvs=4" target="_blank" rel="noopener noreferrer">Young-jun</a>
                     </li>
                     <li>
-                        <Link to={"/"} style={{
-                            color: '#9e9e9e'
-                        }}>커뮤니티</Link>
+                        <a href="https://github.com/kimhyesoo99" target="_blank" rel="noopener noreferrer">Hye-soo</a>
                     </li>
                 </ul>
             </div>
@@ -73,11 +50,10 @@ const Footer = () => {
             }}>
                 <p
                     style={{
-                        color: '#9e9e9e'
+                        color: 'aliceblue'
                     }}>&copy; 2024 TF33. All Rights Reserved.</p>
             </div>
-
-        </div>
+        </div >
     )
 }
 

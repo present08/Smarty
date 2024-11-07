@@ -143,7 +143,7 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/"}>일일입장</Link>
+                                <Link to={"/facilityList"}>일일입장</Link>
                                 <ul>
                                     <li>
                                         <Link to={"/"}>일일입장</Link>

@@ -6,9 +6,10 @@ import centerRouter from "./centerRouter";
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
-const FirstInfor = lazy(() => import("../component/centerIntroduction/guide/FirstInfor"))
-const MyPage = lazy(() => import("../component/mypage/MyPage"))
-
+const FirstInfor = lazy(() => import("../component/centerIntroduction/guide/FirstInfor"));
+const MyPage = lazy(() => import("../component/mypage/MyPage"));
+const FacilityList = lazy(() => import('../component/pages/Facility_list'));
+const ReservationPage = lazy(() => import("../component/pages/ReservationPage"));
 
 const root = createBrowserRouter([
     {
@@ -25,11 +26,19 @@ const root = createBrowserRouter([
     },
     {
         path: "1f",
-        element: <Suspense fallback={Loading}><FirstInfor /></Suspense>
+        element: <Suspense fallback={Loading}><FirstInfor /></Suspense>,
     },
     {
         path: "mypage",
         element: <Suspense fallback={Loading}><MyPage /></Suspense>
+    },
+    {
+        path: "facilityList",
+        element: <Suspense fallback={Loading}><FacilityList /></Suspense>
+    },
+    {
+        path: "facilityList/:facilityId",
+        element: <Suspense fallback={Loading}><ReservationPage /></Suspense>
     },
 ]);
 

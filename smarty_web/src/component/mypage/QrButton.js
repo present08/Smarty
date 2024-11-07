@@ -4,6 +4,7 @@ import axios from 'axios';
 const host = 'http://localhost:8080';
 
 const QrButton = ({ userId }) => {
+    
     const [qrCode, setQrCode] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

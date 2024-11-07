@@ -4,6 +4,7 @@ import axios from 'axios';
 const host = 'http://localhost:8080';
 
 const UserStatus = ({ userId }) => {
+    
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

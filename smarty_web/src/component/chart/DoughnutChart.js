@@ -1,17 +1,17 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 
 // 필요한 요소 등록
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
-const DoughnutChart = ({ currentUser }) => {
+const DoughnutChart = ({ usageData, facilities }) => { // usageData와 facilities를 props로 받음
     const data = {
-        labels: ['수영장', '골프장', '배구', '배드민턴', '농구'],
+        labels: facilities, // 시설 이름을 레이블로 사용
         datasets: [
             {
-                label: '이용횟수',
-                data: [1, 3, 2, 4, 5],
+                label: '이용시간 (분)',
+                data: usageData, // props로 받은 이용 시간 데이터
                 backgroundColor: [
                     '#f0f3ea',
                     '#d5deef',
@@ -37,7 +37,7 @@ const DoughnutChart = ({ currentUser }) => {
             },
             title: {
                 display: true,
-                text: '총 이용 횟수',
+                text: '시설별 총 이용 시간',
                 font: {
                     size: 15,
                     weight: 'bold',

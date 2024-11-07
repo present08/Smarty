@@ -28,9 +28,6 @@ const ReservationPage = () => {
     const newDate = (date) => {
         setDate(date);
     }
-    const newId = (name) =>{
-        setUserId(name);
-    }
     useEffect(() => {
         getCourt(location.state.facility_id, location.state.court, date)
             .then((e) => {
@@ -38,6 +35,8 @@ const ReservationPage = () => {
                 setReserved(e.btnData)
                 console.log(e)
             })
+            console.log(localStorage.getItem('user'))
+            setUserId(localStorage.getItem('user'));
     }, [date])
 
     const reservationClick = () => {
@@ -49,7 +48,7 @@ const ReservationPage = () => {
 
     return (
         <>
-            <MainNav props={newId}/>
+            <MainNav/>
             <Wrapper />
             <h1 className='reservation_title'>통합 예약</h1>
             <FacilityComponent props={facilityData} />

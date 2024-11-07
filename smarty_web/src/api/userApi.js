@@ -1,6 +1,6 @@
-import axios from "axios"
+import axios from "axios";
 
-const host = "http://localhost:8080/api/auth"
+const host = "http://localhost:8080/api/auth";
 
 
 // 회원가입
@@ -22,10 +22,10 @@ export const checkLoginStatus = async () => {
 };
 
 // 로그아웃
-export const Logout = async () => {
+export const logout = async () => {
     try {
-        const response = await axios.post(`${host}/logout`, { withCredentials: true }); // withCredentials 추가
-        console.log(response.data)
+        const response = await axios.post(`${host}/logout`, {}, { withCredentials: true });
+        console.log(response.data);
         return response.data;
     } catch (error) {
         alert('로그아웃 중 오류 발생: ', error);
@@ -34,7 +34,7 @@ export const Logout = async () => {
 
 // 예약 정보 데이터 가져오기
 export const getReservationInfo = async (user_id) => {
-    const response = await axios.get(`${host}/reservationUser`, { params: { user_id } })
-    console.log(response.data)
-    return response.data
+    const response = await axios.get(`${host}/reservationUser`, { params: { user_id } });
+    console.log(response.data);
+    return response.data;
 }

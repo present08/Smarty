@@ -1,26 +1,19 @@
-
-
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarChart = ({ currentUser }) => {
+const BarChart = ({ usageData, facilities }) => {
 
     const data = {
-        labels: ['수영장', '배드민턴', '헬스장', '야구장', '축구장', '요가'],
+        labels: facilities,
         datasets: [
             {
                 label: '이용횟수',
-                data: [4, 2, 6, 4, 5, 1],
-                backgroundColor: [
-                    '#d5deef',
-
-                ],
-                hoverBackgroundColor: [
-                    '#395886'
-                ],
+                data: usageData,
+                backgroundColor: ['#d5deef'],
+                hoverBackgroundColor: ['#395886'],
                 barThickness: 20,
             },
         ],
@@ -38,7 +31,7 @@ const BarChart = ({ currentUser }) => {
             },
             title: {
                 display: true,
-                text: '최근 이용 횟수',
+                text: '시설별 이용 횟수',
                 font: {
                     size: 18,
                     weight: 'bold',
@@ -50,7 +43,6 @@ const BarChart = ({ currentUser }) => {
                 },
             },
         },
-
         scales: {
             y: {
                 beginAtZero: true,
@@ -69,10 +61,7 @@ const BarChart = ({ currentUser }) => {
         },
     };
 
-
     return <Bar data={data} options={options} />;
-
-
 };
 
 export default BarChart;

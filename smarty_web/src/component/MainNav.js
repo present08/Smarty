@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../css/nav.css'
 import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
-import { checkLoginStatus, Logout } from '../api/userApi';
+import { checkLoginStatus, logout } from '../api/userApi';
 
-const host = 'http://localhost:8080';
-
-const MainNav = ({props}) => {
+const MainNav = () => {
     // 검색창 모달 구현하기
     const [searchModal, setSearchModal] = useState(false);
     const [userId, setUserId] = useState('');
@@ -35,17 +33,16 @@ const MainNav = ({props}) => {
         checkLoginStatus().then(e => {
             setIsLoggedIn(e.isLoggedIn);
             localStorage.setItem('isLoggedIn', e.isLoggedIn);
-            props(localStorage.getItem('user'))
         })
     }, []); // 컴포넌트 마운트 시 한 번만 실행
 
     const handleLogout = () => {
-        Logout().then(e => {
+        logout().then(e => {
             alert("로그아웃 성공");
             setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', 'false');
             // window.location.reload(); // 새로고침
-        }).catch( (error) =>  {
+        }).catch((error) => {
             console.log("로그인 상태 확인 중 에러 발생: ", error);
         })
     };

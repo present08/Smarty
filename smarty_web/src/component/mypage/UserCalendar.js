@@ -15,7 +15,7 @@ import moment from 'moment/moment';
 const host = 'http://localhost:8080/api/auth';
 
 const UserCalendar = () => {
-    
+
     const [value, setValue] = useState(new Date());
     const [currentUser, setCurrentUser] = useState(null);
     const [modal, setModal] = useState(false);

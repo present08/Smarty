@@ -12,7 +12,7 @@ const UserReservation = () => {
                 alignItems: 'center',
                 marginTop: '1rem'
             }}>
-                <h3 style={{ fontSize: '23px', marginBottom: '1rem', color: '#003f66' }}>예약 및 결제 관리</h3>
+                <h3 style={{ fontSize: '23px', marginBottom: '1rem', color: '#003f66' }}>대여 및 결제 관리</h3>
             </div>
             <div style={{
                 display: 'flex',

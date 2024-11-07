@@ -4,9 +4,7 @@ import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
 import { updatePlan } from '../../api/ReservationAPI.js';
 import moment from 'moment';
-import axios from 'axios';
 
-const host = 'http://localhost:8080/api/auth';
 
 const ReservationComponent = (props) => {
 

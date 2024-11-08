@@ -4,9 +4,8 @@ import UserInformation from './UserInformation';
 import UserRating from './UserRating';
 import UserCalendar from './UserCalendar';
 import UserReservation from './UserReservation';
-import axios from 'axios';
-import { AiFillSmile, AiOutlineSearch } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { AiFillSmile } from 'react-icons/ai';
+import { Link, useLocation } from 'react-router-dom';
 import { TbLogout2 } from 'react-icons/tb';
 import UserButton from './UserButton';
 import SituationButton from './CancellationButton';
@@ -15,80 +14,36 @@ import ReceiptButton from './ReceiptButton';
 import UserNavber from './UserNavber';
 import QrButton from './QrButton';
 import UserGrade from './UserGrade';
-import { getReservationInfo } from '../../api/userApi';
+import {  logout } from '../../api/userApi';
 
-const host = 'http://localhost:8080';
 
 const MyPage = () => {
 
     const [isOn, setIsOn] = useState(false);
-    const [userId, setUserId] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
+    // Nav에서 전달된 데이터 받아오기
+    const location = useLocation();
+    useEffect(() => {
+        console.log(location.state)
+        setCurrentUser(location.state.user)
+    }, [location])
+
+
+    // 종 모양(알림) 변경
     const toggleButton = () => {
         setIsOn(prev => !prev);
     };
 
-    const [currentUser, setCurrentUser] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-
-    // useEffect(() => {
-    //     const checkLoginStatus = async () => {
-    //         try {
-    //             const response = await axios.get(`${host}/api/auth/status`, { withCredentials: true });
-    //             setIsLoggedIn(response.data.isLoggedIn);
-    //             localStorage.setItem('isLoggedIn', response.data.isLoggedIn);
-    //         } catch (error) {
-    //             console.log("로그인 상태 확인 중 에러 발생: ", error);
-    //         }
-    //     };
-
-    //     checkLoginStatus();
-    // }, []);
-
-
-    const handleLogout = async () => {
-        try {
-            await axios.post(`${host}/api/auth/logout`, {}, { withCredentials: true });
+    const handleLogout = () => {
+        logout().then(e => {
             alert("로그아웃 성공");
-            setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', 'false');
-            window.location.reload(); // 새로고침
-        } catch (error) {
-            alert('로그아웃 중 오류 발생: ', error);
-        }
+            localStorage.setItem('user', "")
+        }).catch((error) => {
+            console.log("로그인 상태 확인 중 에러 발생: ", error);
+        })
     };
-
-    const fetchCurrentUser = async () => {
-        try {
-            const response = await axios.get(`${host}/api/auth/me`, { withCredentials: true });
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("현재 로그인된 사용자 정보:", user);
-                setUserId(user.user_id)
-                localStorage.setItem("user", JSON.stringify(user));
-                return user;
-            } else {
-                console.log("사용자가 인증되지 않았습니다.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchCurrentUser().then(user => {
-            setCurrentUser(user);
-        });
-    }, []);
-
-    useEffect(() => {
-        console.log(userId)
-        getReservationInfo(userId).then(e => console.log(e));
-    }, [currentUser])
-    
-
 
     return (
         <DashboardBack>
@@ -97,16 +52,16 @@ const MyPage = () => {
                     <div style={{ display: 'flex', width: '90%', height: '70px', alignItems: 'center', marginBottom: '3rem', justifyContent: 'space-between', position: 'relative' }}>
                         {currentUser && <h3 style={{ fontSize: '28px', display: 'flex', width: '30%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h3>}
                         <div style={{ width: '40%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                            <UserGrade userId={currentUser ? currentUser.user_id : null} />
-                            <QrButton userId={currentUser ? currentUser.user_id : null} />
+                            <UserGrade user={currentUser} />
+                            <QrButton user={currentUser} />
                         </div>
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
-                        <UserInformation />
+                        <UserInformation user={currentUser} />
                         <UserRating />
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
-                        <UserCalendar  />
+                        <UserCalendar user={currentUser} />
                         <UserReservation />
                     </div>
                 </div>
@@ -140,12 +95,12 @@ const MyPage = () => {
                         <div style={{ width: '90%', height: '5%', margin: '0 auto', marginBottom: '2rem' }}>
                             <h3 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUB BOX</h3>
                         </div>
-                        <UserButton />
+                        <UserButton user={currentUser} />
                         <SituationButton />
                         <ReceiptButton />
                     </div>
                     <div style={{ width: '100%', height: '10%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Link to={"/"} style={{ display: 'flex', alignItems: 'center', color: 'black' }} onClick={handleLogout}>
+                        <Link onClick={handleLogout} to={"/"} style={{ display: 'flex', alignItems: 'center', color: 'black', cursor: 'pointer' }} >
                             <TbLogout2 style={{ width: '30px', height: '30px', marginRight: '0.3rem', color: 'black' }} />
                             <span style={{ fontSize: '23px' }}>Logout</span>
                         </Link>

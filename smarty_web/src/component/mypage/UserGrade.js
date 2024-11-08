@@ -1,11 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import '../../css/userGrade.css';
 import { AiOutlineClose } from 'react-icons/ai';
 
-const host = 'http://localhost:8080';
 
-const UserGrade = () => {
+const UserGrade = (props) => {
 
     const membershipBenefits = [
         { benefits: '입장권 5% 할인' },
@@ -39,28 +37,9 @@ const UserGrade = () => {
         setModal(false);
     };
 
-    const fetchCurrentUser = async () => {
-        try {
-            const response = await axios.get(`${host}/api/auth/me`, { withCredentials: true });
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("현재 로그인된 사용자 정보:", user);
-                localStorage.setItem("user", user);
-                return user;
-            } else {
-                console.log("사용자가 인증되지 않았습니다.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
     useEffect(() => {
-        fetchCurrentUser().then(user => {
-            setCurrentUser(user);
-        });
-    }, []);
+            setCurrentUser(props.user);
+    }, [props]);
 
     // 잠시 프론트엔드에서 데이터 사용 나중에 결제 구현이 되면 백엔드에서 다시 블러오기 
     let total = 500000;

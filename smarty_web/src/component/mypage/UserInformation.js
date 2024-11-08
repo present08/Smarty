@@ -1,39 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { MdOutlineAttachEmail } from 'react-icons/md';
 import { IoCallOutline } from 'react-icons/io5';
 import { GoHome } from 'react-icons/go';
 
-const host = 'http://localhost:8080';
 
-const UserInformation = () => {
+const UserInformation = (props) => {
 
     const [currentUser, setCurrentUser] = useState(null);
 
-    const fetchCurrentUser = async () => {
-        try {
-            const response = await axios.get(`${host}/api/auth/me`, { withCredentials: true });
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("현재 로그인된 사용자 정보:", user);
-                localStorage.setItem("user", user)
-                return user;
-            } else {
-                console.log("사용자가 인증되지 않았습니다.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
     useEffect(() => {
-        fetchCurrentUser().then(user => {
-            setCurrentUser(user);
-        });
-    }, []);
+            setCurrentUser(props.user);
+    }, [props]);
 
     return (
         <div style={{

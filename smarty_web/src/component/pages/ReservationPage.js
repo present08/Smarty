@@ -35,8 +35,7 @@ const ReservationPage = () => {
                 setReserved(e.btnData)
                 console.log(e)
             })
-            console.log(localStorage.getItem('user'))
-            setUserId(localStorage.getItem('user'));
+            setUserId((JSON.parse(localStorage.getItem('user'))).user_id);
     }, [date])
 
     const reservationClick = () => {

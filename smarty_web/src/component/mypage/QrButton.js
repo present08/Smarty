@@ -3,15 +3,15 @@ import axios from 'axios';
 
 const host = 'http://localhost:8080';
 
-const QrButton = ({ userId }) => {
-    
+const QrButton = (props) => {
+
     const [qrCode, setQrCode] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [isQrVisible, setIsQrVisible] = useState(false);
 
     const fetchQRCode = async () => {
-        if (!userId) {
+        if (!props.user.user_id) {
             console.log("사용자 ID가 없습니다. QR 코드를 가져올 수 없습니다.");
             return;
         }
@@ -20,7 +20,7 @@ const QrButton = ({ userId }) => {
         setError('');
 
         try {
-            const response = await axios.get(`${host}/api/auth/qrcode/${userId}`, { responseType: 'arraybuffer' });
+            const response = await axios.get(`${host}/api/auth/qrcode/${props.user.user_id}`, { responseType: 'arraybuffer' });
             const qrCodeBlob = new Blob([response.data], { type: 'image/png' });
             const qrCodeUrl = URL.createObjectURL(qrCodeBlob);
             setQrCode(qrCodeUrl);
@@ -78,17 +78,19 @@ const QrButton = ({ userId }) => {
                         justifyContent: 'center',
                         zIndex: 900,
                     }}
-                >
+                    >
                     <div
                         style={{
                             width: '70%',
                             height: '70%',
                             display: 'flex',
                             alignItems: 'center',
+                            flexDirection:'column',
                             justifyContent: 'center',
                             backgroundColor: 'white',
                         }}
                     >
+                        <h3>{props.user.user_name}님의 QR코드 입니다.</h3>
                         <img src={qrCode} alt="QR Code" style={{ width: '35%', height: '60%' }} />
                         <button
                             onClick={handleToggleQr}

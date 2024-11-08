@@ -5,40 +5,16 @@ import { IoCloseSharp } from 'react-icons/io5';
 
 const host = 'http://localhost:8080';
 
-const UserButton = () => {
+const UserButton = ( props ) => {
 
     const [currentUser, setCurrentUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [address, setAddress] = useState('');
-    const [phone, setPhone] = useState('');
-
-    const fetchCurrentUser = async () => {
-        try {
-            const response = await axios.get(`${host}/api/auth/me`, { withCredentials: true });
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("현재 로그인된 사용자 정보:", user);
-                localStorage.setItem("user", JSON.stringify(user)); // JSON.stringify 사용
-                return user;
-            } else {
-                console.log("사용자가 인증되지 않았습니다.");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            return null; // 에러 발생 시 null 반환
-        }
-    };
+    const [newAddress, setNewAddress] = useState('');
+    const [newPhone, setNewPhone] = useState('');
 
     useEffect(() => {
-        fetchCurrentUser().then(user => {
-            setCurrentUser(user);
-            if (user) {
-                setAddress(user.address || ''); // 기존 주소로 상태 초기화
-                setPhone(user.phone || ''); // 기존 전화번호로 상태 초기화
-            }
-        });
-    }, []);
+        setCurrentUser(props.user);
+    }, [props]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -46,8 +22,6 @@ const UserButton = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setAddress(''); // 입력 필드 초기화
-        setPhone(''); // 입력 필드 초기화
     };
 
     const handleSubmit = async (e) => {
@@ -58,7 +32,7 @@ const UserButton = () => {
             return;
         }
 
-        const userInfo = { user_id: currentUser.user_id, address, phone }; // user_id로 변경
+        const userInfo = { user_id: currentUser.user_id, address: newAddress, phone:newPhone }; // user_id로 변경
 
         console.log("전송할 사용자 정보:", userInfo); // 디버깅을 위한 로그
 
@@ -112,8 +86,8 @@ const UserButton = () => {
                                         <input
                                             type="text"
                                             id="address"
-                                            value={address}
-                                            onChange={(e) => setAddress(e.target.value)}
+                                            // value={currentUser.address}
+                                            onChange={(e) => setNewAddress(e.target.value)}
                                             placeholder="변경하실 주소를 입력하세요"
                                             required
                                             style={{
@@ -136,8 +110,8 @@ const UserButton = () => {
                                         <input
                                             type="text"
                                             id="phone"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
+                                            // value={currentUserphone}
+                                            onChange={(e) => setNewPhone(e.target.value)}
                                             placeholder="변경하실 전화번호를 입력하세요"
                                             required
                                             style={{

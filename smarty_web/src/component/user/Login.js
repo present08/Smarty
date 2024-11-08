@@ -50,7 +50,7 @@ const Login = () => {
             // 로그인 성공 시, 토큰 저장 등 처리
             console.log('로그인 성공:', e);
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('user', e.user_id);
+            localStorage.setItem('user', JSON.stringify(e));
             alert(`${e.user_name}님 환영합니다`)
             if (isRemember) {
                 setCookie("rememberUserId", user_id)

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import '../css/nav.css'
 import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import { checkLoginStatus, logout } from '../api/userApi';
@@ -7,13 +7,16 @@ import { checkLoginStatus, logout } from '../api/userApi';
 const MainNav = () => {
     // 검색창 모달 구현하기
     const [searchModal, setSearchModal] = useState(false);
-    const [userId, setUserId] = useState('');
     const modalBackcground = useRef();
+
 
     // 검색창
     const [search, setSearch] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [user, setUser] = useState('');
+    const navigate = useNavigate();
+
     const onChange = (e) => {
         const searchValue = e.target.value;
         setSearch(e.target.value);
@@ -30,18 +33,32 @@ const MainNav = () => {
 
     // 로그인 상태를 확인하는 함수
     useEffect(() => {
+        console.log("getLogin")
+        console.log(localStorage.getItem('user'))
         checkLoginStatus().then(e => {
             setIsLoggedIn(e.isLoggedIn);
             localStorage.setItem('isLoggedIn', e.isLoggedIn);
         })
     }, []); // 컴포넌트 마운트 시 한 번만 실행
+    
+    useEffect(() =>{
+        if(isLoggedIn){
+            setUser(JSON.parse(localStorage.getItem("user")))
+        }
+    },[isLoggedIn])
+
+    // user data 전달
+    const moveMypage = () => {
+        navigate("/mypage", { state: { user } })
+    }
 
     const handleLogout = () => {
         logout().then(e => {
             alert("로그아웃 성공");
             setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', 'false');
-            // window.location.reload(); // 새로고침
+            localStorage.setItem('user', "")
+            window.location.reload(); // 새로고침
         }).catch((error) => {
             console.log("로그인 상태 확인 중 에러 발생: ", error);
         })
@@ -64,7 +81,10 @@ const MainNav = () => {
                     {isLoggedIn ? (
                         <>
                             <li>
-                                <Link to={"/mypage"}>마이페이지</Link>
+                                <Link to={"/"}>관리자모드</Link>
+                            </li>
+                            <li>
+                                <span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span>
                             </li>
                             <li>
                                 <Link to={"/"} onClick={handleLogout}>로그아웃</Link>

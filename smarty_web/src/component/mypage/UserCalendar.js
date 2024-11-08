@@ -29,7 +29,6 @@ const UserCalendar = (props) => {
         setModal(false);
     };
 
-
         useEffect(() => {
             if (props.user) {
                 setCurrentUser(props.user);

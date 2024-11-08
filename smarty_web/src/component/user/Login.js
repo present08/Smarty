@@ -11,7 +11,6 @@ const Login = () => {
     const [user_id, setUser_id] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     const [cookie, setCookie, removeCookie] = useCookies(['rememberUserId']);

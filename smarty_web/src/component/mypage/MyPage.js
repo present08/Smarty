@@ -14,7 +14,7 @@ import ReceiptButton from './ReceiptButton';
 import UserNavber from './UserNavber';
 import QrButton from './QrButton';
 import UserGrade from './UserGrade';
-import {  logout } from '../../api/userApi';
+import { logout } from '../../api/userApi';
 
 
 const MyPage = () => {
@@ -50,7 +50,7 @@ const MyPage = () => {
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
                 <div style={{ width: '80vw', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <div style={{ display: 'flex', width: '90%', height: '70px', alignItems: 'center', marginBottom: '3rem', justifyContent: 'space-between', position: 'relative' }}>
-                        {currentUser && <h3 style={{ fontSize: '28px', display: 'flex', width: '30%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h3>}
+                        {currentUser && <h3 style={{ fontSize: '28px', display: 'flex', width: '40%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h3>}
                         <div style={{ width: '40%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                             <UserGrade user={currentUser} />
                             <QrButton user={currentUser} />
@@ -62,7 +62,7 @@ const MyPage = () => {
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
                         <UserCalendar user={currentUser} />
-                        <UserReservation />
+                        <UserReservation user={currentUser} />
                     </div>
                 </div>
                 <div style={{

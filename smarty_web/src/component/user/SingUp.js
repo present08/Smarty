@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { signUp } from '../../api/userApi';
 
-const host = 'http://localhost:8080';
 
 const SignUp = () => {
     const [userId, setUserId] = useState('');
@@ -15,18 +13,9 @@ const SignUp = () => {
     const [address, setAddress] = useState('');
     const [birthday, setBirthday] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState(''); // QR 코드 URL 상태
     const [selectEmail, setSelectEmail] = useState('')
-    const userData = {
-        user_id: userId,
-        user_name: userName,
-        email,
-        password,
-        phone,
-        address,
-        birthday,
-    };
+    const userData = { user_id: userId, user_name: userName, email, password, phone, address, birthday, };
 
     const navigate = useNavigate();
 
@@ -63,61 +52,6 @@ const SignUp = () => {
             })
         }
     }
-
-
-
-    // const handleSignUp = async (e) => {
-    //     e.preventDefault();
-    //     const userData = {
-    //         user_id: userId,
-    //         user_name: userName,
-    //         email,
-    //         password,
-    //         phone,
-    //         address,
-    //         birthday,
-    //     };
-
-    //     try {
-    //         if (window.confirm("회원가입 하시겠습니까?")) {
-
-    //             const signupResponse = await axios.post(`${host}/api/auth/signup`, userData, { responseType: 'arraybuffer' });
-    //             console.log('회원가입 성공:', signupResponse.data);
-    //             setSuccess('회원가입이 완료되었습니다. 로그인 해주세요.');
-
-    //             // 바이트 배열을 base64로 변환
-    //             const base64String = btoa(
-    //                 new Uint8Array(signupResponse.data)
-    //                     .reduce((data, byte) => data + String.fromCharCode(byte), '')
-    //             );
-    //             const qrCodeUrl = `data:image/png;base64,${base64String}`;
-    //             setQrCodeUrl(qrCodeUrl); // QR 코드 URL 상태 업데이트
-
-    //             setTimeout(() => {
-    //                 navigate("/user/login");
-    //             }, 5000);
-    //             setError('');
-
-
-    //         }
-    //     } catch (err) {
-    //         setError('회원가입 실패: 다시 시도해 주세요.');
-    //         if (err.response.data === "UserID or UserEmail already exists.") {
-    //             alert("ID 또는 Email 중복되었습니다 다시시도해주세요.");
-    //         }
-    //     }
-    // };
-
-
-    // const Title = styled.h2`
-    //   display: flex;
-    //   font-size:40px;
-    //   @media (max-width: 600px) {
-    //     font-size:20px;
-    //   }
-    // `;
-
-
 
     return (
         <div style={{

@@ -5,7 +5,7 @@ import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/a
 import { checkLoginStatus, logout } from '../api/userApi';
 
 const MainNav = () => {
-    // 검색창 모달 구현하기
+    // 검색창 모달 구현하기 
     const [searchModal, setSearchModal] = useState(false);
     const modalBackcground = useRef();
 
@@ -40,12 +40,12 @@ const MainNav = () => {
             localStorage.setItem('isLoggedIn', e.isLoggedIn);
         })
     }, []); // 컴포넌트 마운트 시 한 번만 실행
-    
-    useEffect(() =>{
-        if(isLoggedIn){
+
+    useEffect(() => {
+        if (isLoggedIn) {
             setUser(JSON.parse(localStorage.getItem("user")))
         }
-    },[isLoggedIn])
+    }, [isLoggedIn])
 
     // user data 전달
     const moveMypage = () => {
@@ -161,13 +161,10 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/"}>물품대여</Link>
+                                <Link to={"/product"}>물품</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>사물함</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/"}>품목</Link>
+                                        <Link to={"/"}>물품대여</Link>
                                     </li>
                                 </ul>
                             </li>

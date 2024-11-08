@@ -49,7 +49,7 @@ const UserReservation = (props) => {
                 alignItems: 'center'
             }}>
                 <div style={{ width: '90%', height: '90%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <div style={{ overflowY: 'auto', flex: 1, }}>
+                    <div style={{ overflowY: 'auto', flex: 1, marginBottom: '1rem', borderRadius: '1opx', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', }}>
                         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
                             <thead>
                                 <tr style={{ height: '50px', backgroundColor: '#d5deef' }}>
@@ -60,7 +60,7 @@ const UserReservation = (props) => {
                                 </tr>
                             </thead>
                         </table>
-                        <div style={{ maxHeight: '180px', overflowY: 'auto', width: '100%', borderRadius: '1opx', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', }}>
+                        <div style={{ maxHeight: '180px', overflowY: 'auto', width: '100%' }}>
                             <table style={{ borderCollapse: 'collapse', width: '100%' }}>
                                 <tbody>
                                     {data.map((item) => (

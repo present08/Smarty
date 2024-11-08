@@ -78,14 +78,14 @@ const QrButton = (props) => {
                         justifyContent: 'center',
                         zIndex: 900,
                     }}
-                    >
+                >
                     <div
                         style={{
                             width: '70%',
                             height: '70%',
                             display: 'flex',
                             alignItems: 'center',
-                            flexDirection:'column',
+                            flexDirection: 'column',
                             justifyContent: 'center',
                             backgroundColor: 'white',
                         }}

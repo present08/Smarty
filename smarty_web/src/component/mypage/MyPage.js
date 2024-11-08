@@ -58,7 +58,7 @@ const MyPage = () => {
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
                         <UserInformation user={currentUser} />
-                        <UserRating />
+                        <UserRating user={currentUser} />
                     </div>
                     <div style={{ display: 'flex', width: '90%', height: '350px', justifyContent: 'space-between' }}>
                         <UserCalendar user={currentUser} />

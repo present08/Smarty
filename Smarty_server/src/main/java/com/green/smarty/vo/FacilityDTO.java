@@ -1,17 +1,20 @@
 package com.green.smarty.vo;
 
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FacilityVO {
-
+public class FacilityDTO {
     private String facility_id;
     private String facility_name; // 시설 종류
 
@@ -38,21 +41,7 @@ public class FacilityVO {
     @Builder.Default
     private List<String> file_name = new ArrayList<>(); // 시설 관련 이미지 파일, 파일명
 
-
-    // 시설 정보 수정 메서드
-    public void update(int quantity, String open_time, String close_time, int default_time,
-            int basic_fee, int rate_adjustment, String contact, String info, String caution,
-            boolean court, boolean facility_status) {
-        this.quantity = quantity;
-        this.open_time = open_time;
-        this.close_time = close_time;
-        this.default_time = default_time;
-        this.basic_fee = basic_fee;
-        this.rate_adjustment = rate_adjustment;
-        this.contact = contact;
-        this.info = info;
-        this.caution = caution;
-        this.court = court;
-        this.facility_status = facility_status;
-    }
+    private String court_id;
+    private String court_name;
+    private boolean court_status;
 }

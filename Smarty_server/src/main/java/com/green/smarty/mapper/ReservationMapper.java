@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.green.smarty.vo.CourtVO;
+import com.green.smarty.vo.FacilityDTO;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
 import com.green.smarty.vo.UserVO;
@@ -21,6 +22,10 @@ public interface ReservationMapper {
     int insertCourt(CourtVO vo);
 
     FacilityVO getFacility(String facility_id);
+
+    List<FacilityDTO> getFacilityOFCourt(); // facility + court
+
+    List<FacilityVO> getFacilityAll(); // facility
 
     List<ReservationVO> getReservation(Map getReservation);
 

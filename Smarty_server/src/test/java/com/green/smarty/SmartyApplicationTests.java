@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.green.smarty.mapper.ReservationMapper;
 import com.green.smarty.vo.CourtVO;
+import com.green.smarty.vo.FacilityDTO;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
 import com.green.smarty.vo.UserVO;
@@ -57,7 +58,7 @@ class SmartyApplicationTests {
 	@Test
 	public void insertUser() {
 		UserVO vo = UserVO.builder()
-				.user_id("kaka")
+				.user_id("kakaka")
 				.user_name("kaka")
 				.email("kaka@kaka")
 				.password("1234")
@@ -75,18 +76,26 @@ class SmartyApplicationTests {
 
 	@Test
 	public void insert_court() {
-		String[] facility_id = { "fc_1730877214863", "fc_1730877214958", "fc_1730877214972", "fc_1730877214980",
-				"fc_1730877214985", };
+
+		List<FacilityVO> facilityVO = reservationMapper.getFacilityAll();
+
+		List<String> facility_id = new ArrayList<>();
+		for (FacilityVO i : facilityVO)
+			facility_id.add(i.getFacility_id());
+
+		int cnt = 1;
 		for (int i = 1; i < 3; i++) {
-			for (int j = 0; j < facility_id.length; j++) {
+			for (int j = 0; j < facility_id.size(); j++) {
+				int rand = (int) (Math.random() * 10);
 				CourtVO vo = CourtVO.builder()
-						.court_id("C_00000" + (i < 2 ? j : j + facility_id.length))
+						.court_id("C_" + facility_id.get(i).substring(12) + String.format("%02d", cnt))
 						.court_name(i + "번코트")
-						.facility_id(facility_id[j])
-						.court_status(true)
+						.facility_id(facility_id.get(j))
+						.court_status(rand < 3 ? false : true)
 						.build();
 				int result = reservationMapper.insertCourt(vo);
 				System.out.println(result);
+				cnt++;
 			}
 		}
 	}
@@ -156,5 +165,7 @@ class SmartyApplicationTests {
 		// int a = Math.random();
 		System.out.println((Math.round(Math.random() * 100000) / 1000) * 1000);
 		System.out.println((int) (Math.random() * 3));
+		List<FacilityDTO> facilityVO = reservationMapper.getFacilityOFCourt();
+		System.out.println(facilityVO.get(0));
 	}
 }

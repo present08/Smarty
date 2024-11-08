@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.green.smarty.mapper.ReservationMapper;
+import com.green.smarty.vo.FacilityDTO;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
 
@@ -17,6 +18,8 @@ import com.green.smarty.vo.ReservationVO;
 public class ReservationService {
     @Autowired
     private ReservationMapper reservationMapper;
+
+    
 
     public List<Map<String, Integer>> createTimeBtn(String facility_id, String court_id, String date) {
         Map<String, String> getReservation = new HashMap<>();

@@ -6,17 +6,17 @@ import './ReservationPage.css';
 import { getCourt } from '../api/ReservationAPI';
 import { useLocation } from 'react-router-dom';
 
-let today = new Date();   
+let today = new Date();
 
 let year = today.getFullYear();
 let month = today.getMonth() + 1;
-let day = today.getDate(); 
+let day = today.getDate();
 
 
 const ReservationPage = () => {
     const [facilityData, setFacilityData] = useState({})
     const [reserved, setReserved] = useState([])
-    const [date, setDate] = useState(year + '-' + month + '-' + (day < 10 ? "0"+day : day))
+    const [date, setDate] = useState(year + '-' + month + '-' + (day < 10 ? "0" + day : day))
     const [reservationFlag, setReservationFlag] = useState(false)
     const location = useLocation();
     const focusRef = useRef(null);
@@ -24,11 +24,15 @@ const ReservationPage = () => {
         setDate(date);
     }
     useEffect(() => {
-        getCourt(location.state.facility_id, location.state.court, date)
+        setFacilityData(location.state)
+        console.log("getLocation", location.state)
+    }, [location])
+
+    useEffect(() => {
+        getCourt(location.state.facility_id, location.state.court_id, date)
             .then((e) => {
-                setFacilityData(e.facilityVO)
-                setReserved(e.btnData)
-                console.log(e)
+                setReserved(e)
+                console.log("btndata ", e)
             })
     }, [date])
 

@@ -17,8 +17,8 @@ const ReservationComponent = (props) => {
     const [price, setPrice] = useState(facilityData.basic_fee)
     const initData = {
         reservation_id: null,
-        user_id: "kaka",
-        court_id: "C_000000",
+        user_id: "",
+        court_id: "",
         reservation_start: "",
         reservation_end: "",
         court_name: "",
@@ -73,15 +73,15 @@ const ReservationComponent = (props) => {
         const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
         setPostData({
             reservation_id: null,
-            court_id: "C_000000",
-            court_name: "",
+            court_id: facilityData.court_id,
+            court_name: facilityData.court_name,
             court_status: true,
             facility_id: facilityData.facility_id,
             user_id: 'kaka',
             reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
         })
-
+    
         // console.log(moment(start_date).format("YYYY-MM-DD HH:mm:ss"))
         // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
     }, [lastNum])

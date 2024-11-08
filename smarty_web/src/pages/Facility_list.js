@@ -1,24 +1,31 @@
-import React from 'react'
-import { useEffect, useState } from 'react';
-import ReservationPage from './ReservationPage';
-import { getCourt } from '../api/ReservationAPI';
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { getfacilityId } from '../api/ReservationAPI';
 
 const Facility_list = () => {
-  const [court, setCourt] = useState('')
   const navigate = useNavigate();
-  const facility_id = ["fc_1730877214863", "fc_1730877214958", "fc_1730877214972", "fc_1730877214980",
-    "fc_1730877214985",]
+  const [facility_id, setFacility_id] = useState([])
+
+  useEffect(() => {
+    getfacilityId().then(e => {
+      e.map(i => {
+        if (facility_id.length < e.length) {
+          setFacility_id(prev => [...prev, i]);
+        }
+        console.log(i)
+      });
+    })
+  }, [])
+
 
   const handleClick = (i) => {
-    navigate(`/${i}`, { state: { facility_id: i, court: "C_000000" } })
+    navigate(`/facilityList/${i.facility_id}`, { state: i })
+    console.log("iiiiiii", i.facility_id)
   }
 
   return (
     <div>
-      {facility_id.map(i => <button key={i} onClick={() => handleClick(i)}>{i}</button>)}
-      {/* { court && facility? 
-      <ReservationPage props={facilityData} />:<></>} */}
+      {facility_id.map((i, idx) => <button key={idx} onClick={() => handleClick(i)}>{i.facility_name}, {i.court_name}</button>)}
     </div>
   )
 }

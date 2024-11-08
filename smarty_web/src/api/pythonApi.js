@@ -66,3 +66,6 @@ export const sendScheduleData = (facilityName, date) => {
     date: date
   });
 };
+
+// 어제 수입과 오늘 수입의 변동폭 데이터 요청
+export const getIncomeRate = async

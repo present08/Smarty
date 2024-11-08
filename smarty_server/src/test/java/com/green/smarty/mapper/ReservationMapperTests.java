@@ -58,7 +58,7 @@ public class ReservationMapperTests {
 
             // 예약 날짜 생성
             LocalDate reservationDate = LocalDate.now();
-            LocalDate selectedDate = LocalDate.of(2024, 11, 4);
+            LocalDate selectedDate = LocalDate.of(2024, 11, 8);
 
             // 유효한 예약 시간을 찾기 위한 최대 시도 횟수 설정
             int maxAttempts = 10;

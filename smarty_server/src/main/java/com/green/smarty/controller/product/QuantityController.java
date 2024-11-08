@@ -34,7 +34,9 @@ public class QuantityController {
     public String setStock(@PathVariable("quantityId") String quantityId,
                            @RequestParam("stock") int stock) {
         int result = quantityService.setStock(quantityId, stock);
+        System.out.println("Updated stock for quantity_id : " + quantityId + "to stock : " + stock);
         return result > 0 ? "전체 재고량이 성공적으로 수정되었습니다." : "전체 재고량 수정에 실패했습니다.";
+
     }
 
     // 재고량 추가/감소

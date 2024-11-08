@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from charts.bar_chart import bar_chart_bp
 from charts.daily_scheduler import daily_scheduler_bp
+from charts.income_rate import income_comparison_bp
 from charts.line_chart import line_chart_bp
 from charts.personally_chart import personally_chart_bp
 from charts.pie_chart import pie_chart_bp
@@ -17,6 +18,7 @@ app.register_blueprint(pie_chart_bp, url_prefix='/api')
 app.register_blueprint(daily_scheduler_bp, url_prefix='/api')
 app.register_blueprint(rental_statistics_bp, url_prefix='/api')
 app.register_blueprint(personally_chart_bp, url_prefix='/api')
+app.register_blueprint(income_comparison_bp, url_prefix='/api')
 
 
 if __name__ == '__main__':

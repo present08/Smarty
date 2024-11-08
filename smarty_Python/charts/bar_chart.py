@@ -28,7 +28,7 @@ def get_bar_data():
             c.class_name, COUNT(u.user_id) as user_count
         FROM 
             enrollment_tbl e
-        JOIN 
+        JOIN
             user_tbl u ON e.user_id = u.user_id
         JOIN 
             class_tbl c ON e.class_id = c.class_id

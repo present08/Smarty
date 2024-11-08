@@ -1,49 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { Table, InputNumber, Select, notification, Button, Spin } from 'antd';
-import { fetchProductByFacility, fetchFacilities, fetchDetailsWithSizeByProductId, fetchProductStatusByQuantityId, updateProductStatus, updateStock } from '../../api/intellijApi';
+import {
+    fetchProductByFacility, fetchFacilities, fetchDetailsWithSizeByProductId,
+    fetchProductStatusByQuantityId, updateProductStatus, updateStock
+} from '../../api/intellijApi';
 import * as XLSX from 'xlsx';
 
 const { Option } = Select;
 
 const Management = () => {
-    const [data, setData] = useState([]); // 데이터 상태를 저장
+    const [data, setData] = useState([]); // 테이블 데이터 상태
     const [facilities, setFacilities] = useState([]); // 시설 목록 상태
-    const [selectedFacility, setSelectedFacility] = useState(''); // 기본값을 빈 문자열로 설정
+    const [selectedFacility, setSelectedFacility] = useState(''); // 선택된 시설
     const [loading, setLoading] = useState(false); // 로딩 상태
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]); // 체크된 행의 키를 저장할 상태
 
-    // 추가된 상태: 변경할 상태와 재고를 저장할 객체
-    const [pendingChanges, setPendingChanges] = useState({});
-
+    // 시설 목록을 가져오는 useEffect
     useEffect(() => {
         fetchFacilities()
             .then(response => {
-                setFacilities([{ facility_id: '', facility_name: '================' }, ...response.data]);
+                setFacilities([{
+                    facility_id: '',
+                    facility_name: '================'
+                }, ...response.data]); // 기본값 포함하여 시설 목록 설정
             })
             .catch(error => {
                 console.error("시설 목록을 불러오는 중 오류 발생 : ", error);
             });
     }, []);
 
+    // 선택된 시설에 따른 데이터 가져오기
     const fetchData = async () => {
         if (selectedFacility) {
             setLoading(true); // 로딩 시작
             try {
                 const products = await fetchProductByFacility(selectedFacility);
+                console.log("Fetched products:", products.data);
+
+                // 상품 목록과 상태 정보를 가져옴
                 const productsWithStatus = await Promise.all(products.data.map(async (product) => {
                     const quantitiesResponse = await fetchDetailsWithSizeByProductId(product.product_id);
                     const quantitiesWithStatus = await Promise.all(quantitiesResponse.data.map(async (quantity) => {
                         const quantityId = quantity.quantity_id;
                         const statusResponse = await fetchProductStatusByQuantityId(quantityId);
                         const currentStatus = statusResponse ? statusResponse.status : "대여 가능";
+
                         return {
                             ...quantity,
-                            product_name: product.product_name + (quantity.cloth_size || quantity.shoe_size ? `_${quantity.cloth_size || quantity.shoe_size}` : ''),
-                            current_status: currentStatus
+                            product_name: product.product_name + (quantity.cloth_size || quantity.shoe_size ?
+                                `_${quantity.cloth_size || quantity.shoe_size}` : ''),
+                            current_status: currentStatus // 현재 상태 추가
                         };
                     }));
-                    return quantitiesWithStatus;
+
+                    return quantitiesWithStatus; // 각 상품의 수량 정보 반환
                 }));
-                setData(productsWithStatus.flat());
+
+                setData(productsWithStatus.flat()); // 플랫하여 최종 데이터 설정
             } catch (error) {
                 console.error("데이터 가져오는 중 오류 발생:", error);
                 notification.error({
@@ -54,41 +67,31 @@ const Management = () => {
                 setLoading(false); // 로딩 종료
             }
         } else {
-            setData([]);
+            setData([]); // 선택된 시설이 없을 경우 데이터 초기화
         }
     };
 
+    // 선택된 시설이 변경될 때마다 데이터 새로 고침
     useEffect(() => {
         fetchData();
     }, [selectedFacility]);
 
     // 상태 변경 핸들러
     const handleStatusChange = (value, record) => {
-        setPendingChanges((prev) => ({
-            ...prev,
-            [record.quantity_id]: {
-                ...prev[record.quantity_id],
-                status: value
-            }
-        }));
+        const updatedItem = { ...record, status: value }; // 상태 변경
         setData((prevData) =>
-            prevData.map((item) => (item.quantity_id === record.quantity_id ? { ...item, status: value } : item))
+            prevData.map((item) => (item.quantity_id === record.quantity_id ? updatedItem : item))
         );
+        console.log("Updated status:", value);
     };
 
     // 재고 변경 핸들러
     const handleStockChange = (change, record) => {
-        const newStock = record.stock + change;
+        const newStock = record.stock + change; // 새로운 재고 계산
         if (newStock >= 0) {
-            setPendingChanges((prev) => ({
-                ...prev,
-                [record.quantity_id]: {
-                    ...prev[record.quantity_id],
-                    stock: newStock
-                }
-            }));
+            const updatedItem = { ...record, stock: newStock }; // 재고 변경
             setData((prevData) =>
-                prevData.map((item) => (item.quantity_id === record.quantity_id ? { ...item, stock: newStock } : item))
+                prevData.map((item) => (item.quantity_id === record.quantity_id ? updatedItem : item))
             );
         } else {
             notification.warning({
@@ -97,33 +100,57 @@ const Management = () => {
             });
         }
     };
-    
+
+    // 개별 항목 저장 핸들러
     const handleSaveChanges = (record) => {
-        // 변경된 상태 및 재고 값을 가져오기
-        const changes = pendingChanges[record.quantity_id] || {}; 
-        const newStatus = changes.status || record.status; // 새로운 상태
-        const newStock = changes.stock !== undefined ? changes.stock : record.stock; // 새로운 재고
-    
-        if (!newStatus) {
-            notification.error({
-                message: '상태 오류',
-                description: '상태가 설정되지 않았습니다. 상태를 선택해 주세요.'
+        console.log("Saving changes for:", record);
+        const statusToUpdate = record.status || '대여 가능'; // 상태 설정
+        const currentStatus = record.current_status;
+        const statusChanged = currentStatus !== statusToUpdate; // 상태 변경 여부 체크
+
+        // 상태와 재고 업데이트
+        Promise.all([
+            updateProductStatus(record.quantity_id, statusChanged ? statusToUpdate : currentStatus), // 상태 업데이트
+            updateStock(record.quantity_id, record.stock) // 재고 업데이트
+        ])
+        .then(() => {
+            notification.success({
+                message: '변경 사항이 적용되었습니다.',
+                description: '해당 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
             });
-            return; // 함수 종료
-        }
-    
-        // 상태 업데이트 API 호출
-        updateProductStatus(record.quantity_id, newStatus)
-            .then(() => {
-                // 재고 업데이트 API 호출
-                return updateStock(record.quantity_id, newStock);
-            })
+            fetchData(); // 데이터 새로 고침
+        })
+        .catch(error => {
+            console.error("변경 적용 중 오류 발생: ", error);
+            notification.error({
+                message: '변경 실패',
+                description: '변경 적용 중 오류 발생'
+            });
+        });
+    };
+
+    // 다중 선택 저장 핸들러
+    const handleBulkSaveChanges = () => {
+        const updates = selectedRowKeys.map(key => {
+            const record = data.find(item => item.quantity_id === key); // 체크된 항목 찾기
+            const statusToUpdate = record.status || '대여 가능'; // 상태 설정
+            const currentStatus = record.current_status;
+            const statusChanged = currentStatus !== statusToUpdate; // 상태 변경 여부 체크
+
+            return Promise.all([
+                updateProductStatus(record.quantity_id, statusChanged ? statusToUpdate : currentStatus), // 상태 업데이트
+                updateStock(record.quantity_id, record.stock) // 재고 업데이트
+            ]);
+        });
+
+        Promise.all(updates)
             .then(() => {
                 notification.success({
-                    message: '변경 사항이 적용되었습니다.',
-                    description: '해당 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
+                    message: '선택된 항목 저장 완료',
+                    description: '선택된 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
                 });
                 fetchData(); // 데이터 새로 고침
+                setSelectedRowKeys([]); // 체크박스 초기화
             })
             .catch(error => {
                 console.error("변경 적용 중 오류 발생: ", error);
@@ -133,7 +160,8 @@ const Management = () => {
                 });
             });
     };
-    
+
+    // 엑셀로 내보내기 핸들러
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
@@ -145,12 +173,20 @@ const Management = () => {
         });
     };
 
+    // 테이블에서 체크박스 설정
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (selectedRowKeys) => {
+            setSelectedRowKeys(selectedRowKeys); // 체크된 행의 키 상태 업데이트
+        },
+    };
+
     return (
         <div>
             <h1>대여 품목 관리 대시보드</h1>
             <Select
                 style={{ width: 200, marginBottom: 20 }}
-                onChange={(value) => setSelectedFacility(value)}
+                onChange={(value) => setSelectedFacility(value)} // 시설 선택 변경
                 value={selectedFacility}
             >
                 {facilities.map(facility => (
@@ -162,12 +198,32 @@ const Management = () => {
             <Button type='primary' onClick={exportToExcel} style={{ marginBottom: 20 }}>
                 엑셀 파일로 내보내기
             </Button>
+            <Button type='primary' onClick={handleBulkSaveChanges} style={{ marginBottom: 20 }}>
+                선택된 항목 저장
+            </Button>
             {loading ? (
                 <Spin size="large" />
             ) : (
                 <Table
+                    rowSelection={rowSelection} // 체크박스 설정
                     dataSource={data}
                     columns={[
+                        {
+                            title: '선택',
+                            dataIndex: 'selection',
+                            render: (_, record) => (
+                                <input
+                                    type="checkbox"
+                                    checked={selectedRowKeys.includes(record.quantity_id)} // 체크 상태
+                                    onChange={() => {
+                                        const newSelectedRowKeys = selectedRowKeys.includes(record.quantity_id)
+                                            ? selectedRowKeys.filter(key => key !== record.quantity_id)
+                                            : [...selectedRowKeys, record.quantity_id];
+                                        setSelectedRowKeys(newSelectedRowKeys); // 체크박스 상태 업데이트
+                                    }}
+                                />
+                            ),
+                        },
                         { title: '상품명', dataIndex: 'product_name', key: 'product_name' },
                         { title: '수량 ID', dataIndex: 'quantity_id', key: 'quantity_id' },
                         {
@@ -185,7 +241,7 @@ const Management = () => {
                             render: (text, record) => (
                                 <Select
                                     value={record.status || '대여 가능'}
-                                    onChange={(value) => handleStatusChange(value, record)}
+                                    onChange={(value) => handleStatusChange(value, record)} // 상태 변경 핸들러
                                     style={{ minWidth: 120 }}
                                 >
                                     <Option value='손상'>손상</Option>
@@ -213,7 +269,7 @@ const Management = () => {
                             title: '작업',
                             key: 'action',
                             render: (text, record) => (
-                                <Button onClick={() => handleSaveChanges(record)}>저장</Button>
+                                <Button onClick={() => handleSaveChanges(record)}>저장</Button> // 개별 저장 버튼
                             )
                         }
                     ]}

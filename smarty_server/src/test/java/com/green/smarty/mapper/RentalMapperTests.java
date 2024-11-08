@@ -37,8 +37,8 @@ public class RentalMapperTests {
             QuantityVO randomQuantity = quantities.get(random.nextInt(quantities.size()));
 
             rentalMapper.register(new RentalVO(UUID.randomUUID().toString(), randomUser.getUser_id(),
-                    randomQuantity.getQuantity_id(), LocalDateTime.of(2024, 11, 4, 18, 30),
-                    LocalDateTime.of(2024, 11, 4, 20, 30)));
+                    randomQuantity.getQuantity_id(), LocalDateTime.of(2024, 11, 8, 18, 30),
+                    LocalDateTime.of(2024, 11, 8, 20, 30)));
         }
     }
 }

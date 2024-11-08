@@ -45,14 +45,11 @@ def get_daily_data():
         facility_name = data.get('facility_name')
         date = data.get('date')
 
-    # facility_name과 date가 없을 때 400 에러 반환
     if not facility_name or not date:
         return jsonify({"error": "시설 이름 또는 날짜가 누락되었습니다."}), 400
 
-    # 디버깅을 위해 facility_name과 date 출력
     print(f"Facility Name: {facility_name}, Date: {date}")
 
-    # 데이터베이스 연결
     db = get_class_data()
     if db is None:
         return jsonify({"error": "Unable to connect to the database"}), 500
@@ -80,7 +77,6 @@ def get_daily_data():
         ORDER BY 
             r.reservation_start;
     """
-
     cursor.execute(query, (facility_name, date))
     reservations_results = cursor.fetchall()
 
@@ -113,7 +109,7 @@ def get_daily_data():
     # 예약 상태를 포함한 테이블 형식 데이터 구성
     courts = []
 
-    # 모든 코트에 대해 처리 (예약이 없는 코트도 포함) - **수정된 부분**
+    # 모든 코트에 대해 처리 (예약이 없는 코트도 포함)
     for court in all_courts:
         court_id, court_name = court
 

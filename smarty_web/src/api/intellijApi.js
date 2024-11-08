@@ -8,12 +8,12 @@ const productStatusControllerPath = `${BASE_URL}/product-status`; // 상품 상�
 const quantityControllerPath = `${BASE_URL}/product-quantities`; // 상품 수량 컨트롤러
 const sizeControllerPath = `${BASE_URL}/product-sizes`; // 상품 사이즈 컨트롤러 
 
-// Spring Boot에서 유저정보 가져오기
+// 유저정보 가져오기
 export const fetchUsers = () => {
   return axios.get(`${BASE_URL}/users`);
 };
 
-// Spring Boot에서 시설명 가져오기
+// 시설명 가져오기
 export const fetchFacilities = () => {
   return axios.get(facilityControllerPath);
 };
@@ -48,7 +48,7 @@ export const deleteProduct = (productId) => {
   return axios.delete(`${productControllerPath}/${productId}`);
 };
 
-// Spring Boot에서 대여품 수량 가져오기
+// 대여품 수량 가져오기
 export const fetchQuantities = () => {
   return axios.get(quantityControllerPath);
 };
@@ -58,7 +58,7 @@ export const fetchQuantitiesByProduct = (productId) => {
   return axios.get(`${quantityControllerPath}/${productId}`);
 };
 
-// 새로운 함수: 사이즈 정보를 포함한 quantity 데이터 가져오기
+// 사이즈 정보를 포함한 quantity 데이터 가져오기
 export const fetchDetailsWithSizeByProductId = (productId) => {
   return axios.get(`${quantityControllerPath}/details-with-size/${productId}`);
 };
@@ -74,13 +74,13 @@ export const fetchDetailsByProductId = (productId) => {
 };
 
 // 재고 수정
-export const updateStock = (quantity_id, stock) => { // quantityId -> quantity_id로 수정
+export const updateStock = (quantity_id, stock) => {
   return axios.put(`${quantityControllerPath}/set-stock/${quantity_id}`, null, {
       params: { stock },
   });
 };
 
-// Spring Boot에서 대여품 사이즈 가져오기
+// 대여품 사이즈 가져오기
 export const fetchSizes = () => {
   return axios.get(sizeControllerPath);
 };
@@ -91,29 +91,29 @@ export const addSizesToProduct = (productId, sizes) => {
 };
 
 // 대여품 상태 가져오기 (관리자용)
-export const fetchProductStatusByQuantityId = async (quantity_id) => { // quantityId -> quantity_id로 수정
+export const fetchProductStatusByQuantityId = async (quantity_id) => {
   const url = `${productStatusControllerPath}/quantity/${quantity_id}`;
   const response = await axios.get(url);
   return response.data; // 상태 정보 반환
 };
 
 // 대여품 상태 갱신 (관리자용)
-export const updateProductStatus = (quantity_id, newStatus) => { // quantityId -> quantity_id로 수정
-    const url = `${productStatusControllerPath}?quantity_id=${quantity_id}&status=${newStatus}`; // 쿼리 매개변수 수정
+export const updateProductStatus = (quantity_id, newStatus) => { 
+    const url = `${productStatusControllerPath}?quantity_id=${quantity_id}&status=${newStatus}`;
     return axios.put(url);
 };
 
-// Spring Boot에서 예약정보 가져오기
+// 예약정보 가져오기
 export const fetchReservations = () => {
   return axios.get(`${BASE_URL}/reservations`);
 };
 
-// Spring Boot에서 대여정보 가져오기
+// 대여정보 가져오기
 export const fetchRentals = () => {
   return axios.get(`${BASE_URL}/rentals`);
 };
 
-// Spring Boot에서 수강정보 가져오기
+// 수강정보 가져오기
 export const fetchEnrollments = () => {
   return axios.get(`${BASE_URL}/enrollments`);
 };

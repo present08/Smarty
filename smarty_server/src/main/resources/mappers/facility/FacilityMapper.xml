@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.facility.FacilityMapper">
     <insert id="register" parameterType="com.green.smarty.vo.facility.FacilityVO" useGeneratedKeys="true" keyProperty="facility_id">
-        insert into facility_tbl (facility_id, facility_name, day_rate, night_rate, open_time, close_time)
+        insert into facility (facility_id, facility_name, day_rate, night_rate, open_time, close_time)
         values (#{facility_id}, #{facility_name}, #{day_rate}, #{night_rate}, #{open_time}, #{close_time})
     </insert>
 
     <select id="getAllFacilities" resultType="com.green.smarty.vo.facility.FacilityVO">
-        SELECT facility_id, facility_name FROM facility_tbl
+        SELECT facility_id, facility_name FROM facility
     </select>
 
 </mapper>

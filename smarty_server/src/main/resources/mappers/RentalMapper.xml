@@ -5,18 +5,18 @@
 <mapper namespace="com.green.smarty.mapper.RentalMapper">
 
     <insert id="register" parameterType="com.green.smarty.vo.RentalVO" useGeneratedKeys="true" keyProperty="rental_id">
-        insert into rental_tbl (rental_id, user_id, quantity_id, rental_date, return_date)
+        insert into rental (rental_id, user_id, quantity_id, rental_date, return_date)
         values (#{rental_id}, #{user_id}, #{quantity_id}, #{rental_date}, #{return_date})
     </insert>
 
     <select id="getAllRentals" resultType="com.green.smarty.vo.RentalVO">
-        select * from rental_tbl
+        select * from rental
     </select>
 
     <select id="getProductRentalStatus" resultType="com.green.smarty.vo.RentalVO">
         SELECT r.rental_id, r.user_id, r.quantity_id, r.rental_date, r.return_date
-        FROM rental_tbl r
-        JOIN facility_tbl f ON r.facility_id = f.facility_id
+        FROM rental r
+        JOIN facility f ON r.facility_id = f.facility_id
         WHERE r.facility_id = #{facilityId}
         AND DATE(r.rental_date) = #{date}
     </select>
@@ -47,11 +47,11 @@
         MOD(TIMESTAMPDIFF(MINUTE, NOW(), rt.return_date), 60), '분'
         )
         END AS remainingTime
-        FROM rental_tbl rt
-        JOIN quantity_tbl q ON rt.quantity_id = q.quantity_id
-        LEFT JOIN size_tbl s ON q.size_id = s.size_id
-        JOIN product_tbl p ON q.product_id = p.product_id
-        JOIN facility_tbl f ON p.facility_id = f.facility_id
+        FROM rental rt
+        JOIN quantity q ON rt.quantity_id = q.quantity_id
+        LEFT JOIN size s ON q.size_id = s.size_id
+        JOIN product p ON q.product_id = p.product_id
+        JOIN facility f ON p.facility_id = f.facility_id
         WHERE rt.user_id = #{userId}
     </select>
 

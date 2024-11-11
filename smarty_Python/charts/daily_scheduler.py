@@ -66,11 +66,11 @@ def get_daily_data():
             r.reservation_end, 
             c.court_name
         FROM 
-            reservation_tbl r
+            reservation r
         JOIN 
-            court_tbl c ON r.court_id = c.court_id
+            court c ON r.court_id = c.court_id
         JOIN 
-            facility_tbl f ON c.facility_id = f.facility_id
+            facility f ON c.facility_id = f.facility_id
         WHERE 
             f.facility_name = %s  -- facility_name을 사용하여 검색
             AND DATE(r.reservation_start) = %s  
@@ -83,8 +83,8 @@ def get_daily_data():
     # 시설의 모든 코트 가져오기 (예약이 없어도 표시해야 하므로) - **추가된 부분**
     court_query = """
         SELECT court_id, court_name 
-        FROM court_tbl c 
-        JOIN facility_tbl f ON c.facility_id = f.facility_id 
+        FROM court c 
+        JOIN facility f ON c.facility_id = f.facility_id 
         WHERE f.facility_name = %s
     """
     cursor.execute(court_query, (facility_name,))

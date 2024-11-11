@@ -1,4 +1,4 @@
-package com.green.smarty.controller.product;
+package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.SizeService;
 import com.green.smarty.vo.product.SizeVO;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product-sizes")
+@RequestMapping("/api/admin/product-sizes")
 @CrossOrigin(origins = "http://localhost:3000")
-public class SizeController {
+public class AdminSizeController {
     @Autowired
     private SizeService sizeService;
 
@@ -20,5 +20,4 @@ public class SizeController {
             size.setProduct_id(productId);
             sizeService.addSizesToProduct(productId, sizes);
         });
-    }
-}
+    }}

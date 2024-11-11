@@ -5,16 +5,16 @@
 <mapper namespace="com.green.smarty.mapper.EnrollmentMapper">
 
     <insert id="register" parameterType="com.green.smarty.vo.EnrollmentVO" useGeneratedKeys="true" keyProperty="enrollment_id">
-        insert into enrollment_tbl(enrollment_id, user_id, class_id)
+        insert into enrollment(enrollment_id, user_id, class_id)
         values (#{enrollment_id}, #{user_id}, #{class_id})
     </insert>
 
     <select id="getEnrollmentsByUserId" resultType="com.green.smarty.vo.EnrollmentVO">
         SELECT e.enrollment_id, c.class_name, c.start_date, c.end_date, c.day,
         c.start_time, c.end_time, f.facility_name
-        FROM enrollment_tbl e
-        JOIN class_tbl c ON e.class_id = c.class_id
-        JOIN facility_tbl f ON c.facility_id = f.facility_id
+        FROM enrollment e
+        JOIN class c ON e.class_id = c.class_id
+        JOIN facility f ON c.facility_id = f.facility_id
         WHERE e.user_id = #{userId}
     </select>
 

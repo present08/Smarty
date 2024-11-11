@@ -59,11 +59,11 @@ def get_line_data():
         SELECT 
             SUM(p.price)
         FROM 
-            rental_tbl rt
+            rental rt
         JOIN 
-            quantity_tbl q ON rt.quantity_id = q.quantity_id
+            quantity q ON rt.quantity_id = q.quantity_id
         JOIN 
-            product_tbl p ON q.product_id = p.product_id  -- quantity_tbl과 product_tbl 조인
+            product p ON q.product_id = p.product_id  -- quantity과 product조인
         WHERE 
             rt.user_id = r.user_id 
             AND DATE(rt.rental_date) = DATE(r.reservation_start)
@@ -98,11 +98,11 @@ def get_line_data():
         (SELECT 
             COALESCE(SUM(p.price), 0)
         FROM 
-            rental_tbl rt
+            rental rt
         JOIN 
-            quantity_tbl q ON rt.quantity_id = q.quantity_id
+            quantity q ON rt.quantity_id = q.quantity_id
         JOIN 
-            product_tbl p ON q.product_id = p.product_id  -- quantity_tbl과 product_tbl 조인
+            product p ON q.product_id = p.product_id  -- quantity과 product 조인
         WHERE 
             rt.user_id = r.user_id 
             AND DATE(rt.rental_date) = DATE(r.reservation_start)
@@ -110,11 +110,11 @@ def get_line_data():
     ) AS total_income
 
 FROM 
-    reservation_tbl r
+    reservation r
 JOIN 
-    court_tbl ct ON r.court_id = ct.court_id
+    court ct ON r.court_id = ct.court_id
 JOIN 
-    facility_tbl f ON ct.facility_id = f.facility_id
+    facility f ON ct.facility_id = f.facility_id
 WHERE 
     DATE(r.reservation_start) = %s  -- 날짜 필터링
 

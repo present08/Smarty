@@ -5,13 +5,13 @@
 <mapper namespace="com.green.smarty.mapper.ReservationMapper">
 
     <insert id="register" parameterType="com.green.smarty.vo.ReservationVO" useGeneratedKeys="true" keyProperty="reservation_id">
-        insert into reservation_tbl (reservation_id,user_id,court_id, reservation_start, reservation_end)
+        insert into reservation (reservation_id,user_id,court_id, reservation_start, reservation_end)
         values (#{reservation_id}, #{user_id}, #{court_id} ,#{reservation_start}, #{reservation_end})
     </insert>
 
     <select id="getReservationsByCourtIdAndTime" resultType="com.green.smarty.vo.ReservationVO" parameterType="map">
         SELECT *
-        FROM reservation_tbl
+        FROM reservation
         WHERE court_id = #{court_id}
         AND reservation_start &lt; #{end,jdbcType=TIMESTAMP}  <!-- '<' 연산자를 &lt;로 대체 -->
         AND reservation_end &gt; #{start,jdbcType=TIMESTAMP}  <!-- '>' 연산자를 &gt;로 대체 -->
@@ -43,9 +43,9 @@
         MOD(TIMESTAMPDIFF(MINUTE, NOW(), r.reservation_end), 60), '분'
         )
         END AS remainingTime
-        FROM reservation_tbl r
-        JOIN court_tbl c ON r.court_id = c.court_id
-        JOIN facility_tbl f ON c.facility_id = f.facility_id
+        FROM reservation r
+        JOIN court c ON r.court_id = c.court_id
+        JOIN facility f ON c.facility_id = f.facility_id
         WHERE r.user_id = #{userId}
     </select>
 </mapper>

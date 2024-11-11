@@ -1,16 +1,17 @@
-package com.green.smarty.controller.product;
+package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.QuantityService;
 import com.green.smarty.vo.product.QuantityVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/product-quantities")
+@RequestMapping("/api/admin/product-quantities")
 @CrossOrigin(origins = "http://localhost:3000")
-public class QuantityController {
+public class AdminQuantityController {
     @Autowired
     private QuantityService quantityService;
 
@@ -21,13 +22,11 @@ public class QuantityController {
             quantityService.registerQuantity(quantity);
         });
     }
-
     // 특정 상품 ID에 대한 개별 수량 조회
     @GetMapping("/{productId}")
     public List<QuantityVO> getQuantitiesByProductId(@PathVariable("productId") String productId) {
         return quantityService.getQuantitiesByProductId(productId);  // 특정 상품의 재고 목록 반환
     }
-
     // 전체 재고량 수정
     @PutMapping("/set-stock/{quantityId}")
     public String setStock(@PathVariable("quantityId") String quantityId,
@@ -36,7 +35,6 @@ public class QuantityController {
         System.out.println("Updated stock for quantity_id : " + quantityId + "to stock : " + stock);
         return result > 0 ? "전체 재고량이 성공적으로 수정되었습니다." : "전체 재고량 수정에 실패했습니다.";
     }
-
     // 재고량 추가/감소
     @PutMapping("/update-stock/{quantityId}")
     public String updateStock(@PathVariable("quantityId") String quantityId,
@@ -49,7 +47,6 @@ public class QuantityController {
             return "재고량 업데이트에 실패했습니다.";
         }
     }
-
     // 전체 재고량 합산
     @GetMapping("/total-stock")
     public List<QuantityVO> getTotalStockForAllProducts() {

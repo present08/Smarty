@@ -1,4 +1,4 @@
-package com.green.smarty.controller.product;
+package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.ProductStatusService;
 import com.green.smarty.vo.product.ProductStatusVO;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product-status")
+@RequestMapping("/api/admin/product-status")
 @CrossOrigin(origins = "http://localhost:3000")
-public class ProductStatusController {
+public class AdminProductStatusController {
     @Autowired
     private ProductStatusService productStatusService;
 
@@ -26,15 +26,14 @@ public class ProductStatusController {
                 .status(status)
                 .build();
         productStatusService.updateProductStatus(productStatus);
-        System.out.println("Updated status for quantity_id: " + quantityId + " to status: " + status); // 추가된 로그
-
+        System.out.println("Updated status for quantity_id: " + quantityId + " to status: " + status);
     }
 
     @GetMapping("/quantity/{quantity_id}")
     public ProductStatusVO getProductStatusByQuantityId(@PathVariable("quantity_id") String quantityId) {
         ProductStatusVO status = productStatusService.getProductStatusByQuantityId(quantityId).stream().findFirst().orElse(null);
         if (status == null) {
-            System.out.println("No status found for quantity_id: " + quantityId); // 추가된 로그
+            System.out.println("No status found for quantity_id: " + quantityId);
         }
         return status;    }
 }

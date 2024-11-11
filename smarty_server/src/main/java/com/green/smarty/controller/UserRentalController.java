@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/rentals")
+@RequestMapping("/api/user/rentals")
 @CrossOrigin(origins = "http://localhost:3000")
-public class RentalController {
+public class UserRentalController {
     @Autowired
     private RentalService rentalService;
 

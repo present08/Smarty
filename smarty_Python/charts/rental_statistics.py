@@ -45,17 +45,17 @@ def get_rental_statistics():
         SUM(q.stock) AS total_stock,
         COALESCE(SUM(r.rented_quantity), 0) AS rented_quantity
     FROM 
-        facility_tbl f
+        facility f
     JOIN 
-        product_tbl p ON f.facility_id = p.facility_id
+        product p ON f.facility_id = p.facility_id
     JOIN 
-        quantity_tbl q ON p.product_id = q.product_id
+        quantity q ON p.product_id = q.product_id
     LEFT JOIN 
-        size_tbl s ON q.size_id = s.size_id
+        size s ON q.size_id = s.size_id
     LEFT JOIN 
         (
             SELECT quantity_id, COUNT(*) AS rented_quantity
-            FROM rental_tbl
+            FROM rental
             WHERE DATE(rental_date) = %s
             GROUP BY quantity_id
         ) r ON q.quantity_id = r.quantity_id

@@ -6,7 +6,7 @@
 
     <select id="countClassOverlap" resultType="int">
         SELECT COUNT(*)
-        FROM class_tbl
+        FROM class
         WHERE facility_id = #{facilityId}
         AND class_name = #{className}
         AND day = #{day}
@@ -15,12 +15,12 @@
     </select>
 
     <insert id="register" parameterType="com.green.smarty.vo.ClassVO" useGeneratedKeys="true" keyProperty="class_id">
-        insert into class_tbl(class_id, facility_id, class_name, start_date, end_date, day, start_time, end_time,price)
+        insert into class(class_id, facility_id, class_name, start_date, end_date, day, start_time, end_time,price)
         values (#{class_id}, #{facility_id}, #{class_name}, #{start_date}, #{end_date}, #{day}, #{start_time}, #{end_time},#{price})
     </insert>
 
     <select id="getAllClasses" resultType="com.green.smarty.vo.ClassVO" parameterType="String">
-        SELECT * FROM class_tbl
+        SELECT * FROM class
     </select>
 
 </mapper>

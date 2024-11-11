@@ -1,4 +1,4 @@
-package com.green.smarty.controller.product;
+package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.ProductService;
 import com.green.smarty.vo.product.ProductVO;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/admin/products")
 @CrossOrigin(origins = "http://localhost:3000")
-public class ProductController {
+public class AdminProductController {
     @Autowired
     private ProductService productService;
 
@@ -19,31 +19,27 @@ public class ProductController {
     public void addProduct(@RequestBody ProductVO product) {
         productService.addProduct(product);
     }
-
     // 대여물품 정보 수정
     @PutMapping
     public void updateProduct(@RequestBody ProductVO product) {
         productService.updateProduct(product);
     }
-
     // 대여물품 삭제
     @DeleteMapping("/{productId}")
     public void deleteProduct(@PathVariable("productId") String productId) {
         productService.deleteProduct(productId);
     }
-
+    // 대여물품 조회
     @GetMapping
     public List<ProductVO> getAllProducts(){
         return productService.getAllProducts();
     }
-
-    // 특정 상품 조회
+    // 특정 대여물품 조회
     @GetMapping("/{productId}")
     public ProductVO getProductById(@PathVariable("productId") String productId) {
         return productService.getProductById(productId);
     }
-
-
+    //
     @GetMapping("/facility/{facilityId}")
     public List<ProductVO> getProductsByFacilityId(@PathVariable("facilityId") String facilityId) {
         if ("all".equals(facilityId)) {
@@ -52,5 +48,4 @@ public class ProductController {
             return productService.getProductsByFacilityId(facilityId); // 특정 시설의 제품만 반환
         }
     }
-
 }

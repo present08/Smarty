@@ -5,13 +5,13 @@
 <mapper namespace="com.green.smarty.mapper.product.SizeMapper">
 
     <insert id="register" parameterType="com.green.smarty.vo.product.SizeVO" useGeneratedKeys="true" keyProperty="size_id">
-        insert into size_tbl (size_id, cloth_size, shoe_size, product_id)
+        insert into size (size_id, cloth_size, shoe_size, product_id)
         values (#{size_id}, #{cloth_size}, #{shoe_size}, #{product_id})
     </insert>
 
     <select id="getSizesByProductId" parameterType="string" resultType="com.green.smarty.vo.product.SizeVO">
         SELECT *
-        FROM size_tbl
+        FROM size
         WHERE product_id = #{productId}
     </select>
 

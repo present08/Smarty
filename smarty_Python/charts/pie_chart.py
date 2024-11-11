@@ -29,15 +29,15 @@ def get_pie_chart():
         u.user_name AS user_name, 
         f.facility_name AS facility_name,
         COUNT(r.reservation_id) AS total_reservations,
-        ROUND((COUNT(r.reservation_id) / (SELECT COUNT(*) FROM reservation_tbl WHERE user_id = %s)) * 100, 2) AS reservation_ratio
+        ROUND((COUNT(r.reservation_id) / (SELECT COUNT(*) FROM reservation WHERE user_id = %s)) * 100, 2) AS reservation_ratio
     FROM 
-        reservation_tbl r
+        reservation r
     JOIN 
-        court_tbl c ON r.court_id = c.court_id
+        court c ON r.court_id = c.court_id
     JOIN 
-        facility_tbl f ON c.facility_id = f.facility_id
+        facility f ON c.facility_id = f.facility_id
     JOIN 
-        user_tbl u ON r.user_id = u.user_id
+        user u ON r.user_id = u.user_id
     WHERE 
         r.user_id = %s
     GROUP BY 

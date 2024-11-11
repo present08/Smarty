@@ -65,21 +65,21 @@ def get_income_comparison():
                 SELECT 
                     SUM(p.price)
                 FROM 
-                    rental_tbl rt
+                    rental rt
                 JOIN 
-                    quantity_tbl q ON rt.quantity_id = q.quantity_id
+                    quantity q ON rt.quantity_id = q.quantity_id
                 JOIN 
-                    product_tbl p ON q.product_id = p.product_id
+                    product p ON q.product_id = p.product_id
                 WHERE 
                     rt.user_id = r.user_id 
                     AND DATE(rt.rental_date) = DATE(r.reservation_start)
             ), 0) AS total_income
         FROM 
-            reservation_tbl r
+            reservation r
         JOIN 
-            court_tbl ct ON r.court_id = ct.court_id
+            court ct ON r.court_id = ct.court_id
         JOIN 
-            facility_tbl f ON ct.facility_id = f.facility_id
+            facility f ON ct.facility_id = f.facility_id
         WHERE 
             DATE(r.reservation_start) IN (CURDATE(), DATE_SUB(CURDATE(), INTERVAL 1 DAY))
         GROUP BY 

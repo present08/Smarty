@@ -30,14 +30,14 @@ def get_personally_chart():
             u.user_name AS user_name,  -- 유저 이름 가져오기
                SUM(TIMESTAMPDIFF(HOUR, r.reservation_start, r.reservation_end)) AS total_usage_hours,
                (SELECT COUNT(*) 
-                FROM rental_tbl rt
+                FROM rental rt
                 WHERE rt.user_id = %s 
                     AND DATE(rt.rental_date) = DATE(r.reservation_start)) AS total_rentals,
                 COUNT(r.reservation_id) AS total_reservations
-        FROM reservation_tbl r
-        JOIN court_tbl c ON r.court_id = c.court_id
-        JOIN facility_tbl f ON c.facility_id = f.facility_id
-        JOIN user_tbl u ON r.user_id = u.user_id  -- user_tbl 조인하여 유저 이름 가져옴
+        FROM reservation r
+        JOIN court c ON r.court_id = c.court_id
+        JOIN facility f ON c.facility_id = f.facility_id
+        JOIN user u ON r.user_id = u.user_id  -- user 조인하여 유저 이름 가져옴
             WHERE r.user_id = %s
             AND DATE(r.reservation_start) BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND CURDATE()
         GROUP BY DATE(r.reservation_start)

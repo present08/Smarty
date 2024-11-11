@@ -58,6 +58,11 @@ export const getPersonallyData = async (userId = 'user33') => {  // 기본 유�
   return response.data;
 };
 
+// 어제 오늘 일 매출 표현 및 비교
+export const getIncomeRate = async () => {
+  const response = await axios.get(`${PYTHON_BASE_URL}/income-comparison`);
+  return response.data;
+}
 
 // Python 서버로 시설명과 날짜 데이터 전송
 export const sendScheduleData = (facilityName, date) => {
@@ -66,6 +71,3 @@ export const sendScheduleData = (facilityName, date) => {
     date: date
   });
 };
-
-// 어제 수입과 오늘 수입의 변동폭 데이터 요청
-export const getIncomeRate = async

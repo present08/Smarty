@@ -3,8 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 
 const Loading = <div> loading... </div>
-const FacilityList = lazy(() => import('./../pages/Facility_list'));
-const ReservationPage = lazy(() => import('./../pages/ReservationPage'));
+const FacilityList = lazy(() => import('./../pages/reservation/Facility_list'));
+const ReservationPage = lazy(() => import('./../pages/reservation/ReservationPage'));
 
 const root = createBrowserRouter([
     {

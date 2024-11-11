@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import FacilityComponent from '../components/FacilityComponent';
-import ReservationComponent from '../components/ReservationComponent';
-import Information from './../components/Information';
-import './ReservationPage.css';
-import { getCourt } from '../api/ReservationAPI';
+import FacilityComponent from '../../components/reservation/FacilityComponent';
+import ReservationComponent from '../../components/reservation/ReservationComponent';
+import Information from '../../components/reservation/Infomation';
+import '../../css/reservationPage.css';
+import { getCourt } from '../../api/ReservationAPI';
 import { useLocation } from 'react-router-dom';
 
 let today = new Date();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './FacilityComponent.css'
+import '../../css/facilityComponent.css'
 
 const FacilityComponent = ({ props }) => {
   const [infoArr, setInfoArr] = useState([])
@@ -28,21 +28,23 @@ const FacilityComponent = ({ props }) => {
 
 
   return (
-    <div className='container'>
-      <div className='thumbnail'>
+    <div className='facilityContainer'>
+      <div className='facilityThumbnail'>
         <img src="/img/축구장.jpg" />
       </div>
-      <div className='info'>
+      <div className='facilityInfo'>
         <h3>시설정보</h3>
         {infoArr.map((info, idx) =>
-          <div className='info_list' key={idx}>
-            <div className='title'>{info}</div>
-            <div className='line'></div>
-            <div className='content'>{info == "이용요금(할인)" ? props[infoArr1[idx]] - props[infoArr1[idx]] * props.rate_adjustment : info == "이용요금(할증)" ? props[infoArr1[idx]] + props[infoArr1[idx]] * props.rate_adjustment : props[infoArr1[idx]]}</div>
+          <div className='facilityInfo_list' key={idx}>
+            <div className='facilitySubtitle'>{info}</div>
+            <div className='facility_line'></div>
+            <div className='facilityContent'>{info == "이용요금(할인)" ? props[infoArr1[idx]] - props[infoArr1[idx]] * props.rate_adjustment : info == "이용요금(할증)" ? props[infoArr1[idx]] + props[infoArr1[idx]] * props.rate_adjustment : props[infoArr1[idx]]}</div>
           </div>
         )}
-        <p> ※ 이용요금(할인) : 오전 첫 시간 적용</p>
-        <p> ※ 이용요금(할증) : 오후 마지막 시간 적용</p>
+        <div className='facility_hottime'>
+          <p> ※ 이용요금(할인) : 오전 첫 시간 적용</p>
+          <p> ※ 이용요금(할증) : 오후 마지막 시간 적용</p>
+        </div>
       </div>
 
     </div>

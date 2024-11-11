@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LuAlarmClock } from 'react-icons/lu';
 import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
-import { updatePlan } from '../api/ReservationAPI.js';
+import { updatePlan } from '../../api/ReservationAPI.js';
 import moment from 'moment';
 
 
@@ -10,7 +10,6 @@ import moment from 'moment';
 const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate } = props;
     const [date, setDate] = useState('')
-    const [partTime, setPartTime] = useState(0)
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
@@ -81,7 +80,7 @@ const ReservationComponent = (props) => {
             reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
         })
-    
+
         // console.log(moment(start_date).format("YYYY-MM-DD HH:mm:ss"))
         // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
     }, [lastNum])
@@ -99,9 +98,9 @@ const ReservationComponent = (props) => {
             <CustomCalender newDate={newDate} Date1={Date1} />
             <div>
                 <h2 className='reservation_minititle'><LuAlarmClock />  예약 시간 선택</h2>
-                <div className='time_list'>
+                <div className='reservaiotn_time_list'>
                     {timeLine.map((tl, index) => (
-                        <button className={`time_btn ${tl.disabled ? 'disabled' : ''} ${tl.active ? 'active' : ""}`} disabled={tl.disabled} key={index} onClick={() => handleClick(tl)}>
+                        <button className={`reservation_time_btn ${tl.disabled ? 'disabled' : ''} ${tl.active ? 'active' : ""}`} disabled={tl.disabled} key={index} onClick={() => handleClick(tl)}>
                             {tl.start < 10 ? '0' + tl.start : tl.start}:00 - {tl.end < 10 ? '0' + tl.end : tl.end}:00
                         </button>
                     ))}

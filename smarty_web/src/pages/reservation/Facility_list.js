@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { getfacilityId } from '../api/ReservationAPI';
+import { getfacilityId } from '../../api/ReservationAPI';
 
 const Facility_list = () => {
   const navigate = useNavigate();

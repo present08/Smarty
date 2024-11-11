@@ -6,22 +6,19 @@ import { updatePlan } from '../../api/ReservationAPI.js';
 import moment from 'moment';
 
 
+
 const ReservationComponent = (props) => {
-
-
-    const { facilityData, reserved, newDate, userId } = props;
+    const { facilityData, reserved, newDate } = props;
     const [date, setDate] = useState('')
     const [partTime, setPartTime] = useState(0)
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
     const [price, setPrice] = useState(facilityData.basic_fee)
-    const [currentUser, setCurrentUser] = useState(null);
-
     const initData = {
         reservation_id: null,
         user_id: "",
-        court_id: "C_000000",
+        court_id: "",
         reservation_start: "",
         reservation_end: "",
         court_name: "",
@@ -76,15 +73,17 @@ const ReservationComponent = (props) => {
         const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
         setPostData({
             reservation_id: null,
-            court_id: "C_000000",
-            court_name: "",
+            court_id: facilityData.court_id,
+            court_name: facilityData.court_name,
             court_status: true,
             facility_id: facilityData.facility_id,
-            user_id: userId,
+            user_id: 'kaka',
             reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
         })
 
+        // console.log(moment(start_date).format("YYYY-MM-DD HH:mm:ss"))
+        // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
     }, [lastNum])
 
     const insertReservation = () => {
@@ -95,16 +94,14 @@ const ReservationComponent = (props) => {
             })
     }
 
-
-
     return (
         <div className='reservation_container'>
             <CustomCalender newDate={newDate} Date1={Date1} />
             <div>
                 <h2 className='reservation_minititle'><LuAlarmClock />  예약 시간 선택</h2>
-                <div className='time_list'>
+                <div className='reservaiotn_time_list'>
                     {timeLine.map((tl, index) => (
-                        <button className={`time_btn ${tl.disabled ? 'disabled' : ''} ${tl.active ? 'active' : ""}`} disabled={tl.disabled} key={index} onClick={() => handleClick(tl)}>
+                        <button className={`reservation_time_btn ${tl.disabled ? 'disabled' : ''} ${tl.active ? 'active' : ""}`} disabled={tl.disabled} key={index} onClick={() => handleClick(tl)}>
                             {tl.start < 10 ? '0' + tl.start : tl.start}:00 - {tl.end < 10 ? '0' + tl.end : tl.end}:00
                         </button>
                     ))}

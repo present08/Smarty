@@ -2,11 +2,11 @@ import { Suspense, lazy } from "react";
 
 const Loading = () => <div>Loading....</div>;
 
-const Pwchange = lazy(() => import("../component/user/Pwchange"));
-const FindID = lazy(() => import("../component/user/FindID"));
-const FindPassword = lazy(() => import("../component/user/FindPassword"));
-const Login = lazy(() => import("../component/user/Login"));
-const SingUp = lazy(() => import("../component/user/SingUp"));
+const Pwchange = lazy(() => import("../pages/user/Pwchange"));
+const FindID = lazy(() => import("../pages/user/FindID"));
+const FindPassword = lazy(() => import("../pages/user/FindPassword"));
+const Login = lazy(() => import("../pages/user/Login"));
+const SingUp = lazy(() => import("../pages/user/SingUp"));
 
 const userrouter = () => {
   return [

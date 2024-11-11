@@ -4,30 +4,30 @@
 
     <!-- 사용자 정보 조회 by user_id -->
     <select id="getById" parameterType="String" resultType="com.green.smarty.vo.UserVO">
-        SELECT * FROM user_tbl WHERE user_id = #{user_id}
+        SELECT * FROM user WHERE user_id = #{user_id}
     </select>
 
     <!-- 사용자 정보 조회 by email -->
     <select id="getByEmail" parameterType="String" resultType="com.green.smarty.vo.UserVO">
-        SELECT * FROM user_tbl WHERE email = #{email}
+        SELECT * FROM user WHERE email = #{email}
     </select>
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user_tbl (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
         VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
     </insert>
 
     <!-- 아이디 찾기-->
     <select id="findByID" resultType="String" parameterType="map">
-        SELECT user_id FROM user_tbl
+        SELECT user FROM user
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
     </select>
 
     <!-- 비밀번호 찾기 -->
     <select id="resetPassword" parameterType="map" resultType="com.green.smarty.vo.UserVO">
-        SELECT * FROM user_tbl
+        SELECT * FROM user
         WHERE user_id = #{user_id}
         AND user_name = #{user_name}
         AND user_phone = #{user_phone}
@@ -35,31 +35,31 @@
 
     <!-- 비밀번호 바꾸기-->
     <update id="updatePassword" parameterType="com.green.smarty.vo.UserVO">
-        UPDATE user_tbl SET password = #{password} WHERE user_id = #{user_id}
+        UPDATE user SET password = #{password} WHERE user_id = #{user_id}
     </update>
 
     <!-- QR 코드를 포함한 사용자 업데이트 -->
     <update id="updateUserWithQRCode">
-        UPDATE user_tbl SET qr_Code = #{qrCode} WHERE user_id = #{user_id}
+        UPDATE user SET qr_Code = #{qrCode} WHERE user_id = #{user_id}
     </update>
 
     <!-- 유저ID로 검색하여 휴면 여부 검색 -->
     <select id="findUserById" parameterType="String" resultType="com.green.smarty.vo.UserVO">
         SELECT *
-        FROM user_tbl
+        FROM user
         WHERE user_id = #{userId}
     </select>
 
     <!-- 상태 업데이트 -->
     <update id="updateUserStatus">
-        UPDATE user_tbl
+        UPDATE user
         SET user_status = #{userStatus}
         WHERE user_id = #{userId}
     </update>
 
     <!-- 회원 수정 -->
     <update id="updateUserInfo" parameterType="com.green.smarty.vo.UserVO" >
-        UPDATE user_tbl
+        UPDATE user
         SET address = #{address}, phone = #{phone}
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>

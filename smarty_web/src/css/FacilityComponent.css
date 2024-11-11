@@ -4,25 +4,25 @@
     list-style: none;
 }
 
-.container {
+.facilityContainer {
     display: flex;
     justify-content: space-around;
     width: 80%;
     margin: 80px auto;
 }
 
-.thumbnail {
+.facilityThumbnail {
     width: 40%;
     height: 500px;
     background-color: gray;
 }
 
-.thumbnail img {
+.facilityThumbnail img {
     width: 100%;
     height: inherit;
 }
 
-.info {
+.facilityInfo {
     width: 40%;
     height: 500px;
     background-color: white;
@@ -33,7 +33,7 @@
     border-radius: 0 30px 0 30px;
 }
 
-.info>h3 {
+.facilityInfo>h3 {
     position: absolute;
     top: -22.5px;
     width: 130px;
@@ -47,25 +47,25 @@
 }
 
 
-.info_list {
+.facilityInfo_list {
     display: flex;
 }
 
-.info_list>* {
+.facilityInfo_list>* {
     padding: 5px;
     vertical-align: middle;
     margin-bottom: 10px;
     box-sizing: border-box;
 }
 
-.info_list>.title {
+.facilityInfo_list>.facilitySubtitle {
     width: 150px;
     margin-left: 30px;
     font-weight: bold;
     color: darkcyan;
 }
 
-.info_list>.line {
+.facilityInfo_list>.facility_line {
     padding: 0;
     width: 2px;
     height: 20px;
@@ -73,6 +73,12 @@
     margin-top: 7px;
 }
 
-.info_list>.content {
+.facilityInfo_list>.facilityContent {
     text-indent: 10px;
+}
+
+.facility_hottime {
+    margin-top: 180px;
+    margin-left: 20px;
+    font-size: 0.8rem;
 }

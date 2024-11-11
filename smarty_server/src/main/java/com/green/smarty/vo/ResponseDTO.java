@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ResponseDTO {
     private FacilityVO facilityVO;
     private List<Map<String, Integer>> btnData;

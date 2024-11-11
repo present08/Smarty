@@ -81,7 +81,7 @@ const MainNav = () => {
                     {isLoggedIn ? (
                         <>
                             <li>
-                                <Link to={"/"}>관리자모드</Link>
+                                <Link to={"/admin"}>관리자모드</Link>
                             </li>
                             <li>
                                 <span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span>

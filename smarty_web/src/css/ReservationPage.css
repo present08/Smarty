@@ -5,9 +5,10 @@
     text-decoration: none;
 }
 
+
+/* reservation Page */
 .reservation_title {
     text-align: center;
-    margin-top: 2rem;
 }
 
 .reservation_title:after {
@@ -20,27 +21,8 @@
     margin-top: 20px;
 }
 
-.buttonBox {
-    display: flex;
-    width: 73%;
-    height: 10%;
-    margin: 0 auto;
-    justify-content: flex-end;
-}
 
-.reservation_btn {
-    display: block;
-    width: 210px;
-    padding: 20px;
-    margin: 0 auto;
-    border: none;
-    background-color: #011b2f;
-    color: aliceblue;
-    font-size: large;
-    border-radius: 15px;
-    cursor: pointer;
-}
-
+/* infomation */
 .tab_container {
     width: 73%;
     margin: 80px auto;
@@ -48,10 +30,12 @@
     border-radius: 10px 10px 0px 0px;
 }
 
+/* reservation component ->  calendar */
 .calendar_container {
     width: 500px;
 }
 
+/* reseravtionComponent */
 .reservation_container {
     display: flex;
     width: 80%;
@@ -62,7 +46,7 @@
     justify-content: space-around;
 }
 
-.time_list {
+.reservaiotn_time_list {
     display: flex;
     flex-wrap: wrap;
     align-content: space-evenly;
@@ -70,7 +54,7 @@
     height: 400px;
 }
 
-.time_btn {
+.reservation_time_btn {
     cursor: pointer;
     color: aliceblue;
     background-color: #011b2f;
@@ -81,7 +65,7 @@
     font-weight: bold;
 }
 
-.time_btn.active {
+.reservation_time_btn.active {
     color: #011b2f;
     background-color: #8ac4d0;
     padding: 20px;
@@ -90,7 +74,7 @@
     margin: 3px;
 }
 
-.time_btn.disabled {
+.reservation_time_btn.disabled {
     background-color: grey;
     cursor: auto;
 }
@@ -150,4 +134,21 @@
 .reservation_option thead th:last-child,
 .reservation_option tbody td:last-child {
     border-right: none;
+}
+
+
+
+
+/* reservation action button */
+.reservation_btn {
+    display: block;
+    width: 200px;
+    padding: 30px;
+    margin: 0 auto;
+    border: none;
+    background-color: #011b2f;
+    color: aliceblue;
+    font-size: large;
+    border-radius: 15px;
+    cursor: pointer;
 }

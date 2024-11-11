@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
-import '../../css/Calendar.css';
+import '../../css/reservationCalendar.css';
 import { FaRegCalendarCheck } from "react-icons/fa";
 
 const CustomCalender = (props) => {

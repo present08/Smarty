@@ -2,10 +2,10 @@ import { Suspense, lazy } from "react";
 
 const Loading = () => <div>Loading....</div>;
 
-const Center_in = lazy(() => import("../component/centerIntroduction/CenterIntroduction"));
-const Directions = lazy(() => import("../component/centerIntroduction/Directions"));
-const FacilityInformation = lazy(() => import("../component/centerIntroduction/FacilityInformation"));
-const ParkingIntro = lazy(() => import("../component/centerIntroduction/ParkingIntro"));
+const Center_in = lazy(() => import("../pages/centerIntroduction/CenterIntroduction"));
+const Directions = lazy(() => import("../pages/centerIntroduction/Directions"));
+const FacilityInformation = lazy(() => import("../pages/centerIntroduction/FacilityInformation"));
+const ParkingIntro = lazy(() => import("../pages/centerIntroduction/ParkingIntro"));
 
 
 const centerRouter = () => {

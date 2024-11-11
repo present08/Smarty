@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineAliwangwang } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import ChatBot from './chatbot/Chatbot';
 
 const ChatbotButton = () => {
+
+    const [chatbot, setChatbot] = useState(false);
+
+    const chatbotopen = () => {
+        setChatbot(!chatbot);
+    }
+
     return (
         <button
             style={{ width: '55px', height: '55px', borderRadius: '50px', border: 'none', }}
         >
-            <Link to={"/"}>
-                <AiOutlineAliwangwang style={{ width: '50px', height: '50px', color: '#3e83a8' }} />
-            </Link>
+            <AiOutlineAliwangwang onClick={chatbotopen} style={{ width: '50px', height: '50px', color: '#3e83a8' }} />
+            {chatbot && (
+                <div style={{
+                    position: 'fixed', top: '17%', right: '6.5%'
+                }}>
+                    <ChatBot />
+                </div>
+            )}
         </button>
     )
 }

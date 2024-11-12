@@ -19,8 +19,4 @@ export const updatePlan = async (postData, facility_id) => {
     console.log(postData)
     const response = await axios.post(`${host}/${facility_id}`, postData)
     return response.data
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

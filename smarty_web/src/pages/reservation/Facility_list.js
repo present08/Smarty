@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getfacilityId } from '../../api/ReservationAPI';
-<<<<<<< HEAD
-
-const Facility_list = () => {
-=======
 import MainNav from './../../component/MainNav';
 import Wrapper from './../../component/Wrapper';
 import Footer from './../../component/Footer';
 
 const Facility_list = () => {
 
->>>>>>> main
   const navigate = useNavigate();
   const [facility_id, setFacility_id] = useState([])
 
@@ -34,14 +29,10 @@ const Facility_list = () => {
 
   return (
     <div>
-<<<<<<< HEAD
-      {facility_id.map((i, idx) => <button key={idx} onClick={() => handleClick(i)}>{i.facility_name}, {i.court_name}</button>)}
-=======
       <MainNav />
       <Wrapper />
       {facility_id.map((i, idx) => <button key={idx} onClick={() => handleClick(i)}>{i.facility_name}, {i.court_name}</button>)}
       <Footer />
->>>>>>> main
     </div>
   )
 }

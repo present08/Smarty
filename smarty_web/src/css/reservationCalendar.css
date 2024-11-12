@@ -76,11 +76,7 @@
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
     display: flex;
     align-items: center;
-<<<<<<< HEAD
-    justify-content: center;    
-=======
     justify-content: center;
->>>>>>> main
     font: inherit;
     font-size: 0.75em;
     font-weight: bold;

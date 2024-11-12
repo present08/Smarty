@@ -50,8 +50,4 @@ public class UserVO {
     public boolean isUserStatus() {
         return user_status; // user_status에 대한 getter
     }
-<<<<<<< HEAD:Smarty_server/src/main/java/com/green/smarty/vo/UserVO.java
 }
-=======
-}
->>>>>>> main:smarty_server/src/main/java/com/green/smarty/vo/UserVO.java

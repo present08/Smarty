@@ -8,7 +8,7 @@ export const postAddFacility = async(facility) => {
         console.log("시설 전송 : ", facility)
         const header = {headers: {"Content-Type": "multipart/form-data"}}
         const res = await axios.post(`${prefix}/`, facility, header)
-        console.log("서버 응답 : ", res)
+        console.log("서버 응답 : ", res.data)
         return res.data
     } catch(error) {
         console.error("에러 발생 : ", error)

@@ -9,54 +9,35 @@ export default function Sidebar() {
     <div className="sidebar">
         <div className="sidebarWrapper">            
             <div className="sidebarMenu">
-                <h3 className="sidebarTitle">Dashboard</h3>
                 <ul className="sidebarList">
                     <li className="sidebarListItem">
                         <Link to="/admin" className="link">
-                            <Home className='sidebarIcon' />
-                            Home
+                            대시보드
                         </Link>
                     </li>
                     <li className="sidebarListItem">
-                        <Troubleshoot className='sidebarIcon' />
-                        Analytics
+                        통계분석
                     </li>
-                </ul>            
-            </div>
-            <div className="sidebarMenu">
-                <h3 className="sidebarTitle">Quick Menu</h3>
-                <ul className="sidebarList">
                     <li className="sidebarListItem">
                         <Link to="/admin/facilities" className="link">
-                            <SportsMartialArts className='sidebarIcon' />
-                            Facilities
+                            시설관리
                         </Link>
+                        <ul className="sidebarSublist">
+                            <li className="sidebarSublistItem">
+                                전체시설
+                            </li>
+                            <li className="sidebarSublistItem">
+                                등록시설1
+                            </li>
+                            <li className="sidebarSublistItem">
+                                등록시설2
+                            </li>
+                        </ul>
                     </li>
-                    <li className="sidebarListItem">
-                        <Link to="products" className="link">
-                            <Storefront className='sidebarIcon' />
-                            Products
-                        </Link>
-                    </li>
-                    <li className="sidebarListItem">
-                        <Link to="users" className="link">
-                            <PersonOutline className='sidebarIcon' />
-                            Users
-                        </Link>
-                    </li>
-                    <li className="sidebarListItem">
-                        <BarChart className='sidebarIcon' />
-                        Reports
-                    </li>
-                </ul>            
-            </div>
-            <div className="sidebarMenu">
-                <h3 className="sidebarTitle">Test</h3>
-                <ul className="sidebarList">
                     <li className="sidebarListItem">
                         <Link to="test" className="link">
                             <ChatBubbleOutline className='sidebarIcon' />
-                            PageTest
+                            테스트용
                         </Link>
                     </li>
                 </ul>            

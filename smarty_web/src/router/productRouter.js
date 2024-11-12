@@ -1,31 +1,36 @@
-import { lazy, Suspense } from "react"
+import React, { lazy, Suspense } from 'react'
+
+const Loading = <div> Loading... </div>
+const ProductDetail = lazy(() => import("../component/product/DetailPage"))
+const RentalSummary = lazy(() => import("../component/product/RentalSummary"))
+const RentalIndex = lazy(() => import("../component/product/IndexPage"))
+const RentalList = lazy(() => import("../component/product/RentalList"))
+const RentalDetail = lazy(() => import("../component/product/RentalDetailPage"))
 
 const productRouter = () => {
 
-    const Loading = <div>Loading...</div>
-    const ProductList = lazy(() => import("../pages/products/productList/ProductList"))
-    const ProductAdd = lazy(() => import("../pages/products/newProduct/NewProduct"))
-    const ProductRead = lazy(() => import("../pages/products/productRead/ProductRead"))
-    const ProductModify = lazy(() => import("../pages/products/productModify/ProductModify"))
-
-  return [
-    {
-      path: "",
-      element: <Suspense fallback={Loading}><ProductList /></Suspense>
-    },
-    {
-        path: "add",
-        element: <Suspense fallback={Loading}><ProductAdd /></Suspense>
-    },
-    {
-        path: "read/:productId",
-        element: <Suspense fallback={Loading}><ProductRead /></Suspense>
-    },
-    {
-        path: "modify/:productId",
-        element: <Suspense fallback={Loading}><ProductModify /></Suspense>
-    }
-  ]
+    return [
+        {
+            path: "detail/:product_id",
+            element: <Suspense fallback={Loading}> <ProductDetail /> </Suspense>
+        },
+        {
+            path: "summary",
+            element: <Suspense fallback={Loading}> <RentalSummary /> </Suspense>
+        },
+        {
+            path: "index",
+            element: <Suspense fallback={Loading}> <RentalIndex /> </Suspense>
+        },
+        {
+            path: "list",
+            element: <Suspense fallback={Loading}> <RentalList /> </Suspense>
+        },
+        {
+            path: "detail/:rental_id",
+            element: <Suspense fallback={Loading}> <RentalDetail /> </Suspense>
+        },
+    ]
 }
 
-export default productRouter
+export default productRouter;

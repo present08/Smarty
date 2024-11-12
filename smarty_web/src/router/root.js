@@ -1,41 +1,66 @@
-import { lazy, Suspense } from "react"
-import facilityRouter from './facilityRouter';
-import productRouter from "./productRouter"
-import userRouter from "./userRouter"
-const {createBrowserRouter} = require("react-router-dom")
+import { createBrowserRouter } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { SyncLoader } from "react-spinners";
+import userrouter from "./userrouter";
+import centerRouter from "./centerRouter";
+import adminRouter from "./adminRouter";
+import productRouter from "./productRouter";
 
-const Loading = <div>Loading...</div>
-const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"))
-const FacilityIndex = lazy(() => import("../pages/facilities/IndexPage"))
-const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
-const UserIndex = lazy(() => import("../pages/users/IndexPage"))
-const TestPage = lazy(() => import("../pages/facilities/newCourt/NewCourt"))
+const Loading = <div><SyncLoader /></div>;
+const Main = lazy(() => import("../component/Main"));
+const FirstInfor = lazy(() => import("../pages/centerIntroduction/FirstInfor"));
+const MyPage = lazy(() => import("../pages/mypage/MyPage"));
+const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));
+const ReservationPage = lazy(() => import("../pages/reservation/ReservationPage"));
+const ChatBot = lazy(() => import("../component/chatbot/Chatbot"));
+const Admin = lazy(() => import("../pages/admin/IndexPage"));
+// 관리자 페이지 라우팅 설정
+// 진입시 통합 레이아웃 인덱스 화면에 <Outlet />으로 하위 컴포넌트 렌더링
+const ProductList = lazy(() => import("../pages/product/ListPage"))
 
 const root = createBrowserRouter([
     {
         path: "",
-        element: <Suspense fallback={Loading}><Dashboard /></Suspense>,
-        errorElement: <div>잘못된 접근입니다.</div>
+        element: <Suspense fallback={Loading}><Main /></Suspense>
     },
     {
-        path: "facilities",
-        element: <Suspense fallback={Loading}><FacilityIndex /></Suspense>,
-        children: facilityRouter()
+        path: "user",
+        children: userrouter()
     },
     {
-        path: "products",
-        element: <Suspense fallback={Loading}><ProductIndex /></Suspense>,
+        path: "admin",
+        element: <Suspense fallback={Loading}><Admin /></Suspense>,
+        children: adminRouter()
+    },
+    {
+        path: "chatbot",
+        element: <Suspense fallback={Loading}><ChatBot /></Suspense>,
+    },
+    {
+        path: "center",
+        children: centerRouter()
+    },
+    {
+        path: "1f",
+        element: <Suspense fallback={Loading}><FirstInfor /></Suspense>,
+    },
+    {
+        path: "mypage",
+        element: <Suspense fallback={Loading}><MyPage /></Suspense>
+    },
+    {
+        path: "facilityList",
+        element: <Suspense fallback={Loading}><FacilityList /></Suspense>
+    },
+    {
+        path: "facilityList/:facilityId",
+        element: <Suspense fallback={Loading}><ReservationPage /></Suspense>
+    },
+    {
+        path: "product",
+        element: <Suspense fallback={Loading}> <ProductList /> </Suspense>,
         children: productRouter()
     },
-    {
-        path: "users",
-        element: <Suspense fallback={Loading}><UserIndex /></Suspense>,
-        children: userRouter()
-    },
-    {
-        path: "test",
-        element: <Suspense fallback={Loading}><TestPage /></Suspense>,
-    }
-])
+]);
 
-export default root
+export default root;

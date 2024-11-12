@@ -1,10 +1,13 @@
-import "./app.css"
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider } from 'react-router-dom';  // BrowserRouter, Route, Routes 제거
+import './App.css';
 import root from './router/root';
+
 
 function App() {
   return (
-    <RouterProvider router={root} />
+    <div className="App main-content">
+      <RouterProvider router={root}></RouterProvider>
+    </div>
   );
 }
 

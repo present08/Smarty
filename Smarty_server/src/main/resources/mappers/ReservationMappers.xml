@@ -43,8 +43,6 @@
     <select id="getReservationAll" resultType="com.green.smarty.vo.ReservationVO">
         select * from reservation
     </select>
-<<<<<<< HEAD:Smarty_server/src/main/resources/mappers/ReservationMappers.xml
-=======
 
 
       <select id="getReservationUserDate" parameterType="string" resultType="com.green.smarty.dto.ReservationUserDTO">
@@ -53,5 +51,4 @@
         join facility f on f.facility_id = c.facility_id;
     </select>
 
->>>>>>> main:smarty_server/src/main/resources/mappers/ReservationMappers.xml
 </mapper>

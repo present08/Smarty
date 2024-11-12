@@ -8,7 +8,7 @@ const FindPassword = lazy(() => import("../pages/user/FindPassword"));
 const Login = lazy(() => import("../pages/user/Login"));
 const SingUp = lazy(() => import("../pages/user/SingUp"));
 
-const userrouter = () => {
+const userRouter = () => {
   return [
     {
       path: "login",
@@ -33,4 +33,4 @@ const userrouter = () => {
   ]
 }
 
-export default userrouter;
+export default userRouter;

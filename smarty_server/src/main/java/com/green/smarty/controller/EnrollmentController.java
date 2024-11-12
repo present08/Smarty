@@ -1,3 +1,4 @@
+/*
 package com.green.smarty.controller;
 
 import com.green.smarty.service.EnrollmentService;
@@ -21,3 +22,4 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollments);
     }
 }
+*/

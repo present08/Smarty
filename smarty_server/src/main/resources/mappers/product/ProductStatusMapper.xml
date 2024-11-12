@@ -5,28 +5,25 @@
 <mapper namespace="com.green.smarty.mapper.product.ProductStatusMapper">
 
     <insert id="insertProductStatus" parameterType="com.green.smarty.vo.product.ProductStatusVO"  useGeneratedKeys="true" keyProperty="status_id">
-        INSERT INTO product_status (status_id, quantity_id, status)
-        VALUES (#{statusId}, #{quantityId}, #{status})
+        INSERT INTO product_status (status_id, product_id, status, updated_at)
+        VALUES (#{statusId}, #{productId}, #{status}, CURRENT_TIMESTAMP)
     </insert>
 
     <select id="getAllProductStatuses" resultType="com.green.smarty.vo.product.ProductStatusVO">
         SELECT * FROM product_status;
     </select>
 
-    <!-- 특정 상품 상태 조회 -->
-    <select id="getProductStatus" parameterType="String" resultType="com.green.smarty.vo.product.ProductStatusVO">
-        SELECT * FROM product_status WHERE quantity_id = #{quantity_id};
+    <!-- 특정 상품의 상태 조회 -->
+    <select id="selectStatusByProductId" parameterType="string" resultType="com.green.smarty.vo.product.ProductStatusVO">
+        SELECT * FROM product_status WHERE product_id = #{productId}
     </select>
 
     <!-- 상품 상태 업데이트 쿼리 -->
     <update id="updateProductStatus" parameterType="com.green.smarty.vo.product.ProductStatusVO">
         UPDATE product_status
         SET status = #{status}, updated_at = NOW()
-        WHERE quantity_id = #{quantity_id};
+        WHERE product_id = #{product_id};
     </update>
 
-    <select id="getProductStatusByQuantityId" parameterType="String" resultType="com.green.smarty.vo.product.ProductStatusVO">
-        SELECT * FROM product_status WHERE quantity_id = #{quantity_id};
-    </select>
 
 </mapper>

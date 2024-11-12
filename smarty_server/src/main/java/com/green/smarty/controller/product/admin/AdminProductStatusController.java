@@ -3,6 +3,8 @@ package com.green.smarty.controller.product.admin;
 import com.green.smarty.service.product.ProductStatusService;
 import com.green.smarty.vo.product.ProductStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,26 +16,35 @@ public class AdminProductStatusController {
     @Autowired
     private ProductStatusService productStatusService;
 
+    @PostMapping("/register")
+    public ResponseEntity<String> registerDefaultStatus(@RequestParam("productId") String productId) {
+        try {
+            productStatusService.registerDefaultStatus(productId);
+            return ResponseEntity.ok("Product status set to '대여 가능'.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to set default product status.");
+        }
+    }
+
     @GetMapping("/all")
     public List<ProductStatusVO> getAllProductStatuses() {
         return productStatusService.getAllProductStatuses();
     }
 
     @PutMapping
-    public void updateProductStatus(@RequestParam("quantity_id") String quantityId, @RequestParam("status") String status) {
+    public void updateProductStatus(@RequestParam("product_id") String productId, @RequestParam("status") String status) {
         ProductStatusVO productStatus = ProductStatusVO.builder()
-                .quantity_id(quantityId)
+                .product_id(productId)
                 .status(status)
                 .build();
         productStatusService.updateProductStatus(productStatus);
-        System.out.println("Updated status for quantity_id: " + quantityId + " to status: " + status);
+        System.out.println("Updated status for quantity_id: " + productId + " to status: " + status); // 추가된 로그
+
     }
 
-    @GetMapping("/quantity/{quantity_id}")
-    public ProductStatusVO getProductStatusByQuantityId(@PathVariable("quantity_id") String quantityId) {
-        ProductStatusVO status = productStatusService.getProductStatusByQuantityId(quantityId).stream().findFirst().orElse(null);
-        if (status == null) {
-            System.out.println("No status found for quantity_id: " + quantityId);
-        }
-        return status;    }
+    @GetMapping("/{productId}")
+    public ResponseEntity<List<ProductStatusVO>> getStatusByProductId(@PathVariable("productId") String productId) {
+        List<ProductStatusVO> statuses = productStatusService.getStatusByProductId(productId);
+        return ResponseEntity.ok(statuses);
+    }
 }

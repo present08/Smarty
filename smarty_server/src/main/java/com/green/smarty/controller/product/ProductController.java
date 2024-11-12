@@ -15,10 +15,10 @@ public class ProductController {
     private ProductService productService;
 
     // 새로운 대여물품 등록
-    @PostMapping
+    /*@PostMapping
     public void addProduct(@RequestBody ProductVO product) {
-        productService.addProduct(product);
-    }
+        productService.registerProduct(product);
+    }*/
 
     // 대여물품 정보 수정
     @PutMapping

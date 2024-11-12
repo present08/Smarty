@@ -2,17 +2,15 @@ package com.green.smarty.vo.product;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Setter
 @Builder
-public class ProductStatusVO {
-    private String status_id;
+public class ProductAttachVO {
     private String product_id;
-    private String status;
-    private LocalDateTime updated_at;
+    private String origin_path;
+    private String thumbnail_path;
+    private String file_name;
 }

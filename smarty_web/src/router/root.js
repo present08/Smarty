@@ -5,6 +5,7 @@ import MainPage from '../pages/MainPage';
 const Loading = <div>Loading.....</div>
 const StatsPage = lazy(() => import("../pages/StatsPage"))
 const RentalManagementPage = lazy(() => import("../components/product/Management"))
+const ProductRegisterPage = lazy(()=> import("../pages/ProductRegisterPage"))
 
 const root = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const root = createBrowserRouter([
             {
                 path: "rental-management",
                 element: <Suspense fallback={Loading}><RentalManagementPage /></Suspense>
+            },
+            {
+                path: "product-register",
+                element: <Suspense fallback={Loading}><ProductRegisterPage/></Suspense>
             }
         ]
     }

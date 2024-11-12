@@ -9,9 +9,7 @@ import java.util.List;
 @Mapper
 public interface FacilityMapper {
     int register(FacilityVO vo);
-    FacilityVO findFacillityById(String facility_id);
     int modify (FacilityVO vo);
-    void removeFacillity(String facility_id);
 
     List<FacilityVO> getAllFacilities();
 

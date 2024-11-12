@@ -1,8 +1,10 @@
 package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.ProductService;
+import com.green.smarty.vo.product.ProductAttachVO;
 import com.green.smarty.vo.product.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +17,11 @@ public class AdminProductController {
     private ProductService productService;
 
     // 새로운 대여물품 등록
-    @PostMapping
-    public void addProduct(@RequestBody ProductVO product) {
-        productService.addProduct(product);
+    @PostMapping("/register")
+    public ResponseEntity<String> registerProducts(
+            @RequestBody List<ProductVO> productList) {
+        productService.registerProduct(productList);
+        return ResponseEntity.ok("Products registered successfully.");
     }
     // 대여물품 정보 수정
     @PutMapping
@@ -36,8 +40,9 @@ public class AdminProductController {
     }
     // 특정 대여물품 조회
     @GetMapping("/{productId}")
-    public ProductVO getProductById(@PathVariable("productId") String productId) {
-        return productService.getProductById(productId);
+    public ResponseEntity<ProductVO> getProductById(@PathVariable("productId") String productId) {
+        ProductVO product = productService.getProductById(productId);
+        return ResponseEntity.ok(product);
     }
     //
     @GetMapping("/facility/{facilityId}")

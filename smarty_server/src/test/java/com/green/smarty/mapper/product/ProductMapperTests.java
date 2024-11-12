@@ -20,7 +20,7 @@ public class ProductMapperTests {
     private SizeMapper sizeMapper;
 
 
-    @Test
+   /* @Test
     public void dummyProductInsert(){
         // 데이터베이스에서 모든 시설 정보를 가져오기
         List<FacilityVO> facilities = facilityMapper.getAllFacilities();
@@ -99,5 +99,5 @@ public class ProductMapperTests {
                         .build());
             });
         }
-    }
+    }*/
 }

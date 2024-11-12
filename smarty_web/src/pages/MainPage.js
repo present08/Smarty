@@ -12,6 +12,9 @@ function MainPage() {
                     <li>
                         <Link to="/rental-management">대여 품목 관리</Link>
                     </li>
+                    <li>
+                        <Link to="/product-register">상품 등록</Link>
+                    </li>
                 </ul>
             </nav>
             <div>

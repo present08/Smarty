@@ -20,4 +20,5 @@ public class AdminSizeController {
             size.setProduct_id(productId);
             sizeService.addSizesToProduct(productId, sizes);
         });
-    }}
+    }
+}

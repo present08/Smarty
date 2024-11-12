@@ -14,7 +14,7 @@ public class ProductStatusMapperTests {
     @Autowired
     private QuantityMapper quantityMapper;
 
-    @Test
+    /*@Test
     public void dummpProductStatusInsert(){
         String statusIdPrefix = "status_";
         String status = "대여 가능";
@@ -25,8 +25,8 @@ public class ProductStatusMapperTests {
             String statusId = statusIdPrefix + (i+1);
             String quantityId = quantityIds.get(i);
 
-            productStatusMapper.insertProductStatus(statusId, quantityId, status);
+            productStatusMapper.insertProductStatus(statusId, productId, status);
         }
 
-    }
+    }*/
 }

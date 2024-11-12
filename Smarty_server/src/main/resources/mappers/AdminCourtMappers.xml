@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.AdminCourtMapper">
+    <insert id="register" parameterType="com.green.smarty.dto.CourtAdminDTO">
+        insert into court (court_id, facility_id, court_name, court_status)
+        values (#{court_id}, #{facility_id}, #{court_name}, #{court_status})
+    </insert>
+
+    <select id="getList" resultType="com.green.smarty.dto.CourtAdminDTO">
+        select * from court
+    </select>
+
+    <select id="read" resultType="com.green.smarty.dto.CourtAdminDTO">
+        select * from court where court_id=#{court_id}
+    </select>
+
+</mapper>

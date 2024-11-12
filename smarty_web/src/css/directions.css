@@ -1,0 +1,145 @@
+.directions-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    margin-bottom: 3rem;
+    flex-direction: column;
+}
+
+/* --------------- */
+
+.submu {
+    margin: 0 auto;
+    width: 70%;
+    height: 3%;
+}
+
+.submu nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* --------------- */
+
+.directions-header {
+    width: 70%;
+    height: 7%;
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+
+.directions-header h3,
+.traffic-header h3 {
+    font-size: 28px;
+    display: flex;
+}
+
+/* --------------- */
+
+.directions-cont {
+    width: 70%;
+    height: 500px;
+    margin: 0 auto;
+}
+
+/* --------------- */
+
+.address_call {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    height: 120px;
+}
+
+.address,
+.bus,
+.subway {
+    display: flex;
+    align-items: center;
+}
+
+.address div:first-child,
+.call div:first-child,
+.fax div:first-child {
+    margin-right: 0.6rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #071d32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.call,
+.fax {
+    display: flex;
+    align-items: center;
+    margin-left: 3rem;
+}
+
+.address p,
+.call p,
+.fax p {
+    font-size: 18px;
+}
+
+
+/* ------------------------------ */
+
+.traffic {
+    width: 100%;
+    height: 7vw;
+}
+
+.traffic-cont {
+    display: flex;
+}
+
+.traffic-header {
+    width: 70%;
+    height: 40px;
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.traffic-header h3 {
+    font-size: 21px;
+    margin-top: 1rem;
+    display: flex;
+}
+
+.bus {
+    width: 35%;
+}
+
+.bus div:first-child,
+.subway div:first-child {
+    margin-right: 0.6rem;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #071d32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.text>p {
+    margin: 0
+}
+
+.text p:first-child {
+    font-weight: bold;
+    font-size: 21px;
+}

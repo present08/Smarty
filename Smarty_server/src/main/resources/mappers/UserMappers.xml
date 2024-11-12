@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.UserMapper">
+
+    <!-- 사용자 정보 조회 by user_id -->
+    <select id="getById" parameterType="String" resultType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 사용자 정보 조회 by email -->
+    <select id="getByEmail" parameterType="String" resultType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
+
+    <!-- 사용자 추가 -->
+    <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
+    </insert>
+
+    <!-- 아이디 찾기-->
+    <select id="findByID" resultType="String" parameterType="map">
+        SELECT user FROM user
+        WHERE email = LOWER(#{email})
+        AND user_name = LOWER(#{user_name})
+    </select>
+
+    <!-- 비밀번호 찾기 -->
+    <select id="resetPassword" parameterType="map" resultType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user
+        WHERE user_id = #{user_id}
+        AND user_name = #{user_name}
+        AND user_phone = #{user_phone}
+    </select>
+
+    <!-- 비밀번호 바꾸기-->
+    <update id="updatePassword" parameterType="com.green.smarty.vo.UserVO">
+        UPDATE user SET password = #{password} WHERE user_id = #{user_id}
+    </update>
+
+    <!-- QR 코드를 포함한 사용자 업데이트 -->
+    <update id="updateUserWithQRCode">
+        UPDATE user SET qr_Code = #{qrCode} WHERE user_id = #{user_id}
+    </update>
+
+    <!-- 유저ID로 검색하여 휴면 여부 검색 -->
+    <select id="findUserById" parameterType="String" resultType="com.green.smarty.vo.UserVO">
+        SELECT *
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 상태 업데이트 -->
+    <update id="updateUserStatus">
+        UPDATE user
+        SET user_status = #{userStatus}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 회원 수정 -->
+    <update id="updateUserInfo" parameterType="com.green.smarty.vo.UserVO" >
+        UPDATE user
+        SET address = #{address}, phone = #{phone}
+        WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
+    </update>
+
+    <update id="updateUserLevel">
+        UPDATE user
+        SET level = #{level}
+        WHERE user_id = #{userId}
+    </update>
+</mapper>
+
+        <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->
+        <!-- 우선 순위는 resultType-->

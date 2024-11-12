@@ -2,16 +2,26 @@ package com.green.smarty.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+<<<<<<< HEAD:Smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
 import java.util.Date;
+=======
+>>>>>>> main:smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD:Smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.green.smarty.dto.ReservationDTO;
+=======
+import org.springframework.stereotype.Service;
+
+import com.green.smarty.dto.ReservationDTO;
+import com.green.smarty.dto.ReservationUserDTO;
+>>>>>>> main:smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
@@ -92,4 +102,12 @@ public class UserReservationService {
         return result;
     }
 
+<<<<<<< HEAD:Smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
+=======
+    public List<ReservationUserDTO> getReservationUserDate(String user_id) {
+        List<ReservationUserDTO> result = reservationMapper.getReservationUserDate(user_id);
+        return result;
+    }
+
+>>>>>>> main:smarty_server/src/main/java/com/green/smarty/service/UserReservationService.java
 }

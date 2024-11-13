@@ -121,8 +121,8 @@ export default function NewFacility() {
             facilityForm.append("files", facilityFiles[i]);
         }
         facilityForm.append("facility_name", facility.facility_name)
-        facilityForm.append("open_time", facility.open_time)
-        facilityForm.append("close_time", facility.close_time)
+        facilityForm.append("open_time", facility.open_time+":00")
+        facilityForm.append("close_time", facility.close_time+":00")
         facilityForm.append("default_time", facility.default_time)
         facilityForm.append("basic_fee", facility.basic_fee)
         facilityForm.append("rate_adjustment", facility.rate_adjustment)
@@ -217,7 +217,9 @@ export default function NewFacility() {
                             <input
                                 name="open_time"
                                 id="open_time"
-                                type={"time"}
+                                type={"number"}
+                                min={5}
+                                max={23}
                                 value={facility.open_time}
                                 onChange={handleInput}
                             />
@@ -225,7 +227,9 @@ export default function NewFacility() {
                             <input
                                 name="close_time"
                                 id="close_time"
-                                type={"time"}
+                                type={"number"}
+                                min={5}
+                                max={23}
                                 value={facility.close_time}
                                 onChange={handleInput}
                             />

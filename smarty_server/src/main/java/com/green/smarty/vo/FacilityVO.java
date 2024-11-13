@@ -22,7 +22,7 @@ public class FacilityVO {
 
     private int basic_fee;
     private float rate_adjustment; // 기본 및 할증가격
-    private int hot_time;
+    private int hot_time;          // 0: 기본가격, 1: 조조할인, 2: 야간할증, 3: 모두
 
     private String contact;
     private String info;

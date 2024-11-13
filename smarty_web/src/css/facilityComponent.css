@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.facilityContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 80px auto;
+}
+
+.facilityThumbnail {
+    width: 40%;
+    height: 500px;
+    background-color: gray;
+}
+
+.facilityThumbnail img {
+    width: 100%;
+    height: inherit;
+}
+
+.facilityInfo {
+    width: 40%;
+    height: 500px;
+    background-color: white;
+    box-shadow: 5px 5px 10px gray;
+    position: relative;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    border-radius: 0 30px 0 30px;
+}
+
+.facilityInfo>h3 {
+    position: absolute;
+    top: -22.5px;
+    width: 130px;
+    left: -15px;
+    line-height: 45px;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 30px;
+    background-color: orange;
+    color: aliceblue;
+}
+
+
+.facilityInfo_list {
+    display: flex;
+}
+
+.facilityInfo_list>* {
+    padding: 5px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.facilityInfo_list>.facilitySubtitle {
+    width: 150px;
+    margin-left: 30px;
+    font-weight: bold;
+    color: darkcyan;
+}
+
+.facilityInfo_list>.facility_line {
+    padding: 0;
+    width: 2px;
+    height: 20px;
+    background-color: aqua;
+    margin-top: 7px;
+}
+
+.facilityInfo_list>.facilityContent {
+    text-indent: 10px;
+}
+
+.facility_hottime {
+    margin-top: 180px;
+    margin-left: 20px;
+    font-size: 0.8rem;
+}

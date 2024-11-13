@@ -64,10 +64,7 @@
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>
 
-<<<<<<< HEAD
     <!-- 회원 등급 업데이트 -->
-=======
->>>>>>> origin/main
     <update id="updateUserLevel">
         UPDATE user
         SET level = #{level}

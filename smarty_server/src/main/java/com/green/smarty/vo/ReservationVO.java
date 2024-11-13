@@ -22,5 +22,4 @@ public class ReservationVO {
     private LocalDateTime reservation_start;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reservation_end;
-
 }

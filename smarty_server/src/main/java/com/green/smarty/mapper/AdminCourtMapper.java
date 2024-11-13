@@ -8,6 +8,8 @@ import java.util.List;
 @Mapper
 public interface AdminCourtMapper {
     void register(CourtAdminDTO courtAdminDTO);
+
     List<CourtAdminDTO> getList();
+
     CourtAdminDTO read(int court_id);
 }

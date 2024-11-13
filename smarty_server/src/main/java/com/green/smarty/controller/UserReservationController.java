@@ -36,9 +36,9 @@ public class UserReservationController {
     @GetMapping("/{facility_id}")
     public List<Map<String, Integer>> getFacility(@PathVariable String facility_id, @RequestParam String court_id,
             @RequestParam String date) {
-        // System.out.println("date " + date);
-        // System.out.println("facility_id " + facility_id);
-        // System.out.println("court_id " + court_id);
+        System.out.println("date " + date);
+        System.out.println("facility_id " + facility_id);
+        System.out.println("court_id " + court_id);
         List<Map<String, Integer>> btnData = reservationService.createTimeBtn(facility_id, court_id, date);
         return btnData;
     }

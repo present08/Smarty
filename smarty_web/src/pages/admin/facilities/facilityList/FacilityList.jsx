@@ -78,9 +78,10 @@ export default function FacilityList() {
           checkboxSelection
           sx={{ border: 0 }}
         />
-        <Link to="/facilities/add">
+        <Link to="/admin/facilities/add">
           <button className="facilityAddButton">Create</button>
         </Link>
+        <Outlet />
       </div>
     </div>
   )

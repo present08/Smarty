@@ -74,14 +74,14 @@ const FacilityComponent = ({ props }) => {
           <h3>SMARTY 시설정보</h3>
         </div>
         <div className='facilityInfoText'>
-          {infoArr.map((info, idx) =>
-            <div className='facilityInfo_list' key={idx}>
-              <div className='facilitySubtitle'>{info}</div>
-              <div className='facilityContent'>{info == "이용요금(할인)" ? props[infoArr1[idx]] - props[infoArr1[idx]] * props.rate_adjustment : info == "이용요금(할증)" ? props[infoArr1[idx]] + props[infoArr1[idx]] * props.rate_adjustment : props[infoArr1[idx]]}</div>
-            </div>
-          )}
+        {infoArr.map((info, idx) =>
+          <div className='facilityInfo_list' key={idx}>
+            <div className='facilitySubtitle'>{info}</div>
+            <div className='facilityContent'>{info == "이용요금(할인)" ? props[infoArr1[idx]] - props[infoArr1[idx]] * props.rate_adjustment : info == "이용요금(할증)" ? props[infoArr1[idx]] + props[infoArr1[idx]] * props.rate_adjustment : props[infoArr1[idx]]}</div>
+          </div>
+        )}
           <hr style={{ color: 'gainsboro', width: '80%', marginTop: '1rem' }} />
-          <div className='facility_hottime'>
+        <div className='facility_hottime'>
             <p>이용요금(할인) : 오전 첫 시간 적용</p>
             <p>이용요금(할증) : 오후 마지막 시간 적용</p>
           </div>

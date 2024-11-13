@@ -144,6 +144,7 @@ export default function NewFacility() {
         } else facilityForm.append("product", false)
 
         postAddFacility(facilityForm).then(id => {
+            console.log(id)
             // 시설 등록에 성공하고 나면 facility_id를 반환받음
             // 이후 코트, 물품등록 여부에 따라 아래 코드 실행
             if (court.length > 0) {
@@ -154,9 +155,9 @@ export default function NewFacility() {
                 postAddCourt(court)
             } else {
                 const defaultCourt = {
-                    facility_id : id,
-                    court_name : facility.facility_name,
-                    court_status : facility.facility_status
+                    facility_id: id,
+                    court_name: facility.facility_name,
+                    court_status: facility.facility_status
                 }
                 const courtArray = [defaultCourt]
                 console.log("전송하는코트 : ", courtArray)

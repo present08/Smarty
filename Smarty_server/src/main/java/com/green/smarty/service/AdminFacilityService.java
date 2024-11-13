@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,15 +34,19 @@ public class AdminFacilityService {
         // 처리2. 첨부파일 유무에 따른 처리
         List<MultipartFile> files = facilityAdminDTO.getFiles();
 
-        if(files == null || files.isEmpty() || files.get(0).isEmpty()) {
+        if (files == null || files.isEmpty() || files.get(0).isEmpty()) {
             log.info("서비스 시설등록 처리2-1 : 이미지 없음, 기본 이미지 등록!");
             Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             adminFacilityMapper.register(facilityAdminDTO);
+
+            Map<String, String> filesUpload = new HashMap<>();
+            filesUpload.put("facility_id", id);
+            filesUpload.put("origin_path", filesInfo.get("origin_path").get(0));
+            filesUpload.put("thumbnail_path", filesInfo.get("thumbnail_path").get(0));
+            filesUpload.put("file_name", filesInfo.get("file_name").get(0));
+            System.out.println("files가 없을 때 : 서비스 2-1 데이터 확인 ! " + filesUpload);
             // facility_attach 테이블 등록
-            adminFacilityMapper.fileUpload(facilityAdminDTO.getFacility_id(),
-                    filesInfo.get("origin_path").get(0),
-                    filesInfo.get("thumbnail_path").get(0),
-                    filesInfo.get("file_name").get(0));
+            adminFacilityMapper.fileUpload(filesUpload);
         } else {
             log.info("서비스 시설등록 처리2-2 : 이미지 있음, 반복문으로 등록!");
             facilityAdminDTO.setFacility_images(true);
@@ -50,14 +55,17 @@ public class AdminFacilityService {
             Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             facilityAdminDTO.setFile_name(filesInfo.get("file_name"));
             adminFacilityMapper.register(facilityAdminDTO);
-            for(int i = 0; i < files.size(); i++) {
+            for (int i = 0; i < files.size(); i++) {
                 // 파일 이름 저장
+                Map<String, String> filesUpload = new HashMap<>();
+                filesUpload.put("facility_id", id);
+                filesUpload.put("origin_path", filesInfo.get("origin_path").get(i));
+                filesUpload.put("thumbnail_path", filesInfo.get("thumbnail_path").get(i));
+                filesUpload.put("file_name", filesInfo.get("file_name").get(i));
 
+                System.out.println("files가 있을 때 : 서비스 2-1 데이터 확인 !" + filesUpload);
                 // facility_attach 테이블 등록
-                adminFacilityMapper.fileUpload(facilityAdminDTO.getFacility_id(),
-                        filesInfo.get("origin_path").get(i),
-                        filesInfo.get("thumbnail_path").get(i),
-                        filesInfo.get("file_name").get(i));
+                adminFacilityMapper.fileUpload(filesUpload);
             }
         }
         log.info("서비스 처리 완료! facilityDTO = " + facilityAdminDTO);

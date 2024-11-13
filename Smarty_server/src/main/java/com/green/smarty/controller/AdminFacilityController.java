@@ -26,6 +26,8 @@ public class AdminFacilityController {
         log.info("컨트롤러 시설 등록! facilityDTO = " + facilityAdminDTO);
         String id = adminFacilityService.register(facilityAdminDTO);
         log.info("등록된 시설 id = " + id + ", facilityDTO = " + facilityAdminDTO);
+        System.out
+                .println("======================================================================================" + id);
 
         return id;
     }

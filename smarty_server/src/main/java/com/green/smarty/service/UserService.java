@@ -5,6 +5,8 @@ import com.green.smarty.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -131,4 +133,18 @@ public class UserService {
         return result > 0 ? "회원 정보 수정 성공" : "회원 정보 수정 실패";
     }
 
+    // 레벨 구분하기
+    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
+        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
+            userVO.setLevel("Diamond");
+        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
+            userVO.setLevel("Platinum");
+        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
+            userVO.setLevel("Gold");
+        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
+            userVO.setLevel("Silver");
+        }else {
+            userVO.setLevel("일반");
+        }
+    }
 }

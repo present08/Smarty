@@ -20,7 +20,7 @@
 
     <!-- 아이디 찾기-->
     <select id="findByID" resultType="String" parameterType="map">
-        SELECT user FROM user
+        SELECT user_id FROM user
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
     </select>
@@ -62,6 +62,13 @@
         UPDATE user
         SET address = #{address}, phone = #{phone}
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
+    </update>
+
+    <!-- 회원 등급 업데이트 -->
+    <update id="updateUserLevel">
+        UPDATE user
+        SET level = #{level}
+        WHERE user_id = #{userId}
     </update>
 </mapper>
 

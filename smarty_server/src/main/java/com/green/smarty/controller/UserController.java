@@ -2,9 +2,9 @@ package com.green.smarty.controller;
 
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
-import com.green.smarty.service.ReservationService;
+import com.green.smarty.service.UserReservationService;
 import com.green.smarty.service.UserService;
-import com.green.smarty.vo.ReservationUserDTO;
+import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -36,7 +37,7 @@ public class UserController {
     private QRCodeService qrCodeService;
 
     @Autowired
-    private ReservationService reservationService;
+    private UserReservationService reservationService;
 
     // 회원가입 처리
     @PostMapping("/signup")
@@ -210,10 +211,17 @@ public class UserController {
             return ResponseEntity.ok(user);
     }
 
+    // 예약정보
     @GetMapping("/reservationUser")
     public List<ReservationUserDTO> getReservationUserDate(@RequestParam String user_id){
         System.out.println(user_id);
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
+    }
+
+    // 등급매기기
+    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
+        userservice.updateUserLevel(user, totalAmount);
+        System.out.println(user.getLevel());
     }
 }

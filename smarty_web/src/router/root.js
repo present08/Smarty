@@ -4,6 +4,8 @@ import { SyncLoader } from "react-spinners";
 import userrouter from "./userrouter";
 import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
+import productRouter from "./productRouter";
+import newNoticeRouter from "./newNoticeRouter"
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
@@ -13,6 +15,7 @@ const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));
 const ReservationPage = lazy(() => import("../pages/reservation/ReservationPage"));
 const ChatBot = lazy(() => import("../component/chatbot/Chatbot"));
 const Admin = lazy(() => import("../pages/admin/dashboard/Dashboard"));
+const ProductList = lazy(() => import("../pages/product/ListPage"))
 
 const root = createBrowserRouter([
     {
@@ -51,6 +54,15 @@ const root = createBrowserRouter([
     {
         path: "facilityList/:facilityId",
         element: <Suspense fallback={Loading}><ReservationPage /></Suspense>
+    },
+    {
+        path: "product",
+        element: <Suspense fallback={Loading}> <ProductList /> </Suspense>,
+        children: productRouter()
+    },
+    {
+        path: "notice",
+        children: newNoticeRouter()
     },
 ]);
 

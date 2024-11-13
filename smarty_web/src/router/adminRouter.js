@@ -1,4 +1,4 @@
-import { elements } from "chart.js";
+
 import { Suspense, lazy } from "react";
 
 const Loading = () => <div>Loading....</div>;

@@ -30,5 +30,6 @@ public interface UserMapper {
     UserVO findUserById(@Param("userId") String userId);
     // 상태 업데이트 쿼리
     void updateUserStatus(@Param("userId") String userId, @Param("userStatus") boolean userStatus);
-
+    // 레벨 업데이트
+    void updateUserLevel(UserVO userVO);
 }

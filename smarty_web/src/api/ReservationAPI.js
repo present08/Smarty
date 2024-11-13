@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const host = "http://localhost:8080/api/reservation"
+const host = "http://localhost:8080/api/user/reservation"
 
 // facility data
 export const getfacilityId = async () => {

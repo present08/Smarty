@@ -172,10 +172,10 @@ const MainNav = () => {
                                 <Link to={"/"}>커뮤니티</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>공지사항</Link>
+                                        <Link to={"/notice/announce"}>공지사항</Link>
                                     </li>
                                     <li>
-                                        <Link to={"/"}>자유게시판</Link>
+                                        <Link to={"/notice/board"}>자유게시판</Link>
                                     </li>
                                     <li>
                                         <Link to={"/"}>채용정보</Link>

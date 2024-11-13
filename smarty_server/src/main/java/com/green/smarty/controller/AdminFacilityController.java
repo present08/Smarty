@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,8 +33,8 @@ public class AdminFacilityController {
     // Read (시설 조회)
     @GetMapping("/list")
     public List<FacilityAdminDTO> getList() {
-        log.info("컨트롤러 시설 전체 조회!");
         List<FacilityAdminDTO> list = adminFacilityService.getList();
+        log.info("컨트롤러 전체 시설 조회! : " + list);
         return list;
     }
 

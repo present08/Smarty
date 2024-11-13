@@ -16,10 +16,8 @@
         values (#{facility_id}, #{origin_path}, #{thumbnail_path}, #{file_name})
     </insert>
 
-    <select id="getList" resultType="java.util.Map">
-        select A.facility_id, A.facility_name, A.court, A.product, A.facility_status, A.facility_images,
-        B.file_name
-        from facility A left outer join facility_attach B on A.facility_id = B.facility_id;
+    <select id="getList">
+        select * from facility
     </select>
 
     <select id="read" resultType="com.green.smarty.dto.FacilityAdminDTO">

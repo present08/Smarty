@@ -16,8 +16,13 @@ export const postAddFacility = async(facility) => {
 }
 
 export const getListFacility = async() => {
-    const res = await axios.get(`${prefix}/list`)
-    return res.data
+    try {
+        const res = await axios.get(`${prefix}/list`)
+        console.log("서버 응답 : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("에러 발생 : ", error)
+    }
 }
 
 export const getOneFacility = async(facility_id) => {

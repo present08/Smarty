@@ -33,8 +33,8 @@ public class AdminFacilityController {
     // Read (시설 조회)
     @GetMapping("/list")
     public List<FacilityAdminDTO> getList() {
-        log.info("컨트롤러 시설 전체 조회!");
         List<FacilityAdminDTO> list = adminFacilityService.getList();
+        log.info("컨트롤러 전체 시설 조회! : " + list);
         return list;
     }
 

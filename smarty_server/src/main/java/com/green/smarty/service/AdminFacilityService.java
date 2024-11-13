@@ -30,17 +30,23 @@ public class AdminFacilityService {
         facilityAdminDTO.setFacility_id(id);
         log.info("서비스 시설등록 처리1: id 생성 = " + facilityAdminDTO.getFacility_id());
 
-
         // 처리2. 첨부파일 유무에 따른 처리
-        if(facilityAdminDTO.getFiles().get(0).isEmpty()) {
-            log.info("서비스 시설등록 처리2-1 : 이미지 없음! 그대로 매퍼 전송");
+        List<MultipartFile> files = facilityAdminDTO.getFiles();
+
+        if(files == null || files.isEmpty() || files.get(0).isEmpty()) {
+            log.info("서비스 시설등록 처리2-1 : 이미지 없음, 기본 이미지 등록!");
+            Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             adminFacilityMapper.register(facilityAdminDTO);
+            // facility_attach 테이블 등록
+            adminFacilityMapper.fileUpload(facilityAdminDTO.getFacility_id(),
+                    filesInfo.get("origin_path").get(0),
+                    filesInfo.get("thumbnail_path").get(0),
+                    filesInfo.get("file_name").get(0));
         } else {
-            log.info("서비스 시설등록 처리2-2 : 이미지 있음! customFileUtil 호출");
+            log.info("서비스 시설등록 처리2-2 : 이미지 있음, 반복문으로 등록!");
             facilityAdminDTO.setFacility_images(true);
             // 이미지 여부 true로 변경해주고,
             // facilityDTO의 첨부파일 리스트 기반으로 경로(원본, 썸네일), 파일명 리스트 생성
-            List<MultipartFile> files = facilityAdminDTO.getFiles();
             Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             facilityAdminDTO.setFile_name(filesInfo.get("file_name"));
             adminFacilityMapper.register(facilityAdminDTO);
@@ -59,7 +65,6 @@ public class AdminFacilityService {
     }
 
     public List<FacilityAdminDTO> getList() {
-        log.info("서비스에서 매퍼로 전송중! 전체 조회!");
         return adminFacilityMapper.getList();
     }
 

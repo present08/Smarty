@@ -46,21 +46,7 @@ const CalendarModal = ({ isOpen, onClose, schedules, selectedEvent, reservationI
                                         );
                                     }}
                                 />
-                                {/* 상세 예약 모달
-                                {selectedEvent && reservationInfo.map(reservation => {
-                                    const eventId = reservation.user_id + reservation.reservation_start;
-                                    if (eventId === selectedEvent.id) {
-                                        return (
-                                            <EventModal
-                                                key={eventId}
-                                                reservation={reservation}
-                                                currentUser={currentUser}
-                                                closeModal={onClose} // 닫기 함수 전달
-                                            />
-                                        );
-                                    }
-                                    return null;
-                                })} */}
+                                
                             </div>
                         </div>
                         {/* 회원 정보 및 다음 일정 추가 */}

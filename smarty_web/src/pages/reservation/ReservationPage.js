@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import Footer from '../../component/Footer';
 import Wrapper from '../../component/Wrapper';
 import MainNav from '../../component/MainNav';
+import BackToTopButton from '../../component/BackToTopButton';
 
 let today = new Date();
 
@@ -52,6 +53,7 @@ const ReservationPage = () => {
         <>
             <MainNav />
             <Wrapper />
+            <BackToTopButton />
             <h1 className='reservation_title'>{facilityData.facility_name} </h1>
             <p className='reservation_title_sub'>SMARTY 센터에 있는 {facilityData.facility_name} 입니다.</p>
             <FacilityComponent props={facilityData} />

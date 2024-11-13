@@ -8,6 +8,8 @@
 }
 
 .layoutBox {
+    font-family: "Noto Sans KR", sans-serif;
+    /* 관리자 페이지 적용 폰트 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;

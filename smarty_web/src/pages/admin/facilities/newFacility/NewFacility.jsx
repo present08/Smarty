@@ -113,7 +113,7 @@ export default function NewFacility() {
     }
 
     // 입력된 데이터로 API 호출
-    const handleFacilityAdd = (e) => {
+    const handleFacilityAdd = () => {
         const facilityFiles = facilityImages.current.files
         const facilityForm = new FormData()
 
@@ -152,6 +152,15 @@ export default function NewFacility() {
                     setCourt({ ...court })
                 })
                 postAddCourt(court)
+            } else {
+                const defaultCourt = {
+                    facility_id : id,
+                    court_name : facility.facility_name,
+                    court_status : facility.facility_status
+                }
+                const courtArray = [defaultCourt]
+                console.log("전송하는코트 : ", courtArray)
+                postAddCourt(courtArray)
             }
 
             if (product.length > 0) {

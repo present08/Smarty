@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -40,15 +41,37 @@ public class CustomFileUtil {
     // 파일 업로드 작업 + 저장된 파일 이름과 경로(원본, 썸네일) 반환
     public Map<String, List<String>> saveFiles(List<MultipartFile> files) throws RuntimeException {
 
-        if(files == null || files.size() == 0) {
-            return new HashMap<>();
+        List<String> file_name = new ArrayList<>();             // 파일명 리스트
+        List<String> origin_path = new ArrayList<>();           // 원본 경로 리스트
+        List<String> thumbnail_path = new ArrayList<>();        // 썸네일 경로 리스트
+        Map<String, List<String>> result = new HashMap<>();     // 최종적으로 반환할 맵
+
+        if(files == null || files.isEmpty()) {
+            // 첨부 파일이 없는 경우 기본 이미지가 저장되도록 처리
+            try {
+                // 기본 이미지 파일 경로 설정
+                Path defaultImagePath = Paths.get(new ClassPathResource("images/smarty.jpeg").getURI());
+                // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로 지정
+                String savedName = UUID.randomUUID().toString() + "_default.jpeg";
+                Path savePath = Paths.get(uploadPath, savedName);
+                // 기본 이미지를 지정한 경로에 복사
+                Files.copy(defaultImagePath, savePath);
+
+                // 기본 이미지 썸네일 생성
+                Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
+                Thumbnails.of(savePath.toFile())
+                        .size(200, 200)
+                        .toFile(thumbnailPath.toFile());
+
+                file_name.add(savedName);
+                origin_path.add(savePath.toString());
+                thumbnail_path.add(thumbnailPath.toString());
+            } catch (IOException e) {
+                throw new RuntimeException("기본 이미지 저장 실패", e);
+            }
         }
 
-        List<String> file_name = new ArrayList<>();       // 파일명 리스트
-        List<String> origin_path = new ArrayList<>();        // 원본 경로 리스트
-        List<String> thumbnail_path = new ArrayList<>();         // 썸네일 경로 리스트
-        Map<String, List<String>> result = new HashMap<>(); // 최종적으로 반환할 맵
-
+        // 첨부 파일이 있는 경우 하나씩 저장
         for(MultipartFile multipartFile : files) {
             String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
             Path savePath = Paths.get(uploadPath, savedName);

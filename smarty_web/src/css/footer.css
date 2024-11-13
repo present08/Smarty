@@ -1,0 +1,34 @@
+.gitLink {
+    width: 40%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.gitLink>ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.gitLink>ul>li {
+    color: #9e9e9e;
+    margin-right: 1rem;
+    position: relative;
+}
+
+.gitLink>ul>li>a {
+    color: white;
+}
+
+.gitLink>ul>li>a:hover,
+.gitLink>ul>li>a:focus {
+    color: rgb(0, 64, 255);
+    background-color: rgb(255, 255, 255);
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}

@@ -97,7 +97,7 @@ create table facility_attach (
 drop table facility_attach;
 select * from facility_attach;
 
-select * from facility join facility_attach on facility_attach.facility = "fc_1731545730772" where facility_id ="fc_1731545730772"
+select * from facility f join facility_attach fa on fa.facility_id = f.facility_id and f.facility_id ="fc_1731545730772";
 
 -- 코트 테이블
 create table court (	
@@ -116,12 +116,20 @@ CREATE TABLE class (
     class_name VARCHAR(100) NOT NULL,
     start_date DATE,
     end_date DATE,
-    day VARCHAR(50),
     start_time TIME,
     end_time TIME,
     price INT,
     FOREIGN KEY (facility_id) REFERENCES facility(facility_id)
 );
+-- 수업 상세정보 (테스트중)
+create table class_detail (
+	class_id VARCHAR(100),
+    weekday varchar(100),
+    class_date date,
+    class_size int,	-- 수강인원 추가
+    FOREIGN KEY (class_id) REFERENCES class(class_id)
+);
+
 
 -- 예약 테이블
 CREATE TABLE reservation (

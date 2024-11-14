@@ -12,9 +12,8 @@
 }
 
 .facilityThumbnail {
-    width: 40%;
+    width: 50%;
     height: 500px;
-    background-color: gray;
 }
 
 .facilityThumbnail img {
@@ -23,62 +22,138 @@
 }
 
 .facilityInfo {
-    width: 40%;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
     height: 500px;
-    background-color: white;
-    box-shadow: 5px 5px 10px gray;
-    position: relative;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    border-radius: 0 30px 0 30px;
 }
 
-.facilityInfo>h3 {
-    position: absolute;
-    top: -22.5px;
-    width: 130px;
-    left: -15px;
-    line-height: 45px;
-    font-size: 15px;
-    text-align: center;
-    border-radius: 30px;
-    background-color: orange;
-    color: aliceblue;
-}
-
-
-.facilityInfo_list {
+.facilityInfoTitle {
+    width: 100%;
     display: flex;
 }
 
+.facilityInfoText {
+    width: 90%;
+    height: 98%;
+    box-shadow: 5px 5px 10px gray;
+    position: relative;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.facilityInfoTitle>h3 {
+    font-size: 23px;
+}
+
+.facilityInfo_list {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .facilityInfo_list>* {
-    padding: 5px;
-    vertical-align: middle;
+    padding: 5px 0px;
     margin-bottom: 10px;
     box-sizing: border-box;
 }
 
 .facilityInfo_list>.facilitySubtitle {
-    width: 150px;
-    margin-left: 30px;
     font-weight: bold;
-    color: darkcyan;
+    color: rgb(0, 0, 0);
+    text-align: left;
 }
 
-.facilityInfo_list>.facility_line {
-    padding: 0;
-    width: 2px;
-    height: 20px;
-    background-color: aqua;
-    margin-top: 7px;
-}
 
 .facilityInfo_list>.facilityContent {
     text-indent: 10px;
+    text-align: right;
+    color: gray;
 }
 
 .facility_hottime {
-    margin-top: 180px;
-    margin-left: 20px;
+    width: 80%;
+    margin-top: 2rem;
     font-size: 0.8rem;
+    color: gray;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.facility_hottime>p {
+    display: flex;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.facilityInfoButton {
+    width: 90%;
+    display: flex;
+    height: 10%;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.facilityInfoButton>button:first-child {
+    width: 20%;
+    height: 55px;
+    border-radius: 5px;
+    background-color: #ececec;
+    margin-top: 1rem;
+    font-size: 17px;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    border: none;
+}
+
+.facilityInfoButton>button:last-child {
+    width: 70%;
+    height: 55px;
+    border-radius: 5px;
+    background-color: #011b2f;
+    color: aliceblue;
+    margin-top: 1rem;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+}
+
+/* 슬라이드 영역임 */
+
+.main-image img {
+    width: 100%;
+    height: 500px;
+    border-radius: 15px;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 39%;
+    transform: translateY(-50%);
+    background-color: rgb(255, 255, 255);
+    width: 40px;
+    height: 40px;
+    color: white;
+    border: 1px solid gainsboro;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50px;
+}
+
+.prev {
+    right: 50%;
+    color: black;
+}
+
+.next {
+    right: 47.5%;
+    color: black;
 }

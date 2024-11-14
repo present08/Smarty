@@ -5,6 +5,8 @@ import com.green.smarty.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -34,11 +36,11 @@ public class UserService {
                 System.out.println("코드생성 완료 : "+qrCode);
 
                 //QR 코드를 UserVO 객체에 저장
-                user.setQr_code(qrCode);
+                user.setQrCode(qrCode);
 
                 //QR 코드를 포함한 사용자 정보를 업데이트
                 userMapper.updateUserWithQRCode(user);
-                System.out.println("업데이트_완료 : "+user.getQr_code());
+                System.out.println("업데이트_완료 : "+user.getQrCode());
 
                 return true;
             }
@@ -51,7 +53,7 @@ public class UserService {
     //QR 코드 조회
     public byte[] getQRCode(String userId) {
         UserVO userVO = userMapper.getById(userId);
-        return userVO.getQr_code();
+        return userVO.getQrCode();
     }
 
     // 로그인
@@ -131,4 +133,18 @@ public class UserService {
         return result > 0 ? "회원 정보 수정 성공" : "회원 정보 수정 실패";
     }
 
+    // 레벨 구분하기
+    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
+        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
+            userVO.setLevel("Diamond");
+        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
+            userVO.setLevel("Platinum");
+        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
+            userVO.setLevel("Gold");
+        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
+            userVO.setLevel("Silver");
+        }else {
+            userVO.setLevel("일반");
+        }
+    }
 }

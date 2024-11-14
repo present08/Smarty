@@ -8,25 +8,28 @@
 
 /* reservation Page */
 .reservation_title {
-    text-align: center;
-}
-
-.reservation_title:after {
-    content: "";
-    display: block;
+    text-align: left;
+    width: 73%;
+    font-size: 40px;
+    height: 10%;
     margin: 0 auto;
-    width: 80%;
-    height: 1px;
-    background-color: gray;
-    margin-top: 20px;
+    margin-top: 7rem;
+}
+
+.reservation_title_sub {
+    text-align: left;
+    width: 73%;
+    font-size: 25px;
+    height: 5%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    color: gray;
 }
 
 
-/* infomation */
 .tab_container {
     width: 73%;
     margin: 80px auto;
-
     border-radius: 10px 10px 0px 0px;
 }
 
@@ -35,7 +38,8 @@
     width: 500px;
 }
 
-/* reseravtionComponent */
+
+
 .reservation_container {
     display: flex;
     width: 80%;
@@ -87,10 +91,8 @@
 
 .reservation_minititle {
     padding: 15px 50px;
-    /* background-color: #28527a; */
     color: #011b2f;
-    display: inline-block;
-    border-radius: 30px;
+    display: flex;
     margin: 30px 0;
     vertical-align: top;
 }
@@ -137,13 +139,10 @@
 }
 
 
-
-
 /* reservation action button */
 .reservation_btn {
-    display: block;
-    width: 200px;
-    padding: 30px;
+    width: 180px;
+    padding: 20px;
     margin: 0 auto;
     border: none;
     background-color: #011b2f;

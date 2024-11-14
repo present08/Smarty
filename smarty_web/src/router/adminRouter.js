@@ -1,35 +1,31 @@
-import { elements } from "chart.js";
 import { Suspense, lazy } from "react";
+import adminFacilityRouter from "./adminFacilityRouter";
 
 const Loading = () => <div>Loading....</div>;
-
-const FacilityIndex = lazy(() => import("../pages/admin/facilities/IndexPage"));
-const ProductIndex = lazy(() => import("../pages/admin/products/IndexPage"));
-const UserIndex = lazy(() => import("../pages/admin/users/IndexPage"));
-const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/FacilityList"))
+const Dashboard = lazy(() => import("../pages/admin/dashboard/Dashboard"));
+const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/FacilityList"));
+const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"));
+const UserList = lazy(() => import("../pages/admin/users/userList/UserList"));
 
 
 const adminRouter = () => {
     return [
         {
+            path: "",
+            element: <Suspense fallback={Loading}><Dashboard /></Suspense>,
+        },
+        {
             path: "facilities",
-            element: <Suspense fallback={Loading}><FacilityIndex /></Suspense>,
-            children: [
-                {
-                    path: "list",
-                    elements: <Suspense fallback={Loading}><FacilityList /></Suspense>
-                }
-            ]
+            element: <Suspense fallback={Loading}><FacilityList /></Suspense>,
+            children: adminFacilityRouter()
         },
         {
             path: "products",
-            element: <Suspense fallback={Loading}><ProductIndex /></Suspense>,
-            // children: productRouter()
+            element: <Suspense fallback={Loading}><ProductList /></Suspense>,
         },
         {
             path: "users",
-            element: <Suspense fallback={Loading}><UserIndex /></Suspense>,
-            // children: userRouter()
+            element: <Suspense fallback={Loading}><UserList /></Suspense>,
         },
     ]
 }

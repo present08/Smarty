@@ -332,11 +332,9 @@
 /* 헤더 스타일 */
 .fc-toolbar {
     background-color: #f8f9fa;
-    /* 예: 연한 회색 */
     border-radius: 5px;
     padding: 10px;
     text-align: center;
-    /* 가운데 정렬 */
 }
 
 /* 버튼들과 제목을 중앙에 정렬하기 */
@@ -370,32 +368,35 @@
 
 .subBox>div:first-child {
     width: 90%;
-    height: 35%;
+    height: 30%;
     margin: 0 auto;
 }
 
 .subBox>div:last-child {
     width: 90%;
-    height: 75%;
+    max-height: 400px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin: 0 auto;
+    padding: 10px;
 }
 
-.subBox>div:last-child>h5 {
+.subBox>h5 {
     color: #003f66;
     font-size: 25px;
     display: flex;
     width: 70%;
+    margin: 0 auto;
     margin-bottom: 1rem;
     margin-top: 2rem;
 }
 
 .scheduleBox {
     width: 75%;
-    height: 100px;
+    max-height: 80px;
     border-radius: 15px;
     background-color: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -403,6 +404,7 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    padding: 10px;
 }
 
 .scheduleIcon {
@@ -413,7 +415,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-right: 1.5rem; */
 }
 
 .scheduletext {

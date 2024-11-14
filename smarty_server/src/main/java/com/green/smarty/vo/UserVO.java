@@ -23,7 +23,7 @@ public class UserVO {
     private LocalDateTime join_date;
     private LocalDate login_date;
     private boolean user_status;
-    private byte[] qr_code;
+    private byte[] qrCode;
     private String level;
 
     // 사용자 ID에 대한 getter

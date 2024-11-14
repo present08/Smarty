@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourtVO {
-
     private String court_id;
     private String facility_id;
     private String court_name;

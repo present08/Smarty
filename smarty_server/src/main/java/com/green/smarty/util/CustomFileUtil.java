@@ -1,11 +1,12 @@
 package com.green.smarty.util;
-import com.green.smarty.vo.ProductAttachDTO;
+
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,140 +19,127 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @Log4j2
 @RequiredArgsConstructor
-@Getter
 public class CustomFileUtil {
+    // 파일 데이터 입출력 담당
 
-    @Value("${file.upload-dir}")
+    @Value("upload")
     private String uploadPath;
 
     @PostConstruct
     public void init() {
-        try {
-            File tempFolder = new File(uploadPath);
-            if (!tempFolder.exists()) {
-                boolean created = tempFolder.mkdirs();  // mkdirs()로 변경 - 상위 디렉토리도 생성
-                log.info("폴더 생성 결과: {}", created);
-            }
-            log.info("============================");
-            log.info("Upload Path: {}", tempFolder.getAbsolutePath());
-            log.info("폴더 존재 여부: {}", tempFolder.exists());
-            log.info("폴더 권한: 읽기={}, 쓰기={}", tempFolder.canRead(), tempFolder.canWrite());
-        } catch (Exception e) {
-            log.error("폴더 초기화 실패", e);
-        }
+        File tempFolder = new File(uploadPath);
+        if(tempFolder.exists() == false) tempFolder.mkdir();
+        uploadPath = tempFolder.getAbsolutePath();  // 절대 경로로 변환하고 로깅으로 경로 정보 출력
+        log.info("업로드 파일 절대경로 = "+ uploadPath);
     }
 
-    public List<ProductAttachDTO> saveFiles(List<MultipartFile> files, String productId) throws IOException {
-        if (files == null || files.isEmpty()) return List.of();
+    // 파일 업로드 작업 + 저장된 파일 이름과 경로(원본, 썸네일) 반환
+    public Map<String, List<String>> saveFiles(List<MultipartFile> files) throws RuntimeException {
 
-        List<ProductAttachDTO> attachList = new ArrayList<>();
+        List<String> file_name = new ArrayList<>();             // 파일명 리스트
+        List<String> origin_path = new ArrayList<>();           // 원본 경로 리스트
+        List<String> thumbnail_path = new ArrayList<>();        // 썸네일 경로 리스트
+        Map<String, List<String>> result = new HashMap<>();     // 최종적으로 반환할 맵
 
-        for (MultipartFile file : files) {
+        if(files == null || files.isEmpty()) {
+            // 첨부 파일이 없는 경우 기본 이미지가 저장되도록 처리
             try {
-                String originalFileName = file.getOriginalFilename();
-                if (originalFileName == null) continue;
+                // 기본 이미지 파일 경로 설정
+                Path defaultImagePath = Paths.get(new ClassPathResource("images/smarty.jpeg").getURI());
+                // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로 지정
+                String savedName = UUID.randomUUID().toString() + "_default.jpeg";
+                Path savePath = Paths.get(uploadPath, savedName);
+                // 기본 이미지를 지정한 경로에 복사
+                Files.copy(defaultImagePath, savePath);
 
-                // 파일 확장자 체크
-                String extension = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
-                if (!isImageExtension(extension)) {
-                    log.warn("지원하지 않는 이미지 형식: {}", extension);
-                    continue;
-                }
+                // 기본 이미지 썸네일 생성
+                Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
+                Thumbnails.of(savePath.toFile())
+                        .size(200, 200)
+                        .toFile(thumbnailPath.toFile());
 
-                String savedName = UUID.randomUUID().toString() + extension;
-
-                // 원본 파일 경로
-                String originPath = uploadPath + File.separator + savedName;
-                Path savePath = Paths.get(originPath);
-
-                // 원본 파일 저장
-                Files.copy(file.getInputStream(), savePath);
-                log.info("원본 파일 저장 완료: {}", savePath);
-
-                // 썸네일 경로
-                String thumbnailPath = uploadPath + File.separator + "s_" + savedName;
-
-                // 이미지 파일 체크 및 썸네일 생성
-                if (file.getContentType() != null && file.getContentType().startsWith("image")) {
-                    try {
-                        Path thumbnailPathObj = Paths.get(thumbnailPath);
-                        log.info("썸네일 생성 시도: {}", thumbnailPathObj);
-
-                        Thumbnails.of(savePath.toFile())
-                                .size(200, 200)
-                                .outputQuality(0.9)
-                                .toFile(thumbnailPathObj.toFile());
-
-                        log.info("썸네일 생성 완료");
-                    } catch (Exception e) {
-                        log.error("썸네일 생성 실패: {}", e.getMessage());
-                        thumbnailPath = originPath; // 썸네일 생성 실패시 원본 경로 사용
-                    }
-                }
-
-                // ProductAttachDTO 생성 및 추가
-                ProductAttachDTO attachDTO = ProductAttachDTO.builder()
-                        .product_id(productId)
-                        .origin_path(originPath)
-                        .thumbnail_path(thumbnailPath)
-                        .file_name(originalFileName)
-                        .build();
-
-                attachList.add(attachDTO);
-
+                file_name.add(savedName);
+                origin_path.add(savePath.toString());
+                thumbnail_path.add(thumbnailPath.toString());
             } catch (IOException e) {
-                log.error("파일 처리 중 오류 발생: {}", e.getMessage());
-                throw new IOException("파일 저장 실패", e);
+                throw new RuntimeException("기본 이미지 저장 실패", e);
             }
         }
-        return attachList;
+
+        // 첨부 파일이 있는 경우 하나씩 저장
+        for(MultipartFile multipartFile : files) {
+            String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+            Path savePath = Paths.get(uploadPath, savedName);
+            // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로 지정
+            origin_path.add(savePath.toString());    // 원본 경로 리스트 저장
+
+            try{
+                // Files.copy() 메서드로 실제 파일 데이터를 해당 경로에 복사
+                Files.copy(multipartFile.getInputStream(), savePath);
+                // 이미지 파일이라면 썸네일 생성
+                String contentType = multipartFile.getContentType();
+                if(contentType != null && contentType.startsWith("image")) {
+                    Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
+                    Thumbnails.of(savePath.toFile())
+                            .size(200, 200)
+                            .toFile(thumbnailPath.toFile());
+                    thumbnail_path.add(thumbnailPath.toString());    // 썸네일 경로 리스트 저장
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            file_name.add(savedName);     // 파일 이름 리스트 저장
+        }
+        result.put("file_name", file_name);
+        result.put("origin_path", origin_path);
+        result.put("thumbnail_path", thumbnail_path);
+        return result;
+        //각각의 리스트를 키와 함께 Map에 담아 반환
     }
 
-    private boolean isImageExtension(String extension) {
-        return Arrays.asList(".jpg", ".jpeg", ".png", ".gif").contains(extension.toLowerCase());
-    }
+    // 파일 데이터를 읽어서 스프링에서 제공하는 Resource 타입으로 반환, 특정 파일 조회시 사용
+    public ResponseEntity<Resource> getFile (String fileName) {
 
-    public ResponseEntity<Resource> getFile(String filePath) {
-        Resource resource = new FileSystemResource(filePath);
-
+        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
         if (!resource.isReadable()) {
-            resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
+            resource = new FileSystemResource(uploadPath + File.separator + "default.jpg");
         }
 
         HttpHeaders headers = new HttpHeaders();
+
         try {
             headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+            // 파일의 종류마다 다르게 HTTP 헤더 'Content-Type' 값을 생성해야 하므로\
+            // Files.probeContentType()으로 헤더 메세지 생성
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    public void deleteFiles(List<ProductAttachDTO> attachList) {
-        if (attachList == null || attachList.isEmpty()) return;
+    // 파일 이름을 기준으로 한 번에 여러 개의 파일을 삭제하는 기능
+    public void deleteFiles(List<String> fileNames) {
 
-        attachList.forEach(attach -> {
+        if(fileNames == null || fileNames.size() == 0) {
+            return;
+        }
+
+        fileNames.forEach(fileName -> {
+            String thumbnailFileName = "s_" + fileName;
+            Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
+            Path filePath = Paths.get(uploadPath, fileName);
             try {
-                // 원본 파일 삭제
-                Files.deleteIfExists(Paths.get(attach.getOrigin_path()));
-
-                // 썸네일 파일 삭제 (원본과 다른 경우에만)
-                if (!attach.getOrigin_path().equals(attach.getThumbnail_path())) {
-                    Files.deleteIfExists(Paths.get(attach.getThumbnail_path()));
-                }
+                Files.deleteIfExists(filePath);
+                Files.deleteIfExists(thumbnailPath);
             } catch (IOException e) {
-                log.error("파일 삭제 실패: {}", e.getMessage());
-                throw new RuntimeException("파일 삭제 실패", e);
+                throw new RuntimeException(e.getMessage());
             }
         });
     }
+
 }

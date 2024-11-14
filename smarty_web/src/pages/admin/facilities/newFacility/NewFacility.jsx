@@ -1,5 +1,5 @@
 import "./newFacility.css"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { postAddFacility } from "../../../../api/admin/facilityApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
@@ -113,7 +113,7 @@ export default function NewFacility() {
     }
 
     // 입력된 데이터로 API 호출
-    const handleFacilityAdd = (e) => {
+    const handleFacilityAdd = () => {
         const facilityFiles = facilityImages.current.files
         const facilityForm = new FormData()
 
@@ -121,8 +121,8 @@ export default function NewFacility() {
             facilityForm.append("files", facilityFiles[i]);
         }
         facilityForm.append("facility_name", facility.facility_name)
-        facilityForm.append("open_time", facility.open_time)
-        facilityForm.append("close_time", facility.close_time)
+        facilityForm.append("open_time", facility.open_time+":00")
+        facilityForm.append("close_time", facility.close_time+":00")
         facilityForm.append("default_time", facility.default_time)
         facilityForm.append("basic_fee", facility.basic_fee)
         facilityForm.append("rate_adjustment", facility.rate_adjustment)
@@ -144,6 +144,7 @@ export default function NewFacility() {
         } else facilityForm.append("product", false)
 
         postAddFacility(facilityForm).then(id => {
+            console.log(id)
             // 시설 등록에 성공하고 나면 facility_id를 반환받음
             // 이후 코트, 물품등록 여부에 따라 아래 코드 실행
             if (court.length > 0) {
@@ -152,6 +153,15 @@ export default function NewFacility() {
                     setCourt({ ...court })
                 })
                 postAddCourt(court)
+            } else {
+                const defaultCourt = {
+                    facility_id: id,
+                    court_name: facility.facility_name,
+                    court_status: facility.facility_status
+                }
+                const courtArray = [defaultCourt]
+                console.log("전송하는코트 : ", courtArray)
+                postAddCourt(courtArray)
             }
 
             if (product.length > 0) {
@@ -208,7 +218,9 @@ export default function NewFacility() {
                             <input
                                 name="open_time"
                                 id="open_time"
-                                type={"time"}
+                                type={"number"}
+                                min={5}
+                                max={23}
                                 value={facility.open_time}
                                 onChange={handleInput}
                             />
@@ -216,7 +228,9 @@ export default function NewFacility() {
                             <input
                                 name="close_time"
                                 id="close_time"
-                                type={"time"}
+                                type={"number"}
+                                min={5}
+                                max={23}
                                 value={facility.close_time}
                                 onChange={handleInput}
                             />

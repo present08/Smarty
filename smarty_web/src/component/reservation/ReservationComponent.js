@@ -8,12 +8,13 @@ import moment from 'moment';
 
 
 const ReservationComponent = (props) => {
-    const { facilityData, reserved, newDate } = props;
+    const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')
     const [partTime, setPartTime] = useState(0)
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
+
     const [price, setPrice] = useState(facilityData.basic_fee)
     const initData = {
         reservation_id: null,
@@ -27,6 +28,9 @@ const ReservationComponent = (props) => {
     }
     const [postData, setPostData] = useState(initData)
 
+    useEffect(() => {
+    }, []);
+    
     // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
@@ -34,6 +38,7 @@ const ReservationComponent = (props) => {
     }
     useEffect(() => {
         setTimeLine(reserved)
+   
     }, [reserved])
 
     const handleClick = (tl) => {
@@ -77,7 +82,7 @@ const ReservationComponent = (props) => {
             court_name: facilityData.court_name,
             court_status: true,
             facility_id: facilityData.facility_id,
-            user_id: 'kaka',
+            user_id: user.user_id,
             reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
         })

@@ -17,7 +17,7 @@ const FindID = () => {
         try {
             const response = await axios.post(`${host}/api/auth/findID`, { email, user_name });
             alert('ID : ' + response.data.userID);
-            navigate("/login");
+            navigate("/user/login");
         } catch (err) {
             alert('회원정보가 존재하지않습니다.')
         }

@@ -52,14 +52,6 @@ const MainNav = () => {
         navigate("/mypage", { state: { user } })
     }
 
-    const handleProductClick = () => {
-        navigate('product', {
-            state: {
-                selectedFacility: '시설을 선택하세요'
-            }
-        })
-    }
-
     const handleLogout = () => {
         logout().then(e => {
             alert("로그아웃 성공");
@@ -169,22 +161,10 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/product"} onClick={handleProductClick}>물품</Link>
+                                <Link to={"/product"}>물품</Link>
                                 <ul>
                                     <li>
-                                        <Link to="/product" state={{ facilityType: '수영장' }}>수영장</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/product" state={{ facilityType: '야구장' }}>야구장</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/product" state={{ facilityType: '농구장' }}>농구장</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/product" state={{ facilityType: '축구장' }}>축구장</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/product" state={{ facilityType: '체육관' }}>체육관</Link>
+                                        <Link to={"/"}>물품대여</Link>
                                     </li>
                                 </ul>
                             </li>
@@ -192,10 +172,10 @@ const MainNav = () => {
                                 <Link to={"/"}>커뮤니티</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>공지사항</Link>
+                                        <Link to={"/notice/announce"}>공지사항</Link>
                                     </li>
                                     <li>
-                                        <Link to={"/"}>자유게시판</Link>
+                                        <Link to={"/notice/board"}>자유게시판</Link>
                                     </li>
                                     <li>
                                         <Link to={"/"}>채용정보</Link>

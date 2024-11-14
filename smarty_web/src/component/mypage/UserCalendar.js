@@ -3,14 +3,16 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../css/userCalendar.css';
 import { GoPlus } from 'react-icons/go';
-import CalendarModal from './CalendarModal'; // CalendarModal import
+import CalendarModal from './CalendarModal';
 import { getReservationInfo } from '../../api/userApi';
 import moment from 'moment/moment';
+import EventModal from './EventModal';
 
 const UserCalendar = (props) => {
     const [value, setValue] = useState(new Date());
     const [currentUser, setCurrentUser] = useState(null);
     const [isMainModalOpen, setMainModalOpen] = useState(false);
+    const [isEventModalOpen, setEventModalOpen] = useState(false); // EventModal 상태 추가
     const [reservationInfo, setReservationInfo] = useState([]);
     const [schedules, setSchedules] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -23,8 +25,17 @@ const UserCalendar = (props) => {
         setMainModalOpen(false);
     };
 
+    const openEventModal = () => {
+        setEventModalOpen(true);
+    };
+
+    const closeEventModal = () => {
+        setEventModalOpen(false);
+    };
+
     const handleEventClick = (info) => {
         setSelectedEvent(info.event);
+        openEventModal(); // 이벤트 클릭 시 EventModal 열기
     };
 
     useEffect(() => {
@@ -71,6 +82,14 @@ const UserCalendar = (props) => {
                 currentUser={currentUser}
                 handleEventClick={handleEventClick}
             />
+            {/* EventModal 추가 */}
+            {selectedEvent && isEventModalOpen && (
+                <EventModal
+                    reservation={reservationInfo.find(reservation => reservation.user_id + reservation.reservation_start === selectedEvent.id)}
+                    currentUser={currentUser}
+                    closeModal={closeEventModal}
+                />
+            )}
         </div>
     );
 };

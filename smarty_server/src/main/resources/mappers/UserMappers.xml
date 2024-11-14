@@ -13,10 +13,10 @@
     </select>
 
     <!-- 사용자 추가 -->
-<!--    <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">-->
-<!--        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)-->
-<!--        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})-->
-<!--    </insert>-->
+    <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
+    </insert>
 
     <!-- 아이디 찾기-->
     <select id="findByID" resultType="String" parameterType="map">
@@ -64,11 +64,12 @@
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>
 
-    <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_code)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qr_code})
-    </insert>
-
+    <!-- 회원 등급 업데이트 -->
+    <update id="updateUserLevel">
+        UPDATE user
+        SET level = #{level}
+        WHERE user_id = #{userId}
+    </update>
 </mapper>
 
         <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->

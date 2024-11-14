@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import { DeleteOutline } from '@mui/icons-material';
 import { getListFacility } from "../../../../api/admin/facilityApi"
-import { Link } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 
 // const initState = {
 //     facility_id: '',
@@ -78,9 +78,10 @@ export default function FacilityList() {
           checkboxSelection
           sx={{ border: 0 }}
         />
-        <Link to="/facilities/add">
+        <Link to="/admin/facilities/add">
           <button className="facilityAddButton">Create</button>
         </Link>
+        <Outlet />
       </div>
     </div>
   )

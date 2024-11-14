@@ -26,15 +26,15 @@ const RentalDetailPage = () => {
     useEffect(() => {
         const fetchRentalDetail = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/rentals/${rental_id}`);
-                // rental_id가 이미 문자열이므로 parseInt 제거
-                
+                const numericRentalId = parseInt(rental_id, 10);
+                const response = await axios.get(`http://localhost:8080/api/rentals/${numericRentalId}`);
+
                 if (response.data) {
                     setRental(response.data);
+                    // 상품 ID로 이미지 정보 가져오기
                     if (response.data.product_id) {
                         await fetchProductImages(response.data.product_id);
                     }
-                    // 반납일이 지났는지 확인
                     if (response.data.return_date && new Date(response.data.return_date) <= new Date()) {
                         setCompletedRental(true);
                     }
@@ -42,7 +42,7 @@ const RentalDetailPage = () => {
                     setError('대여 정보가 없습니다.');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error full details:', error);
                 setError('대여 정보를 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);

@@ -38,7 +38,7 @@ const UserGrade = (props) => {
     };
 
     useEffect(() => {
-            setCurrentUser(props.user);
+        setCurrentUser(props.user);
     }, [props]);
 
     // 잠시 프론트엔드에서 데이터 사용 나중에 결제 구현이 되면 백엔드에서 다시 블러오기 

@@ -6,11 +6,11 @@ import Chart from './../../../component/admin/chart/Chart';
 import { userData } from './../../../component/admin/dummyData';
 import WidgetSm from './../../../component/admin/widgetSm/WidgetSm';
 import WidgetLg from './../../../component/admin/widgetLg/WidgetLg';
+import { Outlet } from "react-router-dom";
 
 
 export default function Dashboard() {
-  return (
-    <Layout>      
+  return (    
       <div className="home">
           <FeaturedInfo />
           <Chart data={userData} title="User Analytics" dataKey="uv" grid />
@@ -19,6 +19,5 @@ export default function Dashboard() {
             <WidgetLg />
           </div>
       </div>
-    </Layout>
   )
 }

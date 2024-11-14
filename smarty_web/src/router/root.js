@@ -5,6 +5,7 @@ import userRouter from "./userRouter";
 import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
 import productRouter from "./productRouter";
+import guideRouter from "./guideRouter"
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
@@ -13,6 +14,7 @@ const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));
 const ReservationPage = lazy(() => import("../pages/reservation/ReservationPage"));
 const ChatBot = lazy(() => import("../component/chatbot/Chatbot"));
+const Instructions = lazy(() => import("../pages/guide/Instructions"))
 const Admin = lazy(() => import("../pages/admin/IndexPage"));
 // 관리자 페이지 라우팅 설정
 // 진입시 통합 레이아웃 인덱스 화면에 <Outlet />으로 하위 컴포넌트 렌더링
@@ -35,6 +37,11 @@ const root = createBrowserRouter([
     {
         path: "chatbot",
         element: <Suspense fallback={Loading}><ChatBot /></Suspense>,
+    },
+    {
+        path: "guide",
+        element: <Suspense fallback={Loading}><Instructions /></Suspense>,
+        children: guideRouter()
     },
     {
         path: "center",

@@ -131,13 +131,13 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/guide"}>이용안내</Link>
+                                <Link to={"/guide/instructions"}>이용안내</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>운영시간</Link>
+                                        <Link to={"/guide/hours"}>운영시간</Link>
                                     </li>
                                     <li>
-                                        <Link to={"/"}>환불 및 연기</Link>
+                                        <Link to={"/guide/refund"}>환불 및 취소 안내</Link>
                                     </li>
                                 </ul>
                             </li>

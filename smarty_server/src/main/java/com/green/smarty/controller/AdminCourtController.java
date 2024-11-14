@@ -35,5 +35,4 @@ public class AdminCourtController {
     public CourtAdminDTO read(@PathVariable (name = "court_id") int court_id) {
         return adminCourtService.read(court_id);
     }
-
 }

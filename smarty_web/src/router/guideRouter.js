@@ -1,15 +1,27 @@
+
 import { Suspense, lazy } from "react";
 
 const Loading = () => <div>Loading....</div>;
 
-const Center_in = lazy(() => import("../pages/centerIntroduction/CenterIntroduction"));
+const Instructions = lazy(() => import("../pages/guide/Instructions"))
+const OperatinghoursPage = lazy(() => import("../pages/guide/OperatinghoursPage"));
+const RefundPage = lazy(() => import("../pages/guide/RefundPage"))
+
 
 
 const centerRouter = () => {
     return [
         {
-            path: "center_in",
-            element: <Suspense fallback={<Loading />}><Center_in /></Suspense>
+            path: "instructions",
+            element: <Suspense fallback={Loading}><Instructions /></Suspense>,
+        },
+        {
+            path: "hours",
+            element: <Suspense fallback={<Loading />}><OperatinghoursPage /></Suspense>
+        },
+        {
+            path: "refund",
+            element: <Suspense fallback={<Loading />}><RefundPage /></Suspense>
         },
     ]
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../../css/facilityComponent.css'
+import '../../css/FacilityComponent.css'
 import { AiOutlineHeart } from 'react-icons/ai'
 
 const FacilityComponent = (props) => {

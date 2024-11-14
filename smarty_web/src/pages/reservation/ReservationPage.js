@@ -56,14 +56,7 @@ const ReservationPage = () => {
             <BackToTopButton />
             <h1 className='reservation_title'>{facilityData.facility_name} </h1>
             <p className='reservation_title_sub'>SMARTY 센터에 있는 {facilityData.facility_name} 입니다.</p>
-            <FacilityComponent props={facilityData} />
-            <div style={{
-                width: '68%', margin: '0 auto', height: '80px', display: 'flex', justifyContent: 'flex-end',
-            }}>
-                <div>
-                    <button onClick={() => reservationClick()} className='reservation_btn'>예약하기</button>
-                </div>
-            </div>
+            <FacilityComponent facilityData={facilityData} reservation={reservationClick} />
             <Information props={facilityData} />
             <div ref={focusRef} ></div>
             {reservationFlag ? <ReservationComponent facilityData={facilityData} reserved={reserved} newDate={newDate} user={currentUser} /> : <></>}

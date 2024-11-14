@@ -8,10 +8,10 @@ import java.util.List;
 @Mapper
 
 public interface ProductMapper {
-    Long register(ProductVO vo);
+    int insertProduct(ProductVO vo);
     List<ProductVO> getAllProducts();
-    Long updateProduct(ProductVO vo);
-    ProductVO getProductById(Long product_id);
+    String updateProduct(ProductVO vo);
+    ProductVO getProductById(String product_id);
 
-    void deleteProduct(Long product_id);
+    void deleteProduct(String product_id);
 }

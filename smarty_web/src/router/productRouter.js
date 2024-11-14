@@ -1,33 +1,42 @@
+import { elements } from 'chart.js'
 import React, { lazy, Suspense } from 'react'
-import { Navigate } from 'react-router-dom'
 
 const Loading = <div> Loading... </div>
-const ProductAdd = lazy(() => import("../pages/product/AddPage"))
-const ProductEdit = lazy(() => import("../pages/product/EditPage"))
-const ProductList = lazy(() => import("../pages/product/ListPage"))
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"))
+const RentalSummary = lazy(() => import("../component/product/RentalSummary"))
+const RentalIndex = lazy(() => import("../component/product/IndexPage"))
+const RentalList = lazy(() => import("../component/product/RentalList"))
+const RentalDetail = lazy(() => import("../component/product/RentalDetailPage"))
+const ProductList = lazy(() => import("../pages/product/ProductPage"))
 
 const productRouter = () => {
-  return [
-    {
-      path: "add",
-      element: <Suspense fallback={Loading}> <ProductAdd /> </Suspense>
-    },
-    {
-      path: "edit/:product_id",
-      element: <Suspense fallback={Loading}> <ProductEdit/> </Suspense>
-  },
-  {
-      path: "list",
-      element: <Suspense fallback={Loading}> <ProductList/> </Suspense>
-  },
-  {
-      path: "detail/:product_id",
-      element: <Suspense fallback={Loading}> <ProductDetail/> </Suspense>
-  },
-    
-  ]
+
+    return [
+        {
+            path: "",
+            element: <Suspense fallback={Loading}> <ProductList/>  </Suspense>
+        },
+        // {
+        //     path: "detail/:product_id",
+        //     element: <Suspense fallback={Loading}> <ProductDetail /> </Suspense>
+        // },
+        {
+            path: "summary",
+            element: <Suspense fallback={Loading}> <RentalSummary /> </Suspense>
+        },
+        {
+            path: "index",
+            element: <Suspense fallback={Loading}> <RentalIndex /> </Suspense>
+        },
+        {
+            path: "list",
+            element: <Suspense fallback={Loading}> <RentalList /> </Suspense>
+        },
+        {
+            path: "rental-detail/:rental_id",
+            element: <Suspense fallback={Loading}> <RentalDetail /> </Suspense>
+        },
+    ]
 }
 
-export default productRouter
-
+export default productRouter;

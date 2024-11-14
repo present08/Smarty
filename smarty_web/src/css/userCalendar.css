@@ -1,0 +1,423 @@
+.calendar_box {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    height: 350px;
+}
+
+/* ------------------------------------ */
+
+
+.calendar_header {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    margin-top: 1rem;
+    justify-content: space-between;
+}
+
+/* ------------------------------------ */
+
+.calendar_header>h3 {
+    font-size: 23px;
+    margin-bottom: 1rem;
+    color: #003f66;
+}
+
+/* ------------------------------------ */
+
+.calendar_header>div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 40%;
+    height: 100%;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.calendar_header>div>p {
+    color: gray;
+    font-size: 25px;
+}
+
+/* ------------------------------------ */
+
+.calendar_cont {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: center;
+}
+
+
+/* ------------------------------------ */
+
+
+.react-calendar {
+    background: white;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    line-height: 1.125em;
+    border: none;
+    width: 95%;
+    height: 100%;
+}
+
+.react-calendar--doubleView {
+    width: 700px;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer {
+    display: flex;
+    margin: -0.5em;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer>* {
+    width: 50%;
+    margin: 0.5em;
+}
+
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+}
+
+.react-calendar button:enabled:hover {
+    cursor: pointer;
+}
+
+.react-calendar__navigation {
+    display: flex;
+    height: 55px;
+    margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+    min-width: 55px;
+    background: none;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.react-calendar__navigation button:disabled {
+    background-color: #f0f0f0;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+    background-color: #fae57c;
+}
+
+.react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font: inherit;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+    padding: 0.5em;
+}
+
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.react-calendar__month-view__days__day--weekend:nth-child(7n+1) {
+    color: #d10000;
+}
+
+.react-calendar__month-view__days__day--weekend:nth-child(7n) {
+    color: #001fd1;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth,
+.react-calendar__decade-view__years__year--neighboringDecade,
+.react-calendar__century-view__decades__decade--neighboringCentury {
+    color: #555555;
+    opacity: 0.6;
+}
+
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+    padding: 2em 0.5em;
+}
+
+.react-calendar__tile {
+    padding: 20px;
+    background: none;
+    text-align: center;
+    font: inherit;
+    font-size: 0.833em;
+}
+
+.react-calendar__tile:disabled {
+    background-color: #f0f0f0;
+    color: #ababab;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth:disabled,
+.react-calendar__decade-view__years__year--neighboringDecade:disabled,
+.react-calendar__century-view__decades__decade--neighboringCentury:disabled {
+    color: #cdcdcd;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+    background-color: #fae57c;
+    border-radius: 10px;
+}
+
+.react-calendar__tile--now {
+    background: #28527a;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+    background: #28527a;
+    color: black;
+}
+
+.react-calendar__tile--hasActive {
+    background: #58a3bc;
+}
+
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+    background: #a9d4ff;
+}
+
+.react-calendar__tile--active {
+    background: #58a3bc;
+    color: white;
+    border-radius: 8px;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #58a3bc;
+}
+
+.react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: #e6e6e6;
+}
+
+/* ----------------------- */
+
+.calendarModalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendarModalBox {
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.calendarModalCont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* ----------------------- */
+
+.closeButtonBox {
+    width: 90%;
+    height: 5%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* ----------------------- */
+
+.modalbody {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ----------------------- */
+
+.calendar_Name {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.subBox {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+
+.calendar_Name>div:first-child {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
+
+.calendar_Name>div:first-child>h3 {
+    font-size: 35px;
+    color: #003f66;
+}
+
+.calendar_Name>div:last-child {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ----------------------- */
+
+.fc {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 90%;
+    height: 90%;
+}
+
+/* 헤더 스타일 */
+.fc-toolbar {
+    background-color: #f8f9fa;
+    /* 예: 연한 회색 */
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    /* 가운데 정렬 */
+}
+
+/* 버튼들과 제목을 중앙에 정렬하기 */
+.fc-toolbar>* {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 날짜 셀 스타일 */
+.fc-day {
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+}
+
+/* 이벤트 스타일 */
+.fc-event {
+    background-color: #28a745;
+    color: white;
+    height: 40px;
+    border-radius: 5px;
+}
+
+/* 선택된 날짜 스타일 */
+.fc-day-selected {
+    background-color: #007bff;
+    color: white;
+}
+
+/* ----------------------- */
+
+.subBox>div:first-child {
+    width: 90%;
+    height: 35%;
+    margin: 0 auto;
+}
+
+.subBox>div:last-child {
+    width: 90%;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.subBox>div:last-child>h5 {
+    color: #003f66;
+    font-size: 25px;
+    display: flex;
+    width: 70%;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+.scheduleBox {
+    width: 75%;
+    height: 100px;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.scheduleIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #dedede;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-right: 1.5rem; */
+}
+
+.scheduletext {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

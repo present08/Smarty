@@ -18,7 +18,7 @@ public class CartController {
     private CartService service;
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<CartVO>> getCartList(@PathVariable Long user_id) {
+    public ResponseEntity<List<CartVO>> getCartList(@PathVariable String user_id) {
         return ResponseEntity.ok(service.getCartList(user_id));
     }
 
@@ -47,7 +47,7 @@ public class CartController {
 
     // 장바구니 비우기
     @DeleteMapping("/clear/{user_id}")
-    public ResponseEntity<Void> clearCart(@PathVariable Long user_id) {
+    public ResponseEntity<Void> clearCart(@PathVariable String user_id) {
         service.clearCart(user_id);
         return ResponseEntity.ok().build();
     }

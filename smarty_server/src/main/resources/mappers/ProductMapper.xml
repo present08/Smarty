@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.ProductMapper">
+    <!--sql 구문을 써서 db에서 불러온다-->
+
+    <insert id="insertProduct" parameterType="com.green.smarty.vo.ProductVO">
+        INSERT INTO product ( product_id, facility_id, product_name, stock, price, product_images, size )
+        VALUES (#{product_id}, #{facility_id}, #{product_name}, #{stock}, #{price}, #{product_images}, #{size} )
+    </insert>
+
+<!--    <select  id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">-->
+<!--        select * from product-->
+<!--    </select>-->
+
+    <select  id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">
+        SELECT
+            p.product_id,
+            p.facility_id,
+            p.product_name,
+            p.price,
+            p.stock,
+            p.size,
+            p.product_images,
+            f.facility_name
+        FROM
+            product p
+        LEFT JOIN
+            facility f
+        ON
+            p.facility_id = f.facility_id
+        ORDER BY
+         p.product_id DESC
+    </select>
+
+<!--    <insert id="register" parameterType="com.green.smarty.vo.ProductVO" useGeneratedKeys="true" keyProperty="product_id">-->
+<!--        INSERT INTO product_tbl (-->
+<!--            facility_id,-->
+<!--            product_name,-->
+<!--            price,-->
+<!--            facility_name-->
+<!--        )-->
+<!--        SELECT-->
+<!--            #{facility_id},-->
+<!--            #{product_name},-->
+<!--            #{price},-->
+<!--            f.facility_name-->
+<!--        FROM-->
+<!--            facility_tbl f-->
+<!--        WHERE-->
+<!--            f.facility_id = #{facility_id}-->
+
+<!--    </insert>-->
+
+<!--    <select id="getAllProducts" resultMap="ProductMap">-->
+<!--        SELECT-->
+<!--            p.*,-->
+<!--            f.facility_name,-->
+<!--            a.uuid,-->
+<!--            a.upload_path,-->
+<!--            a.file_name,-->
+<!--            a.image-->
+<!--        FROM-->
+<!--            product_tbl p-->
+<!--        LEFT JOIN-->
+<!--            facility_tbl f-->
+<!--        ON-->
+<!--            p.facility_id = f.facility_id-->
+<!--        LEFT JOIN-->
+<!--            attach_file a-->
+<!--        ON-->
+<!--            p.product_id = a.product_id-->
+<!--        ORDER BY-->
+<!--            p.product_id DESC-->
+<!--    </select>-->
+
+    <delete id="deleteProduct">
+        DELETE FROM product WHERE product_id = #{product_id}
+    </delete>
+
+    <update id="updateProduct" parameterType="com.green.smarty.vo.ProductVO">
+        UPDATE
+            product
+        SET
+            product_name = #{product_name},
+            price = #{price},
+            facility_id = #{facility_id}
+        WHERE
+            product_id = #{product_id}
+    </update>
+
+    <select id="getProductById" resultType="com.green.smarty.vo.ProductVO">
+        SELECT
+            p.product_id,
+            p.facility_id,
+            p.product_name,
+            p.price,
+            p.stock,
+            p.size,
+            p.product_images,
+            f.facility_name,
+            pa.origin_path,
+            pa.thumbnail_path,
+            pa.file_name
+        FROM
+            product p
+        LEFT JOIN
+            facility f
+        ON
+            p.facility_id = f.facility_id
+        LEFT JOIN
+            product_attach pa
+        ON
+            p.product_id = pa.product_id
+        WHERE
+            p.product_id = #{product_id}
+    </select>
+
+</mapper>

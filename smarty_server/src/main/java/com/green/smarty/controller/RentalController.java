@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -34,21 +35,31 @@ public class RentalController {
     @PostMapping("/rentals")
     public ResponseEntity<?> postRental(@RequestBody RentalVO vo) {
         log.info("Received rental data: {}", vo);
+        log.info("User ID: {}", vo.getUser_id());
+        log.info("Product ID: {}", vo.getProduct_id());
+        log.info("Rental Date: {}", vo.getRental_date());
+        log.info("Return Date: {}", vo.getReturn_date());
 
         try {
-            // 사용자 존재 여부 확인
-            if (vo.getUser_id() == null) {
+            if (vo.getUser_id() == null || vo.getUser_id().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("사용자 ID가 없습니다.");
             }
 
-            // 상품 존재 여부 확인
-            if (vo.getProduct_id() == null) {
+            if (vo.getProduct_id() == null || vo.getProduct_id().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("상품 ID가 없습니다.");
             }
 
-            // 대여 처리
-            Long rentalId = service.register(vo);
-            return ResponseEntity.ok("대여가 완료되었습니다. 대여 번호: " + rentalId);
+            if (vo.getRental_date() == null || vo.getReturn_date() == null) {
+                return ResponseEntity.badRequest().body("대여일 또는 반납일이 없습니다.");
+            }
+
+            int rentalId = service.insertRental(vo);
+
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                            "message", "대여가 완료되었습니다.",
+                            "rental_id", rentalId
+                    ));
 
         } catch (Exception e) {
             log.error("대여 처리 중 오류 발생", e);
@@ -58,7 +69,7 @@ public class RentalController {
     }
 
     @PutMapping("/rentals/{rental_id}/return")
-    public ResponseEntity<String> returnRental(@PathVariable Long rental_id) {
+    public ResponseEntity<String> returnRental(@PathVariable String rental_id) {
         try {
             int updatedRows = service.returnRental(rental_id);
             if (updatedRows > 0) {
@@ -72,7 +83,7 @@ public class RentalController {
     }
 
     @GetMapping("/rentals/{rental_id}")
-    public ResponseEntity<RentalVO> getRentalById(@PathVariable Long rental_id) {
+    public ResponseEntity<RentalVO> getRentalById(@PathVariable String rental_id) {
         log.info("Received request for rental_id: {}", rental_id);  // 로그 추가
         try {
             RentalVO rental = service.getRentalById(rental_id);
@@ -86,6 +97,7 @@ public class RentalController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }

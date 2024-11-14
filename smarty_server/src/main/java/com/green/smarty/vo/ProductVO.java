@@ -10,10 +10,13 @@ import java.util.List;
 @Data
 
 public class ProductVO {
-    private Long product_id;
-    private Long facility_id;
+    private String product_id;
+    private String facility_id;
     private String product_name;
     private int price;
     private String facility_name;
-    private List<AttachFileDTO> attachFiles;
+    private boolean product_images;
+    private int stock;
+    private String size;
+    private List<ProductAttachDTO> attachFiles;
 }

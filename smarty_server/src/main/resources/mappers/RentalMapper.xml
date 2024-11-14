@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.RentalMapper">
+    <!--sql 구문을 써서 db에서 불러온다-->
+
+    <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
+        <!-- 오늘 날짜의 마지막 rental_id 조회 -->
+        <selectKey resultType="String" keyProperty="rental_id" order="BEFORE">
+            SELECT CASE WHEN MAX(rental_id) IS NULL THEN
+            CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '001')
+            ELSE CONCAT(
+                'r_',
+                DATE_FORMAT(NOW(), '%Y%m%d'),
+                LPAD( CAST(
+                    CAST(SUBSTRING(MAX(rental_id), -3) AS UNSIGNED) + 1
+                    AS CHAR ), 3, '0'
+                )
+            )
+            END AS
+                new_rental_id
+            FROM
+                rental
+            WHERE
+                rental_id LIKE CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '%')
+        </selectKey>
+
+        INSERT INTO rental (
+            rental_id,
+            user_id,
+            product_id,
+            rental_date,
+            return_date
+        ) VALUES (
+            #{rental_id},
+            #{user_id},
+            #{product_id},
+            #{rental_date},
+            #{return_date}
+        )
+    </insert>
+
+</mapper>

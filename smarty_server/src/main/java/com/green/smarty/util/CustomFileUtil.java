@@ -1,4 +1,5 @@
 package com.green.smarty.util;
+import com.green.smarty.vo.ProductAttachDTO;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -48,10 +49,10 @@ public class CustomFileUtil {
         }
     }
 
-    public List<String> saveFiles(List<MultipartFile> files) throws IOException {
+    public List<ProductAttachDTO> saveFiles(List<MultipartFile> files, String productId) throws IOException {
         if (files == null || files.isEmpty()) return List.of();
 
-        List<String> uploadNames = new ArrayList<>();
+        List<ProductAttachDTO> attachList = new ArrayList<>();
 
         for (MultipartFile file : files) {
             try {
@@ -66,84 +67,90 @@ public class CustomFileUtil {
                 }
 
                 String savedName = UUID.randomUUID().toString() + extension;
-                log.info("저장될 파일명: {}", savedName);
 
-                Path savePath = Paths.get(uploadPath, savedName);
+                // 원본 파일 경로
+                String originPath = uploadPath + File.separator + savedName;
+                Path savePath = Paths.get(originPath);
 
                 // 원본 파일 저장
                 Files.copy(file.getInputStream(), savePath);
                 log.info("원본 파일 저장 완료: {}", savePath);
 
+                // 썸네일 경로
+                String thumbnailPath = uploadPath + File.separator + "s_" + savedName;
+
                 // 이미지 파일 체크 및 썸네일 생성
                 if (file.getContentType() != null && file.getContentType().startsWith("image")) {
                     try {
-                        Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
-                        log.info("썸네일 생성 시도: {}", thumbnailPath);
+                        Path thumbnailPathObj = Paths.get(thumbnailPath);
+                        log.info("썸네일 생성 시도: {}", thumbnailPathObj);
 
-                        // 썸네일 생성 시 버퍼 크기 지정
                         Thumbnails.of(savePath.toFile())
                                 .size(200, 200)
-                                .outputQuality(0.9)  // 품질 설정
-                                .toFile(thumbnailPath.toFile());
+                                .outputQuality(0.9)
+                                .toFile(thumbnailPathObj.toFile());
 
                         log.info("썸네일 생성 완료");
                     } catch (Exception e) {
                         log.error("썸네일 생성 실패: {}", e.getMessage());
-                        // 썸네일 생성 실패해도 원본 파일은 유지
+                        thumbnailPath = originPath; // 썸네일 생성 실패시 원본 경로 사용
                     }
                 }
 
-                uploadNames.add(savedName);
+                // ProductAttachDTO 생성 및 추가
+                ProductAttachDTO attachDTO = ProductAttachDTO.builder()
+                        .product_id(productId)
+                        .origin_path(originPath)
+                        .thumbnail_path(thumbnailPath)
+                        .file_name(originalFileName)
+                        .build();
+
+                attachList.add(attachDTO);
 
             } catch (IOException e) {
                 log.error("파일 처리 중 오류 발생: {}", e.getMessage());
                 throw new IOException("파일 저장 실패", e);
             }
         }
-        return uploadNames;
+        return attachList;
     }
 
-    // 지원하는 이미지 확장자 체크
     private boolean isImageExtension(String extension) {
         return Arrays.asList(".jpg", ".jpeg", ".png", ".gif").contains(extension.toLowerCase());
     }
 
-    // Retrieve a file for download or display
-    public ResponseEntity<Resource> getFile(String fileName) {
-        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+    public ResponseEntity<Resource> getFile(String filePath) {
+        Resource resource = new FileSystemResource(filePath);
 
-        // If the file is not readable, return a default image
         if (!resource.isReadable()) {
             resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
         }
 
         HttpHeaders headers = new HttpHeaders();
         try {
-            // Set the content type based on the file's MIME type
             headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
 
-        // Return the file with appropriate headers
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    // Delete files and their corresponding thumbnails if they exist
-    public void deleteFile(List<String> fileNames) {
-        if (fileNames == null || fileNames.isEmpty()) return;
+    public void deleteFiles(List<ProductAttachDTO> attachList) {
+        if (attachList == null || attachList.isEmpty()) return;
 
-        fileNames.forEach(fileName -> {
-            // Check and delete thumbnail file if it exists
-            String thumbnailFileName = "s_" + fileName;
-            Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
-            Path filePath = Paths.get(uploadPath, fileName);
-
+        attachList.forEach(attach -> {
             try {
-                Files.deleteIfExists(filePath);
-                Files.deleteIfExists(thumbnailPath);
+                // 원본 파일 삭제
+                Files.deleteIfExists(Paths.get(attach.getOrigin_path()));
+
+                // 썸네일 파일 삭제 (원본과 다른 경우에만)
+                if (!attach.getOrigin_path().equals(attach.getThumbnail_path())) {
+                    Files.deleteIfExists(Paths.get(attach.getThumbnail_path()));
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e.getMessage());
+                log.error("파일 삭제 실패: {}", e.getMessage());
+                throw new RuntimeException("파일 삭제 실패", e);
             }
         });
     }

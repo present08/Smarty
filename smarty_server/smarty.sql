@@ -1,5 +1,5 @@
-create database smarty2db;
-use smarty2db;
+create database smartydb;
+use smartydb;
 
-create user`smarty2`@`%` identified by '1234';
-grant all privileges on smarty2db.* to `smarty2`@`%`;
+create user`smarty`@`%` identified by '1234'; 
+grant all privileges on smartydb.* to `smarty`@`%`;

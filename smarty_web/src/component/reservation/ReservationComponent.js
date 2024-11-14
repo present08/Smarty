@@ -10,7 +10,6 @@ import moment from 'moment';
 const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')
-    const [partTime, setPartTime] = useState(0)
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
@@ -30,7 +29,7 @@ const ReservationComponent = (props) => {
 
     useEffect(() => {
     }, []);
-    
+
     // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
@@ -38,7 +37,7 @@ const ReservationComponent = (props) => {
     }
     useEffect(() => {
         setTimeLine(reserved)
-   
+
     }, [reserved])
 
     const handleClick = (tl) => {
@@ -139,7 +138,7 @@ const ReservationComponent = (props) => {
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={insertReservation} className='reservation_btn'>예약하기</button>
+                <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
             </div>
         </div>
     )

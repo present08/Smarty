@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import '../../css/facilityComponent.css'
 import { AiOutlineHeart } from 'react-icons/ai'
 
-const FacilityComponent = ({ props }) => {
+const FacilityComponent = (props) => {
+  const { facilityData, reservation } = props;
 
   const [infoArr, setInfoArr] = useState([])
   const [infoArr1, setInfoArr1] = useState([])
+  const [images, setImages] = useState([])
 
   useEffect(() => {
+    console.log("props", props.reservation)
 
-    switch (props.hot_time) {
+    switch (facilityData.hot_time) {
       case 0:
         setInfoArr(['시설명', '이용요금(기본)', '기본이용시간(h)', '문의전화'])
         setInfoArr1(['facility_name', 'basic_fee', 'default_time', 'contact'])
@@ -27,14 +30,9 @@ const FacilityComponent = ({ props }) => {
         setInfoArr1(['facility_name', 'basic_fee', 'basic_fee', 'basic_fee', 'default_time', 'contact'])
         break;
     }
+    setImages(facilityData.file_name)
   }, [props])
 
-  const images = [
-    '/img/indoors-swimming-pool.jpg',
-    '/img/miniature-assortment-sunbeds-swimming-pool.jpg',
-    '/img/pool-5055009_1280.jpg',
-    '/img/refreshing-swimming-pool.jpg',
-  ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -54,7 +52,7 @@ const FacilityComponent = ({ props }) => {
 
   // 자동 슬라이드 설정
   useEffect(() => {
-    const slideInterval = setInterval(nextSlide, 2000);
+    const slideInterval = setInterval(nextSlide, 3000);
     return () => clearInterval(slideInterval);
   }, [currentIndex]);
 
@@ -64,7 +62,7 @@ const FacilityComponent = ({ props }) => {
     <div className='facilityContainer'>
       <div className='facilityThumbnail'>
         <div className="main-image">
-          <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} />
+          <img src={images ? `http://localhost:8080/api/user/reservation/uploads/${images[currentIndex]}` : ""} alt={`Slide ${currentIndex}`} />
         </div>
         <button className="prev" onClick={prevSlide}>&#10094;</button>
         <button className="next" onClick={nextSlide}>&#10095;</button>
@@ -74,20 +72,20 @@ const FacilityComponent = ({ props }) => {
           <h3>SMARTY 시설정보</h3>
         </div>
         <div className='facilityInfoText'>
-        {infoArr.map((info, idx) =>
-          <div className='facilityInfo_list' key={idx}>
-            <div className='facilitySubtitle'>{info}</div>
-            <div className='facilityContent'>{info == "이용요금(할인)" ? props[infoArr1[idx]] - props[infoArr1[idx]] * props.rate_adjustment : info == "이용요금(할증)" ? props[infoArr1[idx]] + props[infoArr1[idx]] * props.rate_adjustment : props[infoArr1[idx]]}</div>
-          </div>
-        )}
+          {infoArr.map((info, idx) =>
+            <div className='facilityInfo_list' key={idx}>
+              <div className='facilitySubtitle'>{info}</div>
+              <div className='facilityContent'>{info == "이용요금(할인)" ? facilityData[infoArr1[idx]] - facilityData[infoArr1[idx]] * facilityData.rate_adjustment : info == "이용요금(할증)" ? facilityData[infoArr1[idx]] + facilityData[infoArr1[idx]] * facilityData.rate_adjustment : facilityData[infoArr1[idx]]}</div>
+            </div>
+          )}
           <hr style={{ color: 'gainsboro', width: '80%', marginTop: '1rem' }} />
-        <div className='facility_hottime'>
+          <div className='facility_hottime'>
             <p>이용요금(할인) : 오전 첫 시간 적용</p>
             <p>이용요금(할증) : 오후 마지막 시간 적용</p>
           </div>
           <div className='facilityInfoButton'>
             <button><AiOutlineHeart style={{ width: '30px', height: '30px', color: 'gray' }} /></button>
-            <button>예약하기</button>
+            <button onClick={reservation}>예약하기</button>
           </div>
         </div>
       </div>

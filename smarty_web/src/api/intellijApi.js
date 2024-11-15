@@ -69,20 +69,27 @@ export const registerProductAttach = (productId, formData) => {
 
 // 시설별 대여물품 상태 가져오기 (관리자용)
 export const fetchProductStatusByFacility = (facilityId) => {
-  return axios.get(`${productStatusControllerPath}/facility/${facilityId}`);
+  return axios.get(`${adminProductStatusControllerPath}/${facilityId}`);
 }
 
 // 시설별 대여물품 상태 수정 (관리자용)
 export const updateProductStatus = (statusId, newStatus) => {
-  return axios.put(`${adminProductStatusControllerPath}/update-status`, {
-      statusId, newStatus
+  return axios.put(`${adminProductStatusControllerPath}/update-status`, null, {
+    params: {
+      statusId: statusId,
+      newStatus: newStatus
+    }
   });
 };
 
+
 // 시설별 대여물품 수량 수정 (관리자용)
 export const updateProductStock = (productId, newStock) => {
-  return axios.put(`${adminProductStatusControllerPath}/update-stock`, {
-      productId, newStock
+  return axios.put(`${adminProductStatusControllerPath}/update-stock`, null,{
+    params: {
+      productId: productId,
+      newStock: newStock
+    }  
   });
 };
 

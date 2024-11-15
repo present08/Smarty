@@ -4,6 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.product.ProductStatusMapper">
 
+    <select id="findProductStatusByFacility" parameterType="string" resultType="map">
+        SELECT ps.status_id, ps.product_id, ps.product_status, ps.updated_at,
+        p.product_name,
+        CASE
+        WHEN ps.status_id LIKE '%Ind%' THEN 1
+        ELSE p.stock
+        END AS stock
+        FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
+        WHERE p.facility_id = #{facilityId}
+    </select>
 
     <insert id="insertProductStatus" parameterType="com.green.smarty.vo.product.ProductStatusVO" useGeneratedKeys="true" keyProperty="status_id">
         INSERT INTO product_status (status_id, product_id, product_status, updated_at)

@@ -57,105 +57,108 @@ const Management = () => {
     const handleStatusChange = (value, record) => {
         setModifiedData((prev) => ({
             ...prev,
-            [record.status_id]: { ...prev[record.status_id], product_status: value }
+            [record.status_id]: { 
+                ...prev[record.status_id], 
+                product_status: value 
+            }
         }));
     };
+    
 
     const handleStockChange = (change, record) => {
-        const newStock = record.stock + change;
-        if (newStock >= 0) {
-            setModifiedData((prev) => ({
-                ...prev,
-                [record.status_id]: { ...prev[record.status_id], stock: newStock }
-            }));
-        } else {
-            notification.warning({
-                message: '재고 부족',
-                description: '재고가 부족하여 감소할 수 없습니다.'
-            });
-        }
+        setModifiedData((prev) => {
+            const newStock = (prev[record.status_id]?.stock ?? record.stock) + change;
+            if (newStock >= 0) {
+                return {
+                    ...prev,
+                    [record.status_id]: { ...prev[record.status_id], stock: newStock }
+                };
+            } else {
+                notification.warning({
+                    message: '재고 부족',
+                    description: '재고가 부족하여 감소할 수 없습니다.'
+                });
+                return prev;
+            }
+        });
     };
 
     const handleSaveChanges = (record) => {
-        const modifiedRecord = modifiedData[record.status_id];
-        const isStatusChanged = modifiedRecord?.product_status !== undefined 
-            && modifiedRecord.product_status !== record.product_status;
-
-        const isStockChanged = modifiedRecord?.stock !== undefined
-            && modifiedRecord.stock !== record.stock;
-
-        // 상태 또는 수량이 변경된 경우만 저장을 진행
-        if (isStatusChanged || isStockChanged) {
-            const promises = [
-                isStatusChanged 
-                    ? updateProductStatus(record.status_id, modifiedRecord.product_status)
-                    : Promise.resolve(),
-                isStockChanged
-                    ? updateProductStock(record.product_id, modifiedRecord.stock)
-                    : Promise.resolve()
-            ];
-
-            Promise.all(promises)
-                .then(() => {
-                    notification.success({
-                        message: '변경 사항이 적용되었습니다.',
-                        description: '해당 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
-                    });
-                    fetchData();
-                })
-                .catch(error => {
-                    console.error("변경 적용 중 오류 발생: ", error);
-                    notification.error({
-                        message: '변경 실패',
-                        description: '변경 적용 중 오류 발생'
-                    });
+        const modifiedRecord = modifiedData[record.status_id] || {};
+    
+        // 상태값 가져오기: 수정된 값이 있으면 그것을, 없으면 기본값 "대여 가능" 사용
+        const newStatus = modifiedRecord.product_status !== undefined 
+            ? modifiedRecord.product_status 
+            : '대여 가능';
+    
+        // 재고량 가져오기: 수정된 값이 있으면 그것을, 없으면 기존 값을 사용
+        const newStock = modifiedRecord.stock !== undefined 
+            ? modifiedRecord.stock 
+            : record.stock;
+    
+        Promise.all([
+            updateProductStatus(record.status_id, newStatus),
+            updateProductStock(record.product_id, newStock)
+        ])
+            .then(() => {
+                notification.success({
+                    message: '변경 사항이 적용되었습니다.',
+                    description: '해당 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
                 });
-        }
+                fetchData();
+            })
+            .catch(error => {
+                console.error("변경 적용 중 오류 발생: ", error);
+                notification.error({
+                    message: '변경 실패',
+                    description: '변경 적용 중 오류가 발생했습니다.'
+                });
+            });
     };
-
+    
+    
     const handleBulkSaveChanges = () => {
         const updates = selectedRowKeys.map(key => {
-            const modifiedRecord = modifiedData[key];
+            const modifiedRecord = modifiedData[key] || {};
             const record = data.find(item => item.status_id === key);
-            if (!modifiedRecord) return null;
-
-            const isStatusChanged = modifiedRecord.product_status !== undefined 
-                && modifiedRecord.product_status !== record.product_status;
-
-            const isStockChanged = modifiedRecord.stock !== undefined
-                && modifiedRecord.stock !== record.stock;
-
-            if (isStatusChanged || isStockChanged) {
-                return Promise.all([
-                    isStatusChanged 
-                        ? updateProductStatus(record.status_id, modifiedRecord.product_status)
-                        : Promise.resolve(),
-                    isStockChanged
-                        ? updateProductStock(record.product_id, modifiedRecord.stock)
-                        : Promise.resolve()
-                ]);
-            } else {
-                return null;
-            }
-        }).filter(Boolean); // null 필터링
-
+    
+            // 상태값 가져오기: 수정된 값이 있으면 그것을, 없으면 기본값 "대여 가능" 사용
+            const newStatus = modifiedRecord.product_status !== undefined 
+                ? modifiedRecord.product_status 
+                : record.product_status || '대여 가능';
+    
+            // 재고량 가져오기: 수정된 값이 있으면 그것을, 없으면 기존 값을 사용
+            const newStock = modifiedRecord.stock !== undefined 
+                ? modifiedRecord.stock 
+                : record.stock;
+    
+            return Promise.all([
+                updateProductStatus(record.status_id, newStatus),
+                updateProductStock(record.product_id, newStock)
+            ]);
+        });
+    
+        // 모든 업데이트 요청 처리
         Promise.all(updates)
             .then(() => {
                 notification.success({
                     message: '선택된 항목 저장 완료',
                     description: '선택된 품목의 변경된 내용이 데이터베이스에 저장되었습니다.'
                 });
-                fetchData();
-                setSelectedRowKeys([]);
+                fetchData(); // 업데이트 후 데이터 다시 가져오기
+                setSelectedRowKeys([]); // 선택 해제
             })
             .catch(error => {
                 console.error("변경 적용 중 오류 발생: ", error);
                 notification.error({
                     message: '변경 실패',
-                    description: '변경 적용 중 오류 발생'
+                    description: '변경 적용 중 오류가 발생했습니다.'
                 });
             });
     };
+    
+    
+    
 
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(data);

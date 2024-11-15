@@ -17,8 +17,8 @@ public class UserProductStatusController {
     @Autowired
     private ProductStatusService productStatusService;
 
-    @GetMapping("/all")
+    /*@GetMapping("/all")
     public List<ProductStatusVO> getAllProductStatuses() {
         return productStatusService.getAllProductStatuses();
-    }
+    }*/
 }

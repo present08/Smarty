@@ -1,3 +1,4 @@
+/*
 package com.green.smarty.controller.product;
 
 import com.green.smarty.service.product.ProductStatusService;
@@ -30,7 +31,7 @@ public class ProductStatusController {
     public void updateProductStatus(@RequestParam("product_id") String productId, @RequestParam("status") String status) {
         ProductStatusVO productStatus = ProductStatusVO.builder()
                 .product_id(productId)
-                .status(status)
+                .product_status(status)
                 .build();
         productStatusService.updateProductStatus(productStatus);
         System.out.println("Updated status for quantity_id: " + productId + " to status: " + status); // 추가된 로그
@@ -43,3 +44,4 @@ public class ProductStatusController {
         return ResponseEntity.ok(statuses);
     }
 }
+*/

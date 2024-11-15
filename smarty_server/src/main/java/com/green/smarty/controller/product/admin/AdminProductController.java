@@ -18,10 +18,9 @@ public class AdminProductController {
 
     // 새로운 대여물품 등록
     @PostMapping("/register")
-    public ResponseEntity<String> registerProducts(
-            @RequestBody List<ProductVO> productList) {
-        productService.registerProduct(productList);
-        return ResponseEntity.ok("Products registered successfully.");
+    public ResponseEntity<List<ProductVO>> registerProduct(@RequestBody List<ProductVO> productList) {
+        List<ProductVO> registeredProducts = productService.registerProduct(productList);
+        return ResponseEntity.ok(registeredProducts);  // `product_id` 포함한 상품 목록 반환
     }
     // 대여물품 정보 수정
     @PutMapping

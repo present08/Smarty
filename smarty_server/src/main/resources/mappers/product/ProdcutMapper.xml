@@ -35,26 +35,6 @@
         SELECT * FROM product WHERE facility_id = #{facilityId}
     </select>
 
-    <!-- 중간 자리 순번 조회: product_id가 baseProductId로 시작하는 경우 중간 자리의 최대 값 조회 -->
-    <select id="findMaxMiddleIndex" resultType="int">
-        SELECT COALESCE(MAX(CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(product_id, '_', -2), '_', 1) AS UNSIGNED)), 0)
-        FROM product
-        WHERE product_id LIKE CONCAT(#{baseProductId}, '%')
-    </select>
-
-    <!-- 끝자리 순번 조회: product_id가 baseProductId로 시작하는 경우 끝자리의 최대 값 조회 -->
-    <select id="findMaxSuffix" resultType="int">
-        SELECT COALESCE(MAX(CAST(SUBSTRING_INDEX(product_id, '_', -1) AS UNSIGNED)), 0)
-        FROM product
-        WHERE product_id LIKE CONCAT(#{baseProductId}, '%')
-    </select>
-
-    <select id="existsByProductName" parameterType="map" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM product
-        WHERE product_name = #{productName}
-    </select>
-
     <select id="existsByProductId" parameterType="string" resultType="boolean">
         SELECT COUNT(1) > 0
         FROM product

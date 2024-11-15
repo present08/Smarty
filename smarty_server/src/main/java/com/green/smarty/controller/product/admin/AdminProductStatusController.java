@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/product-status")
@@ -17,34 +18,47 @@ public class AdminProductStatusController {
     private ProductStatusService productStatusService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerDefaultStatus(@RequestParam("productId") String productId) {
+    public ResponseEntity<String> registerDefaultStatus(
+            @RequestParam("productId") String productId,
+            @RequestParam("managementType") String managementType,
+            @RequestParam("stock") int stock,
+            @RequestParam(value = "size", required = false) String size) {
         try {
-            productStatusService.registerDefaultStatus(productId);
+            // 관리 방식에 따른 상태 등록
+            productStatusService.registerDefaultStatus(productId, managementType, stock, size);
             return ResponseEntity.ok("Product status set to '대여 가능'.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to set default product status.");
         }
     }
 
-    @GetMapping("/all")
-    public List<ProductStatusVO> getAllProductStatuses() {
-        return productStatusService.getAllProductStatuses();
+    // 특정 facility_id의 모든 상품 상태 조회 엔드포인트
+    @GetMapping("/{facilityId}")
+    public ResponseEntity<List<Map<String, Object>>> getProductStatusByFacility(@PathVariable("facilityId") String facilityId){
+        List<Map<String, Object>> productStatusList = productStatusService.getProductStatusByFacility(facilityId);
+        return ResponseEntity.ok(productStatusList);
     }
 
-    @PutMapping
-    public void updateProductStatus(@RequestParam("product_id") String productId, @RequestParam("status") String status) {
-        ProductStatusVO productStatus = ProductStatusVO.builder()
-                .product_id(productId)
-                .status(status)
-                .build();
-        productStatusService.updateProductStatus(productStatus);
-        System.out.println("Updated status for quantity_id: " + productId + " to status: " + status); // 추가된 로그
+    @PutMapping("/update-status")
+    public ResponseEntity<String> updateProductStatus(@RequestParam("statusId") String statusId, @RequestParam("newStatus") String newStatus) {
 
+        try {
+            productStatusService.udpateProductStatus(statusId, newStatus);
+            return ResponseEntity.ok("Product status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update product status");
+        }
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<List<ProductStatusVO>> getStatusByProductId(@PathVariable("productId") String productId) {
-        List<ProductStatusVO> statuses = productStatusService.getStatusByProductId(productId);
-        return ResponseEntity.ok(statuses);
+    @PutMapping("/update-stock")
+    public ResponseEntity<String> updateProductStock(@RequestParam("productId") String productId, @RequestParam("newStock") int newStock) {
+
+        try {
+            productStatusService.udpateProductStock(productId, newStock);
+            return ResponseEntity.ok("Product stock updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update product stock");
+        }
     }
+
 }

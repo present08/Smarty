@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 public class ProductStatusVO {
     private String status_id;
     private String product_id;
-    private String status;
+    private String product_status;
     private LocalDateTime updated_at;
 }

@@ -8,9 +8,9 @@ const RegisterComponent = () => {
         product_name: '',
         price: '',
         management_type: '=========',
-        size: [],  // 사이즈를 배열로 관리
+        size: [],
         stock: '',
-        attachments: []
+        attachments: new FormData()
     };
 
     const [products, setProducts] = useState([initialProductState]);
@@ -48,9 +48,16 @@ const RegisterComponent = () => {
 
     const handleFileChange = (index, e) => {
         const files = Array.from(e.target.files);
+        const formData = new FormData();
+
+        files.forEach((file) => formData.append("files", file)); // FormData에 파일 즉시 추가
+
+        console.log("FormData with files:", formData.getAll("files")); // FormData에 파일이 있는지 확인
+
+        // products 상태의 attachments를 FormData로 설정
         setProducts((prevProducts) =>
             prevProducts.map((product, i) =>
-                i === index ? { ...product, attachments: files } : product
+                i === index ? { ...product, attachments: formData } : product
             )
         );
     };
@@ -72,31 +79,42 @@ const RegisterComponent = () => {
             }
         }
 
-        // 사이즈 배열을 콤마로 구분된 문자열로 변환하여 전송 준비
         const productsToSend = products.map((product) => ({
             ...product,
-            size: product.size.join(','),  // size 배열을 콤마로 구분된 문자열로 변환
+            size: product.size.join(',')
         }));
 
         try {
             const productResponse = await registerProduct(productsToSend);
             console.log('상품들이 등록되었습니다. : ', productResponse.data);
 
-            for (let i = 0; i < products.length; i++) {
-                const product = products[i];
-                const { product_id } = productResponse.data[i];
-                
-                for (let file of product.attachments) {
-                    const attachData = {
-                        product_id: product_id,
-                        origin_path: file.name,
-                        thumbnail_path: file.name,
-                        file_name: file.name
-                    };
-                    await registerProductAttach(attachData);
+            const registeredProducts = productResponse.data;
+
+            for (let i = 0; i < registeredProducts.length; i++) {
+                const product = registeredProducts[i];
+                const { product_id } = product;
+
+                if (!product_id) {
+                    console.warn(`Warning: Product at index ${i} has null product_id. Skipping attachment.`);
+                    continue;
+                }
+
+                const formData = products[i].attachments; // 상태에서 FormData 가져오기
+                console.log("Final FormData for upload:", formData.getAll("files")); // 확인
+
+                if (formData.getAll("files").length === 0) {
+                    console.log(`Product ${product_id}에는 첨부파일이 없습니다.`);
+                    continue;
+                }
+
+                try {
+                    await registerProductAttach(product_id, formData);
+                    console.log(`첨부 파일이 등록되었습니다. : product_id ${product_id}`);
+                } catch (fileError) {
+                    console.error(`첨부 파일 등록 실패: product_id ${product_id}`, fileError);
                 }
             }
-            
+
             alert('모든 상품이 성공적으로 등록되었습니다.');
         } catch (error) {
             console.error('상품 등록에 오류 발생. : ', error);

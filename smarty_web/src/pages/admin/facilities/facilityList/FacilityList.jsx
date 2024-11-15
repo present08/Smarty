@@ -1,9 +1,8 @@
 import "./facilityList.css"
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
-import { DeleteOutline } from '@mui/icons-material';
 import { getListFacility } from "../../../../api/admin/facilityApi"
-import { Link, Outlet } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 // const initState = {
 //     facility_id: '',
@@ -48,25 +47,27 @@ export default function FacilityList() {
       width: 150,
       renderCell: (params) => {
         return (
-          <div className="productAction">
-            <Link to={"/products/read/" + params.row.id}>
-              <button className="productListEdit">Edit</button>
+          <div className="facilityAction">
+            <Link to={"/admin/facilities/read/" + params.row.facility_id}>
+              <button className="facilityReadButton">Read</button>
             </Link>
-            <DeleteOutline className="productListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
           </div>
         )
       }
     }
   ];
 
-  const paginationModel = { page: 0, pageSize: 5 };
+  const paginationModel = { page: 0, pageSize: 10 };
 
   return (
     <div className="facilityList">
       <div className="facilityContainer">
-        <div className="facilityTitle">시설</div>
+        <div className="facilityContainerTop">
+          <div className="facilityTitle">시설</div>
+          <Link to="/admin/facilities/add">
+            <button className="facilityAddButton">Create</button>
+          </Link>
+        </div>
         <DataGrid
           className="facilityTable"
           rows={data}
@@ -78,10 +79,6 @@ export default function FacilityList() {
           checkboxSelection
           sx={{ border: 0 }}
         />
-        <Link to="/admin/facilities/add">
-          <button className="facilityAddButton">Create</button>
-        </Link>
-        <Outlet />
       </div>
     </div>
   )

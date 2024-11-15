@@ -1,8 +1,8 @@
 package com.green.smarty.service;
 
-import com.green.smarty.dto.ProductAdminDTO;
 import com.green.smarty.mapper.AdminProductMapper;
 import com.green.smarty.util.CustomFileUtil;
+import com.green.smarty.vo.ProductVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,24 +24,24 @@ public class AdminProductService {
     private CustomFileUtil customFileUtil;
 
     // 물품 등록 시에 비즈니스 로직 처리
-    public void register(ProductAdminDTO productAdminDTO) throws IOException {
+    public void register(ProductVO productVO) throws IOException {
         // 첨부파일 유무에 따른 처리
-        if(productAdminDTO.getFiles().get(0).isEmpty()) {
+        if(productVO.getFiles().get(0).isEmpty()) {
             log.info("서비스 물품등록 처리2) : 이미지 없음! 그대로 매퍼로 전송");
-            adminProductMapper.register(productAdminDTO);
+            adminProductMapper.register(productVO);
 
         } else {
             log.info("서비스 물품등록 처리2) : 이미지 있음! customFileUtil 호출");
-            productAdminDTO.setProduct_images(true);
-            List<MultipartFile> files =  productAdminDTO.getFiles();
+            productVO.setProduct_images(true);
+            List<MultipartFile> files =  productVO.getFiles();
             Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             // 첨부파일에 대한 정보가 키와 값(리스트)로 맵에 저장됨 -> 파일이름 저장 후 매퍼 전송
-            productAdminDTO.setFile_name(filesInfo.get("file_name"));
-            adminProductMapper.register(productAdminDTO);
+            productVO.setFile_name(filesInfo.get("file_name"));
+            adminProductMapper.register(productVO);
 
             // filesInfo 맵에서 하나씩 꺼내어 product_attach 파라미터로 전달
             for(int i = 0; i < files.size(); i++) {
-                adminProductMapper.fileUpload(productAdminDTO.getProduct_id(),
+                adminProductMapper.fileUpload(productVO.getProduct_id(),
                         filesInfo.get("origin_path").get(i),
                         filesInfo.get("thumbnail_path").get(i),
                         filesInfo.get("file_name").get(i));
@@ -88,11 +88,11 @@ public class AdminProductService {
 //        }
 //    }
 
-    public List<ProductAdminDTO> getList() {
+    public List<ProductVO> getList() {
         return adminProductMapper.getList();
     }
 
-    public ProductAdminDTO read(int product_id) {
+    public ProductVO read(int product_id) {
         return adminProductMapper.read(product_id);
     }
 }

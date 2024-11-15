@@ -1,18 +1,18 @@
-.facilityContainer {
+.classContainer {
     margin: 20px;
 }
-.facilityContainerTop {
+.classContainerTop {
     display: flex;
     gap: 30px;
     align-items: center;
 }
 
-.facilityTitle {
+.classTitle {
     font-size: 30px;
     color: #011B2F;
 }
 
-.facilityAddButton {
+.classAddButton {
     width: 80px;
     border: none;
     padding: 5px;
@@ -22,12 +22,12 @@
     font-size: 16px;
     cursor: pointer;
 }
-.facilityAction {
+.classAction {
     display: flex;
     align-items: center;
 }
 
-.facilityReadButton {
+.classReadButton {
     border: none;
     border-radius: 10px;
     padding: 5px 10px;

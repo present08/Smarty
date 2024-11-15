@@ -8,7 +8,7 @@ export const postAddFacility = async(facility) => {
         console.log("시설 전송 : ", facility)
         const header = {headers: {"Content-Type": "multipart/form-data"}}
         const res = await axios.post(`${prefix}/`, facility, header)
-        console.log("서버 응답 : ", res.data)
+        console.log("postAddFacility : ", res.data)
         return res.data
     } catch(error) {
         console.error("에러 발생 : ", error)
@@ -18,7 +18,7 @@ export const postAddFacility = async(facility) => {
 export const getListFacility = async() => {
     try {
         const res = await axios.get(`${prefix}/list`)
-        console.log("서버 응답 : ", res.data)
+        console.log("getListFacility : ", res.data)
         return res.data
     } catch(error) {
         console.error("에러 발생 : ", error)
@@ -26,8 +26,13 @@ export const getListFacility = async() => {
 }
 
 export const getOneFacility = async(facility_id) => {
-    const res = await axios.get(`${prefix}/${facility_id}`)
-    return res.data
+    try {
+        const res = await axios.get(`${prefix}/${facility_id}`)
+        console.log("getOneFacility : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("에러 발생 : ", error)
+    }
 }
 
 export const putOneFacility = async(facility_id, facility) => {

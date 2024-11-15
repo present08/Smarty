@@ -10,5 +10,5 @@ public interface AdminProductMapper {
     int register(ProductVO productVO);
     void fileUpload(String product_id, String origin_path, String thumbnail_path, String file_name);
     List<ProductVO> getList();
-    ProductVO read(int product_id);
+    ProductVO read(String product_id);
 }

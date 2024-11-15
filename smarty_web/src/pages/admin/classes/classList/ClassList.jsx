@@ -1,22 +1,18 @@
 import './classList.css'
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
-import { getListFacility } from "../../../../api/admin/facilityApi"
+import { getListFacility, getOneFacility } from "../../../../api/admin/facilityApi"
 import { Link, useParams } from "react-router-dom"
 
 export default function ClassList() {
   const {facility_id} = useParams()
-  const [data, setData] = useState([])
+  const [currentFacility, setCurrentFacility] = useState(null)
 
-  const handleDelete = (id) => {
-    setData(data.filter(item => item.facility_id !== id))
-  }
-
-  // useEffect(() => {
-  //   getListFacility().then(data => {
-  //     setData(data)
-  //   }).catch((error) => console.error('에러 발생 : ', error))
-  // }, [])
+  useEffect(() => {
+    getOneFacility(facility_id).then(res => {
+      setCurrentFacility(res)
+    }).catch((error) => console.error("ERROR!", error))
+  }, [facility_id])
 
   const columns = [
     { field: 'class_id', headerName: '강의 ID', width: 180 },
@@ -45,14 +41,14 @@ export default function ClassList() {
     <div className="classList">
       <div className="classContainer">
         <div className="classContainerTop">
-          <div className="classTitle">강의</div>
+          <div className="classTitle">{currentFacility && currentFacility.facility_name} 강의 목록</div>
           <Link to={`/admin/classes/${facility_id}/add`}>
             <button className="classAddButton">Create</button>
           </Link>
         </div>
         <DataGrid
           className="classTable"
-          rows={data}
+          // rows={data}
           disableRowSelectionOnClick
           columns={columns}
           getRowId={(row) => row.class_id}

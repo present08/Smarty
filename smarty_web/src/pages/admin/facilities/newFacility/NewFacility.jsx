@@ -78,7 +78,6 @@ export default function NewFacility() {
     const handleInput = (e) => {
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
-        console.log(facility)
     }
 
     // 가격 변동률 radio value 업데이트 함수

@@ -4,34 +4,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import { getListFacility } from "../../../../api/admin/facilityApi"
 import { Link } from "react-router-dom"
 
-// const initState = {
-//     facility_id: '',
-//     facility_name: '',
-//     open_time: '',
-//     close_time: '',
-//     default_time: 0,
-//     basic_fee: 0,
-//     extra_fee: 0,
-//     contact: '',
-//     info: '',
-//     caution: '',
-//     court: false,
-//     product: false,
-//     facility_status: false,
-//     files: [],
-// }
-
 export default function FacilityList() {
-  const [data, setData] = useState([])
-
-  const handleDelete = (id) => {
-    setData(data.filter(item => item.facility_id !== id))
-  }
+  const [facilityList, setFailityList] = useState([])
 
   useEffect(() => {
-    getListFacility().then(data => {
-      setData(data)
-      console.log("시설 목록 : ", data)
+    getListFacility().then(res => {
+      setFailityList(res)
     }).catch((error) => console.error('에러 발생 : ', error))
   }, [])
 
@@ -63,14 +41,14 @@ export default function FacilityList() {
     <div className="facilityList">
       <div className="facilityContainer">
         <div className="facilityContainerTop">
-          <div className="facilityTitle">시설</div>
+          <div className="facilityTitle">시설 전체 목록</div>
           <Link to="/admin/facilities/add">
             <button className="facilityAddButton">Create</button>
           </Link>
         </div>
         <DataGrid
           className="facilityTable"
-          rows={data}
+          rows={facilityList}
           disableRowSelectionOnClick
           columns={columns}
           getRowId={(row) => row.facility_id}

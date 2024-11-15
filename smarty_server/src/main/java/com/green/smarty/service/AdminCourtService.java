@@ -2,7 +2,6 @@ package com.green.smarty.service;
 
 import com.green.smarty.mapper.AdminCourtMapper;
 import com.green.smarty.vo.CourtVO;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@Log4j2
 public class AdminCourtService {
     @Autowired
     private AdminCourtMapper adminCourtMapper;
@@ -29,7 +27,7 @@ public class AdminCourtService {
             // "c_" + 시설 id 마지막 4자리 + 01
 
             adminCourtMapper.register(courtList.get(i));
-            log.info("코트 서비스! courtDTO = " + courtList.get(i));
+            System.out.println("코트 서비스! CourtVO = " + courtList.get(i));
         }
     }
 

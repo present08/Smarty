@@ -2,10 +2,7 @@ package com.green.smarty.service;
 
 import com.green.smarty.dto.ClassAdminDTO;
 import com.green.smarty.mapper.AdminClassMapper;
-import com.green.smarty.mapper.AdminCourtMapper;
 import com.green.smarty.vo.ClassDetailVO;
-import com.green.smarty.vo.CourtVO;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +16,6 @@ import java.util.Locale;
 
 @Service
 @Transactional
-@Log4j2
 public class AdminClassService {
     @Autowired
     private AdminClassMapper adminClassMapper;
@@ -77,10 +73,10 @@ public class AdminClassService {
         }
     }
 
-//    public List<ClassAdminDTO> getList() {
-//        return adminClassMapper.getList();
-//    }
-//
+    public List<ClassAdminDTO> getList() {
+        return adminClassMapper.getList();
+    }
+
 //    public ClassAdminDTO read(String class_id) {
 //        return adminClassMapper.read(class_id);
 //    }

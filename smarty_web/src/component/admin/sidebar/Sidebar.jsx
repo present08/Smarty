@@ -70,6 +70,8 @@ export default function Sidebar() {
                                 >
                                     <li className="sidebarSublistItem">강의</li>
                                 </Link>
+                                <li className="sidebarSublistItem">물품</li>
+                                <li className="sidebarSublistItem">사용자</li>
                             </ul>
                         </li>
                     ))}

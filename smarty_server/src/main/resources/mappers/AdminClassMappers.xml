@@ -11,8 +11,7 @@
         insert into class_detail(class_id, weekday, class_date) values(#{class_id}, #{weekday}, #{class_date});
     </insert>
 
-    <!-- Select Class -->
-<!--    <select id="getClassAll" resultType="com.green.smarty.vo.ClassVO">-->
-<!--        select * from class-->
-<!--    </select>-->
+    <select id="getList" resultType="java.util.List">
+        select * from class C inner join class_detail D on C.class_id = D.class_id;
+    </select>
 </mapper>

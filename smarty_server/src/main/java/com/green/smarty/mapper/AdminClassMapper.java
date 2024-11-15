@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminClassMapper {
     void register(ClassAdminDTO classAdminDTO);
     void registerDetail(ClassDetailVO classDetailVO);
-//    List<CourtVO> getList();
+    List<ClassAdminDTO> getList();
 //
 //    CourtVO read(String class_id);
 }

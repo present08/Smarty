@@ -121,8 +121,8 @@ export default function NewFacility() {
             facilityForm.append("files", facilityFiles[i]);
         }
         facilityForm.append("facility_name", facility.facility_name)
-        facilityForm.append("open_time", facility.open_time+":00")
-        facilityForm.append("close_time", facility.close_time+":00")
+        facilityForm.append("open_time", facility.open_time + ":00")
+        facilityForm.append("close_time", facility.close_time + ":00")
         facilityForm.append("default_time", facility.default_time)
         facilityForm.append("basic_fee", facility.basic_fee)
         facilityForm.append("rate_adjustment", facility.rate_adjustment)
@@ -269,53 +269,85 @@ export default function NewFacility() {
                                         <Modal
                                             content={
                                                 <>
-                                                    <div className="leftItem">
-                                                        <label htmlFor="rate_adjustment">가격 변동률</label>
-                                                        <input
-                                                            name="rate_adjustment"
-                                                            id="rate_adjustment"
-                                                            type={"range"}
-                                                            min={0}
-                                                            max={1}
-                                                            step={0.05}
-                                                            value={facility.rate_adjustment}
-                                                            onChange={handleInput}
-                                                            placeholder="ex) 13000"
-                                                        />
-                                                        {Number(facility.rate_adjustment) * 100 + "%"}
-                                                    </div>
-                                                    <div className="showPrice">
-                                                        기본 요금 : {facility.basic_fee}<br />
-                                                        할인 요금 : {Number(facility.basic_fee) * (1 - Number(facility.rate_adjustment))}<br />
-                                                        할증 요금 : {Number(facility.basic_fee) * (1 + Number(facility.rate_adjustment))}<br /><br />
-                                                    </div>
-                                                    <div className="showInfo">
-                                                        할인 요금은 첫 타임, 할증 요금은 마지막 타임에 각각 적용됩니다.<br />
-                                                        적용을 원하는 항목을 선택해주세요.<br /><br />
-                                                        <input
-                                                            name="hot_time"
-                                                            id="discount"
-                                                            type={"radio"}
-                                                            value={1}
-                                                            onClick={(e) => handlePrice(e)}
-                                                        />
-                                                        <label htmlFor="discount"> 조조할인</label>
-                                                        <input
-                                                            name="hot_time"
-                                                            id="surcharge"
-                                                            type={"radio"}
-                                                            value={2}
-                                                            onClick={(e) => handlePrice(e)}
-                                                        />
-                                                        <label htmlFor="surcharge"> 야간할증</label>
-                                                        <input
-                                                            name="hot_time"
-                                                            id="all"
-                                                            type={"radio"}
-                                                            value={3}
-                                                            onClick={(e) => handlePrice(e)}
-                                                        />
-                                                        <label htmlFor="all"> 모두</label>
+                                                    <div className="priceModal_box">
+                                                        <div className="modalleftItem">
+                                                            <label htmlFor="rate_adjustment">가격 변동률</label>
+                                                            <input
+                                                                name="rate_adjustment"
+                                                                id="rate_adjustment"
+                                                                type={"range"}
+                                                                min={0}
+                                                                max={1}
+                                                                step={0.05}
+                                                                value={facility.rate_adjustment}
+                                                                onChange={handleInput}
+                                                                placeholder="ex) 13000"
+                                                            />
+                                                            {Number(facility.rate_adjustment) * 100 + "%"}
+                                                        </div>
+                                                        <div className="modal_cont">
+                                                            <div className="modalshowPrice">
+                                                                <div>
+                                                                    <p>기본 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {facility.basic_fee}
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <p>할인 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {Number(facility.basic_fee) * (1 - Number(facility.rate_adjustment))}
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <p>할중 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {Number(facility.basic_fee) * (1 + Number(facility.rate_adjustment))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="modalshowInfo">
+                                                                <div>
+                                                                    <p>
+                                                                        할인 요금은 첫 타임, 할증 요금은 마지막 타임에 각각 적용됩니다.<br />
+                                                                        적용을 원하는 항목을 선택해주세요.<br /><br />
+                                                                    </p>
+                                                                </div>
+                                                                <div>
+                                                                    <h3>체크박스</h3>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="discount"
+                                                                            type={"radio"}
+                                                                            value={1}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="discount"> 조조할인</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="surcharge"
+                                                                            type={"radio"}
+                                                                            value={2}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="surcharge"> 야간할증</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="all"
+                                                                            type={"radio"}
+                                                                            value={3}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="all"> 모두</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </>
                                             }

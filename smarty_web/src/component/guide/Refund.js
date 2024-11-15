@@ -24,7 +24,7 @@ const Refund = () => {
                 <nav>
                     <Link to="/" style={{ textDecoration: 'none', color: 'black', padding: '10px', paddingLeft: '0' }}>HOME</Link>
                     <p >&gt;</p>
-                    <Link to="/guide/instructions" style={{ textDecoration: 'none', color: 'black', padding: '10px', marginRight: '10px' }}>이용안내</Link>
+                    <Link to="/guide/instructions" style={{ textDecoration: 'none', color: 'black', padding: '10px', }}>이용안내</Link>
                     <p >&gt;</p>
                     <Link to="/guide/hours" style={{ textDecoration: 'none', color: '#28537a', fontWeight: 'bold', padding: '10px', marginRight: '10px' }}>환불 및 취소 안내</Link>
                 </nav>

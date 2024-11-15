@@ -1,3 +1,4 @@
+/*
 package com.green.smarty.mapper.product;
 
 import com.green.smarty.vo.product.ProductAttachVO;
@@ -15,3 +16,4 @@ public interface ProductAttachMapper {
     List<ProductAttachVO> selectAttachByProductId(@Param("productId") String productId);
 
 }
+*/

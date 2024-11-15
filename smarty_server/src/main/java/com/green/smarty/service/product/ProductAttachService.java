@@ -1,3 +1,4 @@
+/*
 package com.green.smarty.service.product;
 
 import com.green.smarty.mapper.product.ProductAttachMapper;
@@ -49,4 +50,4 @@ public class ProductAttachService {
         return productAttachMapper.selectAttachByProductId(productId);
     }
 
-}
+}*/

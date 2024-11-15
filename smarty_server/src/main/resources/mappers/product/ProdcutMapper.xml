@@ -3,41 +3,60 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.product.ProductMapper">
-
-    <insert id="insertProduct" parameterType="com.green.smarty.vo.product.ProductVO" useGeneratedKeys="true" keyProperty="product_id">
-        insert into product (product_id, facility_id, product_name, management_type, price, size, stock, product_images)
-        values (#{product_id}, #{facility_id}, #{product_name}, #{management_type}, #{price}, #{size}, #{stock}, #{product_images})
+    <!-- 상품 등록 -->
+    <insert id="insertProduct" parameterType="com.green.smarty.vo.product.ProductVO">
+        INSERT INTO product (
+        product_id, facility_id, product_name, management_type, price, size, stock, product_images
+        ) VALUES (
+        #{product_id}, #{facility_id}, #{product_name}, #{management_type}, #{price}, #{size}, #{stock}, #{product_images}
+        )
     </insert>
 
+    <insert id="fileUpload" parameterType="map">
+        INSERT INTO product_attach (
+        product_id, origin_path, thumbnail_path, file_name
+        ) VALUES (
+        #{product_id}, #{origin_path}, #{thumbnail_path}, #{file_name}
+        )
+    </insert>
+
+
+    <!-- 모든 상품 조회 -->
     <select id="getAllProducts" resultType="com.green.smarty.vo.product.ProductVO">
         SELECT * FROM product
     </select>
 
-    <!-- 특정 대여물품 조회 -->
-    <select id="getProductById" parameterType="String" resultType="com.green.smarty.vo.product.ProductVO">
-        SELECT * FROM product WHERE product_id = #{productId};
+    <!-- 특정 상품 조회 -->
+    <select id="getProductById" parameterType="string" resultType="com.green.smarty.vo.product.ProductVO">
+        SELECT * FROM product WHERE product_id = #{product_id}
     </select>
 
-    <!-- 대여물품 정보 수정 -->
-    <update id="modify" parameterType="com.green.smarty.vo.product.ProductVO">
-        UPDATE product
-        SET facility_id = #{facility_id}, product_name = #{product_name}, price = #{price}
-        WHERE product_id = #{product_id};
-    </update>
-
-    <!-- 대여물품 삭제 -->
-    <delete id="removeProduct" parameterType="String">
-        DELETE FROM product WHERE product_id = #{product_id};
-    </delete>
-
-    <!-- 특정 시설의 모든 대여물품 -->
+    <!-- 특정 시설의 상품 조회 -->
     <select id="getProductsByFacilityId" parameterType="string" resultType="com.green.smarty.vo.product.ProductVO">
         SELECT * FROM product WHERE facility_id = #{facilityId}
     </select>
 
+    <!-- product_id 중복 여부 확인 -->
     <select id="existsByProductId" parameterType="string" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM product
-        WHERE product_id = #{productId}
+        SELECT COUNT(1) > 0 FROM product WHERE product_id = #{product_id}
     </select>
-    </mapper>
+
+    <!-- 상품 수정 -->
+    <update id="modify" parameterType="com.green.smarty.vo.product.ProductVO">
+        UPDATE product
+        SET
+        facility_id = #{facility_id},
+        product_name = #{product_name},
+        price = #{price},
+        size = #{size},
+        stock = #{stock},
+        product_images = #{product_images}
+        WHERE product_id = #{product_id}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="removeProduct" parameterType="string">
+        DELETE FROM product WHERE product_id = #{product_id}
+    </delete>
+
+</mapper>

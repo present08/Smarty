@@ -1,3 +1,4 @@
+/*
 package com.green.smarty.controller.product.admin;
 
 import com.green.smarty.service.product.ProductAttachService;
@@ -36,3 +37,4 @@ public class AdminProductAttachController {
         return ResponseEntity.ok(attaches);
     }
 }
+*/

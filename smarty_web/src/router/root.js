@@ -5,7 +5,7 @@ import MainPage from '../pages/MainPage';
 const Loading = <div>Loading.....</div>
 const StatsPage = lazy(() => import("../pages/StatsPage"))
 const RentalManagementPage = lazy(() => import("../components/product/Management"))
-const ProductRegisterPage = lazy(()=> import("../pages/ProductRegisterPage"))
+const ProductRegisterPage = lazy(()=> import("../pages/admin/product/NewProduct"))
 
 const root = createBrowserRouter([
     {

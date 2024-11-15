@@ -2,12 +2,10 @@ package com.green.smarty.vo.product;
 
 import lombok.*;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Setter
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductAttachVO {
     private String product_id;
     private String origin_path;

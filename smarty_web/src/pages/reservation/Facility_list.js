@@ -5,6 +5,7 @@ import MainNav from './../../component/MainNav';
 import Wrapper from './../../component/Wrapper';
 import Footer from './../../component/Footer';
 import '../../css/reservationPage.css'
+import BackToTopButton from '../../component/BackToTopButton';
 
 const Facility_list = () => {
 
@@ -32,22 +33,29 @@ const Facility_list = () => {
     <div>
       <MainNav />
       <Wrapper />
+      <BackToTopButton />
       <div className='facility_container'>
-        {facility_id.map((i, idx) => (
-          <div className='facilityBtn' key={idx}>
-            <img src={`http://localhost:8080/api/user/reservation/uploads/${i.file_name[0]}`} />
-            <div className='facility_info'>
-              <h3>시설명 : {i.facility_name}</h3>
-              <h3>코트명 : {i.court_name}</h3>
-              <h3>이용시간 : {i.default_time} 시간</h3>
-              <h3>기본요금 : {i.basic_fee} 원</h3>
+        <div>
+          {facility_id.map((i, idx) => (
+            <div className='facilityBtn' key={idx} onClick={() => handleClick(i)}>
+              <img src={`http://localhost:8080/api/user/reservation/uploads/${i.file_name[0]}`} />
+              <div className='facility_info'>
+                <h3>{i.facility_name}</h3>
+                <p>{i.court_name} ({i.default_time}시간)</p>
+                <div>
+                  <div>
+                    <p style={{ fontSize: '21px', color: '#5700f8' }}>{i.basic_fee}</p>
+                    <p style={{ color: 'gray', textIndent: '0px', fontSize: '20px', }}>원</p>
+                  </div>
+                  <p style={{ fontSize: '19px', color: 'gray', marginLeft: '120px' }}>오픈시간:{i.open_time}</p>
+                </div>
+              </div>
             </div>
-            <button className='reservation_btn smail' key={idx} onClick={() => handleClick(i)}>예약하러가기</button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <Footer />
-    </div>
+    </div >
   )
 }
 

@@ -32,16 +32,14 @@ public class ClassAdminDTO {
     private LocalTime end_time;
 
     private int price;
+
     private int class_size;
 
-    // class_detail : 수업 진행 요일, 날짜
     @Builder.Default
     private List<String> weekday = new ArrayList<>();
 
-    @Builder.Default
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private List<LocalDate> class_date = new ArrayList<>();
+    private LocalDate class_date;
 
-    // 화면에 표시할 시설 이름
     private String facility_name;
 }

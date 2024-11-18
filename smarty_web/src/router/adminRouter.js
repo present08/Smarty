@@ -1,13 +1,15 @@
 import { Suspense, lazy } from "react";
-import adminFacilityRouter from "./adminFacilityRouter";
+import { SyncLoader } from 'react-spinners';
 
-const Loading = () => <div>Loading....</div>;
+const Loading = () => <div><SyncLoader /></div>
 const Dashboard = lazy(() => import("../pages/admin/dashboard/Dashboard"));
 const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/FacilityList"));
-const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"));
-const UserList = lazy(() => import("../pages/admin/users/userList/UserList"));
+const FacilityAdd = lazy(() => import("../pages/admin/facilities/newFacility/NewFacility"))
+const FacilityRead = lazy(() => import("../pages/admin/facilities/facilityRead/FacilityRead"))
 
-
+const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"))
+const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
+const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
 const adminRouter = () => {
     return [
         {
@@ -17,15 +19,26 @@ const adminRouter = () => {
         {
             path: "facilities",
             element: <Suspense fallback={Loading}><FacilityList /></Suspense>,
-            children: adminFacilityRouter()
         },
         {
-            path: "products",
-            element: <Suspense fallback={Loading}><ProductList /></Suspense>,
+            path: "facilities/add",
+            element: <Suspense fallback={Loading}><FacilityAdd /></Suspense>,
         },
         {
-            path: "users",
-            element: <Suspense fallback={Loading}><UserList /></Suspense>,
+            path: "facilities/read/:facility_id",
+            element: <Suspense fallback={Loading}><FacilityRead /></Suspense>,
+        },
+        {
+            path: "classes/:facility_id",
+            element: <Suspense fallback={Loading}><ClassList /></Suspense>,
+        },
+        {
+            path: "classes/:facility_id/add",
+            element: <Suspense fallback={Loading}><ClassAdd /></Suspense>,
+        },
+        {
+            path: "classes/:facility_id/read/:",
+            element: <Suspense fallback={Loading}><ClassRead /></Suspense>,
         },
     ]
 }

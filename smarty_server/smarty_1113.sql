@@ -172,9 +172,9 @@ CREATE TABLE product (
 -- 물품 첨부파일 테이블
 create table product_attach (
 	product_id varchar(100) not null,
-	origin_path varchar(200) not null,
-    thumbnail_path varchar(200) not null,
-	file_name varchar(100) not null,
+	origin_path varchar(1000) not null,
+    thumbnail_path varchar(1000) not null,
+	file_name varchar(1000) not null,
     foreign key (product_id) references product(product_id)
 );
 

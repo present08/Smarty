@@ -5,6 +5,7 @@ import userRouter from "./userRouter";
 import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
 import productRouter from "./productRouter";
+import guideRouter from "./guideRouter"
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
@@ -37,6 +38,10 @@ const root = createBrowserRouter([
     {
         path: "chatbot",
         element: <Suspense fallback={Loading}><ChatBot /></Suspense>,
+    },
+    {
+        path: "guide",
+        children: guideRouter()
     },
     {
         path: "center",

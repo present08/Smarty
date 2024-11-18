@@ -29,7 +29,6 @@ const ReservationComponent = (props) => {
 
     useEffect(() => {
     }, []);
-
     // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
@@ -37,7 +36,6 @@ const ReservationComponent = (props) => {
     }
     useEffect(() => {
         setTimeLine(reserved)
-
     }, [reserved])
 
     const handleClick = (tl) => {

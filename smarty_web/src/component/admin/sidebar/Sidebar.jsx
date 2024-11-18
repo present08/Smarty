@@ -18,7 +18,6 @@ export default function Sidebar() {
     useEffect(() => {
         getListFacility().then(data => {
             setData(data)
-            console.log("서버가 전송한 시설 리스트 : ", data)
         }).catch((error) => console.log("에러 발생 : ", error))
     }, [])
     
@@ -58,11 +57,19 @@ export default function Sidebar() {
                         {facility.facility_name}
                             <ul 
                             className="sidebarSublist"
-                            style={{ display: display === i? 'block' : 'none'}}
+                            // style={{ display: display === i? 'block' : 'none'}}
                             // display에 키값이 저장된 경우에만 보이고, 아니면 안보임
-                            >
-                                <li className="sidebarSublistItem">강의</li>
-                                <li className="sidebarSublistItem">시설</li>
+                            >   
+                                <Link to={`/admin/facilities/read/${facility.facility_id}`}
+                                    className="link"
+                                >
+                                    <li className="sidebarSublistItem">시설/코트</li>
+                                </Link>
+                                <Link to={`/admin/classes/${facility.facility_id}`}
+                                    className="link"
+                                >
+                                    <li className="sidebarSublistItem">강의</li>
+                                </Link>
                                 <li className="sidebarSublistItem">물품</li>
                                 <li className="sidebarSublistItem">사용자</li>
                             </ul>

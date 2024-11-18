@@ -1,5 +1,5 @@
 import "./newProduct.css"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const initProduct = {
     product_id : '',
@@ -8,7 +8,7 @@ const initProduct = {
     stock: '',
     price: '',
     files: []
-  }
+}
 
   export default function NewProduct(productPass) {
     const [product, setProduct] = useState({...initProduct})

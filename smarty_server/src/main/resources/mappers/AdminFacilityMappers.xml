@@ -11,7 +11,7 @@
         #{facility_status}, #{facility_images})
     </insert>
 
-    <insert id="fileUpload" parameterType="String">
+    <insert id="fileUpload" parameterType="map">
         insert into facility_attach (facility_id, origin_path, thumbnail_path, file_name)
         values (#{facility_id}, #{origin_path}, #{thumbnail_path}, #{file_name})
     </insert>

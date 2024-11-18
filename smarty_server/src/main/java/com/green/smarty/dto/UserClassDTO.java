@@ -1,19 +1,20 @@
-package com.green.smarty.vo;
+package com.green.smarty.dto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassVO {
+public class UserClassDTO {
     private String class_id;
     private String facility_id;
     private String class_name;
@@ -31,4 +32,6 @@ public class ClassVO {
     private int price;
 
     private int class_size;
+
+    private String facility_name;
 }

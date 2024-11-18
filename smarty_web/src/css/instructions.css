@@ -1,0 +1,174 @@
+.instructionsContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ------------- 서브메뉴*/
+
+.submu {
+    margin: 0 auto;
+    width: 70%;
+    height: 30px;
+}
+
+.submu nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+/* ------------- */
+
+.instructions_box {
+    display: flex;
+    width: 70%;
+    height: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+/* ------------- */
+
+.instructions_cont {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+}
+
+.instructions_cont>h3,
+.reservation_information>h3 {
+    font-size: 25px;
+    margin-bottom: 2rem;
+    display: flex;
+}
+
+/* ------------- */
+
+
+.Information_box {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-content: center
+}
+
+.contBox {
+    width: 450px;
+    height: 300px;
+    background-color: rgb(248, 248, 248);
+    margin-right: 1rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow: 1px 8px 8px rgba(0, 0, 0, 0.3); */
+}
+
+.Information_box>div:last-child {
+    margin-right: 0;
+}
+
+/* ------------- */
+
+.contBox>div {
+    width: 90px;
+    height: 90px;
+    background-color: white;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(-10px -10px 10px rgba(255, 255, 255, 0.7)) drop-shadow(10px 10px 10px rgba(174, 174, 192, 0.2));
+    box-shadow: inset -10px -10px 10px rgba(255, 255, 255, 0.7),
+        inset 10px 10px 10px rgba(174, 174, 192, 0.2);
+}
+
+.contBox>h5 {
+    font-size: 21px;
+    margin-bottom: 1rem;
+}
+
+.contBox>p {
+    font-size: 19px;
+    color: gray;
+    margin-bottom: 0.3rem;
+}
+
+.contBox>button {
+    width: 100px;
+    height: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: #003f66;
+}
+
+.reservation_button>button {
+    width: 150px;
+    height: 40px;
+    border: none;
+    background-color: #003f66;
+}
+
+.contBox>button>a,
+.reservation_button>button>a {
+    color: aliceblue;
+    font-weight: bold;
+}
+
+/* ------------- */
+
+.reservation_cont {
+    height: 400px;
+    background-color: rgb(248, 248, 248);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.reservation_text {
+    width: 80%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.reservation_text>div>h5 {
+    font-size: 21px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.reservation_box {
+    width: 80%;
+    height: 200px;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.reservation_box>p {
+    color: gray;
+    font-size: 18px;
+}
+
+.reservation_button {
+    margin-bottom: 2rem;
+    text-align: right;
+}

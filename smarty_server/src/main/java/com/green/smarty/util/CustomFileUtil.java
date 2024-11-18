@@ -3,7 +3,6 @@ package com.green.smarty.util;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -22,7 +21,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Component
-@Log4j2
 @RequiredArgsConstructor
 public class CustomFileUtil{
     // 파일 데이터 입출력 담당
@@ -35,7 +33,7 @@ public class CustomFileUtil{
         File tempFolder = new File(uploadPath);
         if(tempFolder.exists() == false) tempFolder.mkdir();
         uploadPath = tempFolder.getAbsolutePath();  // 절대 경로로 변환하고 로깅으로 경로 정보 출력
-        log.info("업로드 파일 절대경로 = "+ uploadPath);
+        System.out.println("업로드 파일 절대경로 = "+ uploadPath);
     }
 
     // 파일 업로드 작업 + 저장된 파일 이름과 경로(원본, 썸네일) 반환

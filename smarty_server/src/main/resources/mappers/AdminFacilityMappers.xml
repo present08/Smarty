@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.AdminFacilityMapper">
 
-    <insert id="register" parameterType="com.green.smarty.dto.FacilityAdminDTO">
+    <insert id="register" parameterType="com.green.smarty.vo.FacilityVO">
         insert into facility (facility_id, facility_name, open_time, close_time, default_time,
         basic_fee, rate_adjustment, hot_time, contact, info, caution, court, product,
         facility_status, facility_images)
@@ -11,7 +11,7 @@
         #{facility_status}, #{facility_images})
     </insert>
 
-    <insert id="fileUpload" parameterType="String">
+    <insert id="fileUpload" parameterType="map">
         insert into facility_attach (facility_id, origin_path, thumbnail_path, file_name)
         values (#{facility_id}, #{origin_path}, #{thumbnail_path}, #{file_name})
     </insert>
@@ -20,11 +20,11 @@
         select * from facility
     </select>
 
-    <select id="read" resultType="com.green.smarty.dto.FacilityAdminDTO">
+    <select id="read" resultType="com.green.smarty.vo.FacilityVO">
         select * from facility where facility_id=#{facility_id}
     </select>
 
-    <update id="modify" parameterType="com.green.smarty.dto.FacilityAdminDTO">
+    <update id="modify" parameterType="com.green.smarty.vo.FacilityVO">
         update facility set facility_name=#{facility_name}, open_time=#{open_time}, close_time=#{close_time},
         default_time=#{default_time}, basic_fee=#{basic_fee}, extra_fee=#{extra_fee}, contact=#{contact},
         info=#{info}, caution=#{caution}, court=#{court}, product=#{product}, facility_status=#{facility_status}

@@ -1,6 +1,5 @@
 import "./newCourt.css"
-import { useEffect, useState } from "react"
-import { postAddCourt } from "../../../../api/admin/courtApi"
+import { useState } from "react"
 
 export default function NewCourt(courtPass) {
     const [courtNum, setCourtNum] = useState(0)     // 생성할 시설 숫자를 저장할 변수
@@ -44,11 +43,11 @@ export default function NewCourt(courtPass) {
                         type="number"
                         className="addCourtNum"
                         placeholder="등록 갯수를 입력하세요"
+                        min={0}
                         onChange={(e) => setCourtNum(e.target.value)}
                     />
                     <button className="addCourtButton" onClick={createForm}>입력창 생성</button>
                     <button className="saveCourtButton" onClick={() => onClickSubmit()}>등록</button>
-                    <button className="saveCourtButton" onClick={() => postAddCourt(result)}>전송</button>
                     <span className="addCourtFormText">*코트명 입력, 개방 여부 선택 후 등록 버튼을 누르면 추가됩니다.</span>
                 </div>
 
@@ -70,6 +69,7 @@ export default function NewCourt(courtPass) {
                                 type="radio"
                                 name={`court_status${i}`}
                                 id={`open_${i}`}
+                                checked
                                 onChange={() => handleInputChange(i, 'court_status', true)}
                             />
                             <label htmlFor={`open_${i}`}> 가능</label>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.UserFacilityMapper">
+
+<!--    모든 시설 조회-->
+    <select id="getAllFacilities" resultType="com.green.smarty.dto.FacilityDTO">
+        SELECT
+            facility_id,
+            facility_name,
+            open_time,
+            close_time,
+            default_time,
+            basic_fee,
+            rate_adjustment,
+            hot_time,
+            contact,
+            info,
+            caution,
+            court,
+            product,
+            facility_status,
+            facility_images
+        FROM
+            facility
+    </select>
+
+<!--    특정 시설 조회-->
+    <select id="getFacilityById" parameterType="String" resultType="com.green.smarty.dto.FacilityDTO">
+        SELECT
+            facility_id,
+            facility_name,
+            open_time,
+            close_time,
+            default_time,
+            basic_fee,
+            rate_adjustment,
+            hot_time,
+            contact,
+            info,
+            caution,
+            court,
+            product,
+            facility_status,
+            facility_images
+        FROM
+            facility
+        WHERE
+            facility_id = #{facility_Id}
+    </select>
+</mapper>

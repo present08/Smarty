@@ -66,6 +66,14 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}> <ProductList /> </Suspense>,
         children: productRouter()
     },
+    {
+        path: "product/detail/:product_id",
+        element: <Suspense fallback={Loading}> <ProductDetail /> </Suspense>
+    },
+    {
+        path: "rental",
+        element: <Suspense fallback={Loading}> <RentalPage /> </Suspense>
+    }
 ]);
 
 export default root;

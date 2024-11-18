@@ -100,32 +100,6 @@ class SmartyApplicationTests {
 		}
 	}
 
-	@Test
-	void insertAnnounce(){
-		AnnounceDTO dto = AnnounceDTO.builder()
-				.message("반가워")
-				.announce_id(2)
-				.User_id("3")
-				.send_date(LocalDateTime.now())
-				.build();
-		int result = announceMapper.insertAnnounce(dto);
-		System.out.println(result);
-	}
 
-	@Test
-	void modifyAnnounce() {
-
-//		AnnounceDTO announceDTO = announceMapper.selectAnnounceById(1);
-//		announceDTO.setMessage("바뀐게 맞나?");
-//		announceMapper.modifyAnnounce(announceDTO);
-		AnnounceDTO announceDTO = new AnnounceDTO();
-//		announceDTO.setAnnounce_id(announce_id); // 기준이 되는 ID 설정
-		announceDTO.setAnnounce_id(2);
-		announceDTO.setMessage("이것도 바꿈");    // 수정할 메시지 설정
-		announceDTO.setSend_date(LocalDateTime.now());  // 수정할 날짜 설정
-
-		// 수정할 내용을 담아 DB 업데이트
-		announceMapper.modifyAnnounce(announceDTO);
-	}
 
 }

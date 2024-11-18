@@ -6,6 +6,7 @@ import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
 import productRouter from "./productRouter";
 import guideRouter from "./guideRouter"
+import newNoticeRouter from "./newNoticeRouter";
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
@@ -85,7 +86,11 @@ const root = createBrowserRouter([
     {
         path: "rental",
         element: <Suspense fallback={Loading}> <RentalPage /> </Suspense>
-    }
+    },
+    {
+        path: "notice",
+        children: newNoticeRouter()
+    },
 ]);
 
 export default root;

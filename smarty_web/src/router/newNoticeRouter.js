@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react';
-import BoardDetail from '../components/BoardDetail';
+import BoardDetail from '../component/announcement/BoardDetail';
 
 const Loading = <div>Loading...</div>;
-const Notice = lazy(() => import("../components/Announcement"));
-const NoticeBoard = lazy(() => import("../components/NoticeBoard"));
+const Notice = lazy(() => import("../component/announcement/Announcement"));
+const NoticeBoard = lazy(() => import("../component/announcement/NoticeBoard"));
 
 
 

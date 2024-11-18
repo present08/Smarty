@@ -168,7 +168,7 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/"}>커뮤니티</Link>
+                                <Link to={"/notice"}>커뮤니티</Link>
                                 <ul>
                                     <li>
                                         <Link to={"/notice/announce"}>공지사항</Link>

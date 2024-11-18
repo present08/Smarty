@@ -24,7 +24,7 @@
     <select id="getClassDetail" resultType="com.green.smarty.vo.ClassDetailVO">
         select * from class_detail
     </select>
-    <select id="getEnrollment" resultType="com.green.smarty.vo.EnrollMentVO">
+    <select id="getEnrollment" resultType="com.green.smarty.vo.EnrollmentVO">
         select * from enrollment
     </select>
 </mapper>

@@ -35,9 +35,11 @@ public class UserClassController {
     }
 
     @PostMapping("/enroll")
-    public int postMethodName(@RequestBody Map<String,String> enrollData) {
-        
-        return 1;
+    public String postMethodName(@RequestBody Map<String, String> enrollData) {
+        System.out.println(enrollData);
+        String result = userClassService.classEnrollment(enrollData);
+        System.out.println(result);
+        return result;
     }
 
 }

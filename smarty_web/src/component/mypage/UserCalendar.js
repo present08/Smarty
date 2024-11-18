@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import '../../css/userCalendar.css';
 import { GoPlus } from 'react-icons/go';
 import CalendarModal from './CalendarModal';
-import { getReservationInfo } from '../../api/userApi';
+import { getReservationInfo } from '../../api/UserApi';
 import moment from 'moment/moment';
 import EventModal from './EventModal';
 

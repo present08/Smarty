@@ -24,7 +24,7 @@ const DetailPage = () => {
                 setProduct(response);
             } catch (error) {
                 setError('상품 정보를 불러오는데 실패했습니다.');
-                console.log("디테일페이지 오류",error)
+                console.log("디테일페이지 오류", error)
             } finally {
                 setLoading(false);
             }

@@ -15,10 +15,6 @@ export const getRentalById = async (rental_id) => {
 }
 
 // 렌탈 신청
-// export const createRental = async (rentalData) => {
-//     const response = await axios.post(`${host}/rentals`, rentalData);
-//     return response.data;
-// }
 export const createRental = async (rentalData) => {
     try {
         console.log('API 호출 전 데이터:', rentalData);
@@ -34,5 +30,12 @@ export const createRental = async (rentalData) => {
 // 렌탈 반납
 export const returnRental = async (rental_id) => {
     const response = await axios.put(`${host}/rentals/${rental_id}/return`);
+    return response.data;
+}
+
+//렌탈 정보 가져오기
+export const getProductRentalUser = async (user_id) => {
+    const response = await axios.get(`${host}/rentalUser`, {params: {user_id}} );
+    console.log(response.data)
     return response.data;
 }

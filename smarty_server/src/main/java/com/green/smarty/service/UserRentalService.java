@@ -1,5 +1,6 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.mapper.UserRentalMapper;
@@ -65,27 +66,13 @@ public class UserRentalService{
     }
 
 
-//    public boolean isUser(String user_id) {
-//        try {
-//            return rentalMapper.findUserId(user_id) > 0;
-//        } catch (Exception e) {
-//            System.err.println("Error checking user existence: " + e.getMessage());
-//            return false;
-//        }
-//    }
-
-//    public boolean isProduct(String product_id) {
-//        try {
-//            return rentalMapper.findProductId(product_id) > 0;
-//        } catch (Exception e) {
-//            System.err.println("Error checking product existence: " + e.getMessage());
-//            return false;
-//        }
-//    }
-
     public int updateRental(RentalDTO dto) {
         return userRentalMapper.updateRental(dto);
     }
 
 
+    public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
+        List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
+        return result;
+    }
 }

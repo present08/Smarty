@@ -1,5 +1,6 @@
 package com.green.smarty.mapper;
 
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.vo.RentalVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,6 @@ public interface UserRentalMapper {
     String findProductId(String product_id);
     int updateRental(RentalDTO dto);
     RentalDTO getRentalById(String rental_id);
+
+    List<ProductRentalUserDTO> getUserRentalListData(String user_id);
 }

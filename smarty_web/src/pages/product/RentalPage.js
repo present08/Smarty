@@ -11,6 +11,7 @@ const RentalPage = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState();
 
     // 로그인 정보 가져오기
 const userStr = localStorage.getItem('user');
@@ -32,11 +33,22 @@ try {
         console.log(location.state)
         console.log(selectProduct)
         console.log(user_id)
+        console.log("로그인정보",isLoggedIn)
     })
 
+    useEffect(() => {
+        const loggedIn = localStorage.getItem('isLoggedIn') === 'true'
+        setIsLoggedIn(loggedIn)
+
+        if (!loggedIn) {
+            alert('로그인이 필요합니다')
+            navigate('/user/login')
+        }
+    },[navigate])
+
     const handleRentalSubmit = async () => {
-        if (!user_id || !selectProduct) {
-            alert('필요한 정보가 누락되었습니다.');
+        if (!isLoggedIn || !user_id || !selectProduct) {
+            alert('로그인이 필요하거나 필요한 정보가 누락되었습니다.');
             return;
         }
     
@@ -113,7 +125,7 @@ try {
                 <div className="rental-submit">
                     <button 
                         onClick={handleRentalSubmit}
-                        disabled={loading}
+                        disabled={loading || !isLoggedIn}
                         className="rental-button"
                     >
                         대여 신청하기

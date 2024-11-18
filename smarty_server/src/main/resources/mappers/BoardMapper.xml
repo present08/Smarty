@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.BoardMapper">
+<!--    게시글 작성-->
+    <insert id="insertBoard" parameterType="com.green.smarty.dto.BoardDTO" useGeneratedKeys="true" keyProperty="board_id">
+        insert into board (title, content, send_date, content_type, view_count, good_btn, bad_btn)
+        values (#{title}, #{content}, now(), #{content_type},0 , #{good_btn}, #{bad_btn})
+    </insert>
+<!--    board_id로 게시글 조회-->
+    <select id="selectBoardById" resultType="com.green.smarty.dto.BoardDTO" parameterType="int">
+        select * from board where board_id = #{board_id}
+    </select>
+<!--    board_id로 게시글 삭제-->
+    <delete id="removeBoard" parameterType="int">
+        delete from board where board_id = #{board_id}
+    </delete>
+<!--    게시글 전체 조회-->
+    <select id="selectAllBoard" resultType="com.green.smarty.dto.BoardDTO">
+        select * from board ORDER BY send_date DESC
+    </select>
+<!--    조회수 증가-->
+    <update id="updateViewCount" parameterType="int">
+        UPDATE board SET view_count = view_count + 1 WHERE board_id = #{board_id}
+    </update>
+
+
+</mapper>

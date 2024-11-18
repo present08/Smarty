@@ -1,8 +1,9 @@
 import React, { lazy, Suspense } from 'react';
+import BoardDetail from '../components/BoardDetail';
 
 const Loading = <div>Loading...</div>;
-const Notice = lazy(() => import("../pages/products/Announcement"));
-const NoticeBoard = lazy(() => import("../pages/products/NoticeBoard"));
+const Notice = lazy(() => import("../components/Announcement"));
+const NoticeBoard = lazy(() => import("../components/NoticeBoard"));
 
 
 
@@ -15,6 +16,10 @@ const newNoticeRouter = () => {
         {
             path: "board",
             element: <Suspense fallback={Loading}><NoticeBoard /></Suspense>
+        },
+        {
+            path: "board/:board_id",
+            element: <Suspense fallback={Loading}><BoardDetail /></Suspense>
         },
     ];
 }

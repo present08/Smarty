@@ -1,10 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
-import loginSlice from "./slices/loginSlice";
-import cartSlice from "./slices/cartSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from './slices/cartSlice';
 
-export default configureStore({
+export const store = configureStore({
     reducer: {
-        "loginSlice": loginSlice,
-        "cartSlice" : cartSlice
-    }
-})
+        cart: cartReducer,
+        // 다른 리듀서들도 여기에 추가할 수 있습니다
+    },
+});
+
+export default store; 

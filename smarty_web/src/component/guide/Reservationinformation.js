@@ -94,7 +94,7 @@ const Reservationinformation = () => {
                         </div>
                     </div>
                     <div className='reservation_button'>
-                        <button><Link to={"/"}>장기입장 예약하기</Link></button>
+                        <button><Link to={"/classList"}>장기입장 예약하기</Link></button>
                     </div>
                 </div>
             </div>

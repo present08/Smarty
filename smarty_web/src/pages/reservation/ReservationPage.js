@@ -3,7 +3,7 @@ import FacilityComponent from '../../component/reservation/FacilityComponent';
 import ReservationComponent from '../../component/reservation/ReservationComponent';
 import Information from '../../component/reservation/Infomation';
 import '../../css/reservationPage.css';
-import { getCourt } from '../../api/ReservationAPI';
+import { getCourt } from '../../api/reservaionApi';
 import { useLocation } from 'react-router-dom';
 import Footer from '../../component/Footer';
 import Wrapper from '../../component/Wrapper';

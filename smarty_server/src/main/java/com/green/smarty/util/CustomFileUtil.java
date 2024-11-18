@@ -22,7 +22,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class CustomFileUtil {
+public class CustomFileUtil{
     // 파일 데이터 입출력 담당
 
     @Value("upload")

@@ -142,10 +142,10 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/"}>수강신청</Link>
+                                <Link to={"/classList"}>수강신청</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>수강신청</Link>
+                                        <Link to={"/classList"}>수강신청</Link>
                                     </li>
                                 </ul>
                             </li>

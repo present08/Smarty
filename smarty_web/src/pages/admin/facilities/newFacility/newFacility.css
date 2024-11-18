@@ -41,6 +41,7 @@
     color: #011B2F;
     margin-bottom: 20px;
 }
+
 .leftItemContent,
 .rightItemContent {
     flex: 11;
@@ -77,15 +78,18 @@
     gap: 10px;
     margin-bottom: 10px;
 }
+
 .subItemtext {
     font-size: 13px;
     color: #555;
 }
+
 .leftItem {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
+
 .leftItem>label,
 .subItemTitle,
 .rightItem>label {
@@ -93,6 +97,7 @@
     font-size: 14px;
     color: #555;
 }
+
 .leftItem>input,
 .rightItem>input {
     border: none;
@@ -142,6 +147,7 @@
 .addFacilityButton {
     background-color: #195E8E;
 }
+
 .cancelFacilityButton {
     background-color: rgb(167, 16, 16);
 }

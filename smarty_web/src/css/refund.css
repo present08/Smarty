@@ -1,0 +1,111 @@
+.refundContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+}
+
+/* ------------- 서브메뉴*/
+
+.submu {
+    margin: 0 auto;
+    width: 70%;
+    height: 30px;
+}
+
+.submu nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+/* ------------- */
+
+.refund_box {
+    display: flex;
+    width: 70%;
+    height: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.refund_cont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.refund_cont>h3 {
+    font-size: 25px;
+    display: flex;
+    margin-bottom: 3rem;
+}
+
+.cont_container {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cont_box {
+    width: 400px;
+    height: 400px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 300px;
+    filter: drop-shadow(-10px -10px 10px rgba(255, 255, 255, 0.7)) drop-shadow(10px 10px 10px rgba(174, 174, 192, 0.2));
+    box-shadow: inset -10px -10px 10px rgba(255, 255, 255, 0.7),
+        inset 10px 10px 10px rgba(174, 174, 192, 0.2);
+
+}
+
+.backbox>h5 {
+    font-size: 25px;
+    color: #003f66;
+    margin-bottom: 1rem;
+}
+
+.backbox>p {
+    font-size: 19px;
+    color: gray;
+}
+
+.provision_container {
+    width: 70%;
+    height: 400px;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+}
+
+.provision_container>h5 {
+    font-size: 22px;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.provision_container>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 300px;
+    background-color: rgb(248, 248, 248);
+    border-radius: 15px;
+}
+
+.provision_container>div>p {
+    font-size: 19px;
+    margin-bottom: 2rem;
+    text-align: left;
+    margin-left: 3rem;
+}

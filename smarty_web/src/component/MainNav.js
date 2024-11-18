@@ -117,20 +117,6 @@ const MainNav = () => {
                     <div className='listbox'>
                         <ul>
                             <li>
-                                <Link to={"/"}>이용안내</Link>
-                                <ul>
-                                    <li>
-                                        <Link to={"/"}>운영시간</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/"}>회원등록 안내</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/"}>환불 및 연기</Link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
                                 <Link to={"/center/center_in"}>센터소개</Link>
                                 <ul>
                                     <li>
@@ -141,6 +127,17 @@ const MainNav = () => {
                                     </li>
                                     <li>
                                         <Link to={"/center/directions"}>오시는길</Link>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <Link to={"/guide/instructions"}>이용안내</Link>
+                                <ul>
+                                    <li>
+                                        <Link to={"/guide/hours"}>이용시간</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={"/guide/refund"}>환불 및 취소 안내</Link>
                                     </li>
                                 </ul>
                             </li>

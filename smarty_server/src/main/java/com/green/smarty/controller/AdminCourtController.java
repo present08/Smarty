@@ -34,5 +34,4 @@ public class AdminCourtController {
         System.out.println("컨트롤러 코트 하나 조회! : " + court_id);
         return adminCourtService.read(court_id);
     }
-
 }

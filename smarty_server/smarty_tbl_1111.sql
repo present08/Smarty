@@ -3,6 +3,7 @@ create database smartydb;
 create user`smarty`@`%` identified by '1234'; 
 grant all privileges on smarty.* to `smarty`@`%`;
 select user, host from mysql.user;
+drop database smartydb;
 
 use smartydb;
 show tables;
@@ -84,14 +85,19 @@ create table facility (
     facility_images boolean default false
 );
 
+select * from facility;
 -- 시설 첨부파일 테이블
 create table facility_attach (
 	facility_id varchar(100) not null,
-    origin_path varchar(100) not null,
-    thumbnail_path varchar(100) not null,
-	file_name varchar(100) not null,
+    origin_path varchar(1000) not null,
+    thumbnail_path varchar(1000) not null,
+	file_name varchar(1000) not null,
     foreign key (facility_id) references facility(facility_id)
 );
+drop table facility_attach;
+select * from facility_attach;
+
+select * from facility join facility_attach on facility_attach.facility = "fc_1731545730772" where facility_id ="fc_1731545730772"
 
 -- 코트 테이블
 create table court (	
@@ -102,6 +108,7 @@ create table court (
     foreign key (facility_id) references facility(facility_id)
 );
 
+select * from court;
 -- 수업 테이블
 CREATE TABLE class (
     class_id VARCHAR(100) PRIMARY KEY NOT NULL,

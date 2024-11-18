@@ -23,7 +23,7 @@
 
     <!-- select -->
     <select id="getFacility" parameterType="String" resultType="com.green.smarty.vo.FacilityVO">
-        select * from facility where facility_id = #{facility_id}
+        select * from facility where facility_id =#{facility_id};
         <!-- select * from facility f inner join court c on c.facility_id = f.facility_id and c.court_id = #{court_id} where f.facility_id= #{facility_id}; -->
     </select>
     <select id="getFacilityAll" resultType="com.green.smarty.vo.FacilityVO">
@@ -32,6 +32,9 @@
     </select>
     <select id="getFacilityOFCourt" resultType="com.green.smarty.dto.FacilityDTO">
         select * from facility f join court c on f.facility_id = c.facility_id
+    </select>
+    <select id="getFacilityImg" resultType="com.green.smarty.vo.FacilityAttachVO">
+        select * from facility_attach where facility_id  = #{facility_id}
     </select>
 
     <!-- <select id="getReservation" parameterType="String" resultType="com.green.smarty.vo.ReservationVO">
@@ -43,7 +46,6 @@
     <select id="getReservationAll" resultType="com.green.smarty.vo.ReservationVO">
         select * from reservation
     </select>
-
 
       <select id="getReservationUserDate" parameterType="string" resultType="com.green.smarty.dto.ReservationUserDTO">
         select u.user_id, u.user_name, r.reservation_start, r.reservation_end, c.court_name, f.facility_name from reservation r join user u on r.user_id = #{user_id}  and u.user_id = #{user_id}

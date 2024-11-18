@@ -6,6 +6,7 @@ import NewCourt from "../newCourt/NewCourt"
 import NewProduct from '../../products/newProduct/NewProduct';
 import { postAddCourt } from "../../../../api/admin/courtApi"
 import { postAddProduct } from "../../../../api/admin/productApi"
+import { useNavigate } from "react-router-dom"
 
 const initFacility = {
     facility_name: '',
@@ -24,6 +25,7 @@ const initFacility = {
 }
 
 export default function NewFacility() {
+    const navigate = useNavigate()
 
     // FacilityDTO 구성
     const [facility, setFacility] = useState({ ...initFacility })
@@ -76,7 +78,6 @@ export default function NewFacility() {
     const handleInput = (e) => {
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
-        console.log(facility)
     }
 
     // 가격 변동률 radio value 업데이트 함수
@@ -191,6 +192,8 @@ export default function NewFacility() {
                 })
                 // 이후 폼데이터 배열로 만들어 한번에 전송 시도
             }
+            alert("등록된 시설 ID는 " + id + " 입니다.")
+            navigate(-1)
         })
     }
 

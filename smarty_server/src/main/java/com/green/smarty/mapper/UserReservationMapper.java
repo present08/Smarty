@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.vo.CourtVO;
+import com.green.smarty.vo.FacilityAttachVO;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
 import com.green.smarty.vo.UserVO;
@@ -24,6 +25,8 @@ public interface UserReservationMapper {
     int insertCourt(CourtVO vo);
 
     FacilityVO getFacility(String facility_id);
+
+    List<FacilityAttachVO> getFacilityImg(String facility_id); // facility_Img
 
     List<FacilityDTO> getFacilityOFCourt(); // facility + court
 

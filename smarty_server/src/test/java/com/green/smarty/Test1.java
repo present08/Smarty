@@ -106,9 +106,9 @@ public class Test1 {
         System.out.println(weekdays);
         System.out.println(weekDates);
         ClassVO classVO = ClassVO.builder()
-                .class_id("C_" + facility_id.substring(12) + "03")
+                .class_id("C_" + facility_id.substring(12) + "01")
                 .facility_id(facility_id)
-                .class_name("수영교실3")
+                .class_name("수영교실")
                 .start_date(start_date)
                 .end_date(end_date)
                 .start_time(start_time)

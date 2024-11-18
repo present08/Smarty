@@ -1,88 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/announcement.css';
-import Footer from '../Footer';
+import axios from 'axios';
 import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
-import { Link } from 'react-router-dom';
+import BackToTopButton from '../BackToTopButton';
+import Footer from '../Footer';
 
 const NoticeBoard = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [notices, setNotices] = useState([
-        {
-            id: 1,
-            type: '중요공지',
-            title: '웨이잇 서버 점검 안내(7/21)',
-            date: '2022-07-19',
-            content: '서버 점검 관련 내용...'
-        },
-        {
-            id: 2,
-            type: '중요공지',
-            title: '생활체육 신맴버 대면 공지입니다.',
-            date: '2020-09-23',
-            content: '신맴버 관련 내용...'
-        },
-        {
-            id: 3,
-            type: '중요공지',
-            title: '스쿨웨이팅이 웨이잇으로 새롭게 탄생했습니다.',
-            date: '2020-09-23',
-            content: '서비스 리뉴얼 관련 내용...'
-        },
-        {
-            id: 4,
-            type: '중요공지',
-            title: '서비스 임시 중단 안내 (9/23 목 09:00 - 20:00)',
-            date: '2020-09-17',
-            content: '서비스 중단 관련 내용...'
-        },
-    ]);
+    const [notices, setNotices] = useState([]);
+    const [searchType, setSearchType] = useState('all');
+    const [keyword, setKeyword] = useState('');
     const [newNotice, setNewNotice] = useState({
-        type: '중요공지',
         title: '',
-        content: ''
+        content: '',
+        isImportant: 1,
+        view_count: 0
     });
-
-    const [activeTab, setActiveTab] = useState('notice');
-    const [activeFaq, setActiveFaq] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const noticesPerPage = 10;
+    const noticesPerPage = 8;
 
-    const faqs = [
-        {
-            id: 1,
-            category: '회원가입',
-            question: '회원가입은 어떻게 하나요?',
-            answer: '홈페이지 우측 상단의 "회원가입" 버튼을 클릭하여 필요한 정보를 입력하시면 가입이 완료됩니다. 소셜 계정을 통한 간편 가입도 가능합니다.'
-        },
-        {
-            id: 2,
-            category: '결제',
-            question: '결제 방법은 어떤 것이 있나요?',
-            answer: '신용카드, 계좌이체, 휴대폰 결제, 카카오페이 등 다양한 결제 방법을 제공하고 있습니다. 각 결제 방법에 따른 자세한 절차는 결제 페이지에서 확인하실 수 있습니다.'
-        },
-        {
-            id: 3,
-            category: '서비스',
-            question: '서비스 이용 시간은 어떻게 되나요?',
-            answer: '기본적으로 24시간 365일 이용 가능합니다. 다만, 시스템 점검이 있는 경우 별도 공지를 통해 안내해 드립니다.'
-        },
-        {
-            id: 4,
-            category: '계정',
-            question: '비밀번호를 잊어버렸어요.',
-            answer: '로그인 페이지의 "비밀번호 찾기" 기능을 통해 가입 시 등록한 메일로 인증 후 비밀번호를 재설정하실 수 있습니다.'
-        },
-        {
-            id: 5,
-            category: '기타',
-            question: '고객센터 운영 시간은 어떻게 되나요?',
-            answer: '고객센터는 평일 오전 9시부터 오후 6시까지 운영됩니다. 주말 및 공휴일은 휴무이며, 긴급한 문의는 1:1 문의하기를 이용해 주시기 바랍니다.'
+    // 초기 로딩 시 백엔드에서 공지사항 데이터를 가져오는 함수
+    useEffect(() => {
+        const fetchNotices = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/notice/announce/user/list');
+                setNotices(response.data); // 가져온 데이터를 notices 상태에 업데이트
+            } catch (error) {
+                console.error('공지사항을 가져오는 중 오류가 발생했습니다:', error);
+            }
+        };
+
+        fetchNotices();
+    }, []); // 빈 배열로 설정하여 컴포넌트가 처음 더링될 때만 호출
+
+    const toggleItem = async (id) => {
+        if (activeItem !== id) {  // 새로운 항목을 열 때만 조회수 증가
+            try {
+                console.log('조회수 증가 API 호출:', id);
+                const response = await axios.post(`http://localhost:8080/notice/announce/user/view/${id}`);
+                console.log('API 응답:', response.data);
+
+                // 로컬 상태 업데이트
+                setNotices(notices.map(notice =>
+                    notice.announce_id === id
+                        ? { ...notice, view_count: notice.view_count + 1 }
+                        : notice
+                ));
+            } catch (error) {
+                console.error('조회수 업데이트 중 오류 상세:', error.response || error);
+            }
         }
-    ];
-
-    const toggleItem = (id) => {
         setActiveItem(activeItem === id ? null : id);
     };
 
@@ -94,189 +63,229 @@ const NoticeBoard = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const currentDate = new Date().toISOString().split('T')[0];
+        const currentDate = new Date().toISOString().replace('Z', '');
         const newNoticeItem = {
-            id: notices.length + 1,
             ...newNotice,
-            date: currentDate
+            send_date: currentDate,
+            isImportant: newNotice.isImportant
         };
 
-        setNotices(prev => [newNoticeItem, ...prev]);
-        setIsModalOpen(false);
-        setNewNotice({
-            type: '중요공지',
-            title: '',
-            content: ''
-        });
+        try {
+            const response = await axios.post('http://localhost:8080/notice/announce/user/write', newNoticeItem);
+            if (response.data) {
+                setNotices(prev => [response.data, ...prev]);
+                setNewNotice({
+                    title: '',
+                    content: '',
+                    isImportant: 1,
+                    view_count: 0
+                });
+                alert('공지사항이 등록되었습니다.');
+            }
+        } catch (error) {
+            console.error('공지사항 작성 실패:', error);
+            alert('공지사항 등록에 실패했습니다. 다시 시도해주세요.');
+        } finally {
+            setIsModalOpen(false);
+        }
     };
 
-    const toggleFaq = (id) => {
-        setActiveFaq(activeFaq === id ? null : id);
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/notice/announce/user/search`, {
+                params: { type: searchType, keyword: keyword }
+            });
+            setNotices(response.data);
+        } catch (error) {
+            console.error('검색 중 오류가 발생했습니다:', error);
+        }
     };
 
 
-
-    const indexOfLastNotice = currentPage * noticesPerPage;
-    const indexOfFirstNotice = indexOfLastNotice - noticesPerPage;
-    const currentNotices = notices.slice(indexOfFirstNotice, indexOfLastNotice);
+    // 전체 페이지 수 계산
     const totalPages = Math.ceil(notices.length / noticesPerPage);
 
-    // 페이지 번호 배열 생성 함수
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pageNumbers.push(i);
-        }
-        return pageNumbers;
+    // 현재 페이지에 표시할 공지사항들
+    const getCurrentPageNotices = () => {
+        const sortedNotices = notices.sort((a, b) => {
+            if (a.isImportant !== b.isImportant) {
+                return b.isImportant - a.isImportant;
+            }
+            return new Date(b.send_date) - new Date(a.send_date);
+        });
+
+        const startIndex = (currentPage - 1) * noticesPerPage;
+        return sortedNotices.slice(startIndex, startIndex + noticesPerPage);
     };
+
+    // 모달 닫기 처리를 위한 새로운 함수
+    const handleCloseModal = () => {
+        // 제목이나 내용이 있는 경우에만 확인 창 표시
+        if (newNotice.title.trim() || newNotice.content.trim()) {
+            if (window.confirm('작성 중인 내용은 저장되 않습니다. 그래도 종료하시겠습니까?')) {
+                setIsModalOpen(false);
+                // 모달 폼 초기화
+                setNewNotice({
+                    title: '',
+                    content: '',
+                    isImportant: 1,
+                    view_count: 0
+                });
+            }
+        } else {
+            setIsModalOpen(false);
+        }
+    };
+
+
 
     return (
         <>
             <MainNav />
             <Wrapper />
-            <div className="container">
-                {/* 헤더 섹션 */}
+            <BackToTopButton />
+            <div className="notice-board">
                 <div className="header">
-                    <h1 className="header-title">고객센터</h1>
-                    <p className="header-subtitle">유세현 짱짱맨</p>
-                </div>
-                {/* 네비게이션 */}
-                <div className="navigation">
-                    <span
-                        className={`nav-item ${activeTab === 'notice' ? 'active' : 'inactive'}`}
-                        onClick={() => {
-                            setActiveTab('notice');
-                            toggleFaq(null);
-                        }}
-                    >
-                        공지사항
-                    </span>
-                    <span
-                        className={`nav-item ${activeTab === 'faq' ? 'active' : 'inactive'}`}
-                        onClick={() => {
-                            setActiveTab('faq');
-                            toggleItem(null);
-                        }}
-                    >
-                        자주하는 질문
-                    </span>
+                    <h1 className="header-title">공지사항</h1>
+                    <p className="header-subtitle">SMARTY의 새로운 소식을 확인하세요</p>
                 </div>
 
-                {/* 컨텐츠 영역 */}
-                {activeTab === 'notice' ? (
-                    <>
-                        <div className="notice-list">
-                            {currentNotices.map((notice) => (
-                                <div key={notice.id} className="notice-item">
-                                    <div
-                                        className="notice-header"
-                                        onClick={() => toggleItem(notice.id)}
-                                    >
-                                        <div className="notice-info">
-                                            <span className={`notice-type ${notice.type === '중요공지' ? 'important' : 'normal'}`}>
-                                                {notice.type}
+                <div className="content-wrapper">
+                    {/* 검색창과 글쓰기 버튼을 포함하는 상단 섹션 */}
+                    <div className="top-section">
+                        <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="검색어를 입력하세요"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                                className="search-input"
+                            />
+                            <button onClick={handleSearch} className="search-button">
+                                검색
+                            </button>
+                        </div>
+
+                        {/* 글쓰기 버튼을 별도로 분리 */}
+                        <div className="write-button-container">
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="write-button"
+                            >
+                                글쓰기
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 컬럼 헤더 추가 */}
+                    <div className="notice-header-columns">
+                        <div className="column type">공지유형</div>
+                        <div className="column title">제목</div>
+                        <div className="column date">작성일</div>
+                        <div className="column views">조회수</div>
+                    </div>
+
+                    <div className="notice-list">
+                        {getCurrentPageNotices().map((notice) => {
+                            const isNew = new Date() - new Date(notice.send_date) < 24 * 60 * 60 * 1000;
+                            return (
+                                <div key={notice.announce_id} className="notice-item">
+                                    <div className="notice-header" onClick={() => toggleItem(notice.announce_id)}>
+                                        <div className="notice-header-left">
+                                            <span className={`notice-type ${notice.isImportant ? 'important' : 'normal'}`}>
+                                                {notice.isImportant ? '중요공지' : '일반공지'}
                                             </span>
-                                            <span className="notice-title">{notice.title}</span>
+                                            <span className="notice-title">
+                                                {notice.title}
+                                                {isNew && <span className="new-badge">New</span>}
+                                            </span>
                                         </div>
-                                        <div className="notice-date-arrow">
-                                            <span className="notice-date">{notice.date}</span>
-                                            <span className={`arrow ${activeItem === notice.id ? 'active' : ''}`}>+</span>
+                                        <div className="notice-info">
+                                            <span className="notice-date">
+                                                {new Date(notice.send_date).toLocaleString('ko-KR', {
+                                                    year: 'numeric',
+                                                    month: '2-digit',
+                                                    day: '2-digit',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false
+                                                })}
+                                            </span>
+                                            <span className="notice-views">
+                                                {notice.view_count}
+                                            </span>
                                         </div>
                                     </div>
-                                    {activeItem === notice.id && (
-                                        <div className="notice-content">
+                                    {activeItem === notice.announce_id && (
+                                        <div
+                                            className="announcement-content"
+                                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+                                        >
                                             {notice.content}
                                         </div>
                                     )}
                                 </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* 페이지네이션 컨트롤 추가 */}
+                    <div className="pagination">
+                        <button
+                            className="pagination-button"
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                        >
+                            이전
+                        </button>
+
+                        <div className="pagination-numbers">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+                                <button
+                                    key={pageNum}
+                                    className={`pagination-number ${pageNum === currentPage ? 'active' : ''}`}
+                                    onClick={() => setCurrentPage(pageNum)}
+                                >
+                                    {pageNum}
+                                </button>
                             ))}
                         </div>
 
-                        {/* 페이지네이션 수정 */}
-                        {notices.length > noticesPerPage && (
-                            <div className="pagination">
-                                <button
-                                    className="page-button"
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                >
-                                    이전
-                                </button>
-
-                                {getPageNumbers().map((number) => (
-                                    <button
-                                        key={number}
-                                        className={`page-number ${currentPage === number ? 'active' : ''}`}
-                                        onClick={() => setCurrentPage(number)}
-                                    >
-                                        {number}
-                                    </button>
-                                ))}
-
-                                <button
-                                    className="page-button"
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    다음
-                                </button>
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    // FAQ 목록
-                    <div className="notice-list">
-                        {faqs.map((faq) => (
-                            <div key={faq.id} className="notice-item">
-                                <div
-                                    className="notice-header"
-                                    onClick={() => toggleFaq(faq.id)}
-                                >
-                                    <div className="notice-info">
-                                        <span className={`notice-type faq-category-${faq.category}`}>
-                                            {faq.category}
-                                        </span>
-                                        <span className="notice-title">{faq.question}</span>
-                                    </div>
-                                    <span className={`arrow ${activeFaq === faq.id ? 'active' : ''}`}>
-                                        +
-                                    </span>
-                                </div>
-                                {activeFaq === faq.id && (
-                                    <div className="notice-content">
-                                        {faq.answer}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                        <button
+                            className="pagination-button"
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                        >
+                            다음
+                        </button>
                     </div>
-                )}
+                </div>
 
-                {/* 글쓰기 버튼 */}
-                <button
-                    className="write-button"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    글쓰기
-                </button>
-
-                {/* 글쓰기 모달 */}
                 {isModalOpen && (
                     <div className="modal">
                         <div className="modal-content">
+                            <div className="modal-header">
+                                <h2 className="modal-title">공지사항 작성</h2>
+                                <button
+                                    className="modal-close-button"
+                                    onClick={handleCloseModal}
+                                >
+                                    ×
+                                </button>
+                            </div>
                             <form className="form" onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label className="form-label">공지 유형</label>
                                     <select
-                                        name="type"
-                                        value={newNotice.type}
+                                        name="isImportant"
+                                        value={newNotice.isImportant}
                                         onChange={handleInputChange}
-                                        className="form-input"
+                                        className="form-select"
                                     >
-                                        <option value="중요공지">중요공지</option>
-                                        <option value="일반공지">일반공지</option>
+                                        <option value="1">중요공지</option>
+                                        <option value="0">일반공지</option>
                                     </select>
                                 </div>
 
@@ -304,46 +313,21 @@ const NoticeBoard = () => {
                                 </div>
 
                                 <div className="form-buttons">
+                                    <button type="submit" className="submit-button">
+                                        등록
+                                    </button>
                                     <button
                                         type="button"
                                         className="cancel-button"
-                                        onClick={() => setIsModalOpen(false)}
+                                        onClick={handleCloseModal}
                                     >
                                         취소
-                                    </button>
-                                    <button type="submit" className="submit-button">
-                                        등록
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 )}
-                {/* 
-                푸터
-                <footer className="footer">
-                    <div className="footer-content">
-                        <div>
-                            <div className="footer-links">
-                                <a href="#" className="footer-link">개인정보처리방침</a>
-                                <a href="#" className="footer-link">저작권책</a>
-                                <a href="#" className="footer-link">부서별 전화번호</a>
-                                <a href="#" className="footer-link">영덕군 오시는 길</a>
-                                <a href="#" className="footer-link">청사안내도</a>
-                                <a href="#" className="footer-link">사이트맵</a>
-                                <a href="#" className="footer-link">원격지원</a>
-                            </div>
-                            <div className="footer-info">
-                                <p>경기 성남시 분당구 돌마로 46 5층 그린컴퓨터아카데미 성남분당점</p>
-                                <p>대표전화: 010-2523-2625 &nbsp;&nbsp;&nbsp;팩스: 부서별안내&nbsp;&nbsp;&nbsp;이메일: aqs56874@gmail.com</p>
-                                <p>© 미금 그린아카데미</p>
-                            </div>
-                        </div>
-                        <div>
-                            <img src="112.jpg" alt="하트" className="footer-logo" />
-                        </div>
-                    </div>
-                </footer> */}
             </div>
             <Footer />
         </>

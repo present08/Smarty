@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { getfacilityId } from '../../api/ReservationAPI';
+import { getfacilityId } from '../../api/reservaionApi';
 import MainNav from './../../component/MainNav';
 import Wrapper from './../../component/Wrapper';
 import Footer from './../../component/Footer';

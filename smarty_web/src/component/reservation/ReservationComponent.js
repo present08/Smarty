@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { LuAlarmClock } from 'react-icons/lu';
 import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
-import { updatePlan } from '../../api/ReservationAPI.js';
+import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
-
 
 
 const ReservationComponent = (props) => {
@@ -29,7 +28,6 @@ const ReservationComponent = (props) => {
 
     useEffect(() => {
     }, []);
-
     // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
@@ -37,7 +35,6 @@ const ReservationComponent = (props) => {
     }
     useEffect(() => {
         setTimeLine(reserved)
-
     }, [reserved])
 
     const handleClick = (tl) => {

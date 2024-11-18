@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../css/nav.css'
 import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
-import { checkLoginStatus, logout } from '../api/UserApi';
+import { checkLoginStatus, logout } from '../api/userApi';
 
 const MainNav = () => {
     // 검색창 모달 구현하기 
@@ -107,11 +107,13 @@ const MainNav = () => {
             </div>
             <div className='mainnav'>
                 <div className='logo'>
-                    <h1 style={{
-                        color: '#17468c',
-                        fontSize: '43px',
-                        marginBottom: '2rem'
-                    }}>SMARTY</h1>
+                    <Link to={"/"}>
+                        <h1 style={{
+                            color: '#17468c',
+                            fontSize: '43px',
+                            marginBottom: '2rem'
+                        }}>SMARTY</h1>
+                    </Link>
                 </div>
                 <div className='navbox'>
                     <div className='listbox'>

@@ -14,7 +14,7 @@ import ReceiptButton from '../../component/mypage/ReceiptButton';
 import UserNavber from '../../component/mypage/UserNavber';
 import QrButton from '../../component/mypage/QrButton';
 import UserGrade from '../../component/mypage/UserGrade';
-import { logout } from '../../api/UserApi';
+import { logout } from '../../api/userApi';
 
 
 const MyPage = () => {

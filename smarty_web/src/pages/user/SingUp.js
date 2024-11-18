@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
-import { signUp } from '../../api/UserApi';
+import { signUp } from '../../api/userApi';
 
 
 const SignUp = () => {

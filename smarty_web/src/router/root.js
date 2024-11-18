@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { SyncLoader } from "react-spinners";
-import userRouter from "./userrouter";
+import userRouter from "./userRouter";
 import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
 import productRouter from "./productRouter";

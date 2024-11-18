@@ -9,9 +9,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.mapper.UserReservationMapper;
+import com.green.smarty.vo.FacilityAttachVO;
 import com.green.smarty.vo.FacilityVO;
 import com.green.smarty.vo.ReservationVO;
 
@@ -19,6 +21,19 @@ import com.green.smarty.vo.ReservationVO;
 public class UserReservationService {
     @Autowired
     private UserReservationMapper reservationMapper;
+
+    public List<FacilityDTO> getFacility() {
+        List<FacilityDTO> dto = reservationMapper.getFacilityOFCourt();
+        for (FacilityDTO i : dto) {
+            List<FacilityAttachVO> f_img = reservationMapper.getFacilityImg(i.getFacility_id());
+            List<String> imgList = new ArrayList<>();
+            for (FacilityAttachVO j : f_img) {
+                imgList.add(j.getFile_name());
+            }
+            i.setFile_name(imgList);
+        }
+        return dto;
+    }
 
     // open, close, default time을 기준으로 버튼 생성 및
     // reservation Table에 데이터가 있으면 버튼 비활성화로 변경

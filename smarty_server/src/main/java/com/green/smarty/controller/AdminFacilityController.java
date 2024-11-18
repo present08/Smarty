@@ -1,9 +1,8 @@
 package com.green.smarty.controller;
 
-import com.green.smarty.dto.FacilityAdminDTO;
 import com.green.smarty.service.AdminFacilityService;
+import com.green.smarty.vo.FacilityVO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Log4j2
 @RequestMapping("/api/admin/facilities")
 public class AdminFacilityController {
 
@@ -21,44 +19,43 @@ public class AdminFacilityController {
 
     // Create (시설 등록)
     @PostMapping("/")
-    public String register(@ModelAttribute FacilityAdminDTO facilityAdminDTO) throws IOException {
-        log.info("컨트롤러 시설 등록! facilityDTO = " + facilityAdminDTO);
-        String id = adminFacilityService.register(facilityAdminDTO);
-        log.info("등록된 시설 id = " + id + ", facilityDTO = " + facilityAdminDTO);
-
+    public String register(@ModelAttribute FacilityVO facilityVO) throws IOException {
+        System.out.println("컨트롤러 시설 등록! facilityVO = " + facilityVO);
+        String id = adminFacilityService.register(facilityVO);
+        System.out.println("등록된 시설 id = " + id + ", facilityDTO = " + facilityVO);
         return id;
     }
 
     // Read (시설 조회)
     @GetMapping("/list")
-    public List<FacilityAdminDTO> getList() {
-        log.info("컨트롤러 시설 전체 조회!");
-        List<FacilityAdminDTO> list = adminFacilityService.getList();
+    public List<FacilityVO> getList() {
+        List<FacilityVO> list = adminFacilityService.getList();
+        System.out.println("컨트롤러 전체 시설 조회! : " + list);
         return list;
     }
 
     @GetMapping("/{facility_id}")
-    public FacilityAdminDTO read(@PathVariable(name = "facility_id") String id) {
-        log.info("컨트롤러 시설 하나 조회! id = " + id);
-        return adminFacilityService.read(id);
+    public FacilityVO read(@PathVariable(name = "facility_id") String facility_id) {
+        System.out.println("컨트롤러 시설 하나 조회! id = " + facility_id);
+        return adminFacilityService.read(facility_id);
     }
 
     // Update (시설 수정)
     @PutMapping("/{facility_id}")
-    public FacilityAdminDTO modify(
-            @PathVariable(name = "facility_id") String id,
-            @RequestBody FacilityAdminDTO facilityAdminDTO) {
-        log.info("컨트롤러 시설 수정! id = " + id);
-        FacilityAdminDTO updateDTO = adminFacilityService.modify(facilityAdminDTO);
-        log.info("컨트롤러 수정 완료! updateDTO = " + updateDTO);
+    public FacilityVO modify(
+            @PathVariable(name = "facility_id") String facility_id,
+            @RequestBody FacilityVO facilityVO) {
+        System.out.println("컨트롤러 시설 하나 수정! id = " + facility_id);
+        FacilityVO updateDTO = adminFacilityService.modify(facilityVO);
+        System.out.println("컨트롤러 수정 완료! updateDTO = " + updateDTO);
         return updateDTO;
     }
 
     // Delete (시설 삭제)
     @DeleteMapping("/{facility_id}")
-    public String remove(@PathVariable(name = "facility_id") String id) {
-        log.info("컨트롤러 시설 삭제! id = " + id);
-        adminFacilityService.remove(id);
+    public String remove(@PathVariable(name = "facility_id") String facility_id) {
+        System.out.println("컨트롤러 시설 삭제! : " + facility_id);
+        adminFacilityService.remove(facility_id);
         return "시설 삭제 완료";
     }
 

@@ -23,12 +23,12 @@ public class ClassVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate end_date;
 
-    private String day;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime start_time;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime end_time;
 
     private int price;
+
+    private int class_size;
 }

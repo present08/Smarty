@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Await, useNavigate } from 'react-router-dom';
-import '../../css/noticeBoard.css';
+import '../../css/announcement.css';
 import axios from 'axios';
 import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
@@ -56,7 +56,7 @@ function Announcement() {
         try {
             const response = await axios.post("http://localhost:8080/notice/board/user/write", newNoticeItem);
             if (response.data) {
-                const updatedResponse = await axios.get("http://localhost:8080/notice/board/user/list");
+                const updatedResponse = await axios.get("http://localhost:8080/notice/board/user/nodeletelist");
                 setBoards(updatedResponse.data);
 
                 setAnnouncements({
@@ -81,7 +81,7 @@ function Announcement() {
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/notice/board/user/list");
+                const response = await axios.get("http://localhost:8080/notice/board/user/nodeletelist");
                 console.log('서버 응답 데이터:', response.data);
                 setBoards(response.data);
             } catch (error) {
@@ -105,12 +105,10 @@ function Announcement() {
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div className="notice-board">
-                <div className="header">
-                    <div className="header-content">
-                        <h1 className="header-title">커뮤니티</h1>
-                        <p className="header-subtitle">회원들과 자유롭게 소통해보세요</p>
-                    </div>
+            <div className="nb-notice-board">
+                <div className="nb-header">
+                    <h1 className="nb-header-title">공지사항</h1>
+                    <p className="nb-header-subtitle">SMARTY의 새로운 소식을 확인하세요</p>
                 </div>
 
                 <div className="container">
@@ -139,13 +137,13 @@ function Announcement() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {boards.map((item) => (
+                                {boards.map((item, index) => (
                                     <tr
                                         key={item.id}
                                         className="table-row"
                                         onClick={() => toggleItem(item.board_id)}
                                     >
-                                        <td className="td">{item.board_id}</td>
+                                        <td className="td">{boards.length - index}</td>
                                         <td className="td">{item.content_type}</td>
                                         <td className="td title">{item.title}</td>
                                         <td className="td author">{item.user_id}</td>

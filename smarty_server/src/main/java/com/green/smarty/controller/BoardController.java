@@ -1,9 +1,8 @@
-package com.green.smarty.controller.advice;
+package com.green.smarty.controller;
 
-import com.green.smarty.dto.AnnounceDTO;
 import com.green.smarty.dto.BoardDTO;
-import com.green.smarty.mapper.BoardMapper;
 import com.green.smarty.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,13 @@ public class BoardController {
     private BoardService boardService;
 
     @PostMapping("/write")
-    public ResponseEntity<BoardDTO> insertBoard(@RequestBody BoardDTO boardDTO) {
+    public ResponseEntity<BoardDTO> insertBoard(@RequestBody BoardDTO boardDTO, HttpServletRequest request) {
         try {
+            String ip = request.getHeader("X-Forwarded-For");
+            if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+            boardDTO.setIp_address(ip);
             int result = boardService.insertBoard(boardDTO);
             if (result > 0) {
                 BoardDTO created = boardService.selectBoardById(boardDTO.getBoard_id());
@@ -42,10 +46,12 @@ public class BoardController {
         return boardService.selectAllBoard();
     }
 
-    @GetMapping("/delete/{board_id}")
-    public ResponseEntity<Void> removeBoard(int board_id) {
+    // 게시글 삭제
+    @DeleteMapping("/delete/{board_id}")
+    public ResponseEntity<Void> removeBoard(@PathVariable int board_id) {
         try {
             boardService.removeBoard(board_id);
+            log.info("데이터 삭제 성공");
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -79,4 +85,21 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    // 게시글 수정
+    @PutMapping("/modify/{boardId}")
+    public ResponseEntity<String> updateBoard(
+            @PathVariable("boardId") int boardId,
+            @RequestBody BoardDTO request) {
+
+        boardService.updateBoardById(boardId, request.getTitle(), request.getContent(), request.getContent_type());
+        return ResponseEntity.ok("게시글이 성공적으로 업데이트되었습니다.");
+    }
+
+    // 삭제되지 않은 게시글 전체 조회
+    @GetMapping("/nodeletelist")
+    public List<BoardDTO> getVisibleBoards() {
+        return boardService.getVisibleBoards();
+    }
+
 }

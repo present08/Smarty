@@ -1,12 +1,12 @@
 /* 전체 레이아웃 */
-.notice-board {
+.ann-notice-board {
     background-color: #f7f9fc;
     min-height: 100vh;
     width: 100%;
 }
 
 /* 헤더 영역 */
-.header {
+.ann-header {
     background: linear-gradient(rgba(25, 94, 142, 0.9), rgba(25, 94, 142, 0.7));
     height: 200px;
     display: flex;
@@ -16,20 +16,20 @@
     color: white;
 }
 
-.header-content {
+.ann-header-content {
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-.header-title {
+.ann-header-title {
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-.header-subtitle {
+.ann-header-subtitle {
     font-size: 16px;
     opacity: 0.9;
 }

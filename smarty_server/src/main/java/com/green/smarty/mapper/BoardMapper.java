@@ -13,9 +13,14 @@ public interface BoardMapper {
 //    board_id로 게시글 조회
     BoardDTO selectBoardById(int board_id);
 //    board_id로 게시글 삭제
-    int removeBoard(int board_id);
+    void removeBoard(int board_id);
 //    send_date 순서대로 게시글 전체 조회
     List<BoardDTO> selectAllBoard();
     // 조회수 증가 메서드
     int updateViewCount(@Param("board_id") int board_id);
+    // board_id로 게시글 수정
+    int updateBoardById(@Param("board_id") int boar_id);
+//    삭제되지 않은 게시글 전체 조회
+    List<BoardDTO> getVisibleBoards();
+
 }

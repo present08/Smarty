@@ -1,10 +1,10 @@
-.notice-board {
+.nb-notice-board {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-.header {
+.nb-header {
     background: linear-gradient(to right, #4a90e2, #63b3ed);
     padding: 2.5rem;
     border-radius: 10px;
@@ -13,12 +13,12 @@
     text-align: center;
 }
 
-.header-title {
+.nb-header-title {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
 }
 
-.header-subtitle {
+.nb-header-subtitle {
     font-size: 1.1rem;
     opacity: 0.9;
 }

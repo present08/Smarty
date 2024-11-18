@@ -42,21 +42,32 @@ public class BoardService {
         return boardDTO;
     }
 
-    public int removeBoard(int board_id){
+    // 게시글 삭제
+    public void removeBoard(int board_id){
         BoardDTO boardDTO = boardMapper.selectBoardById(board_id);
         if(boardDTO == null){
             throw  new IllegalArgumentException("삭제할 대상이 존재하지 않습니다");
         }
-        return boardMapper.removeBoard(board_id);
+        boardMapper.removeBoard(board_id);
     }
-
+    // 게시글 전체 조회
     public List<BoardDTO> selectAllBoard(){
         return boardMapper.selectAllBoard();
+    }
+
+    // 삭제되지 않은 게시글 전체 조회
+    public List<BoardDTO> getVisibleBoards() {
+        return boardMapper.getVisibleBoards();
     }
 
     // 조회수 증가
     public int updateViewCount(int announce_id) {
         return boardMapper.updateViewCount(announce_id);
+    }
+
+    // 게시글 수정
+    public void updateBoardById(int board_id, String title, String content, String contentType) {
+        boardMapper.updateBoardById(board_id);
     }
 
 }

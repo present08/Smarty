@@ -1,0 +1,3 @@
+<insert id="insertAnnounce" parameterType="com.green.smarty.dto.AnnounceDTO" useGeneratedKeys="true" keyProperty="announce_id">
+    insert into announce (content, title, send_date, isImportant, view_count)
+</insert> 

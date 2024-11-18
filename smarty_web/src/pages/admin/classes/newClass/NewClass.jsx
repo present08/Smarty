@@ -13,78 +13,89 @@ const initClass = {
   class_size: 0,
   weekday: []
 }
+
 export default function NewClass() {
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
   
-  const [classData, setClassData] = useState(initClass)
-  const [classList, setClassList] = useState([])
-  const [classNum, setClassNum] = useState(0)
+  const [classData, setClassData] = useState(initClass) // 각각의 강의 정보
+  const [classList, setClassList] = useState([])  // 강의 정보 객체들의 리스트
   
-  const createForm = (i, key, value) => {
-    setClassList((prevList) => {
-      const updateList = [...prevList]
-      updateList[i] = {...updateList[i], [key]: value}
-    })
-  }
-
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
       setCurrentFacility(res)
     }).catch((error) => console.error("ERROR!", error))
   }, [])
 
+  // 사용자 입력값을 classData에 저장
   const handleInput = (e) => {
     classData[e.target.name] = e.target.value
+    setClassData({...classData})  
+  }
+  // 선택한 요일을 classData.weekday에 저장
+  const handleClickWeekday = (e) => {
+    if(e.target.checked) classData.weekday.push(e.target.value)
+    else classData.weekday = classData.weekday.filter(day => day != e.target.value)
     setClassData({...classData})
-    console.log(classData)
+  }
+
+  // classData -> classList에 추가
+  const handleListUp = () => {
+    classList.push(classData)
+    console.log(classList)
+  }
+  
+
+  const handleAddClass = () => {
+    classList.push(initClass)
+    console.log(classList)
   }
 
   return (
     <div className="newClass">
       <div className="addClassTitle">
         {currentFacility && currentFacility.facility_name} 신규 강의 등록
+        <button 
+          className="addClassFormButton"
+          onClick={handleAddClass}
+        >
+          강의 추가
+        </button>
       </div>
-      <button 
-        className="addClassFormButton"
-        onClick={createForm}
-      >
-        강의 추가
-      </button>
 
       <div className="addClassContainer">
 
-        <div className="addClassForm">
-          <div className="addClassFormItem">
-            <div className="addClassFormItemTitle">강의명</div>
+      {classList && classList.map((item, i) => (
+        <div>강의리스트</div>
+      ))}
+
+      {/* {classList && classList.map((form, i) => (
+          <div className="addClassForm">
+
+          <div className="addClassFormItem1">
+            <div className="addClassFormItem1Title">강의명</div>
             <input 
               className='addClassFormItemContent'
-              name='class_name'
+              name={`${form}.class_name${i}`}
               type='text'
-              value={classData.class_name}
+              value={`form.classData.class_name${i}`}
               onChange={handleInput}
               placeholder='ex) 오전 수영강습'
             />
-          </div>
-          <div className="addClassFormItem">
-            <div className="addClassFormItemTitle">시작일</div>
+            <div className="addClassFormItem1Title">시작일</div>
             <input 
-              name='start_date'
+              name={`${form}.start_date${i}`}
               type='date'
-              value={classData.start_date}
+              value={`${form}.classData.start_date${i}`}
               onChange={handleInput}
             />
-          </div>
-          <div className="addClassFormItem">
-            <div className="addClassFormItemTitle">종료일</div>
+            <div className="addClassFormItem1Title">종료일</div>
             <input 
-              name='end_date'
+              name={`${form}.end_date${i}`}
               type='date'
-              value={classData.end_date}
+              value={`${form}.classData.end_date${i}`}
               onChange={handleInput}
             />
-          </div>
-          <div className="addClassFormItem">
             <div className="addClassFormItemTitle">시작시간</div>
             <input 
               name='start_time'
@@ -92,8 +103,6 @@ export default function NewClass() {
               value={classData.start_time}
               onChange={handleInput}
             />
-          </div>
-          <div className="addClassFormItem">
             <div className="addClassFormItemTitle">종료시간</div>
             <input 
               name='end_time'
@@ -102,16 +111,15 @@ export default function NewClass() {
               onChange={handleInput}
             />
           </div>
-          <div className="addClassFormItem">
-            <div className="addClassFormItemTitle">수강료</div>
+
+          <div className="addClassFormItem2">
+            <div className="addClassFormItem2Title">수강료</div>
             <input 
               name='price'
               type='text'
               value={classData.price}
               onChange={handleInput}
             />
-          </div>
-          <div className="addClassFormItem">
             <div className="addClassFormItemTitle">정원</div>
             <input 
               name='class_size'
@@ -119,68 +127,69 @@ export default function NewClass() {
               value={classData.class_size}
               onChange={handleInput}
             />
-          </div>
-          <div className="addClassFormItem">
+            <div className="addClassFormItem2Weekday">
             <div className="addClassFormItemTitle">수업일(복수선택 가능)</div>
-            <input 
-              id='mon'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='mon'>월요일</label>
-            <input 
-              id='tue'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='tue'>화요일</label>
-            <input 
-              id='wed'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='wed'>수요일</label>
-            <input 
-              id='thu'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='thu'>목요일</label>
-            <input 
-              id='fri'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='fri'>금요일</label>
-            <input 
-              id='sat'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='sat'>토요일</label>
-            <input 
-              id='sun'
-              name='weekday'
-              type='checkbox'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <label htmlFor='sun'>일요일</label>           
+              <input 
+                id='mon'
+                name='weekday'
+                type='checkbox'
+                value={'월요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='mon'>월요일</label>
+              <input 
+                id='tue'
+                name='weekday'
+                type='checkbox'
+                value={'화요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='tue'>화요일</label>
+              <input 
+                id='wed'
+                name='weekday'
+                type='checkbox'
+                value={'수요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='wed'>수요일</label>
+              <input 
+                id='thu'
+                name='weekday'
+                type='checkbox'
+                value={'목요일'}
+                oonChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='thu'>목요일</label>
+              <input 
+                id='fri'
+                name='weekday'
+                type='checkbox'
+                value={'금요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='fri'>금요일</label>
+              <input 
+                id='sat'
+                name='weekday'
+                type='checkbox'
+                value={'토요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='sat'>토요일</label>
+              <input 
+                id='sun'
+                name='weekday'
+                type='checkbox'
+                value={'일요일'}
+                onChange={(e) => handleClickWeekday(e)}
+              />
+              <label htmlFor='sun'>일요일</label>
+            </div>
+            <button onClick={handleListUp}>리스트업</button>
           </div>
         </div>
-
+      ))} */}
       </div>
     </div>
   )

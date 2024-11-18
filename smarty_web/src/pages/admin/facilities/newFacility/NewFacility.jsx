@@ -86,6 +86,12 @@ export default function NewFacility() {
         setFacility({ ...facility })
         console.log(facility.hot_time)
     }
+    const handlePriceCancle = (e) => {
+        facility.rate_adjustment = 0
+        facility.hot_time = 0
+        setFacility({ ...facility })
+        console.log(facility)
+    }
 
     // 코트 등록 버튼 클릭 시 실행 함수
     const handlePriceButton = (e) => {
@@ -193,7 +199,7 @@ export default function NewFacility() {
                 // 이후 폼데이터 배열로 만들어 한번에 전송 시도
             }
             alert("등록된 시설 ID는 " + id + " 입니다.")
-            navigate(-1)
+            navigate({pathname: "/admin/facilities"})
         })
     }
 
@@ -303,7 +309,7 @@ export default function NewFacility() {
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <p>할중 요금 </p>
+                                                                    <p>할증 요금 </p>
                                                                     <div className="price_box">
                                                                         {Number(facility.basic_fee) * (1 + Number(facility.rate_adjustment))}
                                                                     </div>
@@ -312,8 +318,8 @@ export default function NewFacility() {
                                                             <div className="modalshowInfo">
                                                                 <div>
                                                                     <p>
-                                                                        할인 요금은 첫 타임, 할증 요금은 마지막 타임에 각각 적용됩니다.<br />
-                                                                        적용을 원하는 항목을 선택해주세요.<br /><br />
+                                                                        가격 변동률을 적용할 항목 선택 후<br />
+                                                                        적용 버튼을 클릭해주세요.
                                                                     </p>
                                                                 </div>
                                                                 <div>
@@ -326,7 +332,7 @@ export default function NewFacility() {
                                                                             value={1}
                                                                             onClick={(e) => handlePrice(e)}
                                                                         />
-                                                                        <label htmlFor="discount"> 조조할인</label>
+                                                                        <label htmlFor="discount"> 조조할인 (첫 타임)</label>
                                                                     </div>
                                                                     <div>
                                                                         <input
@@ -336,7 +342,7 @@ export default function NewFacility() {
                                                                             value={2}
                                                                             onClick={(e) => handlePrice(e)}
                                                                         />
-                                                                        <label htmlFor="surcharge"> 야간할증</label>
+                                                                        <label htmlFor="surcharge"> 야간할증 (마지막 타임)</label>
                                                                     </div>
                                                                     <div>
                                                                         <input
@@ -346,8 +352,12 @@ export default function NewFacility() {
                                                                             value={3}
                                                                             onClick={(e) => handlePrice(e)}
                                                                         />
-                                                                        <label htmlFor="all"> 모두</label>
+                                                                        <label htmlFor="all"> 모두 (할인, 할증 적용)</label>
                                                                     </div>
+                                                                </div>
+                                                                <div className="modalshowInfoButton">
+                                                                    <button className="addPirceButton" onClick={closeModal}>적용</button>
+                                                                    <button className="canclePirceButton" onClick={handlePriceCancle}>취소</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -470,7 +480,7 @@ export default function NewFacility() {
 
                         <div className="facilityButtons">
                             <button className="addFacilityButton" onClick={handleFacilityAdd}>등록</button>
-                            <button className="cancelFacilityButton">취소</button>
+                            <button className="cancelFacilityButton" onClick={() => navigate({pathname: "/admin/facilities"})}>취소</button>
                         </div>
                     </div>
                 </div>

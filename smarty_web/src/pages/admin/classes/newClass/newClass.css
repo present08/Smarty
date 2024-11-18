@@ -28,3 +28,10 @@
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
 }
+
+.addClassFormItem1,
+.addClassFormItem2 {
+    background-color: lightblue;
+    display: flex;
+    
+}

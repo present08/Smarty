@@ -78,16 +78,6 @@ export default function Sidebar() {
 
                 </ul>
             </div>
-            <div className="sidebarMenu">
-                <h3 className="sidebarTitle">테스트중</h3>
-                <ul className="sidebarList">
-                    <li className="sidebarListItem">
-                        <Link to="test" className="link">
-                            테스트용
-                        </Link>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
   )

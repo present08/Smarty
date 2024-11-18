@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.AdminClassMapper">
+
+    <insert id="register" parameterType="com.green.smarty.dto.ClassAdminDTO">
+        insert into class(class_id, facility_id, class_name, start_date, end_date, start_time, end_time, price, class_size)
+        values(#{class_id}, #{facility_id}, #{class_name}, #{start_date}, #{end_date}, #{start_time}, #{end_time}, #{price}, #{class_size});
+    </insert>
+
+    <insert id="registerDetail" parameterType="com.green.smarty.vo.ClassDetailVO">
+        insert into class_detail(class_id, weekday, class_date) values(#{class_id}, #{weekday}, #{class_date});
+    </insert>
+
+    <select id="getList" resultType="java.util.List">
+        select * from class C inner join class_detail D on C.class_id = D.class_id;
+    </select>
+</mapper>

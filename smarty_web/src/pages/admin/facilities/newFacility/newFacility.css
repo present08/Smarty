@@ -1,0 +1,292 @@
+.newFacility {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.addFacilityTitle {
+    flex: 1;
+    font-size: 24px;
+    color: #011B2F;
+    font-weight: 500;
+}
+
+/* 시설 등록 폼 스타일 */
+.addFacilityForm {
+    flex: 10;
+    display: flex;
+    width: 100%;
+    height: 90%;
+}
+
+.addFacilityFormLeft,
+.addFacilityFormRight {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 0 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+.leftItemTitle,
+.rightItemTitle {
+    flex: 1;
+    font-size: 17px;
+    color: #011B2F;
+    margin-bottom: 20px;
+}
+
+.leftItemContent,
+.rightItemContent {
+    flex: 11;
+}
+
+.addFacilityFormSub {
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    width: 70%;
+    height: 180px;
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.addFacilityFormSubTitle {
+    font-size: 15px;
+    color: #011B2F;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.subItemContent {
+    flex: 10;
+}
+
+.subItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.subItemtext {
+    font-size: 13px;
+    color: #555;
+}
+
+.leftItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.leftItem>label,
+.subItemTitle,
+.rightItem>label {
+    font-weight: 300;
+    font-size: 14px;
+    color: #555;
+}
+
+.leftItem>input,
+.rightItem>input {
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
+    height: 30px;
+}
+
+.rightItem>textarea {
+    border: 1px solid #bdbdbd;
+}
+
+.rightItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+.subItemButton {
+    border: none;
+    width: 100px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    color: white;
+    background-color: #58A3BC;
+    cursor: pointer;
+}
+
+.facilityButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.addFacilityButton,
+.cancelFacilityButton {
+    border: none;
+    width: 80px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    color: white;
+    font-weight: 400;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.addFacilityButton {
+    background-color: #195E8E;
+}
+
+.cancelFacilityButton {
+    background-color: rgb(167, 16, 16);
+}
+
+/* 상세 시설 등록 폼 스타일 */
+.modalContent {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+}
+
+/* 모달창 css */
+
+.priceModal_box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalleftItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    height: 15%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #105066;
+}
+
+.modalleftItem>label {
+    font-size: 21px;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.modalleftItem>input {
+    margin-right: 5px;
+}
+
+.modal_cont {
+    margin-top: 2rem;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.modalshowPrice {
+    width: 40%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.modalshowInfo {
+    width: 60%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.modalshowPrice>div {
+    width: 100%;
+    height: 30%;
+    margin-right: 2rem;
+}
+
+.modalshowPrice>div>p {
+    text-align: left;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #105066;
+}
+
+.price_box {
+    width: 90%;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-content: center;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:first-child {
+    width: 100%;
+    height: 20%;
+}
+
+.modalshowInfo>div:first-child>p {
+    font-size: 14px;
+    color: gray;
+    padding: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.modalshowInfo>div:last-child {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:last-child>h3 {
+    color: #105066;
+    font-size: 21px;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.modalshowInfo>div:last-child>div {
+    display: flex;
+}
+
+.modalshowInfo>div:last-child>div>input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid gainsboro;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.modalshowInfo>div:last-child>div>label {
+    font-weight: bold;
+    color: gray;
+}

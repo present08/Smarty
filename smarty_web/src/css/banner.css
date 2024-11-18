@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.banner_container {
+    background-image: url("../../public/img/banner_back.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 1920px;
+    height: 900px;
+}
+
+/* ------------------------------ */
+
+.banner_cont {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+}
+
+/* ------------------------------ */
+
+.text_iconBox {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.textBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.iconBox {
+    margin-top: 13rem;
+    width: 100%;
+    display: flex;
+}
+
+.iconBox>button {
+    border: none;
+    background-color: white;
+    margin-left: 1rem;
+    color: gray;
+}
+
+.iconBox>button:hover {
+    color: #071d32;
+}
+
+.textBox>p {
+    font-size: 35px;
+    margin-top: 2rem;
+}
+
+.textBox>h3 {
+    font-size: 68px;
+}
+
+.textBox>h3>span {
+    color: #04204b;
+}
+
+
+/* ------------------------------ */
+
+.imgBox {
+    width: 50%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}

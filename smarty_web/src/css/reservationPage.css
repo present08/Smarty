@@ -1,0 +1,212 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+
+/* reservation Page */
+.reservation_title {
+    text-align: left;
+    width: 73%;
+    font-size: 40px;
+    height: 10%;
+    margin: 0 auto;
+    margin-top: 7rem;
+}
+
+.reservation_title_sub {
+    text-align: left;
+    width: 73%;
+    font-size: 25px;
+    height: 5%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    color: gray;
+}
+
+
+.tab_container {
+    width: 73%;
+    margin: 80px auto;
+    border-radius: 10px 10px 0px 0px;
+}
+
+/* reservation component ->  calendar */
+.calendar_container {
+    width: 500px;
+}
+
+
+
+.reservation_container {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.reservaiotn_time_list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-evenly;
+    width: 700px;
+    height: 400px;
+}
+
+.reservation_time_btn {
+    cursor: pointer;
+    color: aliceblue;
+    background-color: #011b2f;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 3px;
+    font-weight: bold;
+}
+
+.reservation_time_btn.active {
+    color: #011b2f;
+    background-color: #8ac4d0;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 3px;
+}
+
+.reservation_time_btn.disabled {
+    background-color: grey;
+    cursor: auto;
+}
+
+.reservation_final {
+    width: 100%;
+    margin-top: 100px;
+}
+
+
+.reservation_minititle {
+    padding: 15px 50px;
+    color: #011b2f;
+    display: flex;
+    margin: 30px 0;
+    vertical-align: top;
+}
+
+.reservation_option {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 100px;
+
+}
+
+.reservation_option tr {
+    height: 50px;
+
+}
+
+.reservation_option thead {
+    background-color: #8ac4d0;
+    color: #28527a;
+}
+
+
+.reservation_option th,
+.reservation_option td {
+    border: 1px solid #3e83a8;
+    padding: 8px;
+    text-align: left;
+    text-align: center;
+}
+
+.reservation_option tr {
+    border: none;
+}
+
+.reservation_option thead th:first-child,
+.reservation_option tbody td:first-child {
+    border-left: none;
+}
+
+.reservation_option thead th:last-child,
+.reservation_option tbody td:last-child {
+    border-right: none;
+}
+
+
+/* reservation action button */
+.reservation_btn {
+    width: 180px;
+    padding: 20px;
+    margin: 0 auto;
+    border: none;
+    background-color: #011b2f;
+    color: aliceblue;
+    font-size: large;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+
+/* FacilityList Btn */
+.facility_container {
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+.facility_container>div {
+    display: flex;
+    width: 65%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.facilityBtn {
+    width: 400px;
+    height: 320px;
+    box-shadow: 3px 3px 7px #888;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+
+.facilityBtn>img {
+    width: 400px;
+    height: 210px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.facility_info>h3 {
+    margin-top: 10px;
+    text-align: left;
+    text-indent: 20px;
+    margin-bottom: 15px;
+    font-size: 25px;
+}
+
+.facility_info>div {
+    display: flex;
+    text-indent: 20px;
+}
+
+.facility_info>div>div {
+    display: flex;
+    text-indent: 20px;
+}
+
+.facility_info>p {
+    text-indent: 20px;
+    text-align: left;
+    color: #888888;
+    margin-bottom: 5px;
+}

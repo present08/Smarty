@@ -107,11 +107,13 @@ const MainNav = () => {
             </div>
             <div className='mainnav'>
                 <div className='logo'>
-                    <h1 style={{
-                        color: '#17468c',
-                        fontSize: '43px',
-                        marginBottom: '2rem'
-                    }}>SMARTY</h1>
+                    <Link to={"/"}>
+                        <h1 style={{
+                            color: '#17468c',
+                            fontSize: '43px',
+                            marginBottom: '2rem'
+                        }}>SMARTY</h1>
+                    </Link>
                 </div>
                 <div className='navbox'>
                     <div className='listbox'>
@@ -166,7 +168,7 @@ const MainNav = () => {
                                 </ul>
                             </li>
                             <li>
-                                <Link to={"/"}>커뮤니티</Link>
+                                <Link to={"/notice"}>커뮤니티</Link>
                                 <ul>
                                     <li>
                                         <Link to={"/notice/announce"}>공지사항</Link>

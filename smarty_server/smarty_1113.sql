@@ -3,7 +3,6 @@ create database smartydb;
 create user`smarty`@`%` identified by '1234'; 
 grant all privileges on smarty.* to `smarty`@`%`;
 select user, host from mysql.user;
-drop database smartydb;
 
 use smartydb;
 show tables;
@@ -85,7 +84,6 @@ create table facility (
     facility_images boolean default false
 );
 
-select * from facility;
 -- 시설 첨부파일 테이블
 create table facility_attach (
 	facility_id varchar(100) not null,
@@ -94,10 +92,6 @@ create table facility_attach (
 	file_name varchar(1000) not null,
     foreign key (facility_id) references facility(facility_id)
 );
-drop table facility_attach;
-select * from facility_attach;
-
-select * from facility f join facility_attach fa on fa.facility_id = f.facility_id and f.facility_id ="fc_1731545730772";
 
 -- 코트 테이블
 create table court (	
@@ -108,7 +102,6 @@ create table court (
     foreign key (facility_id) references facility(facility_id)
 );
 
-select * from court;
 -- 수업 테이블
 CREATE TABLE class (
     class_id VARCHAR(100) PRIMARY KEY NOT NULL,
@@ -116,25 +109,12 @@ CREATE TABLE class (
     class_name VARCHAR(100) NOT NULL,
     start_date DATE,
     end_date DATE,
+    day VARCHAR(50),
     start_time TIME,
     end_time TIME,
     price INT,
-	class_size int,	-- 수강인원 추가
     FOREIGN KEY (facility_id) REFERENCES facility(facility_id)
 );
--- 수업 상세정보 (테스트중)
-create table class_detail (
-	class_id VARCHAR(100),
-    user_id varchar(100),
-    weekday varchar(100),
-    class_date date,
-    FOREIGN KEY (class_id) REFERENCES class(class_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
-);
-drop table class;
-drop table class_detail;
-
-insert into class(class_id,facility_id,class_name,start_date,end_date,start_time,end_time,price,class_size) values("C_077201","fc_1731545730772","농구교실","2024-11-14","2024-12-14","09:00:00","12:00:00",30000,50);
 
 -- 예약 테이블
 CREATE TABLE reservation (
@@ -152,7 +132,7 @@ CREATE TABLE enrollment (
     enrollment_id VARCHAR(100) PRIMARY KEY NOT NULL,
     user_id VARCHAR(100),
     class_id VARCHAR(100),
-    FOREIGN KEY (user_id) REFERENCES user(user_classclassid),
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (class_id) REFERENCES class(class_id)
 );
 

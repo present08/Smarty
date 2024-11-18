@@ -33,7 +33,6 @@ const UserReservation = (props) => {
                     <h3 style={{ fontSize: '23px', marginBottom: '1rem', color: '#003f66', marginRight: '10px' }}>대여 및 결제 관리</h3>
                     <p style={{ color: 'gray', fontSize: '23px' }}> (총금액 : {new Intl.NumberFormat().format(priceTotal)} 원)</p>
                 </div>
-
             </div>
             <div style={{
                 display: 'flex',

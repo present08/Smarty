@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { getClass } from '../../api/classAPI'
 import Footer from '../../component/Footer'
 import MainNav from '../../component/MainNav'
 import Wrapper from '../../component/Wrapper'
 import '../../css/classList.css'
 import ClassPage from './ClassPage'
-import Facility_list from './../reservation/Facility_list';
+
 
 const ClassList = () => {
     const [classList, setClassList] = useState([])
@@ -61,7 +60,7 @@ const ClassList = () => {
             <MainNav />
             <Wrapper />
             <div style={{ backgroundColor: '#f9f9f9' }}>
-                <h2>SMARTY 수강신청</h2>
+                <h1 style={{paddingTop:'3rem'}}>SMARTY 수강신청</h1>
                 <div className='ClassBtn' >
                     <div className='classFilter'>
                         <h2>종목을 선택하세요.</h2>

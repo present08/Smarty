@@ -109,7 +109,7 @@ const ReservationComponent = (props) => {
                 </div>
             </div>
             <div className='reservation_final'>
-                <h2 className='reservation_minititle'><FaRegCheckSquare />  체육시설 예약 신청 현황</h2>
+                <h2 className='reservation_minititle'><FaRegCheckSquare />  체육시설 예약 확인</h2>
                 <table className='reservation_option'>
                     <colgroup>
                         <col style={{ width: '20%' }} />

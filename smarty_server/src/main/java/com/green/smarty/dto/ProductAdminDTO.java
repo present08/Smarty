@@ -22,6 +22,8 @@ public class ProductAdminDTO {
     private int stock;
     private int price;
     private boolean product_images;
+
+    @Builder.Default
     private List<String> size = new ArrayList<>(); // 기본값 빈 배열로 초기화
 
     @JsonSetter("size")

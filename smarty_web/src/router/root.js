@@ -15,7 +15,7 @@ const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));
 const ReservationPage = lazy(() => import("../pages/reservation/ReservationPage"));
 const ClassList = lazy(() => import("../pages/class/ClassList"));
-const ClassPage = lazy(() => import("../pages/class/ClassPage"));
+// const ClassPage = lazy(() => import("../pages/class/ClassPage"));
 const ChatBot = lazy(() => import("../component/chatbot/Chatbot"));
 const Admin = lazy(() => import("../pages/admin/IndexPage"));
 // 관리자 페이지 라우팅 설정
@@ -70,10 +70,10 @@ const root = createBrowserRouter([
         path: "classList",
         element: <Suspense fallback={Loading}><ClassList /></Suspense>
     },
-    {
-        path: "classList/:classId",
-        element: <Suspense fallback={Loading}><ClassPage /></Suspense>
-    },
+    // {
+    //     path: "classList/:classId",
+    //     element: <Suspense fallback={Loading}><ClassPage /></Suspense>
+    // },
     {
         path: "product",
         element: <Suspense fallback={Loading}> <ProductList /> </Suspense>,

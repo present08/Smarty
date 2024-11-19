@@ -1,195 +1,243 @@
 import './newClass.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getOneFacility } from '../../../../api/admin/facilityApi'
 import { useEffect, useState } from "react"
-
-const initClass = {
-  class_name: '',
-  start_date: '',
-  end_date: '',
-  start_time: '',
-  end_time: '',
-  price: 0,
-  class_size: 0,
-  weekday: []
-}
+import { postAddClass } from '../../../../api/admin/classApi'
 
 export default function NewClass() {
+  const navigate = useNavigate()
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
   
-  const [classData, setClassData] = useState(initClass) // 각각의 강의 정보
   const [classList, setClassList] = useState([])  // 강의 정보 객체들의 리스트
+  const [weekdayList, setWeekdayList] = useState([]) // 각각의 강의 정보
   
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
       setCurrentFacility(res)
+      console.log("facility :", res)
     }).catch((error) => console.error("ERROR!", error))
   }, [])
-
-  // 사용자 입력값을 classData에 저장
-  const handleInput = (e) => {
-    classData[e.target.name] = e.target.value
-    setClassData({...classData})  
-  }
-  // 선택한 요일을 classData.weekday에 저장
-  const handleClickWeekday = (e) => {
-    if(e.target.checked) classData.weekday.push(e.target.value)
-    else classData.weekday = classData.weekday.filter(day => day != e.target.value)
-    setClassData({...classData})
-  }
-
-  // classData -> classList에 추가
-  const handleListUp = () => {
-    classList.push(classData)
-    console.log(classList)
-  }
   
-
+  // 강의 등록폼 추가
   const handleAddClass = () => {
-    classList.push(initClass)
-    console.log(classList)
+    const initClass = {
+      key: Date.now(),
+      facility_id: facility_id,
+      class_name: '',
+      start_date: '',
+      end_date: '',
+      start_time: '',
+      end_time: '',
+      price: 0,
+      class_size: 0,
+      weekday: []
+    }
+    setClassList(prevClass => [...prevClass, initClass])
+    setWeekdayList(prevWeek => [...prevWeek, []])
+    console.log("classList : ", classList)
+    console.log("weekdayList : ", weekdayList)
+  }
+
+  // 사용자 입력값 classList에 저장
+  const handleInput = (i, key, value) => {
+    setClassList((prevList) => {
+      const updateList = [...prevList]
+      updateList[i] = {...updateList[i], [key]: value}
+      return updateList
+    })
+    console.log("input classList : ", classList)  
+  }
+
+  // 선택 요일 weekdayList에 저장
+  const handleClickWeekday = (i, e) => {
+    if(e.target.checked) {
+      setWeekdayList((prevWeek) => {
+        const updateWeek = [...prevWeek]
+        updateWeek[i] = [...updateWeek[i], e.target.value]
+        return updateWeek
+      })
+    } else {
+      weekdayList[i] = weekdayList[i].filter(day => day != e.target.value) 
+    }
+  }
+
+  // weekdayList 업데이트시 classList.weekday 업데이트
+  useEffect(() => {
+    const newClassList = classList.map((item, i) => {
+      return {...item, weekday: weekdayList[i]}
+    })
+    setClassList(newClassList)
+  }, [weekdayList])
+  
+  // 선택 항목 classList, weekdayList에서 삭제
+  const handleDelete = (item, i) => {    
+    setWeekdayList((prevWeek) => {
+      const updateWeek = [...prevWeek]
+      const deleteWeek = updateWeek.splice(i, 1)
+      console.log("삭제한 week : ", deleteWeek)
+      return updateWeek
+    })
+    setClassList(classList.filter(one => one.key != item.key))
+  }
+
+  useEffect(() => {
+    console.log("최종 class : ", classList)
+    console.log("최종 week : ", weekdayList)  
+  }, [classList, weekdayList])
+
+  // 서버로 전송
+  const handleSubmit = () => {
+    postAddClass(classList).then(res => {
+      console.log(res)
+      alert("신규 강의가 등록되었습니다.")
+      navigate({ pathname: `/admin/classes/${facility_id}`})
+    }).catch((error) => console.error("ERROR!", error))  
   }
 
   return (
     <div className="newClass">
-      <div className="addClassTitle">
-        {currentFacility && currentFacility.facility_name} 신규 강의 등록
-        <button 
-          className="addClassFormButton"
-          onClick={handleAddClass}
-        >
-          강의 추가
-        </button>
-      </div>
+      <div className="newClassContainer">
 
-      <div className="addClassContainer">
 
-      {classList && classList.map((item, i) => (
-        <div>강의리스트</div>
-      ))}
-
-      {/* {classList && classList.map((form, i) => (
-          <div className="addClassForm">
-
-          <div className="addClassFormItem1">
-            <div className="addClassFormItem1Title">강의명</div>
-            <input 
-              className='addClassFormItemContent'
-              name={`${form}.class_name${i}`}
-              type='text'
-              value={`form.classData.class_name${i}`}
-              onChange={handleInput}
-              placeholder='ex) 오전 수영강습'
-            />
-            <div className="addClassFormItem1Title">시작일</div>
-            <input 
-              name={`${form}.start_date${i}`}
-              type='date'
-              value={`${form}.classData.start_date${i}`}
-              onChange={handleInput}
-            />
-            <div className="addClassFormItem1Title">종료일</div>
-            <input 
-              name={`${form}.end_date${i}`}
-              type='date'
-              value={`${form}.classData.end_date${i}`}
-              onChange={handleInput}
-            />
-            <div className="addClassFormItemTitle">시작시간</div>
-            <input 
-              name='start_time'
-              type='time'
-              value={classData.start_time}
-              onChange={handleInput}
-            />
-            <div className="addClassFormItemTitle">종료시간</div>
-            <input 
-              name='end_time'
-              type='time'
-              value={classData.end_time}
-              onChange={handleInput}
-            />
+        <div className="addClassFormHead">
+          <div className="addClassTitle">
+            {currentFacility && currentFacility.facility_name} 신규 강의 등록
           </div>
-
-          <div className="addClassFormItem2">
-            <div className="addClassFormItem2Title">수강료</div>
-            <input 
-              name='price'
-              type='text'
-              value={classData.price}
-              onChange={handleInput}
-            />
-            <div className="addClassFormItemTitle">정원</div>
-            <input 
-              name='class_size'
-              type='text'
-              value={classData.class_size}
-              onChange={handleInput}
-            />
-            <div className="addClassFormItem2Weekday">
-            <div className="addClassFormItemTitle">수업일(복수선택 가능)</div>
-              <input 
-                id='mon'
-                name='weekday'
-                type='checkbox'
-                value={'월요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='mon'>월요일</label>
-              <input 
-                id='tue'
-                name='weekday'
-                type='checkbox'
-                value={'화요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='tue'>화요일</label>
-              <input 
-                id='wed'
-                name='weekday'
-                type='checkbox'
-                value={'수요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='wed'>수요일</label>
-              <input 
-                id='thu'
-                name='weekday'
-                type='checkbox'
-                value={'목요일'}
-                oonChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='thu'>목요일</label>
-              <input 
-                id='fri'
-                name='weekday'
-                type='checkbox'
-                value={'금요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='fri'>금요일</label>
-              <input 
-                id='sat'
-                name='weekday'
-                type='checkbox'
-                value={'토요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='sat'>토요일</label>
-              <input 
-                id='sun'
-                name='weekday'
-                type='checkbox'
-                value={'일요일'}
-                onChange={(e) => handleClickWeekday(e)}
-              />
-              <label htmlFor='sun'>일요일</label>
-            </div>
-            <button onClick={handleListUp}>리스트업</button>
+          <div className="addClassFormButton">
+            <button className='addClassButton' onClick={handleAddClass}>강의 추가</button>
           </div>
         </div>
-      ))} */}
+        <hr />
+ 
+        <div className="addClassFormBody">
+          {classList.map((item, i) => (
+            <div className="addClassForm" key={item.key}>
+
+              <div className="addClassFormTitle">강의{i+1}</div>
+
+              <div className="addClassFormItem1">
+                <div className="addClassFormItem2Title">강의명</div>
+                <input 
+                  type='text'
+                  name={`class_name${i}`}
+                  placeholder={`ex) 강의명 ${i+1}`}
+                  onChange={(e) => handleInput(i, 'class_name', e.target.value)}
+                />
+                <div className="addClassFormItem2Title">수강료</div>
+                <input 
+                  type='text'
+                  name={`price${i}`}
+                  placeholder={`ex) 10000`}
+                  onChange={(e) => handleInput(i, 'price', e.target.value)}
+                />
+                <div className="addClassFormItemTitle">정원</div>
+                <input 
+                  type='text'
+                  name={`class_size${i}`}
+                  placeholder={`ex) 50`}
+                  onChange={(e) => handleInput(i, 'class_size', e.target.value)}
+                />
+              </div>
+
+              <div className="addClassFormItem2">
+                <div className="addClassFormItem1Title">시작일</div>
+                <input 
+                  type='date'
+                  name={`start_date${i}`}
+                  min={new Date().toISOString().substring(0, 10)}
+                  onChange={(e) => handleInput(i, 'start_date', e.target.value)}
+                />
+                <div className="addClassFormItem1Title">종료일</div>
+                <input 
+                  type='date'
+                  name={`end_date${i}`}
+                  min={new Date().toISOString().substring(0, 10)}
+                  onChange={(e) => handleInput(i, 'end_date', e.target.value)}
+                />
+                <div className="addClassFormItemTitle">시작시간</div>
+                <input 
+                  type='time'
+                  name={`start_time${i}`}
+                  onChange={(e) => handleInput(i, 'start_time', e.target.value)}
+                />
+                <div className="addClassFormItemTitle">종료시간</div>
+                <input 
+                  type='time'
+                  name={`end_time${i}`}
+                  max={currentFacility.close_time}
+                  onChange={(e) => handleInput(i, 'end_time', e.target.value)}
+                />
+              </div>
+
+              <div className="addClassFormItem3">
+                <div className="addClassFormItemTitle">수업일(복수선택 가능)</div>
+                <input 
+                  id={`mon${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'월요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`mon${i}`}>월요일</label>
+                <input 
+                  id={`tue${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'화요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`tue${i}`}>화요일</label>
+                <input 
+                  id={`wed${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'수요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`wed${i}`}>수요일</label>
+                <input 
+                  id={`thu${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'목요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`thu${i}`}>목요일</label>
+                <input 
+                  id={`fri${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'금요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`fri${i}`}>금요일</label>
+                <input 
+                  id={`sat${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'토요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`sat${i}`}>토요일</label>
+                <input 
+                  id={`sun${i}`}
+                  name={`weekday${i}`}
+                  type='checkbox'
+                  value={'일요일'}
+                  onChange={(e) => handleClickWeekday(i, e)}
+                />
+                <label htmlFor={`sun${i}`}>일요일</label>
+                <button className='cancleClassButton' onClick={() => handleDelete(item, i)}>삭제</button>           
+              </div>
+            </div>
+          ))}
+        </div>
+        {classList.length > 0?
+        <div className="addclassFormFoot">
+          <button className='submitClassButton' onClick={handleSubmit}>등록하기</button>
+        </div>
+        : <></>}
       </div>
     </div>
   )

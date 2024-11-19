@@ -31,14 +31,16 @@ public class AdminClassService {
             else idx = "i+1";
             String class_id = "C_" + facility_id.substring(12) + idx;
             classList.get(i).setClass_id(class_id);
-            System.out.println("서비스 처리1 클래스 id 생성 : " + class_id);
+            System.out.println("서비스 처리1) 클래스 id 생성 : " + class_id);
             adminClassMapper.register(classList.get(i));
 
             // 처리2-1) weekday, class_data 생성
             List<String> weekdaySet = classList.get(i).getWeekday();
-            LocalDate staer_date = classList.get(i).getStart_date();
+            System.out.println("서비스 처리2-1) weekdaySet : " + weekdaySet);
+
+            LocalDate start_date = classList.get(i).getStart_date();
             LocalDate end_date = classList.get(i).getEnd_date();
-            LocalDate current_date = staer_date;
+            LocalDate current_date = start_date;
 
             List<LocalDate> class_date = new ArrayList<>();
             List<String> weekday = new ArrayList<>();
@@ -60,13 +62,15 @@ public class AdminClassService {
                 // step3) 날짜 하루 증가시키기
                 current_date = current_date.plusDays(1);
             }
+            System.out.println("서비스 처리 2-1) 생성된 class_date : " + class_date);
+            System.out.println("서비스 처리 2-1) 생성된 weekday : " + weekday);
 
             // 처리2-2) class_detail 등록
             for(int j = 0; j < class_date.size(); j++) {
                 ClassDetailVO classDetailVO = ClassDetailVO.builder()
                         .class_id(class_id)
-                        .weekday(weekday.get(i))
-                        .class_date(class_date.get(i))
+                        .weekday(weekday.get(j))
+                        .class_date(class_date.get(j))
                         .build();
                 adminClassMapper.registerDetail(classDetailVO);
             }

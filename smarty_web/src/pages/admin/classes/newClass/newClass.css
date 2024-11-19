@@ -1,37 +1,82 @@
 .newClass {
-    display: flex;
-    flex-direction: column;
     height: 100%;
 }
 
-.addClassTitle {
+.newClassContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.addClassFormHead {
     flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.addClassTitle {
     font-size: 24px;
     color: #011B2F;
     font-weight: 500;
+    margin-right: 50px;
 }
 
-.addClassContainer {
-    flex: 10;
-    width: 100%;
+.addClassButton,
+.submitClassButton,
+.cancleClassButton {
+    border: none;
+    width: 100px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    color: white;
+    background-color: #011b2f;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.addClassButton {
+    background-color: #195E8E;
+}
+.cancleClassButton {
+    width: 50px;
+    background-color: rgb(167, 16, 16);
+}
+
+.addClassFormBody {
+    flex: 11;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
 }
 
 .addClassForm {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     border: none;
     border-radius: 10px;
-    margin: 0 10px;
     box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
 }
 
 .addClassFormItem1,
-.addClassFormItem2 {
-    background-color: lightblue;
+.addClassFormItem2,
+.addClassFormItem3 {
     display: flex;
-    
+    margin-bottom: 10px;
+}
+
+.addClassFormItem1>input,
+.addClassFormItem2>input {
+    margin-right: 20px;
+}
+
+.addClassFormItem1>div,
+.addClassFormItem2>div,
+.addClassFormItem3>div,
+.addClassFormItem3>label {
+    margin-right: 10px;
+}
+
+.addclassFormFoot {
+    flex: 1;
 }

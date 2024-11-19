@@ -1,11 +1,11 @@
 import axios from "axios"
 
 export const API_SERVER_HOST = "http://localhost:8080"
-const prefix = `${API_SERVER_HOST}/api/admin/courts`
+const prefix = `${API_SERVER_HOST}/api/admin/classes`
 
-export const postAddClass = async(courtList) => {
+export const postAddClass = async(classList) => {
     try{
-        const res = await axios.post(`${prefix}/`, courtList)
+        const res = await axios.post(`${prefix}/`, classList)
         console.log("postAddClass : ", res.data)
         return res.data
     } catch(error) {

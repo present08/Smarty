@@ -1,0 +1,291 @@
+.parking-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 3rem;
+    flex-direction: column;
+}
+
+/* ------------------- */
+
+.submu {
+    margin: 0 auto;
+    width: 70%;
+}
+
+.submu nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+/* ------------------- */
+
+.parking-cont {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.parking-cont h3 {
+    font-size: 28px;
+    display: flex;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+/* ------------------- */
+
+/* banner.css */
+.parking-map {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+.parking-map div {
+    width: 30%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.parking-map div ul {
+    font-size: 18px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.parking-map div ul li {
+    font-size: 16px;
+    padding: 8px 0;
+    color: #333;
+}
+
+.parking-map div ul:first-child {
+    font-weight: bold;
+    font-size: 24px;
+    color: #376797;
+}
+
+.parking-map iframe {
+    width: 80%;
+    height: 350px;
+    border: 0;
+    border-radius: 8px;
+}
+
+
+/* ------------------- */
+
+.btn-wrapper {
+    margin-top: 3rem;
+    font-size: 28px;
+    width: 100%;
+}
+
+.modal-open-button,
+.modal-close-btn {
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.modal-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1200;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #ffffff;
+    width: 70vh;
+    height: 60vh;
+    padding: 15px;
+    border: 10px solid #bed8ef;
+    border-radius: 10px;
+}
+
+.clac-container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+
+.clac-container p,
+.total h3 {
+    font-weight: bold;
+    font-size: 25px;
+    color: black;
+    display: flex;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.calc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 40%;
+    margin: 0 auto;
+    background-color: #071d32;
+    margin-bottom: 30px;
+}
+
+.calc label {
+    color: white;
+    padding: 15px;
+}
+
+.calc input {
+    height: 40px;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-open-btn {
+    width: 250px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: azure;
+    border: none;
+    border-radius: 10px;
+    background-color: #28537a;
+    margin-bottom: 0.4rem;
+}
+
+.modal-close-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+}
+
+.clac-button {
+    margin: 0 auto;
+    width: 200px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: azure;
+    border: none;
+    background-color: #28537a;
+}
+
+.total {
+    font-size: 19px;
+}
+
+/* ------------------- */
+
+.charge-header {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    justify-content: space-between;
+}
+
+.charge-header>h3 {
+    display: flex;
+    align-items: center;
+}
+
+.charge-container {
+    width: 100%;
+}
+
+.charge-cont p {
+    font-size: 21px;
+    display: flex;
+    margin-bottom: 0.4rem;
+}
+
+.charge-cont {
+    margin: auto;
+    width: 95%;
+    height: 100%;
+    /* background-color: #f7f7f7; */
+}
+
+.charge-cont table,
+.total table {
+    border-bottom: 1px solid #071d32;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+.charge-cont table thead,
+.total table thead {
+    height: 40px;
+    width: 100%;
+    background-color: #071d32;
+}
+
+.charge-cont table:nth-child(2) tbody tr:first-child td:first-child {
+    border-right: 1px solid #071d32;
+}
+
+.charge-cont table:nth-child(4) tbody tr:first-child td:last-child {
+    border-left: 1px solid #071d32;
+}
+
+.charge-cont table tbody {
+    height: 150px;
+    width: 100%;
+}
+
+.charge-cont table thead tr th,
+.total table thead tr th {
+    color: #f7f7f7;
+    font-size: 20px;
+}
+
+.total table tbody tr td {
+    height: 40px;
+}
+
+.total table tbody tr td:first-child {
+    border-right: 1px solid #071d32;
+}
+
+.charge-cont table tbody tr td,
+.charge-cont table tbody tr td p {
+    font-size: 18px;
+}
+
+
+.charge-cont table thead tr th:nth-last-of-type(1) {
+    width: 60%
+}
+
+.intro-container {
+    width: 100%;
+}
+
+/* ------------- */

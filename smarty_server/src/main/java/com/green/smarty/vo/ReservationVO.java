@@ -2,9 +2,9 @@ package com.green.smarty.vo;
 
 import lombok.*;
 
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Getter
 @NoArgsConstructor
@@ -12,12 +12,14 @@ import java.time.LocalTime;
 @ToString
 @Setter
 @Builder
-
 public class ReservationVO {
+
     private String reservation_id;
     private String user_id;
     private String court_id;
-    private LocalDateTime reservation_start;
-    private LocalDateTime reservation_end;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reservation_start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reservation_end;
 }

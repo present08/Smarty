@@ -66,32 +66,47 @@ const QrButton = (props) => {
             {error && <p>{error}</p>}
             {isQrVisible && qrCode && (
                 <div
-                    onClick={handleToggleQr}
                     style={{
                         position: 'fixed',
                         top: 0,
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: '#eeeae6',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         zIndex: 900,
-                        flexDirection: 'column'
                     }}
                 >
-                    <div style={{
-                        width: '300px', height: '450px', backgroundColor: '#28527a', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', boxSizing: 'border-box'
-                    }}>
-                        <div>
-                            <img src={qrCode} alt="QR Code" style={{ width: '250px', }} />
-                        </div>
-                        <div>
-                            <h3 style={{ fontSize: '23px', color: '#50c4d2' }}>{props.user.user_name}님의 QR코드 입니다.</h3>
-                            <p style={{ padding: '20px', color: '#eeeae6' }}>QR코드를 통해 출석체크 및 로그인<br />
-                                기능으로 사용 가능합니다.</p>
-                        </div>
+                    <div
+                        style={{
+                            width: '70%',
+                            height: '70%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            backgroundColor: 'white',
+                        }}
+                    >
+                        <h3>{props.user.user_name}님의 QR코드 입니다.</h3>
+                        <img src={qrCode} alt="QR Code" style={{ width: '35%', height: '60%' }} />
+                        <button
+                            onClick={handleToggleQr}
+                            style={{
+                                position: 'absolute',
+                                top: '20px',
+                                right: '20px',
+                                padding: '10px 20px',
+                                backgroundColor: '#ffffff',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            닫기
+                        </button>
                     </div>
                 </div>
             )}

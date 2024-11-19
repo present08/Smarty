@@ -16,11 +16,17 @@ import java.time.LocalDateTime;
 public class ProductRentalUserDTO {
 
     private String user_id;
+
     private String user_name;
+
     private String facility_name;
+
     private String product_id;
+
     private String product_name;
+
     private int price;
+
     private String size;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

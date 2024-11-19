@@ -1,0 +1,119 @@
+* {
+    cursor: pointer;
+}
+
+.listHeader {
+    width: 90%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #f7f7f7;
+}
+
+.listBody {
+    width: 90%;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px 0;
+}
+
+.listBody li {
+    color: gray;
+}
+
+.listHeader li,
+.listBody li {
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.listBody:hover {
+    background-color: #e9ecef;
+}
+
+
+.reservationModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.reservationModalContainer {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reservationModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.reservationModalHeader h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.reservationModalContent {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.reservationModalContent h4 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.reservationModalContent p {
+    margin: 5px 0;
+}
+
+.reservationModalFooter {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.primaryButton {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.primaryButton:hover {
+    background-color: #0056b3;
+}

@@ -1,5 +1,6 @@
 package com.green.smarty.mapper;
 
+import com.green.smarty.vo.FacilityAttachVO;
 import com.green.smarty.vo.FacilityVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,6 +17,8 @@ public interface AdminFacilityMapper {
     List<FacilityVO> getList();
 
     FacilityVO read(String facility_id);
+
+    List<FacilityAttachVO> getImages(String facility_id);
 
     void modify(FacilityVO facilityVO);
 

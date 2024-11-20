@@ -37,7 +37,7 @@ const adminRouter = () => {
             element: <Suspense fallback={Loading}><ClassAdd /></Suspense>,
         },
         {
-            path: "classes/:facility_id/read/:",
+            path: "classes/:facility_id/read/:class_id",
             element: <Suspense fallback={Loading}><ClassRead /></Suspense>,
         },
     ]

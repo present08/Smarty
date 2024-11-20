@@ -15,4 +15,8 @@
 <!--        select * from class C inner join class_detail D on C.class_id = D.class_id;-->
         select * from class
     </select>
+
+    <select id="read">
+        select * from class where class_id = #{class_id}
+    </select>
 </mapper>

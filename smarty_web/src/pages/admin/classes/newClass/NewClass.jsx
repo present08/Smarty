@@ -106,16 +106,15 @@ export default function NewClass() {
           </div>
           <div className="addClassFormButton">
             <button className='addClassButton' onClick={handleAddClass}>강의 추가</button>
+            {classList.length > 0?
+              <button className='submitClassButton' onClick={handleSubmit}>등록하기</button>
+            : <></>}
           </div>
         </div>
-        <hr />
  
         <div className="addClassFormBody">
           {classList.map((item, i) => (
             <div className="addClassForm" key={item.key}>
-
-              <div className="addClassFormTitle">강의{i+1}</div>
-
               <div className="addClassFormItem1">
                 <div className="addClassFormItem2Title">강의명</div>
                 <input 
@@ -233,11 +232,7 @@ export default function NewClass() {
             </div>
           ))}
         </div>
-        {classList.length > 0?
-        <div className="addclassFormFoot">
-          <button className='submitClassButton' onClick={handleSubmit}>등록하기</button>
-        </div>
-        : <></>}
+
       </div>
     </div>
   )

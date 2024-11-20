@@ -249,7 +249,8 @@ export default function NewFacility() {
                             <input
                                 name="default_time"
                                 id="default_time"
-                                type={"text"}
+                                type={"number"}
+                                min={0}
                                 value={facility.default_time}
                                 onChange={handleInput}
                                 placeholder="ex) 1"

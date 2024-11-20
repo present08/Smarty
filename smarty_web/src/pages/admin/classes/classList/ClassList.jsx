@@ -36,8 +36,8 @@ export default function ClassList() {
       renderCell: (params) => {
         return (
           <div className="classAction">
-            <Link to={`/admin/classes/${facility_id}/read` + params.row.class_id}>
-              <button className="classReadButton">Read</button>
+            <Link to={`/admin/classes/${facility_id}/read/` + params.row.class_id}>
+              <button className="classReadButton">조회</button>
             </Link>
           </div>
         )
@@ -51,7 +51,7 @@ export default function ClassList() {
         <div className="classContainerTop">
           <div className="classTitle">{currentFacility && currentFacility.facility_name} 강의 목록</div>
           <Link to={`/admin/classes/${facility_id}/add`}>
-            <button className="classAddButton">Create</button>
+            <button className="classAddButton">강의 추가</button>
           </Link>
         </div>
         <DataGrid

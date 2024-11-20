@@ -2,9 +2,13 @@ package com.green.smarty.service;
 
 import com.green.smarty.mapper.AdminFacilityMapper;
 import com.green.smarty.util.CustomFileUtil;
+import com.green.smarty.vo.FacilityAttachVO;
 import com.green.smarty.vo.FacilityVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -68,12 +72,41 @@ public class AdminFacilityService {
         return id;
     }
 
+    // 전체 시설 조회
     public List<FacilityVO> getList() {
-        return adminFacilityMapper.getList();
+        // 처리) 각 FacilityVO마다 FacilityAttachVO의 파일 이름 정보 -> FacilityVO.setFile_name
+        List<FacilityVO> facilityList = adminFacilityMapper.getList();
+        for(FacilityVO facilityVO : facilityList) {
+            // 각 FacilityVO의 facility_id 추출하여 파일 정보 얻기
+            List<FacilityAttachVO> attachList = adminFacilityMapper.getImages(facilityVO.getFacility_id());
+            List<String> file_name = facilityVO.getFile_name();
+
+            // 각 FacilityVO의 file_name 배열에 FacilityAttachVO 파일 이름 담기
+            for(FacilityAttachVO facilityAttachVO : attachList) {
+                file_name.add(facilityAttachVO.getFile_name());
+            }
+            facilityVO.setFile_name(file_name);
+        }
+        return facilityList;
     }
 
+    // 개별 시설 조회
     public FacilityVO read(String facility_id) {
-        return adminFacilityMapper.read(facility_id);
+        // 처리) FacilityAttachVO의 파일 이름 정보 -> FacilityVO.setFile_name
+        List<FacilityAttachVO> attachList = adminFacilityMapper.getImages(facility_id);
+        FacilityVO facilityVO = adminFacilityMapper.read(facility_id);
+
+        List<String> file_name = facilityVO.getFile_name();
+        for (FacilityAttachVO facilityAttachVO : attachList) {
+            file_name.add(facilityAttachVO.getFile_name());
+        }
+        facilityVO.setFile_name(file_name);
+        return facilityVO;
+    }
+
+    public ResponseEntity<Resource> showImages(@PathVariable(name = "file_name") String file_name) {
+        System.out.println("서비스 파일 조회! : " + file_name);
+        return customFileUtil.getFile(file_name);
     }
 
     public FacilityVO modify(FacilityVO facilityVO) {

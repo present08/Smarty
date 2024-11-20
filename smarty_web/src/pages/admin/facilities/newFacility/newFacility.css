@@ -1,5 +1,4 @@
 .newFacility {
-    margin: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -8,17 +7,16 @@
 
 .addFacilityTitle {
     height: 10%;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: 300;
     color: #011B2F;
-    font-weight: 600;
 }
 
 /* 시설 등록 폼 스타일 */
 .addFacilityForm {
-    height: 80%;
+    height: 90%;
     display: flex;
     width: 100%;
-    height: 90%;
 }
 
 .addFacilityFormLeft,
@@ -40,13 +38,18 @@
 .leftItemTitle,
 .rightItemTitle {
     flex: 1;
-    font-size: 18px;
-    color: #011B2F;
+    font-size: 16px;
+    color: #8b969c;
 }
 
 .leftItemContent,
 .rightItemContent {
     flex: 9;
+}
+.leftItem,
+.rightItem {
+    display: flex;
+    align-items: center;
 }
 
 .addFacilityFormSub {
@@ -56,16 +59,17 @@
     box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
-    width: 70%;
+    width: 50%;
     height: 180px;
-    margin: 20px 0px;
+    margin: 30px 0 0 30px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 .addFacilityFormSubTitle {
-    font-size: 15px;
-    color: #011B2F;
+    font-size: 16px;
+    color: #8b969c;
     margin-bottom: 20px;
     flex: 1;
 }
@@ -77,7 +81,7 @@
 .subItem {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 10px;
 }
 
@@ -94,7 +98,8 @@
 
 .leftItem>label,
 .subItemTitle,
-.rightItem>label {
+.rightItem>label,
+.subItem>label {
     font-weight: 300;
     font-size: 14px;
     color: #555;
@@ -138,12 +143,12 @@
 .addPirceButton,
 .canclePirceButton {
     border: none;
-    width: 80px;
+    width: 60px;
+    height: 30px;
     border-radius: 5px;
-    padding: 5px 0px;
-    color: white;
+    color: aliceblue;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     margin: 10px;
     cursor: pointer;
 }
@@ -155,7 +160,7 @@
 
 .cancelFacilityButton,
 .canclePirceButton {
-    background-color: rgb(167, 16, 16);
+    background-color: rgb(161, 20, 20);
 }
 
 /* 상세 시설 등록 폼 스타일 */
@@ -211,7 +216,6 @@
     height: 100%;
     justify-content: center;
     align-items: center;
-
 }
 
 .modalshowInfo {

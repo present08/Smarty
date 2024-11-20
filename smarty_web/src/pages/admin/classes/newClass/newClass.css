@@ -1,7 +1,3 @@
-.newClass {
-    height: 100%;
-}
-
 .newClassContainer {
     height: 100%;
     display: flex;
@@ -9,9 +5,10 @@
 }
 
 .addClassFormHead {
-    flex: 1;
+    height: 10%;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid #f7f7f7;
 }
 
 .addClassTitle {
@@ -22,35 +19,45 @@
 }
 
 .addClassButton,
-.submitClassButton,
-.cancleClassButton {
+.submitClassButton {
+    width: 80px;
+    height: 25px;
     border: none;
-    width: 100px;
+    background-color: #003f66;
+    color: aliceblue;
     border-radius: 5px;
-    padding: 5px 0px;
-    color: white;
-    background-color: #011b2f;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 .addClassButton {
     background-color: #195E8E;
 }
 .cancleClassButton {
     width: 50px;
-    background-color: rgb(167, 16, 16);
+    height: 25px;
+    border: none;
+    color: #555;
+    border-radius: 5px;
+    margin-left: 130px;
+    cursor: pointer;
 }
 
 .addClassFormBody {
-    flex: 11;
+    height: 90%;
+    width: 770px;
     display: flex;
     flex-direction: column;
 }
 
 .addClassForm {
+    height: 80px;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    gap: 10px;
+    margin: 20px 0 0 20px;
+    padding: 10px;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
@@ -61,13 +68,16 @@
 .addClassFormItem1,
 .addClassFormItem2,
 .addClassFormItem3 {
+    flex: 1;
     display: flex;
-    margin-bottom: 10px;
+    align-items: center;
 }
 
 .addClassFormItem1>input,
 .addClassFormItem2>input {
     margin-right: 20px;
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
 }
 
 .addClassFormItem1>div,
@@ -75,8 +85,7 @@
 .addClassFormItem3>div,
 .addClassFormItem3>label {
     margin-right: 10px;
-}
-
-.addclassFormFoot {
-    flex: 1;
+    font-weight: 300;
+    font-size: 14px;
+    color: #555;
 }

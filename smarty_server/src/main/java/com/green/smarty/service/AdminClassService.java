@@ -81,7 +81,7 @@ public class AdminClassService {
         return adminClassMapper.getList();
     }
 
-//    public ClassAdminDTO read(String class_id) {
-//        return adminClassMapper.read(class_id);
-//    }
+    public ClassAdminDTO read(String class_id) {
+        return adminClassMapper.read(class_id);
+    }
 }

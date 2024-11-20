@@ -1,20 +1,21 @@
 .newFacility {
+    margin: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: flex-start;
     height: 100%;
 }
 
 .addFacilityTitle {
-    flex: 1;
+    height: 10%;
     font-size: 24px;
     color: #011B2F;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* 시설 등록 폼 스타일 */
 .addFacilityForm {
-    flex: 10;
+    height: 80%;
     display: flex;
     width: 100%;
     height: 90%;
@@ -26,25 +27,26 @@
     padding: 20px;
     border: none;
     border-radius: 10px;
-    margin: 0 10px;
+    margin: 0 40px 0px 0;
     box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .leftItemTitle,
 .rightItemTitle {
     flex: 1;
-    font-size: 17px;
+    font-size: 18px;
     color: #011B2F;
-    margin-bottom: 20px;
 }
 
 .leftItemContent,
 .rightItemContent {
-    flex: 11;
+    flex: 9;
 }
 
 .addFacilityFormSub {

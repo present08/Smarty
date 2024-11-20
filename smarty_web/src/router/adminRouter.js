@@ -12,7 +12,6 @@ const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
 const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
 
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
-const ProductAdd = lazy(() => import("../pages/admin/products/newProduct/NewProduct"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
 
 const adminRouter = () => {
@@ -50,11 +49,7 @@ const adminRouter = () => {
             element: <Suspense fallback={Loading}><ProductList/></Suspense>,
         },
         {
-            path: "products/:facility_id/add",
-            element: <Suspense fallback={Loading}><ProductAdd /></Suspense>,
-        },
-        {
-            path: "products/:facility_id/read/:",
+            path: "products/:facility_id/read/:product_id",
             element: <Suspense fallback={Loading}><ProductRead /></Suspense>,
         },
     ]

@@ -66,7 +66,7 @@ export const getOneProduct = async (product_id) => {
     } catch (error) {
         console.error("특정 상품 조회 실패:", error);
         throw error;
-    }
+    } 
 };
 
 // 시설별 대여물품 상태 가져오기 (관리자용)

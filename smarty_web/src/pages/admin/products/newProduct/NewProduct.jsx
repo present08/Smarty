@@ -1,9 +1,10 @@
 import "./newProduct.css";
 import { useState } from "react";
+import { postProductData, uploadProductFiles } from "../../../../api/admin/productApi"; // 백엔드 API 호출
 
 const initProduct = {
   product_id: "",
-  facility_id: "fc_1731390393778", // 기본 시설 ID
+  facility_id: "",
   product_name: "",
   stock: "",
   price: "",
@@ -12,8 +13,8 @@ const initProduct = {
   size: [], // 사이즈 리스트
 };
 
-export default function NewProduct({ productPass }) {
-  const [product, setProduct] = useState({ ...initProduct });
+export default function NewProduct({ productPass, facilityId, context, onClose }) {
+  const [product, setProduct] = useState({ ...initProduct, facility_id: facilityId || "" });
   const [productList, setProductList] = useState([]); // 등록할 상품 리스트
 
   // 입력값 변경 핸들러
@@ -43,35 +44,56 @@ export default function NewProduct({ productPass }) {
   // 상품 리스트에 추가
   const onClickUpdate = () => {
     if (!product.product_name || !product.stock || !product.price) {
-        alert("모든 필수 입력값을 채워주세요.");
-        return;
+      alert("모든 필수 입력값을 채워주세요.");
+      return;
     }
 
     const updatedProduct = {
-        ...product,
-        price: parseInt(product.price, 10), // 숫자로 변환
-        stock: parseInt(product.stock, 10), // 숫자로 변환
-        files: product.files || [], // files 초기화
+      ...product,
+      price: parseInt(product.price, 10), // 숫자로 변환
+      stock: parseInt(product.stock, 10), // 숫자로 변환
+      files: product.files || [], // files 초기화
     };
 
     setProductList((prev) => [...prev, updatedProduct]);
-    setProduct({ ...initProduct });
-};
+    setProduct({ ...initProduct, facility_id: facilityId || "" });
+  };
 
-// 부모 컴포넌트로 데이터 전달
-const handleProductSubmit = () => {
-  if (productList.length === 0) {
+  // 부모 컴포넌트로 데이터 전달 또는 백엔드 전송
+  const handleProductSubmit = async () => {
+    if (productList.length === 0) {
       alert("추가된 상품이 없습니다.");
       return;
-  }
+    }
 
-  console.log("전송할 상품 리스트:", productList);
+    if (context === "productList") {
+      // 상품 리스트 페이지: JSON 데이터 전송
+      try {
+        const productData = productList.map(({ files, ...rest }) => rest); // 파일 제외
+        const productIds = await postProductData(productData); // JSON 전송
 
-  productPass(productList); // 부모 컴포넌트로 상품 리스트 전달
-  alert("상품 리스트가 시설 폼에 추가되었습니다.");
-  setProductList([]); // 상품 리스트 초기화
-};
+        // 파일 업로드 처리
+        productList.forEach((productItem, index) => {
+          if (productItem.files && productItem.files.length > 0) {
+            uploadProductFiles(productIds[index], productItem.files); // 파일 전송
+          }
+        });
 
+        alert("상품 등록 성공!");
+        setProductList([]); // 리스트 초기화
+        onClose(); // 모델창 닫기
+      } catch (error) {
+        console.error("상품 등록 실패:", error);
+        alert("상품 등록 중 오류가 발생했습니다.");
+      }
+    } else if (context === "facility") {
+      // 시설 등록 페이지: 리스트에 저장
+      productPass(productList); // 부모 컴포넌트로 리스트 전달
+      alert("상품 리스트가 시설 폼에 추가되었습니다.");
+      setProductList([]); // 리스트 초기화
+      onClose(); // 모델창 닫기
+    }
+  };
 
   return (
     <div className="newProduct">
@@ -127,8 +149,9 @@ const handleProductSubmit = () => {
         {product.management_type === "사이즈별 관리" && (
           <div className="addProductItem">
             <label>사이즈 선택</label>
-            <div>
-              {["S", "M", "L", "XL", "XXL", "240", "250", "260", "270", "280"].map(
+            <div className="sizeOptions">
+            {["S", "M", "L", "XL", "XXL",
+                "240", "250", "260", "270", "280"].map(
                 (size) => (
                   <label key={size}>
                     <input
@@ -147,12 +170,7 @@ const handleProductSubmit = () => {
 
         <div className="addProductItem">
           <label>이미지</label>
-          <input
-            id="files"
-            type="file"
-            multiple
-            onChange={handleInputFile}
-          />
+          <input id="files" type="file" multiple onChange={handleInputFile} />
         </div>
 
         <button className="addProductButton" onClick={onClickUpdate}>
@@ -162,6 +180,7 @@ const handleProductSubmit = () => {
 
       <div className="addProductList">
         <h4>등록된 상품 리스트</h4>
+        <h5>=========================</h5>
         {productList.map((item, index) => (
           <div key={index}>
             <p>상품명: {item.product_name}</p>
@@ -169,13 +188,14 @@ const handleProductSubmit = () => {
             {item.management_type === "사이즈별 관리" && (
               <p>사이즈: {item.size.join(", ")}</p>
             )}
+        <h5>=========================</h5>
           </div>
         ))}
       </div>
 
       <div className="addProductListButton">
         <button className="submitProductButton" onClick={handleProductSubmit}>
-          등록
+          {context === "facility" ? "폼에 추가" : "등록"}
         </button>
         <button
           className="resetProductButton"

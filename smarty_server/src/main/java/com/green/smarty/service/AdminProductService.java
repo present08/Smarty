@@ -120,6 +120,9 @@ public class AdminProductService {
 
     public ProductAdminDTO getProductById(String productId) {
         ProductVO productVO = adminProductMapper.getProductById(productId);
+        if (productVO == null) {
+            throw new IllegalArgumentException("해당 상품 ID가 존재하지 않습니다: " + productId);
+        }
         return toProductAdminDTO(productVO);
     }
 

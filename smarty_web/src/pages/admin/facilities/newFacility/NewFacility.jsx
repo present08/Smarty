@@ -335,7 +335,9 @@ export default function NewFacility() {
                                     <span className="subItemtext">{product.length}개의 물품 등록</span>
                                     {productModal ?
                                         <Modal
-                                            content={<NewProduct productPass={productPass} />}
+                                            content={<NewProduct productPass={productPass}
+                                                context="facility"
+                                                onClose={closeModal}/>}
                                             callbackFn={closeModal} />
                                         : <></>
                                     }

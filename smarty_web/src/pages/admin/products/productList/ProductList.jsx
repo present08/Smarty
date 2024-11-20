@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Button, Stack } from "@mui/material";
 import * as XLSX from "xlsx";
 import { fetchProductStatusByFacility, updateProductStatus, updateProductStock } from "../../../../api/admin/productApi";
+import NewProduct from "../../products/newProduct/NewProduct"; // NewProduct import
+import Modal from "../../../../component/admin/modal/Modal"; // Modal 컴포넌트 import
 
 export default function ProductList() {
   const { facility_id } = useParams();
@@ -13,6 +15,7 @@ export default function ProductList() {
   const [modifiedData, setModifiedData] = useState({});
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPageRows, setCurrentPageRows] = useState([]);
+  const [productModalOpen, setProductModalOpen] = useState(false); // 모달 상태 추가
 
   // 데이터 로드
   const fetchData = () => {
@@ -144,6 +147,13 @@ export default function ProductList() {
     alert("엑셀 파일로 내보내기 완료!");
   };
 
+
+  // 모달 토글 함수
+  const toggleProductModal = () => {
+    setProductModalOpen((prev) => !prev);
+  };
+
+
   // 렌더링 로직 수정
   const columns = [
     { field: "status_id", headerName: "상태 ID", width: 120 },
@@ -192,8 +202,8 @@ export default function ProductList() {
       width: 400,
       renderCell: (params) => (
         <div className="productAction">
-          <Link to={`/products/read/${params.row.product_id}`}>
-            <button className="productListEdit">Edit</button>
+          <Link to={`/admin/products/${facility_id}/read/` + params.row.product_id}>
+            <button className="productListEdit">상품 조회</button>
           </Link>
           <button
             onClick={() => handleSaveRow(params.row.status_id)}
@@ -226,7 +236,7 @@ export default function ProductList() {
     },
   ];
 
-  const paginationModel = { page: 0, pageSize: 5 };
+  const paginationModel = { page: 0, pageSize: 10 };
 
   return (
     <div className="productList">
@@ -250,6 +260,13 @@ export default function ProductList() {
             >
               선택된 항목 저장
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={toggleProductModal}
+            >
+              상품 추가
+            </Button>
           </div>
         </Stack>
         <DataGrid
@@ -270,10 +287,22 @@ export default function ProductList() {
           }}
           getRowId={(row) => row.status_id}
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
           sx={{ border: 0 }}
         />
       </div>
+            {/* 상품 추가 모달 */}
+            {productModalOpen && (
+        <Modal
+          content={
+            <NewProduct
+              facilityId={facility_id}
+              context="productList"
+              onClose={toggleProductModal}
+            />
+          }
+          callbackFn={toggleProductModal}
+        />
+      )}
     </div>
   );
 }

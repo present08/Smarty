@@ -24,4 +24,5 @@ public class BoardVO {
     private LocalDateTime update_date;
     private int is_deleted;
     private String ip_address;
+    private LocalDateTime deleted_date;
 }

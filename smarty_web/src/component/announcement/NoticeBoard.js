@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Await, useNavigate } from 'react-router-dom';
-import '../../css/announcement.css';
+import '../../css/noticeBoard.css';
 import axios from 'axios';
 import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
 import Footer from '../Footer';
+import { noticeApi } from '../../api/noticeApi';
 
 function Announcement() {
     const navigate = useNavigate();
 
     const [boards, setBoards] = useState([])
+    const [keyword, setKeyword] = useState('')
+    const [searchType, setSearchType] = useState('title')
     const [announcements, setAnnouncements] = useState({
         title: '',
         content: '',
@@ -23,6 +26,53 @@ function Announcement() {
 
     const [isModalState, setIsModalState] = useState(false);
 
+    useEffect(() => {
+        const fetchNotices = async () => {
+            try {
+                const response = await noticeApi.getNoticeList();
+                setBoards(response.data);
+            } catch (error) {
+                console.error('게시글 불러오기 실패:', error);
+            }
+        };
+        fetchNotices();
+    }, []);
+
+    const toggleItem = async (board_id) => {
+        try {
+            await noticeApi.updateViewCount(board_id);
+            navigate(`/notice/board/${board_id}`)
+        } catch (error) {
+            console.error('조회수 업데이트 실패:', error);
+        }
+    }
+
+    const handleSearch = async () => {
+        if (!keyword.trim()) {
+            alert('검색어를 입력해주세요');
+            return;
+        }
+        try {
+            console.log('검색 요청 파라미터:', { keyword, searchType });
+            const response = await noticeApi.searchNotice(keyword, searchType);
+            console.log('검색 응답 데이터:', response.data);
+
+            if (response.data) {
+                setBoards(response.data);
+                if (response.data.length === 0) {
+                    alert('검색 결과가 없습니다.');
+                }
+            }
+        } catch (error) {
+            console.error('검색 중 오류가 발생했습니다:', error);
+            alert('검색 중 오류가 발생했습니다.');
+        }
+    }
+
+    const handleModalState = () => {
+        setIsModalState(!isModalState);
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setAnnouncements(prev => ({
@@ -31,34 +81,13 @@ function Announcement() {
         }));
     }
 
-    const handleModalState = () => {
-        if (announcements.title?.trim() || announcements.content?.trim()) {
-            if (window.confirm('작성 중인 내용은 저장되지 않습니다. 그래도 종료 하시겠습니까?')) {
-                setIsModalState(false);
-                setAnnouncements({
-                    title: '',
-                    content: '',
-                    content_type: '',
-                });
-            }
-        } else {
-            setIsModalState(false);
-        }
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const currentDate = new Date().toISOString().replace('Z', '');
-        const newNoticeItem = {
-            ...announcements,
-            send_date: currentDate
-        };
         try {
-            const response = await axios.post("http://localhost:8080/notice/board/user/write", newNoticeItem);
+            const response = await noticeApi.writeNotice(announcements);
             if (response.data) {
-                const updatedResponse = await axios.get("http://localhost:8080/notice/board/user/nodeletelist");
+                const updatedResponse = await noticeApi.getNoticeList();
                 setBoards(updatedResponse.data);
-
                 setAnnouncements({
                     title: '',
                     content: '',
@@ -71,56 +100,54 @@ function Announcement() {
                 alert('게시글이 등록되었습니다.');
             }
         } catch (error) {
-            console.error('게시글 작성 실패:', error);
             alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
         } finally {
             setIsModalState(false);
         }
-    }
-
-    useEffect(() => {
-        const fetchNotices = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/notice/board/user/nodeletelist");
-                console.log('서버 응답 데이터:', response.data);
-                setBoards(response.data);
-            } catch (error) {
-                console.error('게시글 불러오기 실패:', error);
-            }
-        };
-        fetchNotices();
-    }, []);
-
-    const toggleItem = async (board_id) => {
-        try {
-            await axios.post(`http://localhost:8080/notice/board/user/view/${board_id}`);
-            navigate(`/notice/board/${board_id}`)
-        } catch (error) {
-            console.error('조회수 업데이트 실패:', error);
-        }
-    }
+    };
 
     return (
         <>
+            <link rel="stylesheet" href="../../css/noticeBoard.css" />
             <MainNav />
             <Wrapper />
             <BackToTopButton />
             <div className="nb-notice-board">
                 <div className="nb-header">
-                    <h1 className="nb-header-title">공지사항</h1>
-                    <p className="nb-header-subtitle">SMARTY의 새로운 소식을 확인하세요</p>
+                    <h1 className="nb-header-title">자유게시판</h1>
+                    <p className="nb-header-subtitle">회원들과 자유롭게 소통해보세요</p>
                 </div>
 
                 <div className="container">
                     <div className="button-container">
-                        <div>
-                            <h2 className="page-title">전체 게시글</h2>
-                        </div>
+                        <h2 className="page-title">전체 게시글</h2>
                         <button
                             className="write-button"
-                            onClick={() => setIsModalState(true)}
+                            onClick={handleModalState}
                         >
-                            글쓰기
+                            <i className="fas fa-pen"></i> 글쓰기
+                        </button>
+                    </div>
+                    <div className='nb-search-container'>
+                        <select
+                            value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)}
+                        >
+                            <option value='title'>제목</option>
+                            <option value='content'>내용</option>
+                        </select>
+                        <input
+                            type='text'
+                            placeholder='검색어를 입력하세요'
+                            className='nb-search-input'
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                        >
+                        </input>
+                        <button className='nb-search-button'
+                            onClick={handleSearch}
+                        >
+                            검색
                         </button>
                     </div>
 

@@ -4,8 +4,7 @@ import BoardDetail from '../component/announcement/BoardDetail';
 const Loading = <div>Loading...</div>;
 const Notice = lazy(() => import("../component/announcement/Announcement"));
 const NoticeBoard = lazy(() => import("../component/announcement/NoticeBoard"));
-
-
+const NoticeModifyPage = lazy(() => import("../component/announcement/NoticeModifyPage"));
 
 const newNoticeRouter = () => {
     return [
@@ -21,7 +20,11 @@ const newNoticeRouter = () => {
             path: "board/:board_id",
             element: <Suspense fallback={Loading}><BoardDetail /></Suspense>
         },
+        {
+            path: "board/modify/:board_id",
+            element: <Suspense fallback={Loading}><NoticeModifyPage /></Suspense>
+        }
     ];
 }
 
-export default newNoticeRouter
+export default newNoticeRouter;

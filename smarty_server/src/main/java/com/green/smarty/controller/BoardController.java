@@ -87,13 +87,22 @@ public class BoardController {
     }
 
     // 게시글 수정
-    @PutMapping("/modify/{boardId}")
+    @PutMapping("/modify/{board_id}")
     public ResponseEntity<String> updateBoard(
-            @PathVariable("boardId") int boardId,
+            @PathVariable("board_id") int boardId,
             @RequestBody BoardDTO request) {
-
-        boardService.updateBoardById(boardId, request.getTitle(), request.getContent(), request.getContent_type());
-        return ResponseEntity.ok("게시글이 성공적으로 업데이트되었습니다.");
+        try {
+            int updatedRows = boardService.updateBoardById(request.getBoard_id(), request.getTitle(), request.getContent(), request.getContent_type());
+            if (updatedRows > 0) {
+                return ResponseEntity.ok("게시글이 성공적으로 업데이트되었습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("업데이트에 실패했습니다.");
+            }
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
     }
 
     // 삭제되지 않은 게시글 전체 조회
@@ -101,5 +110,54 @@ public class BoardController {
     public List<BoardDTO> getVisibleBoards() {
         return boardService.getVisibleBoards();
     }
+
+    // 조건부 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<BoardDTO>> searchBoard(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("type") String type){
+        try{
+            log.info("검색 요청 파라미터 - type: {}, keyword: {}", type, keyword); // 파라미터 로깅
+            List<BoardDTO> result = boardService.searchBoard(type, keyword);
+            log.info("검색 결과 데이터: {}", result); // 결과 데이터 로깅
+            return ResponseEntity.ok(result);
+        } catch (Exception e){
+            log.error("검색 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 좋아요 증가
+    @PostMapping("/view/good/{board_id}")
+    public ResponseEntity<Void> updateGood(@PathVariable int board_id) {
+        try {
+            boardService.updateGood(board_id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error incrementing view count: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 싫어요 증가
+    @PostMapping("/view/bad/{board_id}")
+    public ResponseEntity<Void> updateBad(@PathVariable int board_id) {
+        try {
+            boardService.updateBad(board_id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error incrementing view count: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 삭제 날짜 저장
+    @PostMapping("/delete/{board_id}")
+    public ResponseEntity<Integer> deletedDate(@PathVariable int board_id){
+        boardService.deletedDate(board_id);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

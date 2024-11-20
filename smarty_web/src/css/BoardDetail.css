@@ -1,70 +1,214 @@
 .board-detail-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background: #fff;
+    border: 1px solid #ddd;
 }
 
-.board-detail-content {
-    width: 100%;
+.board-header {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-category {
+    color: #666;
+    margin-bottom: 8px;
+    font-size: 14px;
 }
 
 .board-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 20px;
+    margin: 0;
     color: #333;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 1rem;
 }
 
-.board-info {
+.board-info-bar {
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.info-left span {
+    margin-right: 20px;
     color: #666;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
+}
+
+.info-right {
+    color: #888;
 }
 
 .board-content {
-    min-height: 200px;
+    min-height: 300px;
+    padding: 30px 20px;
     line-height: 1.6;
-    color: #444;
-    margin-bottom: 2rem;
-    white-space: pre-wrap;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-footer {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.reaction-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.reaction-buttons button {
+    padding: 6px 16px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.reaction-buttons button:hover {
+    background: #f5f5f5;
+}
+
+.count {
+    font-weight: bold;
+    margin-left: 5px;
+    color: #666;
 }
 
 .button-group {
     display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 2rem;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: #f8f8f8;
 }
 
-.edit-button, .delete-button {
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 4px;
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.button-group button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
+    border-radius: 3px;
 }
 
-.edit-button {
-    background-color: #4CAF50;
-    color: white;
+.button-group button:hover {
+    background: #f0f0f0;
 }
 
-.edit-button:hover {
-    background-color: #45a049;
+.edit-btn {
+    color: #2196F3;
+    border-color: #2196F3 !important;
 }
 
-.delete-button {
-    background-color: #f44336;
-    color: white;
+.delete-btn {
+    color: #f44336;
+    border-color: #f44336 !important;
 }
 
-.delete-button:hover {
-    background-color: #da190b;
-} 
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .board-info-bar {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .right-buttons {
+        justify-content: flex-end;
+    }
+}
+
+.comments-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.comment-form {
+  margin-bottom: 2rem;
+}
+
+.comment-form textarea,
+.reply-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  resize: vertical;
+}
+
+.comment-form button,
+.reply-form button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comment-header,
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.comment-content,
+.reply-content {
+  margin-bottom: 0.5rem;
+}
+
+.reply-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.reply {
+  margin-left: 2rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+  border-radius: 0 4px 4px 0;
+}
+
+.reply-form {
+  margin-left: 2rem;
+  margin-top: 1rem;
+}
+
+.reply-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reply-buttons button:last-child {
+  background-color: #6c757d;
+}

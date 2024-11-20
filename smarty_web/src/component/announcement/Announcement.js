@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/noticeBoard.css';
+import '../../css/announcement.css';
 import axios from 'axios';
 import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
@@ -149,8 +149,8 @@ const NoticeBoard = () => {
             <div className="ann-notice-board">
                 <div className="ann-header">
                     <div className="ann-header-content">
-                        <h1 className="ann-header-title">자유게시판</h1>
-                        <p className="ann-header-subtitle">회원들과 자유롭게 소통해보세요</p>
+                        <h1 className="ann-header-title">공지사항</h1>
+                        <p className="ann-header-subtitle">공지사항을 확인해주세요</p>
                     </div>
                 </div>
 

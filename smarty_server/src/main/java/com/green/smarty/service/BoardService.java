@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -61,13 +62,38 @@ public class BoardService {
     }
 
     // 조회수 증가
-    public int updateViewCount(int announce_id) {
-        return boardMapper.updateViewCount(announce_id);
+    public int updateViewCount(int board_id) {
+        return boardMapper.updateViewCount(board_id);
     }
 
     // 게시글 수정
-    public void updateBoardById(int board_id, String title, String content, String contentType) {
-        boardMapper.updateBoardById(board_id);
+    public int updateBoardById(int board_id, String title, String content, String content_type) {
+        BoardDTO board = boardMapper.selectBoardById(board_id);
+        if (board == null || board.getIs_deleted() == 1) {
+            throw new NoSuchElementException("수정할 게시글이 존재하지 않습니다. ID: " + board_id);
+        }
+        return boardMapper.updateBoardById(board_id, title, content, content_type);
+    }
+
+
+    // 조건부 검색
+    public List<BoardDTO> searchBoard(String type, String keyword){
+        return boardMapper.searchBoard(keyword, type);
+    }
+
+    // 좋아요 증가
+    public int updateGood(int board_id){
+        return boardMapper.updateGood(board_id);
+    }
+
+    // 싫어요 증가
+    public int updateBad(int board_id){
+        return boardMapper.updateBad(board_id);
+    }
+
+    // 게시글 삭제 날짜 저장
+    public int deletedDate(int board_id){
+        return boardMapper.deletedDate(board_id);
     }
 
 }

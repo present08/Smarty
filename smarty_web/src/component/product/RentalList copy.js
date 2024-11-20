@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Pagination from './Pagenation'
 import { getProductRentalUser } from '../../api/rentalAPI'
 
 const RentalList = () => {
     const [rentals, setRentals] = useState([]);
-    const [completedRentals, setCompletedRentals] = useState(new Set());
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [rentalCounts, setRentalCounts] = useState({})
@@ -42,16 +41,9 @@ const RentalList = () => {
             }
 
             const user = JSON.parse(userStr);
-            // console.log("API 호출전 : ", user.user_id)
             const rentals = await getProductRentalUser(user.user_id)
 
-            // const rentalsWithCount = rentals.map((rental) => ({
-            //     ...rental,
-            //     rentalCount: rental.count !== undefined ? rental.count : 1,
-            // }))
-            // setRentals(rentalsWithCount)
-            // console.log("rentalsWithCount: ",rentalsWithCount)
-
+            // 대여 ㅅ량 초기화
             const counts = rentals.reduce((acc, rental) => {
                 acc[rental.rental_id] = rental.count;
                 return acc;
@@ -104,10 +96,6 @@ const RentalList = () => {
         if (!window.confirm('정말 반납하시겠습니까?')) {
             return;
         }
-        // if (!rentalCount || rentalCount <= 0) {
-        //     alert("반납 수량이 유효하지 않습니다")
-        //     return
-        // }
 
         try {
             // count를 params로 전달
@@ -172,7 +160,7 @@ const RentalList = () => {
                                         {formatDateTime(rental.return_date)}
                                     </td>
                                     <td className="px-6 py-4 border-b">
-                                        {rental.count}
+                                        {rentalCounts[rental.rental_id]}
                                     </td>
                                     
                                     <td className="px-6 py-4 border-b">
@@ -182,32 +170,7 @@ const RentalList = () => {
                                             <span className='text-green-600'> 반납 완료 </span>
                                         )}
                                     </td>
-                                    {/* <td className="px-6 py-4 border-b">
-                                        {rental.rental_status && (
-                                            <button
-                                                onClick={() => handleReturn(rental.rental_id, rental.count)}
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                반납하기
-                                            </button>
-                                        )}
-                                    </td> */}
-                                    {/* <td>
-                                        {rental.rental_status ? (
-                                            <button
-                                                onClick={() => {
-                                                    console.log("rental_id: ", rental.rental_id)
-                                                    console.log("rentalCount: ", rental.count)
-                                                    handleReturn(rental.rental_id, rental.rentalCount)
-                                                }} // rental.count를 명시적으로 전달
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                반납하기
-                                            </button>
-                                        ) : (
-                                            "반납 완료"
-                                        )}
-                                    </td> */}
+                                    
                                     <td className="px-6 py-4 border-b">
                                     {rental.rental_status ? (
                                         <button

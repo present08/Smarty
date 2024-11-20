@@ -8,6 +8,7 @@ import productRouter from "./productRouter";
 import guideRouter from "./guideRouter"
 import newNoticeRouter from "./newNoticeRouter";
 
+
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
 const FirstInfor = lazy(() => import("../pages/centerIntroduction/FirstInfor"));
@@ -23,6 +24,7 @@ const Admin = lazy(() => import("../pages/admin/IndexPage"));
 const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
+const RentalList = lazy(() => import("../component/product/RentalList"));
 
 const root = createBrowserRouter([
     {
@@ -86,6 +88,10 @@ const root = createBrowserRouter([
     {
         path: "rental",
         element: <Suspense fallback={Loading}> <RentalPage /> </Suspense>
+    },
+    {
+        path: "rentals/list",
+        element: <Suspense fallback={Loading}> <RentalList /> </Suspense>
     },
     {
         path: "notice",

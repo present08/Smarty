@@ -18,8 +18,8 @@ public class ProductTests {
 
     @Test
     public void insertProduct() {
-        List<String> p_arr = Arrays.asList(new String[] { "물품1", "물품2", "물품3", "물품4", "물품5", "물품6", "물품7", "물품8" });
-        List<String> f_arr = Arrays.asList(new String[] { "fc_1731321664931", "fc_1731321664972" });
+        List<String> p_arr = Arrays.asList(new String[] { "모자", "상의", "하의", "신발", "장갑", "수건", "안경", "양말" });
+        List<String> f_arr = Arrays.asList(new String[] { "fc_1731568880360", "fc_1731574984449" });
         List<String> s_arr = Arrays.asList(new String[] { "S", "M", "L", "XL", "XXL" });
         int cnt = 0;
         for (String i : f_arr) {
@@ -30,7 +30,7 @@ public class ProductTests {
                     .product_id(id)
                     .facility_id(i)
                     .product_name(j)
-                    .price((int)((Math.random()*100)+1000)*100)
+                    .price((int)((Math.random()*1000))*10)
                     .size(s_arr.get(randomIndex))
                     .stock(50)
                     .build();

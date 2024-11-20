@@ -12,8 +12,6 @@
         insert into enrollment(enrollment_id, class_id, user_id) values(#{enrollment_id},#{class_id}, #{user_id})
     </insert>
 
-
-
     <!-- Select Class -->
     <select id="getClassAll" resultType="com.green.smarty.vo.ClassVO">
         select * from class

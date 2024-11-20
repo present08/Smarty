@@ -1,5 +1,6 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -146,5 +148,11 @@ public class UserService {
         }else {
             userVO.setLevel("일반");
         }
+    }
+
+    // 등록한 클래스 정보 가져오기
+    public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {
+        List<UserClassApplicationDTO> result = userMapper.getClassUserApplication(user_id);
+        return result;
     }
 }

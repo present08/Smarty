@@ -5,6 +5,7 @@ import MainNav from '../../component/MainNav'
 import Wrapper from '../../component/Wrapper'
 import '../../css/classList.css'
 import ClassPage from './ClassPage'
+import BackToTopButton from '../../component/BackToTopButton'
 
 
 const ClassList = () => {
@@ -59,8 +60,9 @@ const ClassList = () => {
         <div>
             <MainNav />
             <Wrapper />
+            <BackToTopButton />
             <div style={{ backgroundColor: '#f9f9f9' }}>
-                <h1 style={{paddingTop:'3rem'}}>SMARTY 수강신청</h1>
+                <h1 style={{ paddingTop: '3rem' }}>SMARTY 수강신청</h1>
                 <div className='ClassBtn' >
                     <div className='classFilter'>
                         <h2>종목을 선택하세요.</h2>
@@ -80,10 +82,10 @@ const ClassList = () => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
             {classData ? <ClassPage classData={classData} setModal={() => setClassData()} /> : <></>}
             <Footer />
-        </div>
+        </div >
     )
 }
 

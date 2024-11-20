@@ -16,7 +16,7 @@ const UserReservation = (props) => {
     };
 
     const modalClose = () => {
-        setModal(false); // 모달 닫기
+        setModal(false);
         setSelectedProduct(null);
     };
 
@@ -40,6 +40,8 @@ const UserReservation = (props) => {
                             userName: item.user_name,
                             userId: item.user_id
                         }));
+
+                        // 상태 초기화
                         setRentalData(formattedData);
                         const total = formattedData.reduce((sum, item) => sum + item.productPrice, 0);
                         setPriceTotal(total);
@@ -55,7 +57,7 @@ const UserReservation = (props) => {
         } else {
             console.log('No user data available:', currentUser);
         }
-    }, [props]);
+    }, [props.user]);
 
     return (
         <div style={{
@@ -140,7 +142,6 @@ const UserReservation = (props) => {
             </div>
         </div>
     );
-
 };
 
 export default UserReservation;

@@ -72,6 +72,7 @@ public class UserRentalService{
 
 
     public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
+        System.out.println(user_id);
         List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
         return result;
     }

@@ -1,5 +1,6 @@
 package com.green.smarty.controller;
 
+import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
 import com.green.smarty.service.UserReservationService;
@@ -223,5 +224,12 @@ public class UserController {
     public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
         userservice.updateUserLevel(user, totalAmount);
         System.out.println(user.getLevel());
+    }
+
+    @GetMapping("/classApplication")
+    public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
+        return  result;
     }
 }

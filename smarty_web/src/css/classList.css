@@ -65,9 +65,11 @@
     background-color: white;
     margin-top: 30px;
     border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-.classFilter>h2{
-    margin:40px 0;
+
+.classFilter>h2 {
+    margin: 40px 0;
 }
 
 .facilityItemList {
@@ -101,6 +103,7 @@
     border-radius: 30px;
     margin-top: 30px;
     position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .classtap>h3 {
@@ -136,7 +139,7 @@
     width: 35px;
     border-radius: 25px;
     background-color: #084a81;
-    color:#bce5e6;
+    color: #bce5e6;
     margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -146,8 +149,9 @@
 .classtap>h3:nth-child(4) {
     top: 50%;
     transform: translateY(-50%);
-    left: 550px;
+    left: 600px;
     padding: 10px;
+    border-radius: 10px;
     background-color: #f4d160;
 }
 
@@ -155,7 +159,8 @@
 .classtap>h3:nth-child(5) {
     top: 50%;
     transform: translateY(-50%);
-    left: 700px;
+    left: 750px;
     padding: 10px;
+    border-radius: 10px;
     background-color: #f4d160;
 }

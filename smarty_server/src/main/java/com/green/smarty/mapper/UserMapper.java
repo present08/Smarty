@@ -1,9 +1,11 @@
 package com.green.smarty.mapper;
 
+import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -32,4 +34,6 @@ public interface UserMapper {
     void updateUserStatus(@Param("userId") String userId, @Param("userStatus") boolean userStatus);
     // 레벨 업데이트
     void updateUserLevel(UserVO userVO);
+    //등록한 클래스 정보 가져오기
+    List<UserClassApplicationDTO> getClassUserApplication(String user_id);
 }

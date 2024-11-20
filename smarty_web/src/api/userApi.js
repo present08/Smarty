@@ -32,9 +32,17 @@ export const logout = async () => {
     }
 };
 
-// 예약 정보 데이터 가져오기
+// 일일입장 예약 정보 데이터 가져오기
 export const getReservationInfo = async (user_id) => {
     const response = await axios.get(`${host}/reservationUser`, { params: { user_id } });
+    console.log(response.data);
+    return response.data;
+}
+
+
+// 수강신청 예약 정보 데이터 가져오기
+export const getUserClassApplication = async (user_id) => {
+    const response = await axios.get(`${host}/classApplication`, { params: { user_id } });
     console.log(response.data);
     return response.data;
 }

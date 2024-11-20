@@ -70,6 +70,27 @@
         SET level = #{level}
         WHERE user_id = #{userId}
     </update>
+
+    <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        e.enrollment_id,
+        e.class_id,
+        c.class_name,
+        c.start_date,
+        c.end_date,
+        c.start_time,
+        c.end_time,
+        c.price
+        FROM
+        enrollment e
+        INNER JOIN user u ON u.user_id = #{user_id}
+        INNER JOIN class c ON e.class_id = c.class_id
+        WHERE e.user_id = #{user_id}
+
+    </select>
+
 </mapper>
 
         <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->

@@ -21,7 +21,8 @@ function Announcement() {
         content_type: '',
         view_count: 0,
         good_btn: 0,
-        bad_btn: 0
+        bad_btn: 0,
+        user_id: 'test_user'
     });
 
     const [isModalState, setIsModalState] = useState(false);
@@ -83,26 +84,55 @@ function Announcement() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // 데이터 유효성 검사
+        if (!announcements.title.trim() || !announcements.content.trim() || !announcements.content_type) {
+            alert('모든 필드를 입력해주세요.');
+            return;
+        }
+
         try {
-            const response = await noticeApi.writeNotice(announcements);
+            // BoardDTO와 정확히 일치하는 데이터 구조
+            const submitData = {
+                title: announcements.title.trim(),
+                content: announcements.content.trim(),
+                content_type: announcements.content_type,
+                user_id: 'test_user',  // 실제 로그인한 사용자 ID로 변경 필요
+                view_count: 0,
+                good_btn: 0,
+                bad_btn: 0,
+                is_deleted: 0,
+                board_id: null,  // 새 게시글이므로 null
+                send_date: null  // 서버에서 설정됨
+            };
+
+            // 디버깅을 위한 로그
+            console.log('서버로 전송되는 데이터:', submitData);
+
+            const response = await noticeApi.writeNotice(submitData);
+            
             if (response.data) {
                 const updatedResponse = await noticeApi.getNoticeList();
                 setBoards(updatedResponse.data);
+                // 폼 초기화
                 setAnnouncements({
                     title: '',
                     content: '',
-                    send_date: '',
                     content_type: '',
+                    user_id: 'test_user',
                     view_count: 0,
                     good_btn: 0,
                     bad_btn: 0
                 });
                 alert('게시글이 등록되었습니다.');
+                setIsModalState(false);
             }
         } catch (error) {
+            // 더 자세한 에러 정보 출력
+            console.error('게시글 등록 에러:', error);
+            console.error('에러 응답:', error.response);
+            console.error('에러 데이터:', error.response?.data);
             alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
-        } finally {
-            setIsModalState(false);
         }
     };
 
@@ -166,7 +196,7 @@ function Announcement() {
                             <tbody>
                                 {boards.map((item, index) => (
                                     <tr
-                                        key={item.id}
+                                        key={item.board_id}
                                         className="table-row"
                                         onClick={() => toggleItem(item.board_id)}
                                     >
@@ -180,63 +210,64 @@ function Announcement() {
                                         <td className="td">{item.view_count}</td>
                                     </tr>
                                 ))}
-                                {isModalState && (
-                                    <div className='modal'>
-                                        <div className='modal-content'>
-                                            <div className='modal-header'>
-                                                <h2 className='modal-title'>게시글 작성</h2>
-                                                <button className='modal-close-button' onClick={handleModalState}>
-                                                    ×
-                                                </button>
-                                            </div>
-                                            <form className='form' onSubmit={handleSubmit}>
-                                                <div className='form-group'>
-                                                    <label className='form-label'>제목</label>
-                                                    <input type='text' name='title'
-                                                        value={announcements.title}
-                                                        onChange={handleInputChange}
-                                                        className='form-input'
-                                                        required />
-                                                </div>
-                                                <div className='form-group'>
-                                                    <label className='form-label'>내용</label>
-                                                    <textarea name='content'
-                                                        value={announcements.content}
-                                                        onChange={handleInputChange}
-                                                        className='form-textarea'
-                                                        required />
-                                                </div>
-                                                <div className='form-group' q>
-                                                    <label className='form-label'>카테고리</label>
-                                                    <select name='content_type'
-                                                        value={announcements.content_type}
-                                                        onChange={handleInputChange}
-                                                        className='form-select'
-                                                        required>
-                                                        <option value="">카테고리 선택</option>
-                                                        <option value="일반">일반</option>
-                                                        <option value="질문">질문</option>
-                                                        <option value="수다">수다</option>
-                                                    </select>
-                                                </div>
-                                                <div className="form-buttons">
-                                                    <button type="submit" className="submit-button">
-                                                        등록
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="cancel-button"
-                                                        onClick={handleModalState}>
-                                                        취소
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                )}
                             </tbody>
                         </table>
                     </div>
+
+                    {isModalState && (
+                        <div className='modal'>
+                            <div className='modal-content'>
+                                <div className='modal-header'>
+                                    <h2 className='modal-title'>게시글 작성</h2>
+                                    <button className='modal-close-button' onClick={handleModalState}>
+                                        ×
+                                    </button>
+                                </div>
+                                <form className='form' onSubmit={handleSubmit}>
+                                    <div className='form-group'>
+                                        <label className='form-label'>제목</label>
+                                        <input type='text' name='title'
+                                            value={announcements.title}
+                                            onChange={handleInputChange}
+                                            className='form-input'
+                                            required />
+                                    </div>
+                                    <div className='form-group'>
+                                        <label className='form-label'>내용</label>
+                                        <textarea name='content'
+                                            value={announcements.content}
+                                            onChange={handleInputChange}
+                                            className='form-textarea'
+                                            required />
+                                    </div>
+                                    <div className='form-group'>
+                                        <label className='form-label'>카테고리</label>
+                                        <select name='content_type'
+                                            value={announcements.content_type}
+                                            onChange={handleInputChange}
+                                            className='form-select'
+                                            required>
+                                            <option value="">카테고리 선택</option>
+                                            <option value="일반">일반</option>
+                                            <option value="질문">질문</option>
+                                            <option value="수다">수다</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-buttons">
+                                        <button type="submit" className="submit-button">
+                                            등록
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="cancel-button"
+                                            onClick={handleModalState}>
+                                            취소
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />

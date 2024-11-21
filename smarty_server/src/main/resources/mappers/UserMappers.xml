@@ -70,6 +70,7 @@
         SET level = #{level}
         WHERE user_id = #{userId}
     </update>
+
 </mapper>
 
         <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->

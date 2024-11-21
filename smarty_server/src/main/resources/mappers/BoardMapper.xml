@@ -3,8 +3,29 @@
 <mapper namespace="com.green.smarty.mapper.BoardMapper">
 <!--    게시글 작성-->
     <insert id="insertBoard" parameterType="com.green.smarty.dto.BoardDTO" useGeneratedKeys="true" keyProperty="board_id">
-        insert into board (title, content, send_date, content_type, view_count, good_btn, bad_btn, is_deleted, ip_address)
-        values (#{title}, #{content}, now(), #{content_type},0 , #{good_btn}, #{bad_btn}, #{is_deleted}, #{ip_address})
+        INSERT INTO board (
+        title,
+        content,
+        send_date,
+        content_type,
+        view_count,
+        good_btn,
+        bad_btn,
+        is_deleted,
+        ip_address,
+        user_id
+        ) VALUES (
+        #{title},
+        #{content},
+        NOW(),
+        #{content_type},
+        0,
+        0,
+        0,
+        0,
+        #{ip_address},
+        #{user_id}
+        )
     </insert>
 <!--    board_id로 게시글 조회-->
     <select id="selectBoardById" resultType="com.green.smarty.dto.BoardDTO" parameterType="int">

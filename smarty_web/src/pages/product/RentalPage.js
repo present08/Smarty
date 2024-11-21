@@ -14,14 +14,14 @@ const RentalPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState();
 
     // 로그인 정보 가져오기
-const userStr = localStorage.getItem('user');
-let user_id;
-try {
-    const userInfo = JSON.parse(userStr || '{}');
-    user_id = userInfo.user_id;
-} catch (error) {
-    console.error('사용자 정보 파싱 에러:', error);
-}
+    const userStr = localStorage.getItem('user');
+    let user_id;
+    try {
+        const userInfo = JSON.parse(userStr || '{}');
+        user_id = userInfo.user_id;
+    } catch (error) {
+        console.error('사용자 정보 파싱 에러:', error);
+    }
 
     const {
         selectProduct,
@@ -33,7 +33,7 @@ try {
         console.log(location.state)
         console.log(selectProduct)
         console.log(user_id)
-        console.log("로그인정보",isLoggedIn)
+        console.log("로그인정보", isLoggedIn)
     })
 
     useEffect(() => {
@@ -44,14 +44,14 @@ try {
             alert('로그인이 필요합니다')
             navigate('/user/login')
         }
-    },[navigate])
+    }, [navigate])
 
     const handleRentalSubmit = async () => {
         if (!isLoggedIn || !user_id || !selectProduct) {
             alert('로그인이 필요하거나 필요한 정보가 누락되었습니다.');
             return;
         }
-    
+
         setLoading(true);
         try {
             // 날짜 형식 수정
@@ -62,14 +62,14 @@ try {
                 const hours = String(date.getHours()).padStart(2, '0');
                 const minutes = String(date.getMinutes()).padStart(2, '0');
                 const seconds = String(date.getSeconds()).padStart(2, '0');
-                
+
                 return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
             };
 
             const today = new Date();
             const returnDate = new Date(today);
             returnDate.setDate(today.getDate() + 3);
-    
+
             const rentalData = {
                 user_id: user_id,
                 product_id: selectProduct.product_id,
@@ -79,15 +79,15 @@ try {
                 quantity: quantity || 1,
                 price: selectProduct.price || price
             };
-    
+
             console.log('서버로 전송할 데이터:', rentalData);
-    
+
             const result = await createRental(rentalData);
             console.log('서버 응답:', result);
-    
+
             alert('대여가 완료되었습니다.');
             navigate('/product');
-    
+
         } catch (error) {
             console.error('상세 에러:', error);
             setError('렌탈 신청에 실패했습니다.');
@@ -115,15 +115,15 @@ try {
             <div className="rental-container">
                 <h2>대여 신청</h2>
                 {error && <div className="error-message">{error}</div>}
-                
-                <RentalInfo 
+
+                <RentalInfo
                     product={selectProduct}
                     quantity={quantity}
                     price={price}
                 />
 
                 <div className="rental-submit">
-                    <button 
+                    <button
                         onClick={handleRentalSubmit}
                         disabled={loading || !isLoggedIn}
                         className="rental-button"

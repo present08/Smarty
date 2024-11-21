@@ -24,21 +24,13 @@ public class BoardController {
     @PostMapping("/write")
     public ResponseEntity<BoardDTO> insertBoard(@RequestBody BoardDTO boardDTO, HttpServletRequest request) {
         try {
-            String ip = request.getHeader("X-Forwarded-For");
-            if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteAddr();
-            }
-            boardDTO.setIp_address(ip);
-            int result = boardService.insertBoard(boardDTO);
-            if (result > 0) {
-                BoardDTO created = boardService.selectBoardById(boardDTO.getBoard_id());
-                return ResponseEntity.ok(created);
-            }
-            return ResponseEntity.badRequest().build();
+            log.info("받은 데이터: {}", boardDTO);  // 로깅 추가
+            // ... 나머지 코드
         } catch (Exception e) {
-            log.error("Error creating announcement : ", e);
+            log.error("게시글 작성 중 오류 발생", e);  // 상세 에러 로깅
             return ResponseEntity.internalServerError().build();
         }
+        return null;
     }
 
     @GetMapping("/list")

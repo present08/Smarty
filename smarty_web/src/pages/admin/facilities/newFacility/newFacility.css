@@ -1,23 +1,22 @@
 .newFacility {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: flex-start;
     height: 100%;
 }
 
 .addFacilityTitle {
-    flex: 1;
-    font-size: 24px;
+    height: 10%;
+    font-size: 28px;
+    font-weight: 300;
     color: #011B2F;
-    font-weight: 500;
 }
 
 /* 시설 등록 폼 스타일 */
 .addFacilityForm {
-    flex: 10;
+    height: 90%;
     display: flex;
     width: 100%;
-    height: 100%;
 }
 
 .addFacilityFormLeft,
@@ -26,71 +25,86 @@
     padding: 20px;
     border: none;
     border-radius: 10px;
-    margin: 0 10px;
-    box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
+    margin: 0 40px 0px 0;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .leftItemTitle,
 .rightItemTitle {
     flex: 1;
-    font-size: 17px;
-    color: #011B2F;
-    margin-bottom: 20px;
+    font-size: 16px;
+    color: #8b969c;
 }
+
 .leftItemContent,
 .rightItemContent {
-    flex: 11;
+    flex: 9;
+}
+.leftItem,
+.rightItem {
+    display: flex;
+    align-items: center;
 }
 
 .addFacilityFormSub {
     padding: 20px;
     border: none;
     border-radius: 10px;
-    box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    width: 70%;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    width: 50%;
     height: 180px;
-    margin: 20px 0px;
+    margin: 30px 0 0 30px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 .addFacilityFormSubTitle {
-    font-size: 15px;
-    color: #011B2F;
+    font-size: 16px;
+    color: #8b969c;
     margin-bottom: 20px;
     flex: 1;
 }
+
 .subItemContent {
     flex: 10;
 }
+
 .subItem {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 10px;
 }
+
 .subItemtext {
     font-size: 13px;
     color: #555;
 }
+
 .leftItem {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
+
 .leftItem>label,
 .subItemTitle,
-.rightItem>label {
+.rightItem>label,
+.subItem>label {
     font-weight: 300;
     font-size: 14px;
     color: #555;
 }
+
 .leftItem>input,
 .rightItem>input {
     border: none;
@@ -125,30 +139,170 @@
 }
 
 .addFacilityButton,
-.cancelFacilityButton {
+.cancelFacilityButton,
+.addPirceButton,
+.canclePirceButton {
     border: none;
-    width: 80px;
+    width: 60px;
+    height: 30px;
     border-radius: 5px;
-    padding: 5px 0px;
-    color: white;
+    color: aliceblue;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     margin: 10px;
     cursor: pointer;
 }
 
-.addFacilityButton {
+.addFacilityButton,
+.addPirceButton {
     background-color: #195E8E;
 }
-.cancelFacilityButton {
-    background-color: rgb(167, 16, 16);
+
+.cancelFacilityButton,
+.canclePirceButton {
+    background-color: rgb(161, 20, 20);
 }
 
 /* 상세 시설 등록 폼 스타일 */
 .modalContent {
     border: none;
     border-radius: 10px;
-    box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+}
+
+/* 모달창 css */
+
+.priceModal_box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalleftItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    height: 15%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #105066;
+}
+
+.modalleftItem>label {
+    font-size: 21px;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.modalleftItem>input {
+    margin-right: 5px;
+}
+
+.modal_cont {
+    margin-top: 2rem;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.modalshowPrice {
+    width: 40%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalshowInfo {
+    width: 60%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 1rem;
+    margin-left: 50px;
+}
+
+.modalshowPrice>div {
+    width: 100%;
+    height: 30%;
+    /* margin-right: 2rem; */
+}
+
+.modalshowPrice>div>p {
+    text-align: left;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #105066;
+}
+
+.price_box {
+    width: 90%;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-content: center;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:first-child {
+    width: 100%;
+    height: 20%;
+}
+
+.modalshowInfo>div:first-child>p {
+    font-size: 14px;
+    color: gray;
+    padding: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.modalshowInfo>div:nth-child(2) {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:nth-child(2)>h3 {
+    color: #105066;
+    font-size: 21px;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.modalshowInfo>div:nth-child(2)>div {
+    display: flex;
+    
+}
+
+.modalshowInfo>div:nth-child(2)>div>input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid gainsboro;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.modalshowInfo>div:nth-child(2)>div>label {
+    font-weight: bold;
+    color: gray;
+}
+
+.modalshowInfoButton {
+    margin-top: 20px;
 }

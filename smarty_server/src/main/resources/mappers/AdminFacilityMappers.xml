@@ -24,6 +24,10 @@
         select * from facility where facility_id=#{facility_id}
     </select>
 
+    <select id="getImages">
+        select * from facility_attach where facility_id=#{facility_id}
+    </select>
+
     <update id="modify" parameterType="com.green.smarty.vo.FacilityVO">
         update facility set facility_name=#{facility_name}, open_time=#{open_time}, close_time=#{close_time},
         default_time=#{default_time}, basic_fee=#{basic_fee}, extra_fee=#{extra_fee}, contact=#{contact},

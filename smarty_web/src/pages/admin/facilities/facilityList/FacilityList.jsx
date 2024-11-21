@@ -27,7 +27,7 @@ export default function FacilityList() {
         return (
           <div className="facilityAction">
             <Link to={"/admin/facilities/read/" + params.row.facility_id}>
-              <button className="facilityReadButton">Read</button>
+              <button className="facilityReadButton">조회</button>
             </Link>
           </div>
         )
@@ -41,11 +41,12 @@ export default function FacilityList() {
     <div className="facilityList">
       <div className="facilityContainer">
         <div className="facilityContainerTop">
-          <div className="facilityTitle">시설 전체 목록</div>
-          <Link to="/admin/facilities/add">
-            <button className="facilityAddButton">Create</button>
+          <div className="facilityTitle">전체 시설 목록</div>
+          <Link to="/admin/facilities/add">            
+            <button className="facilityAddButton">시설추가</button>
           </Link>
         </div>
+
         <DataGrid
           className="facilityTable"
           rows={facilityList}

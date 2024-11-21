@@ -36,6 +36,8 @@ public class AdminClassService {
 
             // 처리2-1) weekday, class_data 생성
             List<String> weekdaySet = classList.get(i).getWeekday();
+            System.out.println("서비스 처리2-1) weekdaySet : " + weekdaySet);
+
             LocalDate staer_date = classList.get(i).getStart_date();
             LocalDate end_date = classList.get(i).getEnd_date();
             LocalDate current_date = staer_date;
@@ -60,6 +62,8 @@ public class AdminClassService {
                 // step3) 날짜 하루 증가시키기
                 current_date = current_date.plusDays(1);
             }
+            System.out.println("서비스 처리 2-1) 생성된 class_date : " + class_date);
+            System.out.println("서비스 처리 2-1) 생성된 weekday : " + weekday);
 
             // 처리2-2) class_detail 등록
             for(int j = 0; j < class_date.size(); j++) {
@@ -77,7 +81,8 @@ public class AdminClassService {
         return adminClassMapper.getList();
     }
 
-//    public ClassAdminDTO read(String class_id) {
-//        return adminClassMapper.read(class_id);
-//    }
+    public ClassAdminDTO read(String class_id) {
+        return adminClassMapper.read(class_id);
+    }
+
 }

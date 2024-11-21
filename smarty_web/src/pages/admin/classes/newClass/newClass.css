@@ -1,30 +1,91 @@
-.newClass {
+.newClassContainer {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100%;
+}
+
+.addClassFormHead {
+    height: 10%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f7f7f7;
 }
 
 .addClassTitle {
-    flex: 1;
     font-size: 24px;
     color: #011B2F;
     font-weight: 500;
+    margin-right: 50px;
 }
 
-.addClassContainer {
-    flex: 10;
-    width: 100%;
+.addClassButton,
+.submitClassButton {
+    width: 80px;
+    height: 25px;
+    border: none;
+    background-color: #003f66;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.addClassButton {
+    background-color: #195E8E;
+}
+.cancleClassButton {
+    width: 50px;
+    height: 25px;
+    border: none;
+    color: #555;
+    border-radius: 5px;
+    margin-left: 130px;
+    cursor: pointer;
+}
+
+.addClassFormBody {
+    height: 90%;
+    width: 770px;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
 }
 
 .addClassForm {
-    flex: 1;
-    padding: 20px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0 0 20px;
+    padding: 10px;
     border: none;
     border-radius: 10px;
-    margin: 0 10px;
     box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
+}
+
+.addClassFormItem1,
+.addClassFormItem2,
+.addClassFormItem3 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.addClassFormItem1>input,
+.addClassFormItem2>input {
+    margin-right: 20px;
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.addClassFormItem1>div,
+.addClassFormItem2>div,
+.addClassFormItem3>div,
+.addClassFormItem3>label {
+    margin-right: 10px;
+    font-weight: 300;
+    font-size: 14px;
+    color: #555;
 }

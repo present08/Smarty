@@ -18,17 +18,6 @@
         )
     </insert>
 
-<!--    <select id="findByProductId" parameterType="String" resultType="com.green.smarty.dto.ProductAttachDTO">-->
-<!--        SELECT-->
-<!--            origin_path,-->
-<!--            thumbnail_path,-->
-<!--            file_name,-->
-<!--            product_id-->
-<!--        FROM-->
-<!--            product_attach-->
-<!--        WHERE-->
-<!--            product_id = #{value}-->
-<!--    </select>-->
 
     <delete id="deleteByProductId" parameterType="String">
         DELETE FROM product_attach

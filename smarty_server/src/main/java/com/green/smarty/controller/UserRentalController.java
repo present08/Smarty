@@ -36,37 +36,6 @@ public class UserRentalController {
         }
     }
 
-//    @PostMapping("/rentals")
-//    public ResponseEntity<?> postRental(@RequestBody RentalVO vo) {
-//        System.out.println("렌탈 정보 : " + vo);
-//
-//        try {
-//            if (vo.getUser_id() == null || vo.getUser_id().trim().isEmpty()) {
-//                return ResponseEntity.badRequest().body("사용자 ID가 없습니다.");
-//            }
-//
-//            if (vo.getProduct_id() == null || vo.getProduct_id().trim().isEmpty()) {
-//                return ResponseEntity.badRequest().body("상품 ID가 없습니다.");
-//            }
-//
-//            if (vo.getRental_date() == null || vo.getReturn_date() == null) {
-//                return ResponseEntity.badRequest().body("대여일 또는 반납일이 없습니다.");
-//            }
-//
-//            int rentalId = userRentalService.insertRental(vo);
-//
-//            return ResponseEntity.ok()
-//                    .body(Map.of(
-//                            "message", "대여가 완료되었습니다.",
-//                            "rental_id", rentalId
-//                    ));
-//
-//        } catch (Exception e) {
-//            log.error("대여 처리 중 오류 발생", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("대여 처리 중 오류가 발생했습니다: " + e.getMessage());
-//        }
-//    }
     // 대여 등록
     @PostMapping("/rentals")
     public ResponseEntity<?> postRental(@RequestBody Map<String, Object> rentalRequest) {
@@ -103,19 +72,6 @@ public class UserRentalController {
         }
     }
 
-//    @PutMapping("/rentals/{rental_id}/return")
-//    public ResponseEntity<String> returnRental(@PathVariable String rental_id) {
-//        try {
-//            int updatedRows = userRentalService.returnRental(rental_id);
-//            if (updatedRows > 0) {
-//                return new ResponseEntity<>("반납 완료", HttpStatus.OK);
-//            } else {
-//                return new ResponseEntity<>("반납 실패: 해당 렌탈이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("반납 처리 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
     // 대여 반납
     @PutMapping("/rentals/{rental_id}/return")
     public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {

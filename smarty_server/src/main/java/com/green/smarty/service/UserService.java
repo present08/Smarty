@@ -19,6 +19,9 @@ public class UserService {
     @Autowired
     private QRCodeService qrCodeService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     // 회원가입
     public boolean signup(UserVO user) {
         try {
@@ -31,6 +34,9 @@ public class UserService {
                 userMapper.insertUser(user);
                 System.out.println("회원등록성공");
 
+                notificationService.sendNotification(user.getFcm_token(),
+                        "회원가입성공 !",
+                        "환영합니다" + user.getUser_name() + "님!");
                 //QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("코드생성 완료 : "+qrCode);

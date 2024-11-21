@@ -109,11 +109,23 @@ public class AdminFacilityService {
         return customFileUtil.getFile(file_name);
     }
 
-    public FacilityVO modify(FacilityVO facilityVO) {
-        String facility_id = facilityVO.getFacility_id();
+    public void modify(String facility_id, FacilityVO facilityVO) {
         System.out.println("서비스 시설 수정! : " + facility_id);
+        // 처리1) 기존의 시설 정보를 불러와서 수정
+        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
+
+        originFacilityVO.changeName(facilityVO.getFacility_name());
+        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
+        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
+        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
+        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
+        originFacilityVO.changeHotTime(facilityVO.getHot_time());
+        originFacilityVO.changeContact(facilityVO.getContact());
+        originFacilityVO.changeInfo(facilityVO.getInfo());
+        originFacilityVO.changeCaution(facilityVO.getCaution());
+        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
+
         adminFacilityMapper.modify(facilityVO);
-        return adminFacilityMapper.read(facility_id);
     }
 
     public void remove(String facility_id) {

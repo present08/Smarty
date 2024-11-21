@@ -7,7 +7,7 @@
     </insert>
 
     <select id="getList" resultType="com.green.smarty.vo.CourtVO">
-        select * from court
+        select * from court where facility_id=#{facility_id}
     </select>
 
     <select id="read" resultType="com.green.smarty.vo.CourtVO">

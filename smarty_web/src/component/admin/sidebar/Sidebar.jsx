@@ -4,12 +4,12 @@ import { getListFacility } from "../../../api/admin/facilityApi";
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
-    const [data, setData] = useState([])    // API에서 받은 시설 정보 저장
+    const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
 
     useEffect(() => {
-        getListFacility().then(data => {
-            setData(data)
-        }).catch((error) => console.log("에러 발생 : ", error))
+        getListFacility().then(res => {
+            setFacility(res)
+        }).catch((error) => console.log("ERROR! : ", error))
     }, [])
 
     return (
@@ -40,7 +40,7 @@ export default function Sidebar() {
                 <div className="sidebarMenu">
                     <div className="sidebarTitle">관리 메뉴</div>
                     <ul className="sidebarlist">
-                        {data && data.map((facility, i) => (
+                        {facility && facility.map((facility, i) => (
                             <li
                                 key={i}
                                 className="sidebarListItem collapse"

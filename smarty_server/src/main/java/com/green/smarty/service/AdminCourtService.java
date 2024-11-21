@@ -14,7 +14,7 @@ public class AdminCourtService {
     @Autowired
     private AdminCourtMapper adminCourtMapper;
 
-    // 코트 등록 시의 비즈니스 로직 처리
+    // 코트 등록
     public void register(List<CourtVO> courtList) {
 
         // 처리) 코트 id 생성
@@ -31,8 +31,8 @@ public class AdminCourtService {
         }
     }
 
-    public List<CourtVO> getList() {
-        return adminCourtMapper.getList();
+    public List<CourtVO> getList(String facility_id) {
+        return adminCourtMapper.getList(facility_id);
     }
 
     public CourtVO read(String court_id) {

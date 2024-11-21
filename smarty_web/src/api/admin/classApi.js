@@ -13,9 +13,9 @@ export const postAddClass = async(classList) => {
     }
 }
 
-export const getListClass = async() => {
+export const getListClass = async(facility_id) => {
     try {
-        const res = await axios.get(`${prefix}/list`)
+        const res = await axios.get(`${prefix}/list/${facility_id}`)
         console.log("getListClass : ", res.data)
         return res.data
     } catch(error) {

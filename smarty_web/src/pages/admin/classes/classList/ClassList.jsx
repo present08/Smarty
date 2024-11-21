@@ -4,11 +4,14 @@ import { DataGrid } from '@mui/x-data-grid';
 import { getOneFacility } from "../../../../api/admin/facilityApi"
 import { Link, useParams } from "react-router-dom"
 import { getListClass } from '../../../../api/admin/classApi';
+import Modal from '../../../../component/admin/modal/Modal';
+import ClassRead from '../classRead/ClassRead';
 
 export default function ClassList() {
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
   const [classList, setClassList] = useState([])
+  const [classModal, setClassModal] = useState(false)
 
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -17,10 +20,17 @@ export default function ClassList() {
   }, [facility_id])
 
   useEffect(() => {
-    getListClass().then(res => {
+    getListClass(facility_id).then(res => {
       setClassList(res)
     }).catch((error) => console.error("ERROR!", error))
-  }, [])
+  }, [facility_id])
+
+  const handleReadButton = () => {
+    setClassModal(true)
+  }
+  const closeModal = () => {
+    setClassModal(false)
+  }
   
   const columns = [
     { field: 'class_id', headerName: '강의 ID', width: 180 },
@@ -36,9 +46,12 @@ export default function ClassList() {
       renderCell: (params) => {
         return (
           <div className="classAction">
-            <Link to={`/admin/classes/${facility_id}/read/` + params.row.class_id}>
-              <button className="classReadButton">조회</button>
-            </Link>
+            {/* <Link to={`/admin/classes/${facility_id}/read/` + params.row.class_id}> */}
+              <button 
+              className="classReadButton"
+              onClick={handleReadButton}
+              >조회</button>
+            {/* </Link> */}
           </div>
         )
       }
@@ -65,6 +78,9 @@ export default function ClassList() {
           checkboxSelection
           sx={{ border: 0 }}
         />
+        {classModal? 
+        <Modal content={<ClassRead />} callbackFn={closeModal}/>
+        : <></>}
       </div>
     </div>
   )

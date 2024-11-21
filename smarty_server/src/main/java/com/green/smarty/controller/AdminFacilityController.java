@@ -50,13 +50,12 @@ public class AdminFacilityController {
 
     // Update (시설 수정)
     @PutMapping("/{facility_id}")
-    public FacilityVO modify(
+    public String modify(
             @PathVariable(name = "facility_id") String facility_id,
-            @RequestBody FacilityVO facilityVO) {
+            @ModelAttribute FacilityVO facilityVO) {
         System.out.println("컨트롤러 시설 하나 수정! id = " + facility_id);
-        FacilityVO updateDTO = adminFacilityService.modify(facilityVO);
-        System.out.println("컨트롤러 수정 완료! updateDTO = " + updateDTO);
-        return updateDTO;
+        adminFacilityService.modify(facility_id, facilityVO);
+        return "시설 수정 완료";
     }
 
     // Delete (시설 삭제)

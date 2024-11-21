@@ -1,78 +1,53 @@
-import { useParams } from "react-router-dom"
 import "./facilityRead.css"
+import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { getOneFacility } from "../../../../api/admin/facilityApi"
+import { API_SERVER_HOST, getOneFacility } from "../../../../api/admin/facilityApi"
+import { getListCourt } from "../../../../api/admin/courtApi"
 
 export default function FacilityRead() {
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
+  const [currentCourt, setCurrentCourt] = useState(null)
   
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
       setCurrentFacility(res)
     }).catch((error) => console.error("ERROR!", error))
   }, [facility_id])
+
+  useEffect(() => {
+    getListCourt(facility_id).then(res => {
+      setCurrentCourt(res)
+    }).catch((error) => console.error("ERROR! : ", error))
+  }, [facility_id])
+  
   
   return (
     <div className="facilityRead">
-        {currentFacility && 
-          <div className="facilityReadContainer">        
-            <div className="facilityReadTitle">{currentFacility.facility_name}</div>
-            <div className="facilityContent">
-              
-                <div className="facilityContentLeft">
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">시설ID</div>
-                    <input value={currentFacility.facility_id} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">개장시간</div>
-                    <input value={currentFacility.open_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">폐장시간</div>
-                    <input value={currentFacility.close_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">기본이용시간</div>
-                    <input value={currentFacility.default_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">기본이용요금</div>
-                    <input value={currentFacility.basic_fee} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">가격변동률</div>
-                    <input value={currentFacility.rate_adjustment} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">변동가격적용</div>
-                    <input value={currentFacility.hot_time} readOnly/>
-                  </div>                  
-                </div>
-
-                <div className="facilityContentRight">
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">연락처</div>
-                    <input value={currentFacility.contact} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">이용안내</div>
-                    <input value={currentFacility.info} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">주의사항</div>
-                    <input value={currentFacility.caution} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">시설 사진</div>
-                    <img src={`http://localhost:8080/api/admin/facilities/images/s_${currentFacility.file_name}`}/>
-                  </div>               
-                </div>
-                
-            </div>
+      <div className="facilityReadContainer">
+        <div className="facilityContent">
+          <div className="facilityImages">이미지 컨테이너<br />
+            {currentFacility && currentFacility.file_name.map(file => (
+              <img src={`${API_SERVER_HOST}/api/admin/facilities/images/s_${file}`} />
+            ))}<br />
+            -등록 이미지 슬라이드 확인<br />
+            -첨부 파일 수정, 삭제<br />
+            -이미지 미리보기<br />
           </div>
-        }      
+          <div className="facilityItem">
+            시설정보 컨테이너<br />
+            -일반 정보 나열 : 이름, 시간, 연락처, 안내/주의사항<br />
+            -가격 관련 : 기본 가격, 할증률, 적용타입<br />
+            -되도록이면 조회 화면에서 바로 수정할 수 있게 구성
+          </div>
+        </div>
+        <div className="courtContent">
+          코트<br />
+          -기본적으로 코트는 1개 이상 조회<br />
+          -각 코트별로 수정, 삭제할 수 있도록 함<br />
+          -코트 추가 기능
+        </div>
+      </div>
     </div>
   )
 }

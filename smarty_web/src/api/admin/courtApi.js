@@ -13,20 +13,25 @@ export const postAddCourt = async(courtList) => {
     }
 }
 
-export const getListCourt = async() => {
+export const getListCourt = async(facility_id) => {
     try {
-        const res = await axios.get(`${prefix}/list`)
+        const res = await axios.get(`${prefix}/list/${facility_id}`)
         console.log("getListCourt : ", res.data)
         return res.data
     } catch(error) {
-        console.error("ERROR ! : ", error)
+        console.error("ERROR! : ", error)
     }
 }
 
-// export const getOneCourt = async(court_id) => {
-//     const res = await axios.get(`${prefix}/${court_id}`)
-//     return res.data
-// }
+export const getOneCourt = async(court_id) => {
+    try {
+        const res = await axios.get(`${prefix}/${court_id}`)
+        console.log("getOneCourt : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}
 
 // export const putOneCourt = async(court_id, court) => {
 //     const res = await axios.put(`${prefix}/${court_id}`, court)

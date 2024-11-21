@@ -1,5 +1,6 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.vo.UserVO;
@@ -153,6 +154,13 @@ public class UserService {
     // 등록한 클래스 정보 가져오기
     public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {
         List<UserClassApplicationDTO> result = userMapper.getClassUserApplication(user_id);
+        return result;
+    }
+
+    // 대여 리스트 가져오기
+    public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(String user_id) {
+        System.out.println(user_id);
+        List<ProductRentalMyPageUserDTO> result = userMapper.getUserMyPageRentalListData(user_id);
         return result;
     }
 }

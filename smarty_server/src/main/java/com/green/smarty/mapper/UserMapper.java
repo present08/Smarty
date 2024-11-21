@@ -1,5 +1,6 @@
 package com.green.smarty.mapper;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,4 +37,6 @@ public interface UserMapper {
     void updateUserLevel(UserVO userVO);
     //등록한 클래스 정보 가져오기
     List<UserClassApplicationDTO> getClassUserApplication(String user_id);
+    // 대여한 리스트 정보 가져오기
+    List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(String user_id);
 }

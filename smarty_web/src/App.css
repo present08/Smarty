@@ -7,7 +7,6 @@
   text-decoration-line: none;
   padding: 0;
   margin: 0;
-
 }
 
 .App-logo {
@@ -68,16 +67,73 @@
   /* 이미지 너비를 100%로 설정 */
 }
 
-@font-face {
+/* @font-face {
   font-family: 'BMHANNA_11yrs_ttf';
   src: url('./fonts/BMHANNA_11yrs_ttf.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+} */
+
+
+@font-face {
+  font-family: 'Paperlogy-4Regular';
+  src: url('./fonts/Paperlogy-4Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
-body {
-  font-family: 'BMHANNA_11yrs_ttf', sans-serif;
+@font-face {
+  font-family: 'Paperlogy-7Bold';
+  src: url('./fonts/Paperlogy-7Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
 }
+
+@font-face {
+  font-family: 'Paperlogy-6SemiBold';
+  src: url('./fonts/Paperlogy-6SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Paperlogy-8ExtraBold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body {
+  font-family: 'Paperlogy-4Regular', 'Paperlogy-8ExtraBold', 'Paperlogy-7Bold', 'Paperlogy-6SemiBold', sans-serif;
+  font-weight: normal;
+}
+
+h1 {
+  font-family: 'Paperlogy-8ExtraBold';
+  font-weight: 800;
+}
+
+h2 {
+  font-family: 'Paperlogy-7Bold';
+  font-weight: 700;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Paperlogy-6SemiBold';
+  font-weight: 600;
+}
+
+
+p {
+  font-family: 'Paperlogy-4Regular';
+  font-weight: 400;
+}
+
 
 .link {
   text-decoration: none;

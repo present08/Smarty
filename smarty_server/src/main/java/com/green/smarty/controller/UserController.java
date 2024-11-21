@@ -1,5 +1,6 @@
 package com.green.smarty.controller;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
@@ -226,10 +227,18 @@ public class UserController {
         System.out.println(user.getLevel());
     }
 
+    // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
         System.out.println("유저아이디 확인 : "+user_id);
         List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
         return  result;
+    }
+
+    // 대여물품 리스트
+    @GetMapping("/rentalMyPageUser")
+    public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
+        List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
+        return result;
     }
 }

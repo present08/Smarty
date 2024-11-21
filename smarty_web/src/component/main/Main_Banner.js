@@ -43,8 +43,8 @@ const Main_Banner = () => {
             <div className='banner_cont'>
                 <div className='text_iconBox'>
                     <div className='textBox'>
-                        <h3 style={{ marginBottom: '1rem' }}>복합문화체육시설 SMARTY</h3>
-                        <h3>통합 예약시스템</h3>
+                        <h1 style={{ marginBottom: '1rem' }}>복합문화체육시설 SMARTY</h1>
+                        <h1>통합 예약시스템</h1>
                         <p>모든 예약을 한번에 간편하게!</p>
                     </div>
                     <div className='iconBox'>

@@ -57,14 +57,15 @@
 
 .textBox>p {
     font-size: 35px;
-    margin-top: 2rem;
+    margin-top: 3rem;
+    font-weight: 300;
 }
 
-.textBox>h3 {
-    font-size: 68px;
+.textBox>h1 {
+    font-size: 58px;
 }
 
-.textBox>h3>span {
+.textBox>h1>span {
     color: #04204b;
 }
 

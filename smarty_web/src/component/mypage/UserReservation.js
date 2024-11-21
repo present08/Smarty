@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getProductRentalUser } from '../../api/rentalAPI';
+import { getProductRentalUser } from '../../api/userApi';
 import '../../css/userReservation.css';
-import { IoClose } from "react-icons/io5";
 
 const UserReservation = (props) => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -90,12 +89,12 @@ const UserReservation = (props) => {
                     width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'
                 }}>
                     <ul className='listHeader'>
-                        <li>Number</li>
-                        <li>Name</li>
-                        <li>Facility</li>
-                        <li>Size</li>
-                        <li>Price</li>
-                        <li>Options</li>
+                        <li><h3>Number</h3></li>
+                        <li><h3>Name</h3></li>
+                        <li><h3>Facility</h3></li>
+                        <li><h3>Size</h3></li>
+                        <li><h3>Price</h3></li>
+                        <li><h3>Options</h3></li>
                     </ul>
                     {rentalData.map((item, index) => (
                         <ul className='listBody' key={index}>
@@ -117,15 +116,40 @@ const UserReservation = (props) => {
                             <div className="reservationModalContent">
                                 {selectedProduct ? (
                                     <div>
-                                        <p>상품명: {selectedProduct.productName}</p>
-                                        <p>상품번호: {selectedProduct.productNum}</p>
-                                        <p>ID: {selectedProduct.userId}</p>
-                                        <p>이름: {selectedProduct.userName}</p>
-                                        <p>가격: {new Intl.NumberFormat().format(selectedProduct.productPrice)} 원</p>
-                                        <p>상품사이즈: {selectedProduct.productSize}</p>
-                                        <p>시설명: {selectedProduct.facilityName}</p>
-                                        <p>대여일: {selectedProduct.rentalDate}</p>
-                                        <p>반납일: {selectedProduct.returnDate}</p>
+                                        <div>
+                                            <div>
+                                                대여중
+                                            </div>
+                                            <div>
+                                                <h5>{selectedProduct.productName}</h5>
+                                                <p>{selectedProduct.productNum}</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5>대여자</h5>
+                                            <p>{selectedProduct.userName}({selectedProduct.userId})님</p>
+                                        </div>
+                                        <div>
+                                            <h5>시설명</h5>
+                                            <p>{selectedProduct.facilityName}</p>
+                                        </div>
+                                        <div>
+                                            <h5>가격</h5>
+                                            <p>{new Intl.NumberFormat().format(selectedProduct.productPrice)} 원</p>
+
+                                        </div>
+                                        <div>
+                                            <h5>상품사이즈</h5>
+                                            <p>{selectedProduct.productSize}</p>
+                                        </div>
+                                        <div>
+                                            <h5>대여일</h5>
+                                            <p>{selectedProduct.rentalDate}</p>
+                                        </div>
+                                        <div>
+                                            <h5>반납일</h5>
+                                            <p>{selectedProduct.returnDate}</p>
+                                        </div>
                                     </div>
                                 ) : (
                                     <p>선택된 상품이 없습니다.</p>

@@ -91,6 +91,29 @@
 
     </select>
 
+    <select id="getUserMyPageRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalMyPageUserDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        f.facility_name,
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.size,
+        r.rental_date,
+        r.return_date
+        FROM
+        rental r
+        INNER JOIN user u
+        ON u.user_id = r.user_id
+        INNER JOIN product p
+        ON p.product_id = r.product_id
+        INNER JOIN facility f
+        ON f.facility_id = p.facility_id
+        WHERE
+        u.user_id = #{user_id};
+    </select>
+
 </mapper>
 
         <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->

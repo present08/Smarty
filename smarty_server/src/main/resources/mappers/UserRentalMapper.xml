@@ -41,27 +41,4 @@
         )
     </insert>
 
-    <select id="getUserRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalUserDTO">
-        SELECT
-        u.user_id,
-        u.user_name,
-        f.facility_name,
-        p.product_id,
-        p.product_name,
-        p.price,
-        p.size,
-        r.rental_date,
-        r.return_date
-        FROM
-        rental r
-        INNER JOIN user u
-        ON u.user_id = r.user_id
-        INNER JOIN product p
-        ON p.product_id = r.product_id
-        INNER JOIN facility f
-        ON f.facility_id = p.facility_id
-        WHERE
-        u.user_id = #{user_id};
-    </select>
-
 </mapper>

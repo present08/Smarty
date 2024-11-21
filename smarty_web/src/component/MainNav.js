@@ -155,7 +155,7 @@ const MainNav = () => {
                                 <Link to={"/facilityList"}>일일입장</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>일일입장</Link>
+                                        <Link to={"/facilityList"}>일일입장</Link>
                                     </li>
                                 </ul>
                             </li>
@@ -163,7 +163,7 @@ const MainNav = () => {
                                 <Link to={"/product"}>물품</Link>
                                 <ul>
                                     <li>
-                                        <Link to={"/"}>물품대여</Link>
+                                        <Link to={"/product"}>물품대여</Link>
                                     </li>
                                 </ul>
                             </li>

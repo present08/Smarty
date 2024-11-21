@@ -10,6 +10,7 @@ import ClassCalendarModal from './ClassCalendarModal';
 import ClassEventModal from './ClassEventModal';
 
 const UserCalendar = (props) => {
+
     // 날짜 관련 상태
     const [value, setValue] = useState(new Date());
 

@@ -6,6 +6,7 @@ import Wrapper from '../../component/Wrapper'
 import '../../css/classList.css'
 import ClassPage from './ClassPage'
 import BackToTopButton from '../../component/BackToTopButton'
+import { AiOutlineBook, AiOutlineCalendar, AiOutlineCheck, AiOutlineClockCircle } from 'react-icons/ai'
 
 
 const ClassList = () => {
@@ -61,23 +62,42 @@ const ClassList = () => {
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div style={{ backgroundColor: '#f9f9f9' }}>
-                <h1 style={{ paddingTop: '3rem' }}>SMARTY 수강신청</h1>
+            <div style={{ backgroundColor: '#f9f9f9', paddingTop: '2rem' }}>
                 <div className='ClassBtn' >
                     <div className='classFilter'>
-                        <h2>종목을 선택하세요.</h2>
+                        <div style={{ width: '100%', height: '100px', borderTopLeftRadius: '30px', display: 'flex', alignItems: 'center', backgroundColor: '#e9e9e9', borderTopRightRadius: '30px' }}>
+                            <h2><AiOutlineCheck style={{ width: '30px', height: '30px', marginRight: '10px', marginLeft: '20px' }} />종목을 선택하세요.</h2>
+                        </div>
                         <div className='facilityItemList'>
                             {facilityName.map(item => (<div onClick={() => filterList(item)} className='facilityItem' key={item}>{item}</div>))}
                         </div>
                     </div>
                     <div className='class_Content'>
+                        <div style={{ width: '100%', height: '100px', borderTopLeftRadius: '30px', display: 'flex', alignItems: 'center', backgroundColor: '#e9e9e9', borderTopRightRadius: '30px' }}>
+                            <h2> <AiOutlineBook style={{ width: '30px', height: '30px', marginRight: '10px', marginLeft: '20px' }} /> SMARTY 클래스 개설 목록</h2>
+                        </div>
                         {classList.map((item, idx) => (
                             <div className='classtap' key={idx} onClick={() => modalopen(item)}>
-                                <h3>{item.facility_name}</h3>
-                                <h3>{item.class_name}</h3>
-                                <h3>{item.weekday.map((day, i) => (<span key={i}>{day.substring(0, 1)}</span>))}</h3>
-                                <h3>{item.start_date.substring(5)} ~ {item.end_date.substring(5)}</h3>
-                                <h3>{item.start_time.substring(0, 5)} ~ {item.end_time.substring(0, 5)}</h3>
+                                <div>
+                                    <div>
+                                        <h4>{item.facility_name}</h4>
+                                        <p>{item.class_id}</p>
+                                    </div>
+                                    <div>
+                                        <h3>{item.class_name}</h3>
+                                    </div>
+                                    <div>
+                                        <AiOutlineClockCircle style={{ marginRight: '5px' }} />
+                                        <p style={{ marginRight: '5px' }}>{item.weekday.map((day, i) => (<span key={i}>{day.substring(0, 1)} </span>))}</p>
+                                        <p>{item.start_time.substring(0, 5)} ~ {item.end_time.substring(0, 5)}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <AiOutlineCalendar style={{ marginRight: '5px' }} />
+                                        <p>{item.start_date.substring(5)} ~ {item.end_date.substring(5)}</p>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -86,7 +106,7 @@ const ClassList = () => {
             {classData ? <ClassPage classData={classData} setModal={() => setClassData()} /> : <></>}
             <Footer />
         </div >
-    )
-}
+    );
+};
 
-export default ClassList
+export default ClassList;

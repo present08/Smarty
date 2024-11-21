@@ -45,12 +45,13 @@ const MyPage = () => {
         })
     };
 
+
     return (
         <DashboardBack>
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
                 <div style={{ width: '80vw', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <div style={{ display: 'flex', width: '90%', height: '70px', alignItems: 'center', marginBottom: '3rem', justifyContent: 'space-between', position: 'relative' }}>
-                        {currentUser && <h3 style={{ fontSize: '28px', display: 'flex', width: '40%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h3>}
+                        {currentUser && <h1 style={{ fontSize: '28px', display: 'flex', width: '40%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h1>}
                         <div style={{ width: '40%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                             <UserGrade user={currentUser} />
                             <QrButton user={currentUser} />
@@ -78,14 +79,14 @@ const MyPage = () => {
                             </button>
                         </div>
                         <div style={{
-                            width: '80%', display: 'flex', justifyContent: 'flex-end', marginRight: '1rem'
+                            width: '80%', display: 'flex', justifyContent: 'flex-end', marginRight: '2rem'
                         }}>
-                            <Link to={"/"}><h3 style={{ fontSize: '35px', color: '#17468c', }}>SMARTY</h3></Link>
+                            <Link to={"/"}><h1 style={{ fontSize: '35px', color: '#17468c', }}>SMARTY</h1></Link>
                         </div>
                     </div>
                     <div style={{ width: '100%', height: '30%', }}>
                         <div style={{ width: '90%', height: '5%', margin: '0 auto', marginBottom: '1.5rem' }}>
-                            <h3 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUBMENU</h3>
+                            <h2 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUBMENU</h2>
                         </div>
                         <div style={{ width: '100%', height: '100%' }}>
                             <UserNavber />
@@ -93,11 +94,11 @@ const MyPage = () => {
                     </div>
                     <div style={{ width: '100%', height: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', }}>
                         <div style={{ width: '90%', height: '5%', margin: '0 auto', marginBottom: '2rem' }}>
-                            <h3 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUB BOX</h3>
+                            <h2 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUB BOX</h2>
                         </div>
                         <UserButton user={currentUser} />
-                        <SituationButton />
-                        <ReceiptButton />
+                        <SituationButton user={currentUser} />
+                        <ReceiptButton user={currentUser} />
                     </div>
                     <div style={{ width: '100%', height: '10%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Link onClick={handleLogout} to={"/"} style={{ display: 'flex', alignItems: 'center', color: 'black', cursor: 'pointer' }} >
@@ -110,5 +111,4 @@ const MyPage = () => {
         </DashboardBack >
     );
 }
-
 export default MyPage;

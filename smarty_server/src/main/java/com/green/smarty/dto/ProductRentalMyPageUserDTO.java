@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class ProductRentalUserDTO {
+public class ProductRentalMyPageUserDTO {
 
     private String user_id;
 

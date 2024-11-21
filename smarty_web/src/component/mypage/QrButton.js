@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { AiOutlineQrcode } from 'react-icons/ai';
 
 const host = 'http://localhost:8080';
 
@@ -60,7 +61,7 @@ const QrButton = (props) => {
                 }}
                 onClick={fetchQRCode}
             >
-                QR
+                <AiOutlineQrcode style={{ width: '40px', height: '40px' }} />
             </button>
             {loading && <p>로딩 중...</p>}
             {error && <p>{error}</p>}

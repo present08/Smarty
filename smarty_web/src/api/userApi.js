@@ -47,4 +47,17 @@ export const getUserClassApplication = async (user_id) => {
     return response.data;
 }
 
+//렌탈 정보 가져오기
+export const getProductRentalUser = async (user_id) => {
+    try {
+        const response = await axios.get(`${host}/rentalMyPageUser`, {
+            params: { user_id }
+        });
+        console.log('API Response:', response.data); // 응답 데이터 확인
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
 

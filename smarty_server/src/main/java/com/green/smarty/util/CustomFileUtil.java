@@ -3,7 +3,6 @@ package com.green.smarty.util;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -23,8 +22,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Log4j2
-public class CustomFileUtil {
+public class CustomFileUtil{
     // 파일 데이터 입출력 담당
 
     @Value("upload")
@@ -51,7 +49,7 @@ public class CustomFileUtil {
             try {
                 // 기본 이미지 파일 경로 설정
                 Path defaultImagePath = Paths.get(new ClassPathResource("images/smarty.jpeg").getURI());
-                // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로     지정
+                // 저장할 파일 이름을 생성하고, Paths.get()으로 저장 경로 지정
                 String savedName = UUID.randomUUID().toString() + "_default.jpeg";
                 Path savePath = Paths.get(uploadPath, savedName);
                 // 기본 이미지를 지정한 경로에 복사
@@ -81,7 +79,6 @@ public class CustomFileUtil {
             try{
                 // Files.copy() 메서드로 실제 파일 데이터를 해당 경로에 복사
                 Files.copy(multipartFile.getInputStream(), savePath);
-                log.info("파일 저장 성공: {}", savePath);
                 // 이미지 파일이라면 썸네일 생성
                 String contentType = multipartFile.getContentType();
                 if(contentType != null && contentType.startsWith("image")) {
@@ -89,11 +86,9 @@ public class CustomFileUtil {
                     Thumbnails.of(savePath.toFile())
                             .size(200, 200)
                             .toFile(thumbnailPath.toFile());
-                    log.info("썸네일 생성 성공: {}", thumbnailPath);
                     thumbnail_path.add(thumbnailPath.toString());    // 썸네일 경로 리스트 저장
                 }
             } catch (IOException e) {
-                log.error("파일 저장 실패: {}", e.getMessage());
                 throw new RuntimeException(e.getMessage());
             }
             file_name.add(savedName);     // 파일 이름 리스트 저장

@@ -11,16 +11,6 @@ const UserReservation = (props) => {
 
     const data = [
         { productNumber: 1, productName: '수영모', facilityName: '수영장', price: 8000 },
-        { productNumber: 2, productName: '수건', facilityName: '헬스장', price: 3000 },
-        { productNumber: 3, productName: '매트', facilityName: '요가', price: 6500 },
-        { productNumber: 4, productName: '매트', facilityName: '요가', price: 6500 },
-        { productNumber: 5, productName: '수영복', facilityName: '수영장', price: 20000 },
-        { productNumber: 6, productName: '운동화', facilityName: '헬스장', price: 5000 },
-        { productNumber: 7, productName: '요가복', facilityName: '요가', price: 15000 },
-        { productNumber: 8, productName: '매트', facilityName: '요가', price: 6500 },
-        { productNumber: 6, productName: '운동화', facilityName: '헬스장', price: 5000 },
-        { productNumber: 7, productName: '요가복', facilityName: '요가', price: 15000 },
-        { productNumber: 8, productName: '매트', facilityName: '요가', price: 6500 },
     ];
 
     useEffect(() => {
@@ -43,7 +33,6 @@ const UserReservation = (props) => {
                     <h3 style={{ fontSize: '23px', marginBottom: '1rem', color: '#003f66', marginRight: '10px' }}>대여 및 결제 관리</h3>
                     <p style={{ color: 'gray', fontSize: '23px' }}> (총금액 : {new Intl.NumberFormat().format(priceTotal)} 원)</p>
                 </div>
-
             </div>
             <div style={{
                 display: 'flex',

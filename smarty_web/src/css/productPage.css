@@ -1,0 +1,176 @@
+/* 메인 컨테이너 */
+.product-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f0f8ff;  /* 연한 파란색 배경 */
+}
+
+/* 타이틀 */
+.product-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+/* 그리드 컨테이너 */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 제품 카드 */
+.product-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 이미지 컨테이너 */
+.product-image-container {
+    position: relative;
+    padding-top: 75%;  /* 4:3 비율 */
+    overflow: hidden;
+}
+
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 체크박스 컨테이너 */
+.checkbox-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.product-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* 제품 정보 */
+.product-info {
+    padding: 1rem;
+    background: white;
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.product-size {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    font-weight: bold;
+    color: #2563eb;  /* 파란색 가격 */
+}
+
+/* 선택된 상품 수 표시 */
+.selected-count {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 선택된 카드 스타일 */
+.product-card.selected {
+    border: 2px solid #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* 페이지네이션 스타일 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 0.5rem;
+}
+
+.pagination-button {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: #e5e7eb;
+    transition: background-color 0.2s;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #d1d5db;
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-button.active {
+    background-color: #22c55e;
+    color: white;
+}
+
+.pagination-nav-button {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: #e5e7eb;
+    transition: background-color 0.2s;
+}
+
+.pagination-nav-button:hover:not(:disabled) {
+    background-color: #d1d5db;
+}
+
+.pagination-nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}

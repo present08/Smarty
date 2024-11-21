@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { getFaility, getProduct } from '../../api/productAPI';
+import { getFailityData, getProduct } from '../../api/productAPI';
 import Footer from '../../component/Footer';
 import MainNav from '../../component/MainNav';
 import Wrapper from '../../component/Wrapper';
@@ -23,16 +23,15 @@ const ListPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-
-    getFaility().then(e => {
+    // getFailityData로 수정
+    getFailityData().then(e => {
       setFacility(e);
-    })
+    });
     getProduct().then(e => {
       setProduct(e);
-    })
+    });
     setLoading(false);
   }, []);
-
 
 
 

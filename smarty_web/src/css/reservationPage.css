@@ -151,3 +151,62 @@
     border-radius: 15px;
     cursor: pointer;
 }
+
+
+/* FacilityList Btn */
+.facility_container {
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+.facility_container>div {
+    display: flex;
+    width: 65%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.facilityBtn {
+    width: 400px;
+    height: 320px;
+    box-shadow: 3px 3px 7px #888;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+
+.facilityBtn>img {
+    width: 400px;
+    height: 210px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.facility_info>h3 {
+    margin-top: 10px;
+    text-align: left;
+    text-indent: 20px;
+    margin-bottom: 15px;
+    font-size: 25px;
+}
+
+.facility_info>div {
+    display: flex;
+    text-indent: 20px;
+}
+
+.facility_info>div>div {
+    display: flex;
+    text-indent: 20px;
+}
+
+.facility_info>p {
+    text-indent: 20px;
+    text-align: left;
+    color: #888888;
+    margin-bottom: 5px;
+}

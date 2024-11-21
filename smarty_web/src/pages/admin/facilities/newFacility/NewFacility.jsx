@@ -3,7 +3,9 @@ import { useRef, useState } from "react"
 import { postAddFacility } from "../../../../api/admin/facilityApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
+import NewProduct from "../../products/newProduct/NewProduct"
 import { postAddCourt } from "../../../../api/admin/courtApi"
+import { postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
 import { useNavigate } from "react-router-dom"
 
 const initFacility = {
@@ -35,20 +37,35 @@ export default function NewFacility() {
     // FacilityDTO 첨부파일 저장 변수
     const facilityImages = useRef()
 
-    // 자식 컴포넌트에서 부모 컴포넌트로 props 전달 방법
+    // CourtDTO 구성
     const [court, setCourt] = useState(Array.from({ length: 0 }, (_, i) => ({
         facility_id: '',
         court_name: '',
         court_status: ''
     })))
-    const courtPass = (court) => {
-        setCourt(court)
+    const courtPass = (courtList) => {
+        setCourt(courtList)
         setCourtModal(false)
+    }
+
+    // ProductDTO 구성
+    const [product, setProduct] = useState(Array.from({ length: 0 }, (_, i) => ({
+        product_id: '',
+        facility_id: '',
+        product_name: '',
+        stock: '',
+        price: '',
+        files: []
+    })))
+    const productPass = (productList) => {
+        setProduct(productList)
+        setProductModal(false)
     }
 
     // 가격변동률, 코트, 물품등록시 모달창 상태관리
     const [priceModal, setPriceModal] = useState(false)
     const [courtModal, setCourtModal] = useState(false)
+    const [productModal, setProductModal] = useState(false)
 
     // 시설등록 input value 업데이트 함수
     const handleInput = (e) => {
@@ -60,29 +77,34 @@ export default function NewFacility() {
     const handlePrice = (e) => {
         facility.hot_time = Number(e.target.value)
         setFacility({ ...facility })
-        console.log(facility.hot_time)
     }
 
-    const handlePriceCancel = (e) => {
+    const handlePriceCancel = () => {
         facility.rate_adjustment = 0
         facility.hot_time = 0
         setFacility({ ...facility })
-        console.log(facility)
     }
 
     // 코트 등록 버튼 클릭 시 실행 함수
-    const handleCourtButton = (e) => {
+    const handleCourtButton = () => {
         setCourtFlag(true)
-        facility.court = courtFlag
+        facility.court = true
         setFacility({ ...facility })
         setCourtModal(true)
-        console.log("시설 : ", courtFlag)
+    }
+
+    const handleProductButton = () => {
+        setProductFlag(true)
+        facility.product = true
+        setFacility({ ...facility })
+        setProductModal(true)
     }
 
     // 모달창 닫기 함수
-    const closeModal = () => {
-        if (courtModal) setCourtModal(false)
-        if (priceModal) setPriceModal(false)
+    const closeModal = (modalType) => {
+        if (modalType === 'court') setCourtModal(false)
+        else if (modalType === 'product') setProductModal(false)
+        else if (modalType === 'price') setPriceModal(false)
     }
 
     // 입력된 데이터로 API 호출
@@ -113,10 +135,17 @@ export default function NewFacility() {
             facilityForm.append("court", false)
         }
 
+        if (product.length > 0) {
+            facilityForm.append("product", true)
+        } else {
+            facilityForm.append("product", false)
+        }
+
         try {
             const facilityId = await postAddFacility(facilityForm)
             console.log("등록된 시설 ID:", facilityId)
 
+            // 코트 등록
             if (court.length > 0) {
                 court.map(court => {
                     court.facility_id = facilityId
@@ -129,9 +158,36 @@ export default function NewFacility() {
                     court_name: facility.facility_name,
                     court_status: facility.facility_status
                 }
-                const courtArray = [defaultCourt]
-                console.log("전송하는 코트 : ", courtArray)
-                postAddCourt(courtArray)
+                postAddCourt([defaultCourt])
+            }
+
+            if (product.length > 0) {
+                const productArray = product.map((product) => ({
+                    facility_id: facilityId,
+                    product_name: product.product_name,
+                    stock: product.stock,
+                    price: product.price,
+                    management_type: product.management_type,
+                    size: product.size,
+                }));    
+    
+                // 상품 등록
+                postProductData(productArray).then((productIds) => {
+                    console.log("등록된 상품 IDs:", productIds);
+
+                    // 각 상품에 파일 업로드 처리
+                    product.forEach((prod, index) => {
+                        if (prod.files && prod.files.length > 0) {
+                            uploadProductFiles(productIds[index], prod.files);
+                        } else {
+                            console.log(`상품 ID ${productIds[index]}에 파일 없음. 기본 이미지 처리`);
+                            uploadProductFiles(productIds[index], []); // 기본 이미지 처리
+                        }
+                    });
+                }).catch((error) => {
+                    console.error("상품 등록 또는 파일 업로드 실패:", error);
+                    alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
+                });
             }
 
             alert(`시설 등록 완료! 시설 ID: ${facilityId}`)
@@ -216,29 +272,30 @@ export default function NewFacility() {
                                     {priceModal ? (
                                         <Modal
                                             content={
-                                                <div className="priceModal_box">
-                                                    <div className="modalleftItem">
-                                                        <label htmlFor="rate_adjustment">가격 변동률</label>
-                                                        <input
-                                                            name="rate_adjustment"
-                                                            id="rate_adjustment"
-                                                            type={"range"}
-                                                            min={0}
-                                                            max={1}
-                                                            step={0.05}
-                                                            value={facility.rate_adjustment}
-                                                            onChange={handleInput}
-                                                            placeholder="ex) 13000"
-                                                        />
-                                                        {Number(facility.rate_adjustment) * 100 + "%"}
+                                                <>
+                                                    <div className="priceModal_box">
+                                                        <div className="modalleftItem">
+                                                            <label htmlFor="rate_adjustment">가격 변동률</label>
+                                                            <input
+                                                                name="rate_adjustment"
+                                                                id="rate_adjustment"
+                                                                type={"range"}
+                                                                min={0}
+                                                                max={1}
+                                                                step={0.05}
+                                                                value={facility.rate_adjustment}
+                                                                onChange={handleInput}
+                                                            />
+                                                            {Number(facility.rate_adjustment) * 100 + "%"}
+                                                        </div>
+                                                        <div className="modalshowInfoButton">
+                                                            <button className="addPriceButton" onClick={() => closeModal('price')}>적용</button>
+                                                            <button className="cancelPriceButton" onClick={handlePriceCancel}>취소</button>
+                                                        </div>
                                                     </div>
-                                                    <div className="modalshowInfoButton">
-                                                        <button className="addPriceButton" onClick={closeModal}>적용</button>
-                                                        <button className="cancelPriceButton" onClick={handlePriceCancel}>취소</button>
-                                                    </div>
-                                                </div>
+                                                </>
                                             }
-                                            callbackFn={closeModal}
+                                            callbackFn={() => closeModal('price')}
                                         />
                                     ) : null}
                                 </div>
@@ -251,9 +308,24 @@ export default function NewFacility() {
                                     {courtModal ? (
                                         <Modal
                                             content={<NewCourt courtPass={courtPass} />}
-                                            callbackFn={closeModal}
+                                            callbackFn={() => closeModal('court')}
                                         />
                                     ) : null}
+                                </div>
+                                <div className="subItem">
+                                    <button className="subItemButton"
+                                        onClick={() => handleProductButton()}>
+                                        대여물품
+                                    </button>
+                                    <span className="subItemtext">{product.length}개의 물품 등록</span>
+                                    {productModal ?
+                                        <Modal
+                                            content={<NewProduct productPass={productPass}
+                                                context="facility"
+                                                onClose={closeModal}/>}
+                                            callbackFn={closeModal} />
+                                        : <></>
+                                    }
                                 </div>
                             </div>
                         </div>

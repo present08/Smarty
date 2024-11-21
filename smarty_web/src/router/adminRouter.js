@@ -10,6 +10,10 @@ const FacilityRead = lazy(() => import("../pages/admin/facilities/facilityRead/F
 const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"))
 const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
 const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
+
+const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
+const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
+
 const adminRouter = () => {
     return [
         {
@@ -37,8 +41,16 @@ const adminRouter = () => {
             element: <Suspense fallback={Loading}><ClassAdd /></Suspense>,
         },
         {
-            path: "classes/:facility_id/read/:",
+            path: "classes/:facility_id/read/:class_id",
             element: <Suspense fallback={Loading}><ClassRead /></Suspense>,
+        },
+        {
+            path: "products/:facility_id",
+            element: <Suspense fallback={Loading}><ProductList/></Suspense>,
+        },
+        {
+            path: "products/:facility_id/read/:product_id",
+            element: <Suspense fallback={Loading}><ProductRead /></Suspense>,
         },
     ]
 }

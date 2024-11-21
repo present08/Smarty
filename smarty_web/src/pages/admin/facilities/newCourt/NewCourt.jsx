@@ -47,8 +47,10 @@ export default function NewCourt(courtPass) {
                         onChange={(e) => setCourtNum(e.target.value)}
                     />
                     <button className="addCourtButton" onClick={createForm}>입력창 생성</button>
-                    <button className="saveCourtButton" onClick={() => onClickSubmit()}>등록</button>
-                    <span className="addCourtFormText">*코트명 입력, 개방 여부 선택 후 등록 버튼을 누르면 추가됩니다.</span>
+                    {result.length > 0? (
+                        <button className="saveCourtButton" onClick={() => onClickSubmit()}>등록</button>
+                    ) : (<></>)}
+                    <span className="addCourtFormText">* 코트명 입력, 개방 여부 선택 후 등록 버튼을 누르면 추가됩니다.</span>
                 </div>
 
 
@@ -82,9 +84,6 @@ export default function NewCourt(courtPass) {
                             <label htmlFor={`closed_${i}`}> 불가</label>
                         </div>
                     ))}
-                </div>
-                <div className="addCourtResult">
-                    {result.map(item => item.court_name)}
                 </div>
             </div>
         </div>

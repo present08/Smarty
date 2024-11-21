@@ -28,11 +28,12 @@ public class AdminClassController {
         List<ClassAdminDTO> list = adminClassService.getList();
         return list;
     }
-//
-//    @GetMapping("/{class_id}")
-//    public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
-//        System.out.println("컨트롤러 클래스 하나 조회!");
-//        return adminClassService.read(class_id);
-//    }
+
+    @GetMapping("/{class_id}")
+    public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
+        System.out.println("컨트롤러 클래스 하나 조회!");
+        return adminClassService.read(class_id);
+    }
+
 
 }

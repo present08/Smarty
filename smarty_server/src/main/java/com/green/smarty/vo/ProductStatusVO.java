@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 public class ProductStatusVO {
     private String status_id;
     private String product_id;
-    private String product_status;  // '손상', '수리 필요', '재구매 필요', '대여 가능'
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private String product_status;
     private LocalDateTime updated_at;
+
 }

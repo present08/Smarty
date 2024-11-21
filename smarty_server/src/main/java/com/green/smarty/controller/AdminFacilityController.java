@@ -4,6 +4,8 @@ import com.green.smarty.service.AdminFacilityService;
 import com.green.smarty.vo.FacilityVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -38,6 +40,12 @@ public class AdminFacilityController {
     public FacilityVO read(@PathVariable(name = "facility_id") String facility_id) {
         System.out.println("컨트롤러 시설 하나 조회! id = " + facility_id);
         return adminFacilityService.read(facility_id);
+    }
+
+    @GetMapping("/images/{file_name}")
+    public ResponseEntity<Resource> showImages(@PathVariable(name = "file_name") String file_name) {
+        System.out.println("컨트롤러 시설 이미지 조회! file_name = " + file_name);
+        return adminFacilityService.showImages(file_name);
     }
 
     // Update (시설 수정)

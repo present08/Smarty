@@ -12,6 +12,5 @@ public interface AdminClassMapper {
     void register(ClassAdminDTO classAdminDTO);
     void registerDetail(ClassDetailVO classDetailVO);
     List<ClassAdminDTO> getList();
-//
-//    CourtVO read(String class_id);
+    ClassAdminDTO read(String class_id);
 }

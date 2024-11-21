@@ -1,12 +1,10 @@
 import "./sidebar.css"
-import { GridView, BarChartOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
     const [data, setData] = useState([])    // API에서 받은 시설 정보 저장
-    const [isHovering, setIsHovering] = useState(0)
 
     useEffect(() => {
         getListFacility().then(data => {
@@ -41,32 +39,28 @@ export default function Sidebar() {
 
                 <div className="sidebarMenu">
                     <div className="sidebarTitle">관리 메뉴</div>
-                    <ul className="sidebarList">
+                    <ul className="sidebarlist">
                         {data && data.map((facility, i) => (
                             <li
                                 key={i}
-                                className="sidebarListItem "
+                                className="sidebarListItem collapse"
                                 id={`sidebarListItem${i}`}
-                                onMouseOver={() => setIsHovering(1)}
-                                onMouseOut={() => setIsHovering(0)}
                             >
                                 {facility.facility_name}
-                                {isHovering ? (
-                                    <ul className="sidebarSubListItem">
-                                        <Link to={`/admin/facilities/read/${facility.facility_id}`}
-                                            className="link"
-                                        >
-                                            <li className="sidebarSublistItem">시설</li>
-                                        </Link>
-                                        <Link to={`/admin/classes/${facility.facility_id}`}
-                                            className="link"
-                                        >
-                                            <li className="sidebarSublistItem">강의</li>
-                                        </Link>
-                                        <li className="sidebarSublistItem">물품</li>
-                                        <li className="sidebarSublistItem">사용자</li>
-                                    </ul>
-                                ) : (<></>)}
+                                <ul className="sidebarSubListItem">
+                                    <Link to={`/admin/facilities/read/${facility.facility_id}`}
+                                        className="link"
+                                    >
+                                        <li className="sidebarSublistItem">시설</li>
+                                    </Link>
+                                    <Link to={`/admin/classes/${facility.facility_id}`}
+                                        className="link"
+                                    >
+                                        <li className="sidebarSublistItem">강의</li>
+                                    </Link>
+                                    <li className="sidebarSublistItem">물품</li>
+                                    <li className="sidebarSublistItem">사용자</li>
+                                </ul>
                             </li>
                         ))}
                     </ul>

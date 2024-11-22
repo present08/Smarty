@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../css/nav.css'
-import { AiOutlineClose, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineMenu, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import { checkLoginStatus, logout } from '../api/userApi';
 
 const MainNav = () => {
+
     // 검색창 모달 구현하기 
     const [searchModal, setSearchModal] = useState(false);
     const modalBackcground = useRef();
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
 
     // 검색창
     const [search, setSearch] = useState(true);
@@ -64,154 +70,91 @@ const MainNav = () => {
         })
     };
 
+
+
     return (
-        <nav style={{
-            width: '100%',
-            height: '130px',
-            display: 'flex',
-            flexDirection: 'column',
-            // backgroundColor: '#f7f7f7',
-            backgroundColor: 'white',
-            zIndex: '1000',
-            position: 'fixed',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-        }}>
-            <div className="subnav">
+        <nav style={{ width: '100%', height: '130px', display: 'flex', flexDirection: 'column', backgroundColor: 'white', zIndex: '1000', position: 'fixed', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            {/* <button className="menu-toggle" onClick={toggleMenu}>
+                <AiOutlineMenu style={{ width: '40px', height: '40px', color: 'white' }} />
+            </button> */}
+            <div className={`subnav ${isMenuOpen ? 'active' : ''}`}>
                 <ul>
                     {isLoggedIn ? (
                         <>
-                            <li>
-                                <Link to={"/admin"}>관리자모드</Link>
-                            </li>
-                            <li>
-                                <span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span>
-                            </li>
-                            <li>
-                                <Link to={"/"} onClick={handleLogout}>로그아웃</Link>
-                            </li>
+                            <li><Link to={"/admin"}>관리자모드</Link></li>
+                            <li><span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span></li>
+                            <li><Link to={"/"} onClick={handleLogout}>로그아웃</Link></li>
                         </>
                     ) : (
                         <>
-                            <li>
-                                <Link to={"/user/login"}>로그인</Link>
-                            </li>
-                            <li>
-                                <Link to={"/user/signUp"}>회원가입</Link>
-                            </li>
-                            <li>
-                                <Link to={"/"}>고객센터</Link>
-                            </li>
+                            <li><Link to={"/user/login"}>로그인</Link></li>
+                            <li><Link to={"/user/signUp"}>회원가입</Link></li>
+                            <li><Link to={"/"}>고객센터</Link></li>
                         </>
                     )}
                 </ul>
             </div>
-            <div className='mainnav'>
+            <div className={`mainnav ${isMenuOpen ? 'active' : ''}`}>
                 <div className='logo'>
                     <Link to={"/"}>
-                        <h1 style={{
-                            color: '#17468c',
-                            fontSize: '43px',
-                            marginBottom: '2rem'
-                        }}>SMARTY</h1>
+                        <h1 style={{ color: '#17468c', fontSize: '43px', marginBottom: '2rem' }}>SMARTY</h1>
                     </Link>
                 </div>
                 <div className='navbox'>
                     <div className='listbox'>
                         <ul>
-                            <li>
-                                <Link to={"/center/center_in"}>센터소개</Link>
+                            <li><Link to={"/center/center_in"}>센터소개</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/center/facility"}>시설안내</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/center/parking"}>주차안내</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/center/directions"}>오시는길</Link>
-                                    </li>
+                                    <li><Link to={"/center/facility"}>시설안내</Link></li>
+                                    <li><Link to={"/center/parking"}>주차안내</Link></li>
+                                    <li><Link to={"/center/directions"}>오시는길</Link></li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to={"/guide/instructions"}>이용안내</Link>
+                            <li><Link to={"/guide/instructions"}>이용안내</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/guide/hours"}>이용시간</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/guide/refund"}>환불 및 취소 안내</Link>
-                                    </li>
+                                    <li><Link to={"/guide/hours"}>이용시간</Link></li>
+                                    <li><Link to={"/guide/refund"}>환불 및 취소 안내</Link> </li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to={"/classList"}>수강신청</Link>
+                            <li><Link to={"/classList"}>수강신청</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/classList"}>수강신청</Link>
-                                    </li>
+                                    <li><Link to={"/classList"}>수강신청</Link></li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to={"/facilityList"}>일일입장</Link>
+                            <li><Link to={"/facilityList"}>일일입장</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/facilityList"}>일일입장</Link>
-                                    </li>
+                                    <li><Link to={"/facilityList"}>일일입장</Link></li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to={"/product"}>물품</Link>
+                            <li><Link to={"/product"}>물품</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/product"}>물품대여</Link>
-                                    </li>
+                                    <li><Link to={"/product"}>물품대여</Link></li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to={"/notice"}>커뮤니티</Link>
+                            <li><Link to={"/notice"}>커뮤니티</Link>
                                 <ul>
-                                    <li>
-                                        <Link to={"/notice/announce"}>공지사항</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/notice/board"}>자유게시판</Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/"}>채용정보</Link>
-                                    </li>
+                                    <li><Link to={"/notice/announce"}>공지사항</Link></li>
+                                    <li><Link to={"/notice/board"}>자유게시판</Link></li>
+                                    <li><Link to={"/"}>채용정보</Link></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                     <div className='iconbox'>
-                        <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{
-                            width: '30px', height: '30px', marginRight: '20px'
-                        }} /></a>
-                        <AiOutlineSearch className='modal-open-bt' onClick={() => {
-                            setSearchModal(true)
-                        }} />
-
+                        <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
+                        <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />
                     </div>
                 </div>
             </div>
             {/* 아이콘 클릭시 모달 오픈 */}
-            {
-                searchModal &&
-                <div className='searchModal-container' ref={modalBackcground} onClick={e => {
-                    if (e.target === modalBackcground.current) {
-                        setSearchModal(false)
-                    }
-                }}>
+            {searchModal &&
+                <div className='searchModal-container' ref={modalBackcground} onClick={e => { if (e.target === modalBackcground.current) { setSearchModal(false) } }}>
                     <div className='searchModal-content'>
-                        <AiOutlineClose className='modal-close-btn'
-                            onClick={() => setSearchModal(false)}
-                        />
+                        <AiOutlineClose className='modal-close-btn' onClick={() => setSearchModal(false)} />
                         <p>SEARCH</p>
                         <div className='searchBox'>
                             <input type="search" onChange={onChange} placeholder='검색어를 입력해주세요.' value={searchTerm} />
-                            <AiOutlineSearch style={{
-                                width: '30px', height: '30px',
-                            }} />
+                            <AiOutlineSearch style={{ width: '30px', height: '30px', }} />
                         </div>
                     </div>
                 </div>

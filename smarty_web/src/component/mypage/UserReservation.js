@@ -110,50 +110,52 @@ const UserReservation = (props) => {
                 {modal && (
                     <div className="reservationModalOverlay">
                         <div className="reservationModalContainer">
-                            <div className="reservationModalHeader">
-                                <h3>대여 상품 상세 정보</h3>
-                            </div>
-                            <div className="reservationModalContent">
-                                {selectedProduct ? (
-                                    <div>
+                            <div>
+                                <div className="reservationModalHeader">
+                                    <h3>대여 상품 상세 정보</h3>
+                                </div>
+                                <div className="reservationModalContent">
+                                    {selectedProduct ? (
                                         <div>
                                             <div>
-                                                대여중
+                                                <div>
+                                                    대여중
+                                                </div>
+                                                <div>
+                                                    <h5>{selectedProduct.productName}</h5>
+                                                    <p>{selectedProduct.productNum}</p>
+                                                </div>
                                             </div>
                                             <div>
-                                                <h5>{selectedProduct.productName}</h5>
-                                                <p>{selectedProduct.productNum}</p>
+                                                <h5>대여자</h5>
+                                                <p>{selectedProduct.userName}({selectedProduct.userId})님</p>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <h5>대여자</h5>
-                                            <p>{selectedProduct.userName}({selectedProduct.userId})님</p>
-                                        </div>
-                                        <div>
-                                            <h5>시설명</h5>
-                                            <p>{selectedProduct.facilityName}</p>
-                                        </div>
-                                        <div>
-                                            <h5>가격</h5>
-                                            <p>{new Intl.NumberFormat().format(selectedProduct.productPrice)} 원</p>
+                                            <div>
+                                                <h5>시설명</h5>
+                                                <p>{selectedProduct.facilityName}</p>
+                                            </div>
+                                            <div>
+                                                <h5>가격</h5>
+                                                <p>{new Intl.NumberFormat().format(selectedProduct.productPrice)} 원</p>
 
+                                            </div>
+                                            <div>
+                                                <h5>상품사이즈</h5>
+                                                <p>{selectedProduct.productSize}</p>
+                                            </div>
+                                            <div>
+                                                <h5>대여일</h5>
+                                                <p>{selectedProduct.rentalDate}</p>
+                                            </div>
+                                            <div>
+                                                <h5>반납일</h5>
+                                                <p>{selectedProduct.returnDate}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h5>상품사이즈</h5>
-                                            <p>{selectedProduct.productSize}</p>
-                                        </div>
-                                        <div>
-                                            <h5>대여일</h5>
-                                            <p>{selectedProduct.rentalDate}</p>
-                                        </div>
-                                        <div>
-                                            <h5>반납일</h5>
-                                            <p>{selectedProduct.returnDate}</p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <p>선택된 상품이 없습니다.</p>
-                                )}
+                                    ) : (
+                                        <p>선택된 상품이 없습니다.</p>
+                                    )}
+                                </div>
                             </div>
                             <div className="reservationModalFooter">
                                 <button onClick={modalClose} className="primaryButton">

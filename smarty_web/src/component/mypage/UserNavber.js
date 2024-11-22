@@ -23,7 +23,7 @@ const UserNavber = () => {
                         예약하기
                     </div>
                     {isSubMenuVisible && (
-                        <ul style={{ marginLeft: '1rem', width: '200px', height: '40px', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', borderRadius: '10px', backgroundColor: '#28527a' }}>
+                        <ul className='userSubMenu' style={{ marginLeft: '1rem', width: '200px', height: '40px', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', borderRadius: '10px', backgroundColor: '#28527a' }}>
                             <li>
                                 <Link to={"/facilityList"} style={{ fontSize: '18px', color: 'aliceblue' }}>일일입장</Link>
                             </li>

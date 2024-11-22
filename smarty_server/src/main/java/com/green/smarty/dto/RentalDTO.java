@@ -14,11 +14,16 @@ import java.time.LocalDateTime;
 @Data
 
 public class RentalDTO {
-    private String rental_id;
-    private String user_id;
-    private String product_id;
+    private String rental_id; //대여ID
+    private String user_id; //사용자ID
+    private String product_id; //상품ID
+    private boolean rental_status; // 대여상태(true: 대여 중, false: 반납 완료)
+    private int count;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime rental_date;
+    private LocalDateTime rental_date; // 대여일
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime return_date;}
+    private LocalDateTime return_date; // 반납일
+
+
+}

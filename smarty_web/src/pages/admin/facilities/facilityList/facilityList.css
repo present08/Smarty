@@ -22,11 +22,6 @@
     cursor: pointer;
 }
 
-.facilityAction {
-    display: flex;
-    align-items: center;
-}
-
 .facilityReadButton {
     border: none;
     border-radius: 10px;

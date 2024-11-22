@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,20 +16,24 @@ public class AdminCourtService {
     private AdminCourtMapper adminCourtMapper;
 
     // 코트 등록
-    public void register(List<CourtVO> courtList) {
+    public List<String> register(List<CourtVO> courtList) {
+        List<String> courtIdList = new ArrayList<>();
 
-        // 처리) 코트 id 생성
         for(int i = 0; i < courtList.size(); i++) {
+            // 처리) 코트 id 생성하여 하나씩 매퍼로 전달
+            //      : "C_" + 시설 id 마지막 4자리 + 01~
             String facility_id = courtList.get(i).getFacility_id();
             String idx = "";
             if( (i+1)-10 < 0 ) idx = "0" + (i+1);
             else idx = "i+1";
-            courtList.get(i).setCourt_id("C_" + facility_id.substring(12) + idx);
-            // "c_" + 시설 id 마지막 4자리 + 01
-
+            String court_id = "C_" + facility_id.substring(12) + idx;
+            System.out.println("코트 등록 처리) 생성된 코드 id = " + court_id);
+            courtList.get(i).setCourt_id(court_id);
+            courtIdList.add(court_id);
             adminCourtMapper.register(courtList.get(i));
-            System.out.println("코트 서비스! CourtVO = " + courtList.get(i));
+
         }
+        return courtIdList;
     }
 
     public List<CourtVO> getList(String facility_id) {

@@ -1,5 +1,5 @@
 import "./newCourt.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function NewCourt(courtPass) {
     const [courtNum, setCourtNum] = useState(0)     // 생성할 시설 숫자를 저장할 변수
@@ -33,6 +33,11 @@ export default function NewCourt(courtPass) {
             // 최종 수정된 updateResult 배열을 반환하여 result의 새 상태로 설정
         })
     }
+
+    useEffect(() => {
+      console.log(result)
+    }, [result])
+    
 
     return (
         <div className="newCourt">
@@ -71,7 +76,6 @@ export default function NewCourt(courtPass) {
                                 type="radio"
                                 name={`court_status${i}`}
                                 id={`open_${i}`}
-                                checked
                                 onChange={() => handleInputChange(i, 'court_status', true)}
                             />
                             <label htmlFor={`open_${i}`}> 가능</label>

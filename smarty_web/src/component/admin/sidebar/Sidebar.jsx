@@ -58,7 +58,11 @@ export default function Sidebar() {
                                     >
                                         <li className="sidebarSublistItem">강의</li>
                                     </Link>
+                                    <Link to={`/admin/products/${facility.facility_id}`}
+                                    className="link"
+                                    >
                                     <li className="sidebarSublistItem">물품</li>
+                                    </Link>
                                     <li className="sidebarSublistItem">사용자</li>
                                 </ul>
                             </li>

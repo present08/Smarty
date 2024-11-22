@@ -62,8 +62,8 @@ public class AdminClassService {
                 // step3) 날짜 하루 증가시키기
                 current_date = current_date.plusDays(1);
             }
-            System.out.println("서비스 처리 2-1) 생성된 class_date : " + class_date);
-            System.out.println("서비스 처리 2-1) 생성된 weekday : " + weekday);
+            System.out.println("서비스 처리 2-2) 생성된 class_date : " + class_date);
+            System.out.println("서비스 처리 2-2) 생성된 weekday : " + weekday);
 
             // 처리2-2) class_detail 등록
             for(int j = 0; j < class_date.size(); j++) {

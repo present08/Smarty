@@ -3,9 +3,8 @@ import './classRead.css'
 import { useEffect, useState } from 'react'
 import { getOneClass } from '../../../../api/admin/classApi'
 
-export default function ClassRead() {
-
-  const {facility_id, class_id} = useParams()
+export default function ClassRead({class_id}) {
+  console.log("props 확인 : ", class_id)
   const [currentClass, setCurrentClass] = useState(null)
  
   useEffect(() => {
@@ -19,9 +18,7 @@ export default function ClassRead() {
     <div className="classRead">
         {currentClass && 
           <div className="classReadContainer">        
-            <div className="classReadTitle">{currentClass.class_name}<br />
-              강의 조회 화면의 경우 리스트에서 조회 버튼 클릭 시 모달창으로 바로 확인할 수 있도록 구현<br /><br />
-            </div>
+            <div className="classReadTitle">{currentClass.class_name}</div>
             <div className="classContent">
 
                   <div className="classContentItem">

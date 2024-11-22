@@ -18,7 +18,7 @@ public class AdminClassController {
     // 강의 등록
     @PostMapping("/")
     public String register(@RequestBody List<ClassAdminDTO> classList) {
-        System.out.println("컨트롤러 클래스 등록! classList = " + classList);
+        System.out.println("클래스 등록 classList = " + classList);
         adminClassService.register(classList);
         return "클래스 등록 성공";
     }
@@ -26,7 +26,7 @@ public class AdminClassController {
     // 선택한 시설 관련 강의 전체 조회
     @GetMapping("/list/{facility_id}")
     public List<ClassAdminDTO> getList(@PathVariable(name = "facility_id") String facility_id) {
-        System.out.println("컨트롤러 클래스 전체 조회!");
+        System.out.println("클래스 전체 조회! facility_id = " + facility_id);
         List<ClassAdminDTO> list = adminClassService.getList(facility_id);
         return list;
     }
@@ -34,7 +34,7 @@ public class AdminClassController {
     // 강의 하나 조회
     @GetMapping("/{class_id}")
     public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
-        System.out.println("컨트롤러 클래스 하나 조회!");
+        System.out.println("클래스 하나 조회! class_id = " + class_id);
         return adminClassService.read(class_id);
     }
 

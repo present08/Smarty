@@ -11,6 +11,7 @@ export default function ClassList() {
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
   const [classList, setClassList] = useState([])
+  const [class_id, setClass_id] = useState(null)
   const [classModal, setClassModal] = useState(false)
 
   useEffect(() => {
@@ -25,8 +26,10 @@ export default function ClassList() {
     }).catch((error) => console.error("ERROR!", error))
   }, [facility_id])
 
-  const handleReadButton = () => {
+  const handleReadButton = (class_id) => {
     setClassModal(true)
+    setClass_id(class_id)
+    console.log(class_id)
   }
   const closeModal = () => {
     setClassModal(false)
@@ -46,12 +49,11 @@ export default function ClassList() {
       renderCell: (params) => {
         return (
           <div className="classAction">
-            {/* <Link to={`/admin/classes/${facility_id}/read/` + params.row.class_id}> */}
-              <button 
+            <button 
               className="classReadButton"
-              onClick={handleReadButton}
-              >조회</button>
-            {/* </Link> */}
+              onClick={() => handleReadButton(params.row.class_id)}
+            >조회</button>
+            <button className="classDeleteButton">삭제</button>
           </div>
         )
       }
@@ -79,7 +81,7 @@ export default function ClassList() {
           sx={{ border: 0 }}
         />
         {classModal? 
-        <Modal content={<ClassRead />} callbackFn={closeModal}/>
+        <Modal content={<ClassRead class_id={class_id}/>} callbackFn={closeModal}/>
         : <></>}
       </div>
     </div>

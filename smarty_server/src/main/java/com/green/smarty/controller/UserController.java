@@ -57,7 +57,7 @@ public class UserController {
 
             try {
                 // QR 코드 생성
-                byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 id를 QR 코드 데이터로 사용
+                byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
             } catch (Exception e) {

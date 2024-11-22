@@ -4,6 +4,7 @@ import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
 import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
+import ReservationComplete from './ReservationComplete.js';
 
 
 const ReservationComponent = (props) => {
@@ -12,7 +13,7 @@ const ReservationComponent = (props) => {
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
-
+    const [complete, setComplete] = useState(false)
     const [price, setPrice] = useState(facilityData.basic_fee)
     const initData = {
         reservation_id: null,
@@ -93,6 +94,11 @@ const ReservationComponent = (props) => {
                 alert("예약완료")
                 setTimeLine(e)
             })
+        setComplete(!complete)
+    }
+
+    const closeModal = (e) => {
+        setComplete(e)
     }
 
     return (
@@ -137,6 +143,7 @@ const ReservationComponent = (props) => {
                 </table>
                 <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
             </div>
+           {complete ? <ReservationComplete postData ={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal}/> :<></>}
         </div>
     )
 }

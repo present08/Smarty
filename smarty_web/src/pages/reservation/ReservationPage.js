@@ -9,6 +9,7 @@ import Footer from '../../component/Footer';
 import Wrapper from '../../component/Wrapper';
 import MainNav from '../../component/MainNav';
 import BackToTopButton from '../../component/BackToTopButton';
+import { useNavigate } from 'react-router-dom';
 
 let today = new Date();
 
@@ -25,13 +26,19 @@ const ReservationPage = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const location = useLocation();
     const focusRef = useRef(null);
+    const navigate = useNavigate();
     const newDate = (date) => {
         setDate(date);
     }
     useEffect(() => {
         setFacilityData(location.state)
         console.log("getLocation", location.state)
-        setCurrentUser(JSON.parse(localStorage.getItem("user")));
+        try {
+            setCurrentUser(JSON.parse(localStorage.getItem("user")));
+        } catch {
+            alert("로그인 후 이용해주세요")
+            navigate("/")
+        }
     }, [location])
 
     useEffect(() => {

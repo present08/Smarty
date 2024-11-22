@@ -20,3 +20,8 @@ export const updatePlan = async (postData, facility_id) => {
     const response = await axios.post(`${host}/${facility_id}`, postData)
     return response.data
 }
+
+export const deleteReservation = async (reservation_id) => {
+    const response = await axios.delete(`${host}/${reservation_id}`)
+    return response.data
+}

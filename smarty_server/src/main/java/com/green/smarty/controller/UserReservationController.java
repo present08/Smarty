@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,9 @@ import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.UserReservationService;
+import com.green.smarty.vo.PaymentVO;
+
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/user/reservation")
@@ -72,6 +76,13 @@ public class UserReservationController {
         List<Map<String, Integer>> result = reservationService.insertReservation(dto);
         System.out.println(dto);
         return result;
+    }
+
+    @DeleteMapping("/{reservation_id}")
+    public String remove(@PathVariable String reservation_id) {
+        // List<PaymentVO> paymentList = reservationMapper.getPayment
+
+        return "시설 삭제 완료";
     }
 
 }

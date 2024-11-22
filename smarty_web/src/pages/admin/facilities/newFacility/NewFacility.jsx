@@ -77,27 +77,32 @@ export default function NewFacility() {
     const handlePrice = (e) => {
         facility.hot_time = Number(e.target.value)
         setFacility({ ...facility })
+        console.log(facility.hot_time)
     }
-
-    const handlePriceCancel = () => {
+    const handlePriceCancle = (e) => {
         facility.rate_adjustment = 0
         facility.hot_time = 0
         setFacility({ ...facility })
+        console.log(facility)
     }
-
-    // 코트 등록 버튼 클릭 시 실행 함수
-    const handleCourtButton = () => {
+   // 코트 등록 버튼 클릭 시 실행 함수
+   const handlePriceButton = (e) => {
+    setPriceModal(true)
+    }
+    const handleCourtButton = (e) => {
         setCourtFlag(true)
-        facility.court = true
+        facility.court = courtFlag
         setFacility({ ...facility })
         setCourtModal(true)
+        console.log("시설 : ", courtFlag)
     }
-
-    const handleProductButton = () => {
+    // 물품 등록 버튼 클릭 시 실행 함수
+    const handleProductButton = (e) => {
         setProductFlag(true)
-        facility.product = true
+        facility.product = productFlag
         setFacility({ ...facility })
         setProductModal(true)
+        console.log("물품 : ", productFlag)
     }
 
     // 모달창 닫기 함수
@@ -265,11 +270,11 @@ export default function NewFacility() {
                             <div className="subItemContent">
                                 <div className="subItem">
                                     <button className="subItemButton"
-                                        onClick={() => setPriceModal(true)}>
+                                        onClick={() => handlePriceButton()}>
                                         가격 변동률
                                     </button>
                                     <span className="subItemtext">{Number(facility.rate_adjustment) * 100 + "%"}, {facility.hot_time}</span>
-                                    {priceModal ? (
+                                    {priceModal ?
                                         <Modal
                                             content={
                                                 <>
@@ -285,19 +290,84 @@ export default function NewFacility() {
                                                                 step={0.05}
                                                                 value={facility.rate_adjustment}
                                                                 onChange={handleInput}
+                                                                placeholder="ex) 13000"
                                                             />
                                                             {Number(facility.rate_adjustment) * 100 + "%"}
                                                         </div>
-                                                        <div className="modalshowInfoButton">
-                                                            <button className="addPriceButton" onClick={() => closeModal('price')}>적용</button>
-                                                            <button className="cancelPriceButton" onClick={handlePriceCancel}>취소</button>
+                                                        <div className="modal_cont">
+                                                            <div className="modalshowPrice">
+                                                                <div>
+                                                                    <p>기본 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {facility.basic_fee}
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <p>할인 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {Number(facility.basic_fee) * (1 - Number(facility.rate_adjustment))}
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <p>할증 요금 </p>
+                                                                    <div className="price_box">
+                                                                        {Number(facility.basic_fee) * (1 + Number(facility.rate_adjustment))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="modalshowInfo">
+                                                                <div>
+                                                                    <p>
+                                                                        가격 변동률을 적용할 항목 선택 후<br />
+                                                                        적용 버튼을 클릭해주세요.
+                                                                    </p>
+                                                                </div>
+                                                                <div>
+                                                                    <h3>체크박스</h3>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="discount"
+                                                                            type={"radio"}
+                                                                            value={1}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="discount"> 조조할인 (첫 타임)</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="surcharge"
+                                                                            type={"radio"}
+                                                                            value={2}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="surcharge"> 야간할증 (마지막 타임)</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input
+                                                                            name="hot_time"
+                                                                            id="all"
+                                                                            type={"radio"}
+                                                                            value={3}
+                                                                            onClick={(e) => handlePrice(e)}
+                                                                        />
+                                                                        <label htmlFor="all"> 모두 (할인, 할증 적용)</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="modalshowInfoButton">
+                                                                    <button className="addPirceButton" onClick={closeModal}>적용</button>
+                                                                    <button className="canclePirceButton" onClick={handlePriceCancle}>취소</button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </>
                                             }
-                                            callbackFn={() => closeModal('price')}
+                                            callbackFn={closeModal}
                                         />
-                                    ) : null}
+                                        : <></>
+                                    }
                                 </div>
                                 <div className="subItem">
                                     <button className="subItemButton"
@@ -327,9 +397,35 @@ export default function NewFacility() {
                                         : <></>
                                     }
                                 </div>
+                                <div className="subItem">
+                                    {court.length == 0 ?
+                                        <>
+                                            <div className="subItemTitle">시설 개방</div>
+                                            <input
+                                                name="facility_status"
+                                                id="true"
+                                                type={"radio"}
+                                                value={true}
+                                                onClick={(e) => handleInput(e)}
+                                            // onClick={(e) => console.log(e.target.name, e.target.value)}
+                                            />
+                                            <label htmlFor="true"> 가능</label>
+                                            <input
+                                                name="facility_status"
+                                                id="false"
+                                                type={"radio"}
+                                                value={false}
+                                                onClick={(e) => handleInput(e)}
+                                            // onClick={(e) => console.log(e.target.name, e.target.value)}
+                                            />
+                                            <label htmlFor="false"> 불가</label>
+                                        </>
+                                        : <></>}
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div className="addFacilityFormRight">
                     <div className="rightItemTitle">세부 사항</div>

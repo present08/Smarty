@@ -17,10 +17,10 @@ export default function ClassList() {
   }, [facility_id])
 
   useEffect(() => {
-    getListClass().then(res => {
+    getListClass(facility_id).then(res => {
       setClassList(res)
     }).catch((error) => console.error("ERROR!", error))
-  }, [])
+  }, [facility_id])
   
   const columns = [
     { field: 'class_id', headerName: '강의 ID', width: 180 },

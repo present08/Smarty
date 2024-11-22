@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import "./facilityRead.css"
 import { useEffect, useState } from "react"
 import { getOneFacility } from "../../../../api/admin/facilityApi"
@@ -17,59 +17,45 @@ export default function FacilityRead() {
     <div className="facilityRead">
         {currentFacility && 
           <div className="facilityReadContainer">        
-            <div className="facilityReadTitle">{currentFacility.facility_name}</div>
+            <div className="facilityReadTitle">{currentFacility.facility_id}</div>
+            <Link to={`/admin/facilities/modify/${facility_id}`}>
+              <button className="facilityModifyButton">수정</button>
+            </Link>
             <div className="facilityContent">
-              
-                <div className="facilityContentLeft">
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">시설ID</div>
-                    <input value={currentFacility.facility_id} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">개장시간</div>
-                    <input value={currentFacility.open_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">폐장시간</div>
-                    <input value={currentFacility.close_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">기본이용시간</div>
-                    <input value={currentFacility.default_time} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">기본이용요금</div>
-                    <input value={currentFacility.basic_fee} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">가격변동률</div>
-                    <input value={currentFacility.rate_adjustment} readOnly/>
-                  </div>
-                  <div className="facilityContentLeftItem">
-                    <div className="facilityContentLeftItemTitle">변동가격적용</div>
-                    <input value={currentFacility.hot_time} readOnly/>
-                  </div>                  
-                </div>
 
-                <div className="facilityContentRight">
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">연락처</div>
-                    <input value={currentFacility.contact} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">이용안내</div>
-                    <input value={currentFacility.info} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">주의사항</div>
-                    <input value={currentFacility.caution} readOnly/>
-                  </div>               
-                  <div className="facilityContentRightItem">
-                    <div className="facilityContentRightItemTitle">시설 사진</div>
-                    <img src={`http://localhost:8080/api/admin/facilities/images/s_${currentFacility.file_name}`}/>
-                  </div>               
-                </div>
-                
+              <div className="facilityContentItem1">
+                <div className="facilityContentItemTitle">시설명</div>
+                <input value={currentFacility.facility_name} readOnly/>
+                <div className="facilityContentItemTitle">개장시간</div>
+                <input value={currentFacility.open_time} readOnly/>
+                <div className="facilityContentItemTitle">폐장시간</div>
+                <input value={currentFacility.close_time} readOnly/>
+                <div className="facilityContentItemTitle">기본이용시간</div>
+                <input value={currentFacility.default_time} readOnly/>
+              </div>
+
+              <div className="facilityContentItem2">
+                <div className="facilityContentItemTitle">기본이용요금</div>
+                <input value={currentFacility.basic_fee} readOnly/>
+                <div className="facilityContentItemTitle">가격변동률</div>
+                <input value={currentFacility.rate_adjustment} readOnly/>
+                <div className="facilityContentItemTitle">변동가격적용</div>
+                <input value={currentFacility.hot_time} readOnly/>
+              </div> 
+
+              <div className="facilityContentItem3">
+                <div className="facilityContentItemTitle">연락처</div>
+                <input value={currentFacility.contact} readOnly/>
+                <div className="facilityContentItemTitle">이용안내</div>
+                <textarea value={currentFacility.info} readOnly/>
+                <div className="facilityContentItemTitle">주의사항</div>
+                <textarea value={currentFacility.caution} readOnly/>
+                <div className="facilityContentItemTitle">시설 사진</div>
+                {currentFacility.file_name.map((file) => (
+                  <img src={`http://localhost:8080/api/admin/facilities/images/s_${file}`}/>
+                ))}
+              </div>
+
             </div>
           </div>
         }      

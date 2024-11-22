@@ -18,39 +18,39 @@ const adminRouter = () => {
     return [
         {
             path: "",
-            element: <Suspense fallback={Loading}><Dashboard /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><Dashboard /></Suspense>,
         },
         {
             path: "facilities",
-            element: <Suspense fallback={Loading}><FacilityList /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><FacilityList /></Suspense>,
         },
         {
             path: "facilities/add",
-            element: <Suspense fallback={Loading}><FacilityAdd /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><FacilityAdd /></Suspense>,
         },
         {
             path: "facilities/read/:facility_id",
-            element: <Suspense fallback={Loading}><FacilityRead /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><FacilityRead /></Suspense>,
         },
         {
             path: "classes/:facility_id",
-            element: <Suspense fallback={Loading}><ClassList /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><ClassList /></Suspense>,
         },
         {
             path: "classes/:facility_id/add",
-            element: <Suspense fallback={Loading}><ClassAdd /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><ClassAdd /></Suspense>,
         },
         {
             path: "classes/:facility_id/read/:class_id",
-            element: <Suspense fallback={Loading}><ClassRead /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><ClassRead /></Suspense>,
         },
         {
             path: "products/:facility_id",
-            element: <Suspense fallback={Loading}><ProductList/></Suspense>,
+            element: <Suspense fallback={SyncLoader}><ProductList/></Suspense>,
         },
         {
             path: "products/:facility_id/read/:product_id",
-            element: <Suspense fallback={Loading}><ProductRead /></Suspense>,
+            element: <Suspense fallback={SyncLoader}><ProductRead /></Suspense>,
         },
     ]
 }

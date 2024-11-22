@@ -7,6 +7,7 @@ import com.green.smarty.vo.ProductVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,10 +82,58 @@ public class AdminProductController {
         }
     }
 
-    // 특정 상품 조회
     @GetMapping("/{product_id}")
-    public ProductAdminDTO read(@PathVariable String product_id) {
-        log.info("컨트롤러 특정 상품 조회! product_id = {}", product_id);
-        return adminProductService.getProductById(product_id);
+    public ResponseEntity<ProductVO> getProductById(@PathVariable String product_id) {
+        log.info("상품 정보 조회 요청 - product_id: {}", product_id);
+        try {
+            ProductVO product = adminProductService.getProductById(product_id);
+            log.info("조회된 상품 정보: {}", product);
+            return ResponseEntity.ok(product);
+        } catch (RuntimeException e) {
+            log.warn("상품 조회 실패 - product_id: {}, 이유: {}", product_id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            log.error("상품 조회 중 에러 발생 - product_id: {}, 에러: {}", product_id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // 상품 이미지 반환
+    @GetMapping("/images/{file_name}")
+    public ResponseEntity<Resource> showProductImage(@PathVariable(name = "file_name") String file_name) {
+        log.info("상품 이미지 요청 - file_name: {}", file_name);
+        try {
+            return adminProductService.showProductImage(file_name);
+        } catch (Exception e) {
+            log.error("상품 이미지 조회 실패 - file_name: {}, 이유: {}", file_name, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 첨부파일 조회
+    @GetMapping("/files/{product_id}")
+    public ResponseEntity<List<String>> getProductFiles(@PathVariable String product_id) {
+        log.info("첨부파일 조회 요청 - product_id: {}", product_id);
+        try {
+            List<String> files = adminProductService.getProductImageNames(product_id);
+            log.info("조회된 첨부파일 목록: {}", files);
+            return ResponseEntity.ok(files);
+        } catch (Exception e) {
+            log.error("첨부파일 조회 중 오류 발생: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @DeleteMapping("/files/{product_id}/{file_name}")
+    public ResponseEntity<String> deleteProductImage(
+            @PathVariable String product_id,
+            @PathVariable String file_name
+    ) {
+        try {
+            adminProductService.deleteProductImage(product_id, file_name);
+            return ResponseEntity.ok("File deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File deletion failed.");
+        }
     }
 }

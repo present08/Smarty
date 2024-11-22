@@ -1,0 +1,58 @@
+.facilityReadContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.facilityReadTitle {
+    height: 10%;
+    font-size: 28px;
+    font-weight: 300;
+    color: #011B2F;
+}
+
+.facilityModifyButton,
+.facilityResetButton {
+    width: 80px;
+    height: 25px;
+    border: none;
+    background-color: #003f66;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.facilityContent {
+    display: flex;
+    margin-top: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 0 40px 0px 0;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+}
+
+.facilityContentItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.facilityContentItemTitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: #555;
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+}
+
+input {
+    border: none;
+    height: 30px;
+    font-size: 16px;
+}

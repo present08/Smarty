@@ -38,9 +38,9 @@ public class FacilityVO {
     private List<String> file_name = new ArrayList<>(); // 시설 관련 이미지 파일, 파일명
 
     // 시설 정보 수정 메서드
-    public void update(int quantity, String open_time, String close_time, int default_time,
-            int basic_fee, int rate_adjustment, String contact, String info, String caution,
-            boolean court, boolean facility_status) {
+    public void update(String open_time, String close_time, int default_time,
+                       int basic_fee, int rate_adjustment, String contact, String info, String caution,
+                       boolean court, boolean facility_status) {
         this.open_time = open_time;
         this.close_time = close_time;
         this.default_time = default_time;

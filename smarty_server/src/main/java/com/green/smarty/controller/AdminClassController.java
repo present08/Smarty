@@ -35,5 +35,5 @@ public class AdminClassController {
         return adminClassService.read(class_id);
     }
 
-
 }
+

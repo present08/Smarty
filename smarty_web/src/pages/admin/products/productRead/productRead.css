@@ -1,131 +1,151 @@
-.product {
-    flex: 7;
-    padding: 20px;
-}
-
+/* 상단 제목 섹션 */
 .productTitleContainer {
     display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
     align-items: center;
-    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-.productAddButton {
-    width: 80px;
-    border: none;
-    padding: 5px;
-    background-color: teal;
-    color: white;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+.productTitle {
+    margin: 0; /* 제목과 주변 요소 사이 여백 제거 */
+    font-size: 28px;
+    font-weight: 300;
+    color: #011B2F;
 }
 
+/* 상단 좌/우 정보 섹션 */
 .productTop {
     display: flex;
+    justify-content: space-between; /* 좌우로 균등 분배 */
+    align-items: flex-start; /* 위쪽 정렬 */
+    gap: 20px; /* 두 div 사이 여백 */
+    margin-bottom: 30px; /* 하단 여백 */
 }
 
-.productTopLeft, 
-.productTopRight {
-    flex: 1;
+/* 상품 정보 */
+.productInfo {
+    width: 48%; /* 레이아웃 고정 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* 내부 텍스트 정렬 */
+    align-items: flex-start; /* 내부 내용 왼쪽 정렬 */
+    box-sizing: border-box; /* 패딩 포함 크기 고정 */
+}
+.productInfo h2 {
+    margin-bottom: 15px; /* 소제목과 내용 사이 여백 */
 }
 
-.productTopRight {
-    padding: 20px;
-    margin: 20px;
-    box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -webkit-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -moz-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
+.productInfo p {
+    margin: 8px 0; /* 항목 간 여백 */
 }
 
-.productInfoImg {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 20px;
+/* 이미지 관리 */
+.fileManagement {
+    width: 48%; /* 레이아웃 고정 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* 내부 텍스트 정렬 */
+    align-items: flex-start; /* 내부 내용 왼쪽 정렬 */
+    box-sizing: border-box; /* 패딩 포함 크기 고정 */
 }
 
-.productInfoTop {
+.fileManagement h2 {
+    margin-bottom: 15px; /* 소제목과 내용 사이 여백 */
+}
+
+.fileManagement ul {
+    list-style: none;
+    padding: 0;
+}
+
+.fileManagement ul li {
     display: flex;
     align-items: center;
-}
-
-.productName {
-    font-weight: 600;
-}
-
-.productInfoBottom {
-    margin-top: 10px;
-}
-
-.productInfoItem {
-    width: 150px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.productInfoValue {
-    font-weight: 300;
-}
-
-.productBottom {
-    padding: 20px;
-    margin: 20px;
-    box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -webkit-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -moz-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-}
-
-.productForm {
-    display: flex;
-    justify-content: space-between;
-}
-
-.productFormLeft {
-    display: flex;
-    flex-direction: column;
-}
-
-.productFormLeft>label {
-    margin-bottom: 10px;
-    color: gray;
-}
-
-.productFormLeft>input {
-    margin-bottom: 10px;
-    border: none;
-    padding: 5px;
-    border-bottom: 1px solid gray;
-}
-
-.productFormLeft>select {
     margin-bottom: 10px;
 }
 
-.productFormRight {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.productUpload {
-    display: flex;
-    align-items: center;
-}
-.productUploadImg {
+.fileManagement ul li img {
     width: 100px;
     height: 100px;
-    border-radius: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
     object-fit: cover;
-    margin-right: 20px;
 }
 
-.productButton {
-    border: none;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: darkblue;
+.fileManagement ul li button {
+    background-color: #ff4d4f;
     color: white;
-    font-weight: 600;
+    border: none;
+    padding: 5px 10px;
     cursor: pointer;
+    border-radius: 5px;
+}
+
+.fileManagement ul li button:hover {
+    background-color: #d42e2f;
+}
+
+.fileManagement input[type="file"] {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* 공통 소제목 스타일 */
+.product h2 {
+    margin-bottom: 15px; /* 소제목과 내용 사이 여백 */
+}
+
+/* 하단 대여 정보 섹션 */
+.rentalInfo {
+    margin-top: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+.rentalInfo h2 {
+    margin-bottom: 15px; /* 소제목과 내용 사이 여백 */
+}
+
+/* 공통 테이블 스타일 */
+.rentalInfo table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rentalInfo table th, .rentalInfo table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.rentalInfo table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+/* 공통 버튼 스타일 */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
 }

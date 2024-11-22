@@ -94,4 +94,27 @@ export const fetchProductStatusByFacility = (facilityId) => {
       }  
     });
   };
-  
+
+// 첨부파일 조회
+export const getProductFiles = async (productId) => {
+  try {
+      const response = await axios.get(`${prefix}/files/${productId}`);
+      console.log("첨부파일 조회 성공:", response.data);
+      return response.data; // 파일 이름 리스트 반환
+  } catch (error) {
+      console.error("첨부파일 조회 실패:", error.response?.data || error.message);
+      throw error;
+  }
+};
+
+// 첨부파일 삭제
+export const deleteProductFile = async (productId, fileName) => {
+  try {
+      const response = await axios.delete(
+          `http://localhost:8080/api/admin/products/files/${productId}/${fileName}`
+      );
+      console.log("파일 삭제 성공:", response.data);
+  } catch (error) {
+      console.error("파일 삭제 실패:", error.response?.data || error.message);
+  }
+};

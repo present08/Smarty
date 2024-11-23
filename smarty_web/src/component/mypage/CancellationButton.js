@@ -3,6 +3,9 @@ import { FaUser } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
 import { getReservationInfo } from '../../api/userApi';
 import { AiOutlineCalendar, AiOutlineClockCircle } from 'react-icons/ai';
+import { deleteReservation } from '../../api/reservaionApi';
+import "../../css/cancellButton.css"
+
 
 const SituationButton = (props) => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -17,6 +20,10 @@ const SituationButton = (props) => {
             });
         }
     }, [props]);
+
+    const deleteReservations = (reservation_id) => {
+        deleteReservation(reservation_id, currentUser.user_id).then(e => setSchedules(e))
+    }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -55,7 +62,7 @@ const SituationButton = (props) => {
                                         </h3>
                                         <ul style={{ overflowY: 'scroll', height: '90%' }}>
                                             {schedules.map((item, idx) => (
-                                                <li className='classtap' key={idx}>
+                                                <li className='cancellBtnTap' key={idx}>
                                                     <div>
                                                         <div>
                                                             <h4>{item.court_name}</h4>
@@ -68,8 +75,8 @@ const SituationButton = (props) => {
                                                             <p style={{ marginRight: '5px' }}>{item.reservation_start.split('T')[0]} {item.reservation_start.split('T')[1].substring(0, 2)}시 ~ {item.reservation_end.split('T')[0]} {item.reservation_end.split('T')[1].substring(0, 2)}시</p>
                                                         </div>
                                                     </div>
-                                                    <div     style={{ cursor: 'pointer' }}>
-                                                        <div>예약 취소하기</div>
+                                                    <div style={{ cursor: 'pointer' }} onClick={() => deleteReservations(item.reservation_id)}>
+                                                        <div >예약 취소하기</div>
                                                     </div>
                                                 </li>
                                             ))

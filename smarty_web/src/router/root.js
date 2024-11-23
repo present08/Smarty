@@ -9,7 +9,7 @@ import guideRouter from "./guideRouter"
 import newNoticeRouter from "./newNoticeRouter";
 
 const Loading = <div><SyncLoader /></div>;
-const Main = lazy(() => import("../component/Main"));
+const Main = lazy(() => import("../pages/main/Main"));
 const FirstInfor = lazy(() => import("../pages/centerIntroduction/FirstInfor"));
 const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaUser } from 'react-icons/fa';
 
-const SituationButton = () => {
+const CancellationButton = () => {
     return (
         <div style={{ width: '90%', height: '85px', backgroundColor: '#3283a8', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', margin: '0 auto', marginBottom: '20px', borderRadius: '20px' }}>
             <div style={{ width: '100%', height: '100%', }}>
@@ -22,4 +22,4 @@ const SituationButton = () => {
     )
 }
 
-export default SituationButton;
+export default CancellationButton;

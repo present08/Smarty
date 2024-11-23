@@ -8,14 +8,13 @@ import { AiFillSmile } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
 import { TbLogout2 } from 'react-icons/tb';
 import UserButton from '../../component/mypage/UserButton';
-import SituationButton from '../../component/mypage/CancellationButton';
+import CancellationButton from '../../component/mypage/CancellationButton';
 import { CiBellOff } from 'react-icons/ci';
 import ReceiptButton from '../../component/mypage/ReceiptButton';
 import UserNavber from '../../component/mypage/UserNavber';
 import QrButton from '../../component/mypage/QrButton';
 import UserGrade from '../../component/mypage/UserGrade';
 import { logout } from '../../api/userApi';
-
 
 const MyPage = () => {
 
@@ -97,7 +96,7 @@ const MyPage = () => {
                             <h2 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUB BOX</h2>
                         </div>
                         <UserButton user={currentUser} />
-                        <SituationButton user={currentUser} />
+                        <CancellationButton user={currentUser} />
                         <ReceiptButton user={currentUser} />
                     </div>
                     <div style={{ width: '100%', height: '10%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

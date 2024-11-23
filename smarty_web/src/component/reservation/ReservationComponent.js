@@ -143,7 +143,7 @@ const ReservationComponent = (props) => {
                 </table>
                 <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
             </div>
-           {complete ? <ReservationComplete postData ={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal}/> :<></>}
+            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
         </div>
     )
 }

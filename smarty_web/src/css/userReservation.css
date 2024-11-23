@@ -165,7 +165,7 @@
 .reservationModalContent>div>div:nth-last-child(3)>h5,
 .reservationModalContent>div>div:nth-last-child(2)>h5,
 .reservationModalContent>div>div:nth-last-child(1)>h5 {
-    font-size: 19px;
+    font-size: 16px;
     color: #8d8d8d;
 }
 
@@ -176,7 +176,7 @@
 .reservationModalContent>div>div:nth-last-child(3)>p,
 .reservationModalContent>div>div:nth-last-child(2)>p,
 .reservationModalContent>div>div:nth-last-child(1)>p {
-    font-size: 19px;
+    font-size: 16px;
 }
 
 

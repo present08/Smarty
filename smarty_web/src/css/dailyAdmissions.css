@@ -1,0 +1,78 @@
+.dailyAdmissions_container {
+    width: 100%;
+    height: 700px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.dailyAdmissions_box {
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dailyAdmissions_box>div:first-child {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.dailyAdmissions_box>div:last-child {
+    width: 75%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: scroll;
+}
+
+.dailyAdmissions_box>div:last-child>div {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    align-items: center;
+    transition: transform 0.5s ease;
+}
+
+.dailyslider {
+    display: flex;
+    width: 100%;
+}
+
+.dailyAdmissions_box>div>h2 {
+    font-size: 35px;
+    display: flex;
+    margin-bottom: 50px;
+}
+
+.dailyAdmissions_box>div>p {
+    color: gray;
+    text-align: left;
+    font-size: 19px;
+    margin-bottom: 30px;
+}
+
+.dailyAdmissions_box>div>button {
+    width: 160px;
+    height: 50px;
+    background-color: #17468c;
+    border: none;
+    border-radius: 20px;
+}
+
+.dailyAdmissions_box>div>button>a {
+    color: aliceblue;
+    font-weight: bold;
+    font-size: 17px;
+}

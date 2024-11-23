@@ -3,6 +3,7 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ReservationDTO;
+import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.UserReservationService;
+import com.green.smarty.vo.AttendanceVO;
+import com.green.smarty.vo.PaymentVO;
 
 @RestController
 @RequestMapping("/api/user/reservation")
@@ -33,6 +39,9 @@ public class UserReservationController {
 
     @Autowired
     private UserReservationService reservationService;
+
+    @Autowired
+    private PublicMapper publicMapper;
 
     // 시설 이미지 불러오기
     @GetMapping("/uploads/{fileName}")
@@ -73,4 +82,34 @@ public class UserReservationController {
         System.out.println(dto);
         return result;
     }
+
+    @DeleteMapping("/{reservation_id}")
+    public List<ReservationUserDTO> remove(@PathVariable String reservation_id, @RequestParam String user_id) {
+        System.out.println(reservation_id);
+        System.out.println(user_id);
+        Map<String, String> paramsMap = new HashMap<>();
+        List<PaymentVO> paymentList = publicMapper.getPaymentAll();
+        for (PaymentVO i : paymentList) {
+            paramsMap.put("reservation_id", reservation_id);
+            paramsMap.put("table", "payment");
+            if (i.getReservation_id().equals(reservation_id)) {
+                reservationMapper.deleteReservationID(paramsMap);
+            }
+        }
+        paramsMap.clear();
+        List<AttendanceVO> attendanceList = publicMapper.getAttendanceAll();
+        for (AttendanceVO i : attendanceList) {
+            paramsMap.put("reservation_id", reservation_id);
+            paramsMap.put("table", "attendance");
+            if (i.getReservation_id() != null && i.getReservation_id().equals(reservation_id)) {
+                reservationMapper.deleteReservationID(paramsMap);
+            }
+        }
+
+        reservationMapper.deleteReservation(reservation_id);
+
+        List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
+        return result;
+    }
+
 }

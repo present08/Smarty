@@ -1,6 +1,8 @@
 package com.green.smarty.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.vo.FacilityAttachVO;
 import com.green.smarty.vo.FacilityVO;
@@ -49,21 +52,26 @@ public class UserReservationService {
         FacilityVO f_vo = reservationMapper.getFacility(facility_id);
         List<ReservationDTO> r_vo = reservationMapper.getReservation(getReservation);
 
+        LocalDateTime now = LocalDateTime.now();
+
         int start = Integer.parseInt(f_vo.getOpen_time().split(":")[0]);
         int end = Integer.parseInt(f_vo.getClose_time().split(":")[0]);
         int default_time = f_vo.getDefault_time();
         int cnt = 0;
+
+        // reservation 등록되어있는 시간 제외
         List<Integer> list = new ArrayList<>();
         for (ReservationDTO vo : r_vo) {
             if (vo.getReservation_start().toLocalDate().toString().equals(date)) {
                 int start1 = Integer.parseInt(vo.getReservation_start().toLocalTime().toString().split(":")[0]);
                 int end1 = Integer.parseInt(vo.getReservation_end().toLocalTime().toString().split(":")[0]);
-
                 for (int i = 0; i < end1 - start1; i++) {
                     list.add(start1 + i);
                 }
             }
         }
+        System.out.println(list);
+
         List<Map<String, Integer>> timeBtn = new ArrayList<>();
         for (int i = 0; i < (end - start); i++) {
             Map<String, Integer> timeMap = new HashMap<>();
@@ -83,27 +91,49 @@ public class UserReservationService {
         return timeBtn;
     }
 
-    public List<Map<String, Integer>> insertReservation(ReservationDTO dto) {
+    public UserReservationDTO insertReservation(ReservationDTO dto) {
         List<ReservationVO> selectVO = reservationMapper.getReservationAll();
-        String nowDate = "" + LocalDate.now().getYear() + LocalDate.now().getMonthValue()
-                + LocalDate.now().getDayOfMonth();
-        int last_id = 0;
-        try {
-            if (selectVO.get(selectVO.size() - 1).getReservation_id().substring(2, 10).equals(nowDate)) {
-                last_id = Integer.parseInt(selectVO.get(selectVO.size() - 1).getReservation_id().substring(10));
-            } else {
-                last_id = 0;
-            }
-        } catch (Exception e) {
-            last_id = 0;
-        }
-        dto.setReservation_id("R_" + nowDate + String.format("%02d", last_id + 1));
-        reservationMapper.insertReservation(dto);
         String date = dto.getReservation_start().toString().split("T")[0];
 
-        List<Map<String, Integer>> result = createTimeBtn(dto.getFacility_id(), dto.getCourt_id(), date);
+        // 연속예약 제한
+        LocalDateTime endTime = dto.getReservation_end().truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime startTime = dto.getReservation_start().truncatedTo(ChronoUnit.HOURS);
+        int iterable = 0;
+        String user_id = dto.getUser_id();
+        for (ReservationVO i : selectVO) {
+            LocalDateTime reservation_end = i.getReservation_end().truncatedTo(ChronoUnit.HOURS);
+            LocalDateTime reservation_start = i.getReservation_start().truncatedTo(ChronoUnit.HOURS);
 
-        return result;
+            if ((reservation_end.compareTo(startTime) == 0 || reservation_start.compareTo(endTime) == 0)
+                    && i.getUser_id().equals(user_id)) {
+                iterable = 1;
+            }
+        }
+
+        if (iterable == 0) {
+            // 마지막 예약번호 받아오기(배열에 데이터가 없을 경우 예외처리)
+            String nowDate = "" + LocalDate.now().getYear() + LocalDate.now().getMonthValue()
+                    + LocalDate.now().getDayOfMonth();
+            int last_id = 0;
+
+            try {
+                if (selectVO.get(selectVO.size() - 1).getReservation_id().substring(2, 10).equals(nowDate)) {
+                    last_id = Integer.parseInt(selectVO.get(selectVO.size() - 1).getReservation_id().substring(10));
+                } else {
+                    last_id = 0;
+                }
+            } catch (Exception e) {
+                last_id = 0;
+            }
+            dto.setReservation_id("R_" + nowDate + String.format("%02d", last_id + 1));
+            reservationMapper.insertReservation(dto);
+
+        }
+
+        List<Map<String, Integer>> btnData = createTimeBtn(dto.getFacility_id(), dto.getCourt_id(), date);
+        UserReservationDTO resultDTO = UserReservationDTO.builder().btnData(btnData).iterable(iterable).build();
+
+        return resultDTO;
     }
 
     public List<ReservationUserDTO> getReservationUserDate(String user_id) {

@@ -2,8 +2,10 @@ package service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.green.smarty.SmartyApplication;
+import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.mapper.UserClassMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.vo.ClassDetailVO;
@@ -68,71 +71,71 @@ public class Test1 {
 
     @Test
     public void classTest() {
-    List<FacilityVO> facility = userReservationMapper.getFacilityAll();
-    String facility_id = facility.get(0).getFacility_id();
+        List<FacilityVO> facility = userReservationMapper.getFacilityAll();
+        String facility_id = facility.get(0).getFacility_id();
 
-    LocalDate start_date = LocalDate.of(2024, 11, 16);
-    LocalDate end_date = LocalDate.of(2024, 12, 16);
+        LocalDate start_date = LocalDate.of(2024, 11, 16);
+        LocalDate end_date = LocalDate.of(2024, 12, 16);
 
-    LocalTime start_time = LocalTime.of(11, 00, 00);
-    LocalTime end_time = LocalTime.of(12, 00, 00);
+        LocalTime start_time = LocalTime.of(11, 00, 00);
+        LocalTime end_time = LocalTime.of(12, 00, 00);
 
-    // 시작일~종료일 사이의 월, 수, 금에 해당하는 요일, 날짜 맵에 담기
-    List<String> weeekday = new ArrayList<>();
-    weeekday.add("화요일");
-    weeekday.add("목요일");
-    weeekday.add("금요일");
+        // 시작일~종료일 사이의 월, 수, 금에 해당하는 요일, 날짜 맵에 담기
+        List<String> weeekday = new ArrayList<>();
+        weeekday.add("화요일");
+        weeekday.add("목요일");
+        weeekday.add("금요일");
 
-    List<String> weekdays = new ArrayList<>();
-    List<LocalDate> weekDates = new ArrayList<>();
+        List<String> weekdays = new ArrayList<>();
+        List<LocalDate> weekDates = new ArrayList<>();
 
-    Map<LocalDate, String> schedule = new HashMap<>();
-    LocalDate current_date = start_date;
-    while (current_date.compareTo(end_date) <= 0) {
+        Map<LocalDate, String> schedule = new HashMap<>();
+        LocalDate current_date = start_date;
+        while (current_date.compareTo(end_date) <= 0) {
 
-    // step1) current_date 의 DayOfWeek 객체 생성 및 요일 추출
-    DayOfWeek current = current_date.getDayOfWeek();
-    String currentS = current.getDisplayName(TextStyle.FULL,
-    Locale.getDefault());
+            // step1) current_date 의 DayOfWeek 객체 생성 및 요일 추출
+            DayOfWeek current = current_date.getDayOfWeek();
+            String currentS = current.getDisplayName(TextStyle.FULL,
+                    Locale.getDefault());
 
-    // step2) 지정된 요일과 일치하는 경우 schedule 맵에 담기
-    // key: 수업 날짜, value: 수업 요일
-    for (String day : weeekday) {
-    if (currentS.equals(day)) {
-    schedule.put(current_date, currentS);
-    weekdays.add(day);
-    weekDates.add(current_date);
-    }
-    }
-    // step3) 날짜 하루 증가시키기
-    current_date = current_date.plusDays(1);
-    }
+            // step2) 지정된 요일과 일치하는 경우 schedule 맵에 담기
+            // key: 수업 날짜, value: 수업 요일
+            for (String day : weeekday) {
+                if (currentS.equals(day)) {
+                    schedule.put(current_date, currentS);
+                    weekdays.add(day);
+                    weekDates.add(current_date);
+                }
+            }
+            // step3) 날짜 하루 증가시키기
+            current_date = current_date.plusDays(1);
+        }
 
-    System.out.println(weekdays);
-    System.out.println(weekDates);
-    ClassVO classVO = ClassVO.builder()
-    .class_id("C_" + facility_id.substring(12) + "03")
-    .facility_id(facility_id)
-    .class_name("오늘20241122")
-    .start_date(start_date)
-    .end_date(end_date)
-    .start_time(start_time)
-    .end_time(end_time)
-    .price(3000)
-    .class_size(50)
-    .build();
+        System.out.println(weekdays);
+        System.out.println(weekDates);
+        ClassVO classVO = ClassVO.builder()
+                .class_id("C_" + facility_id.substring(12) + "03")
+                .facility_id(facility_id)
+                .class_name("오늘20241122")
+                .start_date(start_date)
+                .end_date(end_date)
+                .start_time(start_time)
+                .end_time(end_time)
+                .price(3000)
+                .class_size(50)
+                .build();
 
-    userClassMapper.insertClass(classVO);
-    // userClassMapper.insertClassDetail(dto.getClass_id());
-    for (int i = 0; i < weekdays.size(); i++) {
-    ClassDetailVO detailvo = ClassDetailVO.builder()
-    .class_id(classVO.getClass_id())
-    .weekday(weekdays.get(i))
-    .class_date(weekDates.get(i))
-    .build();
+        userClassMapper.insertClass(classVO);
+        // userClassMapper.insertClassDetail(dto.getClass_id());
+        for (int i = 0; i < weekdays.size(); i++) {
+            ClassDetailVO detailvo = ClassDetailVO.builder()
+                    .class_id(classVO.getClass_id())
+                    .weekday(weekdays.get(i))
+                    .class_date(weekDates.get(i))
+                    .build();
 
-    userClassMapper.insertClassDetail(detailvo);
-    }
+            userClassMapper.insertClassDetail(detailvo);
+        }
     }
 
     @Test
@@ -183,5 +186,33 @@ public class Test1 {
             }
 
         }
+    }
+
+    @Test
+    public void dateTest1() {
+        LocalTime now = LocalTime.now();
+        int now1 = Integer.parseInt(now.toString().split(":")[0]);
+
+        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date1 = LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), now1, 0);
+
+        System.out.println();
+        System.out.println(date1);
+        System.out.println();
+
+        LocalDateTime date3 = LocalDateTime.of(2021, 6, 19, 4, 15, 0);
+        LocalDateTime date4 = LocalDateTime.of(2021, 6, 19, 6, 20, 30);
+        compareHour(date3, date4);
+    }
+
+    public static int compareHour(LocalDateTime date1, LocalDateTime date2) {
+        LocalDateTime dayDate1 = date1.truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime dayDate2 = date1.truncatedTo(ChronoUnit.HOURS);
+        int compareResult = dayDate1.compareTo(dayDate2);
+        System.out.println("=== 시간 단위 비교 ===");
+        System.out.println("date1.truncatedTo(ChronoUnit.HOURS) : " + dayDate1);
+        System.out.println("date2.truncatedTo(ChronoUnit.HOURS) : " + dayDate2);
+        System.out.println("결과 : " + compareResult);
+        return compareResult;
     }
 }

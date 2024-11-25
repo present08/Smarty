@@ -112,19 +112,19 @@ public class AdminFacilityService {
 
     public void modify(String facility_id, FacilityVO facilityVO) {
         // 처리1) 기존의 시설 정보를 불러와서 수정
-        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
-        System.out.println("시설 수정 처리1) 기존 시설 정보 originFacilityVO = " + originFacilityVO);
-
-        originFacilityVO.changeName(facilityVO.getFacility_name());
-        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
-        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
-        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
-        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
-        originFacilityVO.changeHotTime(facilityVO.getHot_time());
-        originFacilityVO.changeContact(facilityVO.getContact());
-        originFacilityVO.changeInfo(facilityVO.getInfo());
-        originFacilityVO.changeCaution(facilityVO.getCaution());
-        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
+//        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
+//        System.out.println("시설 수정 처리1) 기존 시설 정보 originFacilityVO = " + originFacilityVO);
+//
+//        originFacilityVO.changeName(facilityVO.getFacility_name());
+//        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
+//        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
+//        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
+//        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
+//        originFacilityVO.changeHotTime(facilityVO.getHot_time());
+//        originFacilityVO.changeContact(facilityVO.getContact());
+//        originFacilityVO.changeInfo(facilityVO.getInfo());
+//        originFacilityVO.changeCaution(facilityVO.getCaution());
+//        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
 
         adminFacilityMapper.modify(facilityVO);
     }

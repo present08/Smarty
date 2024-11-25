@@ -14,9 +14,9 @@ const initFacility = {
     facility_name: '',
     open_time: '',
     close_time: '',
-    default_time: null,
-    basic_fee: null,
-    rate_adjustment: null,
+    default_time: 0,
+    basic_fee: 0,
+    rate_adjustment: 0,
     hot_time: 0,
     contact: '',
     info: '',
@@ -89,26 +89,29 @@ export default function NewFacility() {
 
     // 첨부파일 미리보기
     const [imageSrc, setImageSrc] = useState([])
-    const [updateFile, setUpdateFile] = useState(null)
+    const [updateFile, setUpdateFile] = useState([])
     
     const onUpload = (e) => {
+        // 이미지 등록 버튼 누를때마다 새로운 이미지 배열 생성, 최종 파일만 저장
         const imageList = Array.from(e.target.files)
-        let imageUrlList = [...imageSrc]
+        let imageUrlList = []
 
         imageList.forEach((file) => {
             const currentImageUrl = URL.createObjectURL(file)
             imageUrlList.push(currentImageUrl)
         })
         setImageSrc(imageUrlList)
-        setUpdateFile(Array.from(facilityImages.current.files))
+        setUpdateFile(imageList)
     }
+
     const handleDeleteImage = (id) => {
         setImageSrc(imageSrc.filter((_, index) => index !== id))
         setUpdateFile(updateFile.filter((_, index) => index !== id))
     }
+
     useEffect(() => {
         console.log(updateFile)
-
+        console.log(imageSrc)
     }, [onUpload, handleDeleteImage])
     
 
@@ -157,6 +160,8 @@ export default function NewFacility() {
     //     else if (modalType === 'product') setProductModal(false)
     //     else if (modalType === 'price') setPriceModal(false)
     // }
+
+    
     
     // 입력된 데이터로 API 호출
     const handleFacilityAdd = () => {
@@ -240,7 +245,7 @@ export default function NewFacility() {
             }
 
             alert("등록된 시설 ID는 " + id + " 입니다.")
-            navigate({pathname: "/admin/facilities"})
+            navigate({pathname: `/admin/facilities/read/${id}`})
         })
     }
 
@@ -367,7 +372,7 @@ export default function NewFacility() {
                             <span className="subItemtext">{facility.basic_fee}, {Number(facility.rate_adjustment) * 100 + "%"}, {facility.hot_time}</span>
                             {priceModal ?
                                 <Modal
-                                    content={<Price pricePass={pricePass} />}
+                                    content={<Price pricePass={pricePass} passedPrice={price} />}
                                     callbackFn={closeModal}
                                 />
                                 : <></>
@@ -381,7 +386,7 @@ export default function NewFacility() {
                             <span className="subItemtext">{court.length}개의 코트 등록</span>
                             {courtModal ?
                                 <Modal
-                                    content={<NewCourt courtPass={courtPass} />}
+                                    content={<NewCourt courtPass={courtPass} passedCourt={court} />}
                                     callbackFn={closeModal}
                                 />
                                 : <></>

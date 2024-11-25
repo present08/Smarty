@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react'
 import './price.css'
 
-export default function Price(pricePass) {
+export default function Price({pricePass, passedPrice}) {
+    console.log("HERE!!", passedPrice)
     const [price, setPrice] = useState({
         basic_fee: 0,
         rate_adjustment: 0,
         hot_time: 0
     })
 
+    useEffect(() => {
+      if(passedPrice){
+        console.log("설정값 있음")
+        setPrice(passedPrice)
+      }
+    }, [passedPrice])
+    
+    useEffect(() => {
+      console.log("현재 price : ", price)
+    }, [price])
+    
+
     const onClickSubmit = () => {
-        pricePass.pricePass(price)
+        pricePass(price)
     }
 
     const handleInput = (e) => {
@@ -100,6 +113,7 @@ export default function Price(pricePass) {
                             type={"radio"}
                             value={0}
                             onClick={(e) => handlePrice(e)}
+                            checked={price.hot_time == 0? true : false}                            
                         />
                         <label htmlFor="basic"> 기본 요금</label>
                     </div>
@@ -110,6 +124,7 @@ export default function Price(pricePass) {
                             type={"radio"}
                             value={1}
                             onClick={(e) => handlePrice(e)}
+                            checked={price.hot_time == 1? true : false}
                         />
                         <label htmlFor="discount"> 조조 할인 (첫 타임)</label>
                     </div>
@@ -120,6 +135,7 @@ export default function Price(pricePass) {
                             type={"radio"}
                             value={2}
                             onClick={(e) => handlePrice(e)}
+                            checked={price.hot_time == 2? true : false}
                         />
                         <label htmlFor="surcharge"> 야간 할증 (마지막 타임)</label>
                     </div>
@@ -130,6 +146,7 @@ export default function Price(pricePass) {
                             type={"radio"}
                             value={3}
                             onClick={(e) => handlePrice(e)}
+                            checked={price.hot_time == 3? true : false}
                         />
                         <label htmlFor="all"> 모두 적용 (할인, 할증)</label>
                     </div>

@@ -1,32 +1,163 @@
 .facilityRead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     height: 100%;
-    width: 100%;
 }
 
-.facilityReadContainer {
+.facilityReadTitle {
+    height: 10%;
+    font-size: 28px;
+    font-weight: 300;
+    color: #011B2F;
+}
+
+.facilityReadForm {
+    height: 90%;
     display: flex;
     width: 100%;
-    gap: 20px;
 }
 
-.facilityContent,
-.courtContent {
+.facilityReadFormLeft,
+.facilityReadFormRight {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 0 40px 0px 0;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+.leftItemTitle,
+.rightItemTitle {
+    flex: 1;
+    font-size: 16px;
+    color: #555;
+    display: flex;
+}
+.leftItemContent,
+.rightItemContent {
+    flex: 9;
+}
+
+.leftItem,
+.rightItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+label,
+.courtItemTitle,
+.imageItemTitle {
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+}
+
+.leftItem>input,
+.rightItem>input {
+    border: none;
+    height: 30px;
+}
+.rightItem>input {
+    width: 100px;
+}
+
+.textItem>textarea {
+    border: 1px solid #bdbdbd;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    text-indent: 10px;
+    padding: 5px;
+}
+
+.facilityReadText {
+    font-size: 14px;
+    color: #919191;
+}
+
+/* 코트 표시영역 */
+.courtItem {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.courtContainer {
+    width: 350px;
+    height: 120px;
+    overflow-y: auto;
+    border: none;
     border-radius: 10px;
     box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
-}
-
-.facilityContent {
-    flex: 7;
     display: flex;
+    flex-direction: column;
+    padding: 10px 10px 0 10px;
+    gap: 10px;
+    align-items: center;
 }
 
-.facilityImages {
-    border: 1px solid;
-    width: 400px;
-    height: 500px;
+.court {
+    display: flex;
+    gap: 10px;
 }
-.courtContent {
-    flex: 3;
+.court>input {
+    border: none;
+    width: 120px;
+}
+
+/* 버튼 스타일 */
+.subItemButton {
+    border: none;
+    width: 100px;
+    border-radius: 5px;
+    padding: 5px 0px;
+    color: white;
+    background-color: #58A3BC;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.imageItem,
+.textItem {
+    display: flex;
+    gap: 20px;
+}
+.imageContainer {
+    width: 350px;
+    height: 184px;
+    overflow-y: auto;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    width: 300px;
+    height: 180px;
+}
+
+.facilityModifyButton {
+    width: 80px;
+    height: 25px;
+    border: none;
+    background-color: #195E8E;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 30px;
 }

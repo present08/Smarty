@@ -75,6 +75,8 @@
 .textItem>textarea {
     border: 1px solid #bdbdbd;
     margin-bottom: 20px;
+    text-indent: 10px;
+    padding: 5px;
 }
 
 .rightItem {

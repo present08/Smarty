@@ -33,12 +33,22 @@ export const getOneCourt = async(court_id) => {
     }
 }
 
-// export const putOneCourt = async(court_id, court) => {
-//     const res = await axios.put(`${prefix}/${court_id}`, court)
-//     return res.data
-// }
+export const putOneCourt = async(facility_id, court) => {
+    try {
+        const res = await axios.put(`${prefix}/${facility_id}`, court)
+        console.log("putOneCourt : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}
 
-// export const deleteOneCourt = async(court_id) => {
-//     const res = await axios.delete(`${prefix}/${court_id}`)
-//     return res.data
-// }
+export const deleteOneCourt = async(court_id) => {
+    try {
+        const res = await axios.delete(`${prefix}/${court_id}`)
+        console.log("deleteOneCourt : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}

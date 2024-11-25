@@ -44,14 +44,14 @@ const adminRouter = () => {
             path: "classes/:facility_id/add",
             element: <Suspense fallback={<SyncLoader />}><ClassAdd /></Suspense>,
         },
-        // {
-        //     path: "classes/:facility_id/read/:class_id",
-        //     element: <Suspense fallback={<SyncLoader />}><ClassRead /></Suspense>,
-        // },
-        // {
-        //     path: "classes/:facility_id/modify/:class_id",
-        //     element: <Suspense fallback={<SyncLoader />}><ClassModify /></Suspense>,
-        // },
+        {
+            path: "classes/:facility_id/read/:class_id",
+            element: <Suspense fallback={<SyncLoader />}><ClassRead /></Suspense>,
+        },
+        {
+            path: "classes/:facility_id/modify/:class_id",
+            element: <Suspense fallback={<SyncLoader />}><ClassModify /></Suspense>,
+        },
         {
             path: "products/:facility_id",
             element: <Suspense fallback={<SyncLoader />}><ProductList/></Suspense>,

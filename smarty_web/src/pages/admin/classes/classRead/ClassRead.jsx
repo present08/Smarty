@@ -3,9 +3,8 @@ import './classRead.css'
 import { useEffect, useState } from 'react'
 import { getOneClass } from '../../../../api/admin/classApi'
 
-export default function ClassRead() {
-
-  const {facility_id, class_id} = useParams()
+export default function ClassRead({class_id}) {
+  console.log("props 확인 : ", class_id)
   const [currentClass, setCurrentClass] = useState(null)
  
   useEffect(() => {

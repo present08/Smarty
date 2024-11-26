@@ -7,11 +7,19 @@
     </insert>
 
     <select id="getList" resultType="com.green.smarty.vo.CourtVO">
-        select * from court
+        select * from court where facility_id=#{facility_id}
     </select>
 
     <select id="read" resultType="com.green.smarty.vo.CourtVO">
         select * from court where court_id=#{court_id}
     </select>
+
+    <update id="modify">
+        update court set court_name=#{court_name}, court_status=#{court_status} where court_id=#{court_id}
+    </update>
+
+    <delete id="remove">
+        delete from court where court_id=#{court_id}
+    </delete>
 
 </mapper>

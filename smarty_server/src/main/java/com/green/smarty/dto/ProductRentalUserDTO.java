@@ -22,9 +22,6 @@ public class ProductRentalUserDTO {
     private String product_name;
     private int price;
     private String size;
-    private boolean rental_status;
-    private String rental_id;
-    private int count;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime rental_date;

@@ -73,12 +73,9 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
         const productIds = await postProductData(productData); // JSON 전송
 
         // 파일 업로드 처리
-        productList.forEach(async (productItem) => {
+        productList.forEach((productItem, index) => {
           if (productItem.files && productItem.files.length > 0) {
-            // 모든 product_id에 대해 파일 업로드 호출
-            for (const productId of productIds) {
-              await uploadProductFiles(productId, productItem.files);
-            }
+            uploadProductFiles(productIds[index], productItem.files); // 파일 전송
           }
         });
 
@@ -152,7 +149,6 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
         {product.management_type === "사이즈별 관리" && (
           <div className="addProductItem">
             <label>사이즈 선택</label>
-            <span className="addSizeOpitionText">* 사이즈 선택시 선택한 사이즈별로 입력한 수량이 부여됩니다.</span>
             <div className="sizeOptions">
             {["S", "M", "L", "XL", "XXL",
                 "240", "250", "260", "270", "280"].map(
@@ -183,23 +179,19 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
       </div>
 
       <div className="addProductList">
-  <h4>등록된 상품 리스트</h4>
-  <h5>=========================</h5>
-  {productList.map((item, index) => (
-    <div key={index}>
-      <p>상품명: {item.product_name}</p>
-      <p>관리 방식: {item.management_type}</p>
-      {item.management_type === "사이즈별 관리" ? (
-        <p>사이즈: {item.size.join(", ")}</p>
-      ) : (
-        <p>사이즈 없음</p>
-      )}
-      <p>수량: {item.stock}</p>
-      <p>가격: {item.price}</p>
-      <h5>=========================</h5>
-    </div>
-  ))}
-</div>
+        <h4>등록된 상품 리스트</h4>
+        <h5>=========================</h5>
+        {productList.map((item, index) => (
+          <div key={index}>
+            <p>상품명: {item.product_name}</p>
+            <p>관리 방식: {item.management_type}</p>
+            {item.management_type === "사이즈별 관리" && (
+              <p>사이즈: {item.size.join(", ")}</p>
+            )}
+        <h5>=========================</h5>
+          </div>
+        ))}
+      </div>
 
       <div className="addProductListButton">
         <button className="submitProductButton" onClick={handleProductSubmit}>

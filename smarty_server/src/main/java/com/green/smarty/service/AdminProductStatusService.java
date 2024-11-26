@@ -110,5 +110,4 @@ public class AdminProductStatusService {
         productStatusMapper.updateProductStock(productId, newStock);
     }
 
-
 }

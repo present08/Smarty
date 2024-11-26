@@ -14,4 +14,7 @@ public class CourtVO {
     private String facility_id;
     private String court_name;
     private boolean court_status;
+
+    public void changeName(String court_name) {this.court_name = court_name;}
+    public void changeCourtStatus(Boolean court_status) {this.court_status = court_status;}
 }

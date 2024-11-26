@@ -8,7 +8,6 @@ import productRouter from "./productRouter";
 import guideRouter from "./guideRouter"
 import newNoticeRouter from "./newNoticeRouter";
 
-
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../component/Main"));
 const FirstInfor = lazy(() => import("../pages/centerIntroduction/FirstInfor"));

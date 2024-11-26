@@ -128,6 +128,7 @@ export default function NewClass() {
                   type='text'
                   name={`price${i}`}
                   placeholder={`ex) 10000`}
+                  // value={`0`}
                   onChange={(e) => handleInput(i, 'price', e.target.value)}
                 />
                 <div className="addClassFormItemTitle">정원</div>

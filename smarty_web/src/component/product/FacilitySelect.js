@@ -17,7 +17,7 @@ const FacilitySelect = ({ facility, selectedFacility, handleChangeRental, filter
           return;
       }
 
-      navigate('/rentals/list');
+      navigate('/mypage/rentals');
   };
 
     return (

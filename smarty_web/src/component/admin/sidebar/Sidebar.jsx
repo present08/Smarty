@@ -1,17 +1,18 @@
 import "./sidebar.css"
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
+    const {facility_id} = useParams()
     const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
 
     useEffect(() => {
         getListFacility().then(res => {
             setFacility(res)
         }).catch((error) => console.log("ERROR! : ", error))
-    }, [])
-
+    }, [facility_id])
+    
     return (
         <div className="sidebar">
             <div className="sidebarWrapper">
@@ -30,15 +31,15 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li className="sidebarListItem">
-                            <Link to="/admin/facilities" className="link">
-                                전체시설
+                            <Link to="/admin/facilities/add" className="link">
+                                시설추가
                             </Link>
                         </li>
                     </ul>
                 </div>
 
                 <div className="sidebarMenu">
-                    <div className="sidebarTitle">관리 메뉴</div>
+                    <div className="sidebarTitle">시설 관리</div>
                     <ul className="sidebarlist">
                         {facility && facility.map((facility, i) => (
                             <li
@@ -60,10 +61,10 @@ export default function Sidebar() {
                                     </Link>
                                     <Link to={`/admin/products/${facility.facility_id}`}
                                     className="link"
-                                >
+                                    >
                                     <li className="sidebarSublistItem">물품</li>
-                                </Link>
-                                    <li className="sidebarSublistItem">사용자</li>
+                                    </Link>
+                                    <li className="sidebarSublistItem">이용현황</li>
                                 </ul>
                             </li>
                         ))}

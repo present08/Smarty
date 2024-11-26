@@ -31,13 +31,13 @@ public class AdminFacilityService {
         // 처리1. 시설 id 생성 후 부여
         String id = "FC_" + System.currentTimeMillis();
         facilityVO.setFacility_id(id);
-        System.out.println("서비스 시설등록 처리1: id 생성 = " + facilityVO.getFacility_id());
+        System.out.println("시설 등록 처리1) id 생성 = " + facilityVO.getFacility_id());
 
         // 처리2. 첨부파일 유무에 따른 처리
         List<MultipartFile> files = facilityVO.getFiles();
 
         if (files == null || files.isEmpty() || files.get(0).isEmpty()) {
-            System.out.println("서비스 시설등록 처리2-1: 이미지 없음, 기본 이미지 등록!");
+            System.out.println("시설 등록 처리2-1) 이미지 없음, 기본 이미지 등록");
             Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
             adminFacilityMapper.register(facilityVO);
 
@@ -50,7 +50,7 @@ public class AdminFacilityService {
             // facility_attach 테이블 등록
             adminFacilityMapper.fileUpload(filesUpload);
         } else {
-            System.out.println("서비스 시설등록 처리2-2 : 이미지 있음, 파일 하나씩 처리!");
+            System.out.println("시설 등록 처리2-2) 이미지 있음, 파일 하나씩 처리");
             facilityVO.setFacility_images(true);
             // 이미지 여부 true로 변경해주고,
             // facilityDTO의 첨부파일 리스트 기반으로 경로(원본, 썸네일), 파일명 리스트 생성
@@ -79,13 +79,14 @@ public class AdminFacilityService {
         for(FacilityVO facilityVO : facilityList) {
             // 각 FacilityVO의 facility_id 추출하여 파일 정보 얻기
             List<FacilityAttachVO> attachList = adminFacilityMapper.getImages(facilityVO.getFacility_id());
-            List<String> file_name = facilityVO.getFile_name();
+            List<String> file_name = facilityVO.getFile_name(); // facilityVO의 파일명 담을 배열 (비어있음)
 
             // 각 FacilityVO의 file_name 배열에 FacilityAttachVO 파일 이름 담기
             for(FacilityAttachVO facilityAttachVO : attachList) {
                 file_name.add(facilityAttachVO.getFile_name());
             }
             facilityVO.setFile_name(file_name);
+            System.out.println("시설 조회 처리) 파일명 저장 file_name = " + file_name);
         }
         return facilityList;
     }
@@ -105,15 +106,27 @@ public class AdminFacilityService {
     }
 
     public ResponseEntity<Resource> showImages(@PathVariable(name = "file_name") String file_name) {
-        System.out.println("서비스 파일 조회! : " + file_name);
+        System.out.println("파일 조회! file_name = " + file_name);
         return customFileUtil.getFile(file_name);
     }
 
-    public FacilityVO modify(FacilityVO facilityVO) {
-        String facility_id = facilityVO.getFacility_id();
-        System.out.println("서비스 시설 수정! : " + facility_id);
+    public void modify(String facility_id, FacilityVO facilityVO) {
+        // 처리1) 기존의 시설 정보를 불러와서 수정
+//        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
+//        System.out.println("시설 수정 처리1) 기존 시설 정보 originFacilityVO = " + originFacilityVO);
+//
+//        originFacilityVO.changeName(facilityVO.getFacility_name());
+//        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
+//        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
+//        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
+//        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
+//        originFacilityVO.changeHotTime(facilityVO.getHot_time());
+//        originFacilityVO.changeContact(facilityVO.getContact());
+//        originFacilityVO.changeInfo(facilityVO.getInfo());
+//        originFacilityVO.changeCaution(facilityVO.getCaution());
+//        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
+
         adminFacilityMapper.modify(facilityVO);
-        return adminFacilityMapper.read(facility_id);
     }
 
     public void remove(String facility_id) {

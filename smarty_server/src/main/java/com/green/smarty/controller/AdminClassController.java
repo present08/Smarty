@@ -30,21 +30,12 @@ public class AdminClassController {
         List<ClassAdminDTO> list = adminClassService.getList(facility_id);
         return list;
     }
-<<<<<<<<< Temporary merge branch 1
-//
-//    @GetMapping("/{class_id}")
-//    public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
-//        System.out.println("컨트롤러 클래스 하나 조회!");
-//        return adminClassService.read(class_id);
-//    }
-=========
+
 
     @GetMapping("/{class_id}")
     public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
         System.out.println("클래스 하나 조회! class_id = " + class_id);
         return adminClassService.read(class_id);
     }
-
->>>>>>>>> Temporary merge branch 2
 
 }

@@ -68,10 +68,17 @@
     </select>
 
     <select id="findStatusCountsByProductId" parameterType="string" resultType="map">
-        SELECT ps.product_status, COUNT(*) as count
+        SELECT
+        ps.product_status,
+        CASE
+        WHEN ps.product_status = '대여 가능' THEN p.stock
+        ELSE 0
+        END AS count
         FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
         WHERE ps.product_id = #{productId}
-        GROUP BY ps.product_status;
+        GROUP BY ps.product_status, p.stock;
+
     </select>
 
 

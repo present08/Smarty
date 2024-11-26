@@ -191,7 +191,7 @@ export default function ProductList() {
 
   // 렌더링 로직 수정
   const columns = [
-    { field: "status_id", headerName: "상태 ID", width: 120 },
+    { field: "status_id", headerName: "상태 ID", width: 150 },
     { field: "product_name", headerName: "물품명", width: 160 },
     {
       field: "stock",

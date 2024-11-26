@@ -59,10 +59,14 @@ public class AdminProductStatusController {
 
         try {
             productStatusService.udpateProductStock(productId, newStock);
+            log.info("수량이 변경된 product_id: {} 변경된 수량 : {}", productId, newStock);
             return ResponseEntity.ok("Product stock updated successfully");
         } catch (Exception e) {
+            log.error("상품 수량 변경 실패 : {} ", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update product stock");
         }
     }
+
+
 
 }

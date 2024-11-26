@@ -37,7 +37,7 @@
 
     <update id="updateProductStock" parameterType="map">
         UPDATE product
-        SET stock = #{stock}
+        SET stock = #{stock}, updated_at = CURRENT_TIMESTAMP
         WHERE product_id = #{product_id}
     </update>
 

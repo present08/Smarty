@@ -118,3 +118,4 @@ export const deleteProductFile = async (productId, fileName) => {
       console.error("파일 삭제 실패:", error.response?.data || error.message);
   }
 };
+

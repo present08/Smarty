@@ -91,7 +91,7 @@ export default function ProductRead() {
     }
 
     return (
-        <div className="product">
+        <div className="productRead">
             <div className="productTitleContainer">
                 <div className="productTitle">상품 상세 정보</div>
             </div>

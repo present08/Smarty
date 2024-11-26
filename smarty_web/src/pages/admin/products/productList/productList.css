@@ -1,98 +1,89 @@
-.productTitle {
+/* 최상위 클래스 기준으로 범위 제한 */
+.productList .productTitle {
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
 }
 
-/* 상단 버튼 스타일 */
-.productContainer .MuiButton-root {
-    margin-right: 10px; /* 버튼 사이 여백 */
+.productList .productContainer .MuiButton-root {
+    margin-right: 10px;
     border-radius: 5px;
     padding: 8px 16px;
 }
 
-/* "엑셀 파일로 내보내기" 버튼 (초록색) */
-.productContainer .MuiButton-root:first-child {
-    background-color: #28a745; /* 초록색 */
+.productList .productContainer .MuiButton-root:first-child {
+    background-color: #28a745;
     color: white;
 }
 
-.productContainer .MuiButton-root:first-child:hover {
-    background-color: #218838; /* Hover 초록색 */
+.productList .productContainer .MuiButton-root:first-child:hover {
+    background-color: #218838;
 }
 
-/* "선택된 항목 저장" 버튼 (파란색) */
-.productContainer .MuiButton-root:nth-child(2) {
-    background-color: #007bff; /* 파란색 */
+.productList .productContainer .MuiButton-root:nth-child(2) {
+    background-color: #007bff;
     color: white;
 }
 
-.productContainer .MuiButton-root:nth-child(2):hover {
-    background-color: #0056b3; /* Hover 파란색 */
+.productList .productContainer .MuiButton-root:nth-child(2):hover {
+    background-color: #0056b3;
 }
 
-/* "상품 추가" 버튼 (보라색) */
-.productContainer .MuiButton-root:nth-child(3) {
-    background-color: #6f42c1; /* 보라색 */
+.productList .productContainer .MuiButton-root:nth-child(3) {
+    background-color: #6f42c1;
     color: white;
 }
 
-.productContainer .MuiButton-root:nth-child(3):hover {
-    background-color: #5a36a3; /* Hover 보라색 */
+.productList .productContainer .MuiButton-root:nth-child(3):hover {
+    background-color: #5a36a3;
 }
 
-/* 테이블 내 버튼 스타일 */
-.productAction button {
+.productList .productAction button {
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-right: 5px; /* 버튼 사이 여백 */
+    margin-right: 5px;
     color: white;
     cursor: pointer;
     font-size: 12px;
 }
 
-/* "상품 조회" 버튼 (밝은 파란색) */
-.productAction .productListEdit:nth-child(1) {
-    background-color: #17a2b8; /* 밝은 파란색 */
+.productList .productAction .productListEdit:nth-child(1) {
+    background-color: #17a2b8;
 }
 
-.productAction .productListEdit:nth-child(1):hover {
-    background-color: #138496; /* Hover 밝은 파란색 */
+.productList .productAction .productListEdit:nth-child(1):hover {
+    background-color: #138496;
 }
 
-/* "저장" 버튼 (진한 파란색) */
-.productAction .productListEdit:nth-child(2) {
-    background-color: #007bff; /* 진한 파란색 */
+.productList .productAction .productListEdit:nth-child(2) {
+    background-color: #007bff;
 }
 
-.productAction .productListEdit:nth-child(2):hover {
-    background-color: #0056b3; /* Hover 진한 파란색 */
+.productList .productAction .productListEdit:nth-child(2):hover {
+    background-color: #0056b3;
 }
 
-/* "재고 감소" 버튼 (빨간색) */
-.productAction .productListEdit:nth-child(3) {
-    background-color: #dc3545; /* 빨간색 */
+.productList .productAction .productListEdit:nth-child(3) {
+    background-color: #dc3545;
 }
 
-.productAction .productListEdit:nth-child(3):hover {
-    background-color: #c82333; /* Hover 빨간색 */
+.productList .productAction .productListEdit:nth-child(3):hover {
+    background-color: #c82333;
 }
 
-/* "재고 증가" 버튼 (녹색) */
-.productAction .productListEdit:nth-child(4) {
-    background-color: #28a745; /* 녹색 */
+.productList .productAction .productListEdit:nth-child(4) {
+    background-color: #28a745;
 }
 
-.productAction .productListEdit:nth-child(4):hover {
-    background-color: #218838; /* Hover 녹색 */
+.productList .productAction .productListEdit:nth-child(4):hover {
+    background-color: #218838;
 }
 
-/* "삭제" 아이콘 스타일 (빨간색) */
-.productAction .productListDelete {
-    color: #ff4d4f; /* 빨간색 */
+.productList .productAction .productListDelete {
+    color: #ff4d4f;
 }
 
-.productAction .productListDelete:hover {
-    color: #d42e2f; /* Hover 빨간색 */
+.productList .productAction .productListDelete:hover {
+    color: #d42e2f;
 }

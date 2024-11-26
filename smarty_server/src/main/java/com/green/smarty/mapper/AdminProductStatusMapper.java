@@ -24,4 +24,6 @@ public interface AdminProductStatusMapper {
     void updateProductStatus(@Param("status_id") String statusId, @Param("product_status") String productStatus);
     // 대여상품 수량 수정
     void updateProductStock(@Param("product_id") String productId, @Param("stock") int newStock);
+
+
 }

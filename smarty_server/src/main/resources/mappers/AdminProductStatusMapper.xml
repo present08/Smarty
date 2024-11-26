@@ -35,11 +35,20 @@
         WHERE status_id = #{status_id}
     </update>
 
+    <!-- stock 업데이트 -->
     <update id="updateProductStock" parameterType="map">
         UPDATE product
-        SET stock = #{stock}, updated_at = CURRENT_TIMESTAMP
-        WHERE product_id = #{product_id}
+        SET stock = #{stock}
+        WHERE product_id = #{product_id};
     </update>
+
+    <!-- updated_at 업데이트 -->
+    <update id="updateProductStatusUpdatedAt" parameterType="map">
+        UPDATE product_status
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE product_id = #{product_id};
+    </update>
+
 
     <select id="findMaxSuffix" parameterType="string" resultType="int">
         SELECT COALESCE(MAX(CAST(SUBSTRING(status_id, LENGTH(#{baseId}) + 1) AS UNSIGNED)), 0)
@@ -49,6 +58,20 @@
 
     <select id="existsByStatusId" parameterType="string" resultType="boolean">
         SELECT COUNT(*) > 0 FROM product_status WHERE status_id = #{status_id}
+    </select>
+
+    <select id="getProductInfoByStatusId" parameterType="string" resultType="map">
+        SELECT ps.status_id, ps.product_status, p.product_id, p.stock, p.management_type
+        FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
+        WHERE ps.status_id = #{status_id};
+    </select>
+
+    <select id="findStatusCountsByProductId" parameterType="string" resultType="map">
+        SELECT ps.product_status, COUNT(*) as count
+        FROM product_status ps
+        WHERE ps.product_id = #{productId}
+        GROUP BY ps.product_status;
     </select>
 
 

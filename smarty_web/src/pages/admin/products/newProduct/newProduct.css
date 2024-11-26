@@ -50,6 +50,11 @@
   margin-bottom: 20px;
 }
 
+.addSizeFromText {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
 
 .addProductItem .sizeOptions label {
   display: flex;

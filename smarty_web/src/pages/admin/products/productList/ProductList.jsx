@@ -269,6 +269,14 @@ export default function ProductList() {
         </div>
       ),
     },
+    {
+      field: "updated_at",
+      headerName: "마지막 수정일",
+      width: 250,
+      renderCell: (params) => (
+        <div>{params.row.updated_at ? new Date(params.row.updated_at).toLocaleString() : "N/A"}</div>
+      ),
+    },
   ];
 
   const paginationModel = { page: 0, pageSize: 10 };

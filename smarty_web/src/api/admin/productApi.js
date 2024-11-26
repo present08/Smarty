@@ -111,7 +111,7 @@ export const getProductFiles = async (productId) => {
 export const deleteProductFile = async (productId, fileName) => {
   try {
       const response = await axios.delete(
-          `http://localhost:8080/api/admin/products/files/${productId}/${fileName}`
+          `${prefix}/files/${productId}/${fileName}`
       );
       console.log("파일 삭제 성공:", response.data);
   } catch (error) {
@@ -119,3 +119,22 @@ export const deleteProductFile = async (productId, fileName) => {
   }
 };
 
+export const updateProductStatusWithStock = (statusId, newStatus) => {
+  return axios.put(`${statusprefix}/update-status-with-stock`, null, {
+      params: {
+          statusId,
+          newStatus,
+      },
+  });
+};
+
+// 특정 상품의 상태별 수량 조회
+export const fetchStatusCountsByProduct = async (productId) => {
+  try {
+      const response = await axios.get(`${statusprefix}/status-counts/${productId}`);
+      return response.data;
+  } catch (error) {
+      console.error("상태별 수량 조회 실패:", error.response?.data || error.message);
+      throw error;
+  }
+};

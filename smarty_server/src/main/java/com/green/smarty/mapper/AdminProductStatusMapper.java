@@ -24,6 +24,12 @@ public interface AdminProductStatusMapper {
     void updateProductStatus(@Param("status_id") String statusId, @Param("product_status") String productStatus);
     // 대여상품 수량 수정
     void updateProductStock(@Param("product_id") String productId, @Param("stock") int newStock);
+    // updated_at 업데이트
+    void updateProductStatusUpdatedAt(@Param("product_id") String productId);
+    // 상태 ID로 상품 정보 조회
+    Map<String, Object> getProductInfoByStatusId(@Param("status_id") String statusId);
+    // 상태별 수량 조회
+    List<Map<String, Object>> findStatusCountsByProductId(@Param("productId") String productId);
 
 
 }

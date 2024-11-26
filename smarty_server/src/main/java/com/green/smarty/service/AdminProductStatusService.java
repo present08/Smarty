@@ -106,8 +106,46 @@ public class AdminProductStatusService {
         productStatusMapper.updateProductStatus(statusId, newStatus);
     }
     // 대여 상품 수량 수정
-    public void udpateProductStock(String productId, int newStock){
+    public void updateProductStockAndUpdatedAt(String productId, int newStock) {
+        // stock 업데이트
         productStatusMapper.updateProductStock(productId, newStock);
+
+        // updated_at 업데이트
+        productStatusMapper.updateProductStatusUpdatedAt(productId);
+
+        log.info("상품 ID {}: stock={}, updated_at 갱신 완료", productId, newStock);
+    }
+
+    public void updateStatusAndStock(String statusId, String newStatus) {
+        // 현재 상태 및 관리 방식 조회
+        Map<String, Object> productInfo = productStatusMapper.getProductInfoByStatusId(statusId);
+        String currentStatus = (String) productInfo.get("product_status");
+        String managementType = (String) productInfo.get("management_type");
+        int stock = (int) productInfo.get("stock");
+
+        // 관리 방식 확인
+        if (!"개별 관리".equals(managementType)) {
+            throw new IllegalArgumentException("개별 관리 방식에 대해서만 처리 가능합니다.");
+        }
+
+        // 상태 변경 로직
+        if ("대여 가능".equals(currentStatus) && !"대여 가능".equals(newStatus)) {
+            // 재고 감소
+            if (stock <= 0) {
+                throw new IllegalArgumentException("재고가 부족하여 상태를 변경할 수 없습니다.");
+            }
+            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), stock - 1);
+        } else if (!"대여 가능".equals(currentStatus) && "대여 가능".equals(newStatus)) {
+            // 재고 증가
+            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), stock + 1);
+        }
+
+        // 상태 업데이트
+        productStatusMapper.updateProductStatus(statusId, newStatus);
+    }
+
+    public List<Map<String, Object>> getStatusCountsByProductId(String productId) {
+        return productStatusMapper.findStatusCountsByProductId(productId);
     }
 
 }

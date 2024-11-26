@@ -41,6 +41,7 @@ const RentalList = () => {
             }
 
             const user = JSON.parse(userStr);
+            // console.log("API 호출전 : ", user.user_id)
             const rentals = await getProductRentalUser(user.user_id)
 
             // 대여 ㅅ량 초기화
@@ -160,7 +161,7 @@ const RentalList = () => {
                                         {formatDateTime(rental.return_date)}
                                     </td>
                                     <td className="px-6 py-4 border-b">
-                                        {rentalCounts[rental.rental_id]}
+                                        {rental.count}
                                     </td>
                                     
                                     <td className="px-6 py-4 border-b">
@@ -170,7 +171,32 @@ const RentalList = () => {
                                             <span className='text-green-600'> 반납 완료 </span>
                                         )}
                                     </td>
-                                    
+                                    {/* <td className="px-6 py-4 border-b">
+                                        {rental.rental_status && (
+                                            <button
+                                                onClick={() => handleReturn(rental.rental_id, rental.count)}
+                                                className="text-red-600 hover:text-red-800"
+                                            >
+                                                반납하기
+                                            </button>
+                                        )}
+                                    </td> */}
+                                    {/* <td>
+                                        {rental.rental_status ? (
+                                            <button
+                                                onClick={() => {
+                                                    console.log("rental_id: ", rental.rental_id)
+                                                    console.log("rentalCount: ", rental.count)
+                                                    handleReturn(rental.rental_id, rental.rentalCount)
+                                                }} // rental.count를 명시적으로 전달
+                                                className="text-red-600 hover:text-red-800"
+                                            >
+                                                반납하기
+                                            </button>
+                                        ) : (
+                                            "반납 완료"
+                                        )}
+                                    </td> */}
                                     <td className="px-6 py-4 border-b">
                                     {rental.rental_status ? (
                                         <button

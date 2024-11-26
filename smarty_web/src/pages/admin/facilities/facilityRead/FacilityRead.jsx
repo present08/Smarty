@@ -1,11 +1,10 @@
 import "./facilityRead.css"
-import { DeleteOutline } from '@mui/icons-material';
-import { useEffect, useRef, useState } from "react"
-import { API_SERVER_HOST, getOneFacility, postAddFacility } from "../../../../api/admin/facilityApi"
+import { useEffect, useState } from "react"
+import { API_SERVER_HOST, getOneFacility } from "../../../../api/admin/facilityApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
 import NewProduct from '../../products/newProduct/NewProduct';
-import { getListCourt, postAddCourt } from "../../../../api/admin/courtApi"
+import { getListCourt, postAddCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import { postAddProduct, postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
 import { useNavigate, useParams } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
@@ -31,6 +30,8 @@ export default function FacilityRead() {
     const [currentFacility, setCurrentFacility] = useState(initFacility)
     const [currentCourt, setCurrentCourt] = useState([])
     const [showHotTime, setShowHotTime] = useState()
+    const [courtModal, setCourtModal] = useState(false)
+    const [newCourt, setNewCourt] = useState([])
 
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -48,6 +49,30 @@ export default function FacilityRead() {
         setCurrentCourt(res)
     }).catch((error) => console.error("ERROR!", error))
   }, [currentFacility])
+
+  const courtPass = (court) => {
+    setNewCourt(court)
+    setCourtModal(false)
+}
+useEffect(() => {
+  console.log(newCourt)
+}, [newCourt])
+
+  const handleCourtButton = (e) => {
+    // currentFacility.court = true
+    // setCurrentCourt({ ...currentFacility })
+    setCourtModal(true)
+}
+const closeModal = () => {
+    setCourtModal(false)
+}
+
+const handleCourtAdd = () => {
+    putOneCourt(facility_id, newCourt).then(res => {
+        console.log(res)
+        navigate(0)
+    })
+}
   
 
     return (
@@ -168,6 +193,7 @@ export default function FacilityRead() {
                         </div>
                         <div className="courtItem">
                             <div className="courtItemTitle">코트 정보</div>
+                            {currentFacility.court?
                             <div className="courtContainer">                        
                                 {currentCourt && currentCourt.map((court, i) => (
                                 <div className="court" key={i}>
@@ -183,7 +209,25 @@ export default function FacilityRead() {
                                         <div style={{fontWeight: "300"}}> 가능</div>
                                         :<div style={{fontWeight: "300"}}> 불가</div>}
                                 </div>))}
+                            </div> :
+                            <div className="courtContainer">
+                                <button className="subItemButton"
+                                    onClick={() => handleCourtButton()}>
+                                    코트 추가
+                                </button>
+                                <span className="subItemtext">{newCourt.length}개의 코트 등록</span>
+                                {courtModal ?
+                                    <Modal
+                                        content={<NewCourt courtPass={courtPass}/>}
+                                        callbackFn={closeModal}
+                                    />
+                                    : <></>
+                                }
+                                {newCourt.length > 0 ?
+                                <button className="addFacilityButton" onClick={handleCourtAdd}>등록</button> : <></>
+                                }
                             </div>
+                        }
                         </div>
                         <div className="imageItem">
                             <div className="imageItemTitle">첨부 파일</div>

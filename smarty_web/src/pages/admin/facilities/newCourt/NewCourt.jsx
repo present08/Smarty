@@ -6,30 +6,36 @@ export default function NewCourt({ courtPass, passedCourt }) {
     const {facility_id} = useParams()
     console.log("facility_id", facility_id)
     const [courtNum, setCourtNum] = useState(0)     // 생성할 시설 숫자를 저장할 변수
-    const [result, setResult] = useState([])   // 생성된 시설 객체를 저장할 배열
+    const [court, setCourt] = useState([])   // 생성된 시설 객체를 저장할 배열
     const [modifyToggle, setModifyToggle] = useState(false)
+    const [removeToggle, setRemoveToggle] = useState(false)
 
     useEffect(() => {
-      if(facility_id) setModifyToggle(true)
+      if(court.length > 0) setModifyToggle(true)
     }, [facility_id])
+
+    useEffect(() => {
+      console.log(modifyToggle)
+    }, [modifyToggle])
+    
     
     useEffect(() => {
         if(passedCourt){
           console.log("설정값 있음")
-          setResult(passedCourt)
+          setCourt(passedCourt)
         }
       }, [passedCourt])
 
     const onClickSubmit = () => {
-        courtPass(result)
+        courtPass(court)
         // 부모 컴포넌트에서 전달받은 함수에 결과를 실어보냄(실행)
     }
 
     // step1) 사용자가 생성할 시설의 갯수를 입력하고 생성 버튼 클릭
     //          -> 저장할 객체 배열 생성, 입력폼 출력
     const createForm = () => {
-        setResult(Array.from({ length: courtNum }, (_, i) => ({
-            facility_id: '',
+        setCourt(Array.from({ length: courtNum }, (_, i) => ({
+            facility_id: facility_id || '',
             court_name: '',
             court_status: true
         })));
@@ -37,7 +43,7 @@ export default function NewCourt({ courtPass, passedCourt }) {
 
     // step2) input태그에 입력한 값을 결과 배열(result)에 저장
     const handleInputChange = (i, key, value) => {
-        setResult((prevResult) => {
+        setCourt((prevResult) => {
             const updateResult = [...prevResult]
             // prevResult를 복사하여 updateResult라는 새 배열 생성
             // -> 불변성 유지, 기존 배열을 수정하지 않고 새로운 배열을 생성
@@ -51,13 +57,17 @@ export default function NewCourt({ courtPass, passedCourt }) {
 
     const handleReset = () => {
         setCourtNum(0)
-        setResult([])
+        setCourt([])
         console.log("RESET!")
     }
 
+    const handleRemove = (i) => {
+        setCourt(court.filter((_, index) => index !== i))
+    }
+
     useEffect(() => {
-      console.log(result)
-    }, [result])
+      console.log(court)
+    }, [court])
     
     return (
         <div className="newCourt">
@@ -78,7 +88,7 @@ export default function NewCourt({ courtPass, passedCourt }) {
 
 
             <div className="addCourtFormBody">
-                {result.map((court, i) => (
+                {court.map((court, i) => (
                     <div key={i} className="addCourtItem">
                         <label>코트명</label>
                         <input
@@ -108,15 +118,22 @@ export default function NewCourt({ courtPass, passedCourt }) {
                             checked={court.court_status? false : true}
                         />
                         <label htmlFor={`closed_${i}`}> 불가</label>
+                        {removeToggle?
+                        <button className="resetCourtButton" onClick={() => handleRemove(i)}>삭제</button> : <></>}
                     </div>
                 ))}
                 
-                {result.length > 0? (
-                    <div className="courtItemButton">
-                        <button className="saveCourtButton" onClick={() => onClickSubmit()}>등록</button>
+                {modifyToggle?
+                    (<div className="courtItemButton">
+                        <button className="saveCourtButton" onClick={onClickSubmit}>수정</button>
+                        {removeToggle? <></>:
+                        <button className="resetCourtButton" onClick={() => setRemoveToggle(true)}>삭제</button>}
+                    </div>) :
+                    (<div className="courtItemButton">
+                        <button className="saveCourtButton" onClick={onClickSubmit}>등록</button>
                         <button className="resetCourtButton" onClick={handleReset}>초기화</button>
-                    </div>
-                ) : (<></>)}
+                    </div>)                   
+                }
             </div>
 
         </div>

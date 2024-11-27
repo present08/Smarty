@@ -6,6 +6,7 @@ import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.mapper.UserRentalMapper;
 import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.dto.ProductDTO;
 import com.green.smarty.vo.ProductVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.UserVO;
@@ -130,8 +131,8 @@ public class UserRentalService{
         }
 
         RentalVO rentalVO = publicMapper.getRental(rental_id);
-            rentalVO.setRental_status(false);
-            rentalVO.setReturn_date(LocalDateTime.now());
+        rentalVO.setRental_status(false);
+        rentalVO.setReturn_date(LocalDateTime.now());
         System.out.println("--------"+rentalVO);
 
 

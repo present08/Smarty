@@ -1,44 +1,47 @@
 import "./sidebar.css"
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
-    const [data, setData] = useState([])    // API에서 받은 시설 정보 저장
+    const {facility_id} = useParams()
+    const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
 
     useEffect(() => {
-        getListFacility().then(data => {
-            setData(data)
-        }).catch((error) => console.log("에러 발생 : ", error))
-    }, [])
-  return (
-    <div className="sidebar">
-        <div className="sidebarWrapper">            
-            <div className="sidebarMenu">
-                <h3 className="sidebarTitle">빠른 메뉴</h3>
-                <ul className="sidebarList">
-                    <li className="sidebarListItem">
-                        <Link to="/admin" className="link">
-                            대시보드
-                        </Link>
-                    </li>
-                    <li className="sidebarListItem">
+        getListFacility().then(res => {
+            setFacility(res)
+        }).catch((error) => console.log("ERROR! : ", error))
+    }, [facility_id])
+    
+    return (
+        <div className="sidebar">
+            <div className="sidebarWrapper">
+
+                <div className="sidebarMenu">
+                    <div className="sidebarTitle">빠른 메뉴</div>
+                    <ul className="sidebarList">
+                        <li className="sidebarListItem">
+                            <Link to="/admin" className="link">
+                                대시보드
+                            </Link>
+                        </li>
+                        <li className="sidebarListItem">
                             <Link to="/admin" className="link">
                                 통계분석
                             </Link>
-                      </li>
-                      <li className="sidebarListItem">
-                            <Link to="/admin/facilities" className="link">
-                                전체시설
+                        </li>
+                        <li className="sidebarListItem">
+                            <Link to="/admin/facilities/add" className="link">
+                                시설추가
                             </Link>
                         </li>
-                </ul>
-            </div>
+                    </ul>
+                </div>
 
-            <div className="sidebarMenu">
-                    <div className="sidebarTitle">관리 메뉴</div>
+                <div className="sidebarMenu">
+                    <div className="sidebarTitle">시설 관리</div>
                     <ul className="sidebarlist">
-                        {data && data.map((facility, i) => (
+                        {facility && facility.map((facility, i) => (
                             <li
                                 key={i}
                                 className="sidebarListItem collapse"
@@ -56,19 +59,19 @@ export default function Sidebar() {
                                     >
                                         <li className="sidebarSublistItem">강의</li>
                                     </Link>
-                                <Link to={`/admin/products/${facility.facility_id}`}
+                                    <Link to={`/admin/products/${facility.facility_id}`}
                                     className="link"
-                                >
+                                    >
                                     <li className="sidebarSublistItem">물품</li>
-                                </Link>
-                                <li className="sidebarSublistItem">사용자</li>
-                            </ul>
-                        </li>
-                    ))}
+                                    </Link>
+                                    <li className="sidebarSublistItem">이용현황</li>
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                </ul>
             </div>
         </div>
-    </div>
     )
 }

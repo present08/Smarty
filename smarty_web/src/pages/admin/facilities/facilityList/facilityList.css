@@ -21,10 +21,6 @@
     font-weight: 500;
     cursor: pointer;
 }
-.facilityAction {
-    display: flex;
-    align-items: center;
-}
 
 .facilityReadButton {
     border: none;

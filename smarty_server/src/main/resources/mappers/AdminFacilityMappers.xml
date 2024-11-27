@@ -30,13 +30,18 @@
 
     <update id="modify" parameterType="com.green.smarty.vo.FacilityVO">
         update facility set facility_name=#{facility_name}, open_time=#{open_time}, close_time=#{close_time},
-        default_time=#{default_time}, basic_fee=#{basic_fee}, extra_fee=#{extra_fee}, contact=#{contact},
-        info=#{info}, caution=#{caution}, court=#{court}, product=#{product}, facility_status=#{facility_status}
+        default_time=#{default_time}, basic_fee=#{basic_fee}, rate_adjustment=#{rate_adjustment}, hot_time=#{hot_time},
+        contact=#{contact}, info=#{info}, caution=#{caution}, court=#{court},
+        facility_status=#{facility_status}, facility_images=#{facility_images}
         where facility_id=#{facility_id}
     </update>
 
     <delete id="remove" parameterType="String">
         delete from facility where facility_id=#{facility_id}
+    </delete>
+
+    <delete id="fileRemove">
+        delete from facility_attach where facility_id=#{facility_id}
     </delete>
 
 </mapper>

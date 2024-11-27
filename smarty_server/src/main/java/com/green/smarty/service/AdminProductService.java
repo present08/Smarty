@@ -6,12 +6,16 @@ import com.green.smarty.util.CustomFileUtil;
 import com.green.smarty.vo.ProductVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -118,13 +122,47 @@ public class AdminProductService {
         return productAdminDTOs;
     }
 
-    public ProductAdminDTO getProductById(String productId) {
-        ProductVO productVO = adminProductMapper.getProductById(productId);
-        if (productVO == null) {
-            throw new IllegalArgumentException("해당 상품 ID가 존재하지 않습니다: " + productId);
+    public ProductVO getProductById(String product_id) {
+        ProductVO product = adminProductMapper.getProductById(product_id);
+        if (product == null) {
+            throw new RuntimeException("상품을 찾을 수 없습니다. product_id: " + product_id);
         }
-        return toProductAdminDTO(productVO);
+        return product;
     }
+
+    // 상품 이미지 파일 이름 조회
+    public List<String> getProductImageNames(String product_id) {
+        List<String> fileNames = adminProductMapper.getProductImages(product_id);
+        if (fileNames == null || fileNames.isEmpty()) {
+            log.warn("상품 이미지가 없습니다. product_id: {}", product_id);
+            return Collections.emptyList();
+        }
+        return fileNames;
+    }
+
+    public ResponseEntity<Resource> showProductImage(String file_name) {
+        log.info("서비스 파일 조회 요청 - file_name: {}", file_name);
+
+        // 파일 이름이 null 또는 빈 값일 경우 기본 이미지 반환
+        if (file_name == null || file_name.trim().isEmpty()) {
+            log.warn("파일 이름이 비어있습니다. 기본 이미지로 반환합니다.");
+            file_name = "default.jpg";
+        }
+
+        try {
+            // CustomFileUtil을 사용해 파일 반환
+            return customFileUtil.getFile(file_name);
+        } catch (Exception e) {
+            log.error("파일 조회 중 오류 발생 - file_name: {}", file_name, e);
+            throw new RuntimeException("파일 조회 중 오류 발생", e);
+        }
+    }
+
+    public void deleteProductImage(String product_id, String file_name) {
+        adminProductMapper.deleteProductImage(product_id, file_name); // DB에서 파일 기록 삭제
+        customFileUtil.deleteFiles(Collections.singletonList(file_name)); // 파일 삭제
+    }
+
 
     private ProductAdminDTO toProductAdminDTO(ProductVO vo) {
         return ProductAdminDTO.builder()

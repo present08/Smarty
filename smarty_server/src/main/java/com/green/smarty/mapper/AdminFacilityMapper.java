@@ -23,4 +23,6 @@ public interface AdminFacilityMapper {
     void modify(FacilityVO facilityVO);
 
     void remove(String id);
+
+    void fileRemove(String facility_id);
 }

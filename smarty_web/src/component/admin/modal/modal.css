@@ -15,7 +15,7 @@
     flex-direction: column;
     align-items: center;
     background-color: white;
-    height: 700px;
+    height: 500px;
     width: 800px;
     border-radius: 20px;
     padding: 20px;
@@ -36,6 +36,7 @@
 .modalBoxContent {
     flex: 10;
     width: 80%;
+    overflow-y: auto;
 }
 
 /* .modalBoxBottom {

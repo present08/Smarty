@@ -18,7 +18,6 @@
         )
     </insert>
 
-
     <!-- 모든 상품 조회 -->
     <select id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">
         SELECT * FROM product
@@ -28,6 +27,7 @@
     <select id="getProductById" parameterType="string" resultType="com.green.smarty.vo.ProductVO">
         SELECT * FROM product WHERE product_id = #{product_id}
     </select>
+
 
     <!-- 특정 시설의 상품 조회 -->
     <select id="getProductsByFacilityId" parameterType="string" resultType="com.green.smarty.vo.ProductVO">
@@ -56,6 +56,19 @@
     <delete id="removeProduct" parameterType="string">
         DELETE FROM product WHERE product_id = #{product_id}
     </delete>
+
+    <select id="getProductImages" resultType="String">
+        SELECT file_name
+        FROM product_attach
+        WHERE product_id = #{product_id}
+    </select>
+
+    <delete id="deleteProductImage">
+        DELETE FROM product_attach
+        WHERE product_id = #{product_id}
+        AND file_name = #{file_name}
+    </delete>
+
 
 </mapper>
 

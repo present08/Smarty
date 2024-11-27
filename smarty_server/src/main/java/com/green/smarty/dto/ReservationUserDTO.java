@@ -22,4 +22,6 @@ public class ReservationUserDTO {
     private String court_name;
 
     private String facility_name;
+
+    private String reservation_id;
 }

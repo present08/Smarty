@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Pagination from './Pagenation'
 import { getProductRentalUser } from '../../api/rentalAPI'
 
 const RentalList = () => {
     const [rentals, setRentals] = useState([]);
-    const [completedRentals, setCompletedRentals] = useState(new Set());
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [rentalCounts, setRentalCounts] = useState({})
@@ -45,6 +44,7 @@ const RentalList = () => {
             // console.log("API 호출전 : ", user.user_id)
             const rentals = await getProductRentalUser(user.user_id)
 
+            // 대여 ㅅ량 초기화
             const counts = rentals.reduce((acc, rental) => {
                 acc[rental.rental_id] = rental.count;
                 return acc;

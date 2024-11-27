@@ -1,57 +1,65 @@
 import { Suspense, lazy } from "react";
 import { SyncLoader } from 'react-spinners';
 
-const Loading = () => <div><SyncLoader /></div>
 const Dashboard = lazy(() => import("../pages/admin/dashboard/Dashboard"));
 const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/FacilityList"));
 const FacilityAdd = lazy(() => import("../pages/admin/facilities/newFacility/NewFacility"))
 const FacilityRead = lazy(() => import("../pages/admin/facilities/facilityRead/FacilityRead"))
+const FacilityModify = lazy(() => import("../pages/admin/facilities/facilityModify/FacilityModify"))
 
 const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"))
 const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
 const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
+const ClassModify = lazy(() => import("../pages/admin/classes/classModify/ClassModify"))
 
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
-
 const adminRouter = () => {
     return [
         {
             path: "",
-            element: <Suspense fallback={Loading}><Dashboard /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><Dashboard /></Suspense>,
         },
         {
             path: "facilities",
-            element: <Suspense fallback={Loading}><FacilityList /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><FacilityList /></Suspense>,
         },
         {
             path: "facilities/add",
-            element: <Suspense fallback={Loading}><FacilityAdd /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><FacilityAdd /></Suspense>,
         },
         {
             path: "facilities/read/:facility_id",
-            element: <Suspense fallback={Loading}><FacilityRead /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><FacilityRead /></Suspense>,
+        },
+        {
+            path: "facilities/modify/:facility_id",
+            element: <Suspense fallback={<SyncLoader />}><FacilityModify /></Suspense>,
         },
         {
             path: "classes/:facility_id",
-            element: <Suspense fallback={Loading}><ClassList /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ClassList /></Suspense>,
         },
         {
             path: "classes/:facility_id/add",
-            element: <Suspense fallback={Loading}><ClassAdd /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ClassAdd /></Suspense>,
         },
         {
             path: "classes/:facility_id/read/:class_id",
-            element: <Suspense fallback={Loading}><ClassRead /></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ClassRead /></Suspense>,
+        },
+        {
+            path: "classes/:facility_id/modify/:class_id",
+            element: <Suspense fallback={<SyncLoader />}><ClassModify /></Suspense>,
         },
         {
             path: "products/:facility_id",
-            element: <Suspense fallback={Loading}><ProductList/></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ProductList/></Suspense>,
         },
         {
             path: "products/:facility_id/read/:product_id",
-            element: <Suspense fallback={Loading}><ProductRead /></Suspense>,
-        },
+            element: <Suspense fallback={<SyncLoader />}><ProductRead /></Suspense>,
+        }
     ]
 }
 

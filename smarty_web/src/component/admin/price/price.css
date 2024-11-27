@@ -1,0 +1,160 @@
+/* 모달창 css */
+
+.priceModal_box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalleftItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 10px;
+    height: 15%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #105066;
+}
+
+.modalleftItem>label {
+    font-size: 21px;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.modalleftItem>input {
+    margin-right: 5px;
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
+    height: 30px;
+}
+
+.modal_cont {
+    margin-top: 2rem;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.modalshowPrice {
+    width: 50%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalshowInfo {
+    width: 50%;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 1rem;
+}
+
+.modalshowPrice>div {
+    width: 70%;
+    height: 30%;
+    /* margin-right: 2rem; */
+}
+
+.modalshowPrice>div>p {
+    text-align: left;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #105066;
+}
+
+.price_box {
+    width: 90%;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-content: center;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:first-child {
+    width: 100%;
+    height: 20%;
+}
+
+.modalshowInfo>div:first-child>p {
+    font-size: 14px;
+    color: gray;
+    padding: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.modalshowInfo>div:nth-child(2) {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modalshowInfo>div:nth-child(2)>h3 {
+    color: #105066;
+    font-size: 21px;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.modalshowInfo>div:nth-child(2)>div {
+    display: flex;
+    
+}
+
+.modalshowInfo>div:nth-child(2)>div>input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid gainsboro;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.modalshowInfo>div:nth-child(2)>div>label {
+    font-weight: bold;
+    color: gray;
+}
+
+.modalshowInfoButton {
+    margin-top: 20px;
+}
+
+.addPirceButton,
+.canclePirceButton {
+    border: none;
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.addFacilityButton,
+.addPirceButton {
+    background-color: #195E8E;
+}
+
+.cancelFacilityButton,
+.canclePirceButton {
+    background-color: rgb(161, 20, 20);
+}

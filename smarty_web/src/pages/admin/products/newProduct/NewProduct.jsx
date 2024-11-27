@@ -149,6 +149,7 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
         {product.management_type === "사이즈별 관리" && (
           <div className="addProductItem">
             <label>사이즈 선택</label>
+            <span className="addSizeFromText">* 사이즈 선택 시, 입력한 갯수만큼 각 사이즈 별로 해당 수량이 부여됩니다.</span>
             <div className="sizeOptions">
             {["S", "M", "L", "XL", "XXL",
                 "240", "250", "260", "270", "280"].map(

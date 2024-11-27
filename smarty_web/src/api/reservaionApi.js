@@ -16,7 +16,12 @@ export const getCourt = async (facility_id, court_id, date) => {
 
 // reservation success event( update timeLine )
 export const updatePlan = async (postData, facility_id) => {
-    console.log(postData)
     const response = await axios.post(`${host}/${facility_id}`, postData)
+    return response.data
+}
+
+export const deleteReservation = async (reservation_id, user_id) => {
+    console.log(reservation_id, user_id)
+    const response = await axios.delete(`${host}/${reservation_id}`, { params: { user_id } })
     return response.data
 }

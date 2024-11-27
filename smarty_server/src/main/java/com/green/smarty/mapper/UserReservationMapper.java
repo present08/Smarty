@@ -37,4 +37,8 @@ public interface UserReservationMapper {
     List<ReservationVO> getReservationAll();
 
     List<ReservationUserDTO> getReservationUserDate(String user_id);
+
+    void deleteReservationID(Map paramsMap);
+
+    void deleteReservation(String reservation_id);
 }

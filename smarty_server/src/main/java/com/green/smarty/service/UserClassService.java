@@ -1,6 +1,7 @@
 package com.green.smarty.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,13 +34,14 @@ public class UserClassService {
         return result;
     }
 
-    public int classEnrollment(Map<String, String> enrollData) {
+    public String classEnrollment(Map<String, String> enrollData) {
         List<EnrollmentVO> enroll = userClassMapper.getEnrollment();
         LocalDate date = LocalDate.now();
         String id = "E_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
-                + String.format("%03d", enroll.get(enroll.size() - 1));
+                + String.format("%03d", enroll.size() == 0 ? 1 : enroll.size() + 1);
         enrollData.put("enrollment_id", id);
         userClassMapper.classEnroll(enrollData);
-        return 1;
+        System.out.println(id);
+        return id;
     }
 }

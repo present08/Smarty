@@ -10,8 +10,6 @@ const FacilityComponent = (props) => {
   const [images, setImages] = useState([])
 
   useEffect(() => {
-    console.log("props", props.reservation)
-
     switch (facilityData.hot_time) {
       case 0:
         setInfoArr(['시설명', '이용요금(기본)', '기본이용시간(h)', '문의전화'])

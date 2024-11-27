@@ -10,6 +10,10 @@ const Community = lazy(() => import("../component/announcement/Community"));
 const newNoticeRouter = () => {
     return [
         {
+            path: "",
+            element: <Suspense fallback={Loading}><Community /></Suspense>
+        },
+        {
             path: "announce",
             element: <Suspense fallback={Loading}><Notice /></Suspense>
         },
@@ -25,10 +29,7 @@ const newNoticeRouter = () => {
             path: "board/modify/:board_id",
             element: <Suspense fallback={Loading}><NoticeModifyPage /></Suspense>
         },
-        {
-            path: "notice/allList",
-            element: <Suspense fallback={Loading}><Community /></Suspense>
-        }
+
     ];
 }
 

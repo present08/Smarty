@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import MainNav from '../MainNav';
+import BackToTopButton from '../BackToTopButton';
+import Footer from '../Footer';
+import Wrapper from '../Wrapper';
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -18,24 +22,31 @@ const Community = () => {
     }, []);
 
     return (
-        <CommunityContainer>
-            <Title>커뮤니티</Title>
-            <PostList>
-                {posts.map((post) => (
-                    <PostItem key={`${post.source}-${post.id}`}>
-                        <PostHeader>
-                            <PostTitle>{post.title}</PostTitle>
-                            <PostInfo>
-                                <span>조회수: {post.view_count}</span>
-                                <span>작성일: {new Date(post.send_date).toLocaleDateString()}</span>
-                                <PostType>{post.content_type}</PostType>
-                            </PostInfo>
-                        </PostHeader>
-                        <PostContent>{post.content}</PostContent>
-                    </PostItem>
-                ))}
-            </PostList>
-        </CommunityContainer>
+        <div>
+            <MainNav />
+            <Wrapper />
+            <BackToTopButton />
+            <CommunityContainer>
+
+                <Title>커뮤니티</Title>
+                <PostList>
+                    {posts.map((post) => (
+                        <PostItem key={`${post.source}-${post.id}`}>
+                            <PostHeader>
+                                <PostTitle>{post.title}</PostTitle>
+                                <PostInfo>
+                                    <span>조회수: {post.view_count}</span>
+                                    <span>작성일: {new Date(post.send_date).toLocaleDateString()}</span>
+                                    <PostType>{post.content_type}</PostType>
+                                </PostInfo>
+                            </PostHeader>
+                            <PostContent>{post.content}</PostContent>
+                        </PostItem>
+                    ))}
+                </PostList>
+            </CommunityContainer>
+            <Footer />
+        </div>
     );
 };
 

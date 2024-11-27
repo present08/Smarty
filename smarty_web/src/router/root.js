@@ -23,7 +23,7 @@ const Admin = lazy(() => import("../pages/admin/IndexPage"));
 const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
-
+const Community = lazy(() => import("../component/announcement/Community"));
 const root = createBrowserRouter([
     {
         path: "",

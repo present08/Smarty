@@ -9,7 +9,7 @@
         insert into class_detail(class_id, weekday, class_date) values(#{class_id}, #{weekday}, #{class_date});
     </insert>
     <insert id="classEnroll" parameterType="map">
-        insert into enrollment(class_id, user_id) values(#{class_id}, #{user_id})
+        insert into enrollment(enrollment_id, class_id, user_id) values(#{enrollment_id},#{class_id}, #{user_id})
     </insert>
 
 

@@ -98,4 +98,20 @@ public class AdminProductStatusController {
         }
     }
 
+    @PutMapping("/update-status-with-quantity")
+    public ResponseEntity<String> updateStatusWithQuantity(
+            @RequestParam("statusId") String statusId,
+            @RequestParam("newStatus") String newStatus,
+            @RequestParam("quantity") int quantity
+    ) {
+        try {
+            productStatusService.updateStatusWithQuantity(statusId, newStatus, quantity);
+            log.info("상태 및 수량 변경 완료 - statusId: {}, newStatus: {}, 변경 수량: {}", statusId, newStatus, quantity);
+            return ResponseEntity.ok("Status and quantity updated successfully.");
+        } catch (Exception e) {
+            log.error("상태 및 수량 변경 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status and quantity.");
+        }
+    }
+
 }

@@ -49,7 +49,6 @@
         WHERE product_id = #{product_id};
     </update>
 
-
     <select id="findMaxSuffix" parameterType="string" resultType="int">
         SELECT COALESCE(MAX(CAST(SUBSTRING(status_id, LENGTH(#{baseId}) + 1) AS UNSIGNED)), 0)
         FROM product_status
@@ -78,8 +77,8 @@
         JOIN product p ON ps.product_id = p.product_id
         WHERE ps.product_id = #{productId}
         GROUP BY ps.product_status, p.stock;
-
     </select>
+
 
 
 </mapper>

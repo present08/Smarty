@@ -148,4 +148,22 @@ public class AdminProductStatusService {
         return productStatusMapper.findStatusCountsByProductId(productId);
     }
 
+    public void updateStatusWithQuantity(String statusId, String newStatus, int quantity) {
+        // 현재 상태 조회
+        Map<String, Object> currentStatusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
+        String currentStatus = (String) currentStatusInfo.get("product_status");
+        int stock = (int) currentStatusInfo.get("stock");
+
+        // 수량 검증
+        if (quantity > stock) {
+            throw new IllegalArgumentException("변경할 수량이 현재 재고를 초과할 수 없습니다.");
+        }
+
+        // 재고 감소
+        productStatusMapper.updateProductStock((String) currentStatusInfo.get("product_id"), stock - quantity);
+
+        // 상태 변경
+        productStatusMapper.updateProductStatus(statusId, newStatus);
+    }
+
 }

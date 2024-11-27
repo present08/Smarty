@@ -138,3 +138,13 @@ export const fetchStatusCountsByProduct = async (productId) => {
       throw error;
   }
 };
+
+export const updateProductStatusWithQuantity = (statusId, newStatus, quantity) => {
+  return axios.put(`${statusprefix}/update-status-with-quantity`, null, {
+    params: {
+      statusId,
+      newStatus,
+      quantity,
+    },
+  });
+};

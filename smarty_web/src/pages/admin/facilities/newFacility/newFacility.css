@@ -103,9 +103,7 @@
 }
 
 .addFacilityButton,
-.cancelFacilityButton,
-.addPirceButton,
-.canclePirceButton {
+.cancelFacilityButton{
     border: none;
     width: 60px;
     height: 30px;
@@ -117,13 +115,11 @@
     cursor: pointer;
 }
 
-.addFacilityButton,
-.addPirceButton {
+.addFacilityButton {
     background-color: #195E8E;
 }
 
-.cancelFacilityButton,
-.canclePirceButton {
+.cancelFacilityButton {
     background-color: rgb(161, 20, 20);
 }
 

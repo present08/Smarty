@@ -3,20 +3,18 @@ import { useEffect, useState } from "react"
 import { API_SERVER_HOST, getOneFacility } from "../../../../api/admin/facilityApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
-import NewProduct from '../../products/newProduct/NewProduct';
-import { getListCourt, postAddCourt, putOneCourt } from "../../../../api/admin/courtApi"
-import { postAddProduct, postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
+import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import { useNavigate, useParams } from "react-router-dom"
-import Price from "../../../../component/admin/price/Price"
+import { Add } from '@mui/icons-material';
 
 const initFacility = {
     facility_name: '',
     open_time: '',
     close_time: '',
-    default_time: 0,
-    basic_fee: 0,
-    rate_adjustment: 0,
-    hot_time: 0,
+    default_time: '',
+    basic_fee: '',
+    rate_adjustment: '',
+    hot_time: '',
     contact: '',
     info: '',
     caution: '',
@@ -38,43 +36,43 @@ export default function FacilityRead() {
       setCurrentFacility(res)
       getListCourt(facility_id)
     }).catch((error) => console.error("ERROR!", error))
-  }, [facility_id])
+  }, [facility_id, newCourt])
 
-  useEffect(() => {
-    if(currentFacility.hot_time == 0) setShowHotTime("기본 요금")
-    else if(currentFacility.hot_time == 1) setShowHotTime("조조 할인")
-    else if(currentFacility.hot_time == 2) setShowHotTime("야간 할증")
-    else setShowHotTime("모두 적용")
-    getListCourt(facility_id).then(res => {
-        setCurrentCourt(res)
-    }).catch((error) => console.error("ERROR!", error))
-  }, [currentFacility])
+    useEffect(() => {
+        if(currentFacility.hot_time === 0) setShowHotTime("기본 요금")
+        else if(currentFacility.hot_time === 1) setShowHotTime("조조 할인")
+        else if(currentFacility.hot_time === 2) setShowHotTime("야간 할증")
+        else setShowHotTime("모두 적용")
+        getListCourt(facility_id).then(res => {
+            setCurrentCourt(res)
+        }).catch((error) => console.error("ERROR!", error))
+    }, [currentFacility])
 
-  const courtPass = (court) => {
-    setNewCourt(court)
-    setCourtModal(false)
-}
-useEffect(() => {
-  console.log(newCourt)
-}, [newCourt])
+    const courtPass = (court) => {
+        setNewCourt(court)
+        setCourtModal(false)
+    }
+    useEffect(() => {
+        console.log(newCourt)
+    }, [newCourt])
 
-  const handleCourtButton = (e) => {
-    // currentFacility.court = true
-    // setCurrentCourt({ ...currentFacility })
-    setCourtModal(true)
-}
-const closeModal = () => {
-    setCourtModal(false)
-}
+    const handleCourtButton = (e) => {
+        // currentFacility.court = true
+        // setCurrentCourt({ ...currentFacility })
+        setCourtModal(true)
+    }
+    const closeModal = () => {
+        setCourtModal(false)
+    }
 
-const handleCourtAdd = () => {
-    putOneCourt(facility_id, newCourt).then(res => {
-        console.log(res)
-        navigate(0)
-    })
-}
+    const handleCourtAdd = () => {
+        console.log("코트 등록")
+        putOneCourt(facility_id, newCourt).then(res => {
+            console.log(res)
+            navigate(0)
+        })
+    }
   
-
     return (
         <div className="facilityRead">
             <div className="facilityReadTitle">시설 조회</div>
@@ -88,7 +86,7 @@ const handleCourtAdd = () => {
                                 name="facility_name"
                                 id="facility_name"
                                 type={"text"}
-                                value={currentFacility.facility_name}
+                                defaultValue={currentFacility.facility_name}
                                 readOnly
                             />
                             <label htmlFor="contact">연락처</label>
@@ -96,7 +94,7 @@ const handleCourtAdd = () => {
                                 name="contact"
                                 id="contact"
                                 type={"text"}
-                                value={currentFacility.contact}
+                                defaultValue={currentFacility.contact}
                                 readOnly
                             />
                         </div>
@@ -108,7 +106,7 @@ const handleCourtAdd = () => {
                                 type={"time"}
                                 min={5}
                                 max={23}
-                                value={currentFacility.open_time}
+                                defaultValue={currentFacility.open_time}
                                 readOnly
                             />
                             <label htmlFor="close_time">폐장시간 </label>
@@ -118,7 +116,7 @@ const handleCourtAdd = () => {
                                 type={"time"}
                                 min={5}
                                 max={23}
-                                value={currentFacility.close_time}
+                                defaultValue={currentFacility.close_time}
 
                                 readOnly
                             />
@@ -128,7 +126,7 @@ const handleCourtAdd = () => {
                                 id="default_time"
                                 type={"text"}
                                 min={0}
-                                value={currentFacility.default_time + "시간"}
+                                defaultValue={currentFacility.default_time + "시간"}
                                 readOnly
                             />                       
                         </div>
@@ -139,7 +137,7 @@ const handleCourtAdd = () => {
                                 id="info"
                                 cols="70"
                                 rows="7"
-                                value={currentFacility.info}
+                                defaultValue={currentFacility.info}
                                 readOnly
                             />
                         </div>
@@ -150,7 +148,7 @@ const handleCourtAdd = () => {
                                 id="caution"
                                 cols="70"
                                 rows="7"
-                                value={currentFacility.caution}
+                                defaultValue={currentFacility.caution}
                                 readOnly
                             />
                         </div>
@@ -161,9 +159,10 @@ const handleCourtAdd = () => {
                                 :<div style={{fontWeight: "300"}}> 불가</div>
                             }
                         </div>
+                        {currentFacility.court?
                         <div className="leftItem">
                             <span className="facilityReadText">  * 코트가 존재하는 경우 시설 개방은 코트 개방 여부에 따라 자동으로 설정됩니다.</span>
-                        </div>
+                        </div> : <></> }
                     </div>
                 </div>
                 <div className="facilityReadFormRight">
@@ -175,20 +174,23 @@ const handleCourtAdd = () => {
                                 name="basic_fee"
                                 id="basic_fee"
                                 type={"text"}
-                                value={currentFacility.basic_fee.toLocaleString('ko-KR') + "원"}
+                                defaultValue={currentFacility.basic_fee.toLocaleString('ko-KR') + "원"}
+                                readOnly
                             />
                             <label htmlFor="rate_adjustment">가격 변동률</label>
                             <input
                                 name="rate_adjustment"
                                 id="rate_adjustment"
                                 type={"text"}
-                                value={Number(currentFacility.rate_adjustment) * 100 + "%"}
+                                defaultValue={Number(currentFacility.rate_adjustment) * 100 + "%"}
+                                readOnly
                             />
                             <label htmlFor="rate_adjustment">적용 방식</label>
                             <input
                                 name="hot_time"
                                 type={"text"}
-                                value={showHotTime}
+                                defaultValue={showHotTime}
+                                readOnly
                             />
                         </div>
                         <div className="courtItem">
@@ -202,7 +204,8 @@ const handleCourtAdd = () => {
                                         name="court_name"
                                         id="court_name"
                                         type={"text"}
-                                        value={court.court_name}
+                                        defaultValue={court.court_name}
+                                        readOnly
                                     />
                                     <label htmlFor="court_name">코트 개방</label>
                                     {court.court_status?
@@ -211,23 +214,19 @@ const handleCourtAdd = () => {
                                 </div>))}
                             </div> :
                             <div className="courtContainer">
-                                <button className="subItemButton"
-                                    onClick={() => handleCourtButton()}>
-                                    코트 추가
-                                </button>
-                                <span className="subItemtext">{newCourt.length}개의 코트 등록</span>
-                                {courtModal ?
-                                    <Modal
-                                        content={<NewCourt courtPass={courtPass}/>}
-                                        callbackFn={closeModal}
-                                    />
-                                    : <></>
-                                }
-                                {newCourt.length > 0 ?
-                                <button className="addFacilityButton" onClick={handleCourtAdd}>등록</button> : <></>
-                                }
+                                <label htmlFor="court_name">등록된 코트가 존재하지 않습니다.</label>
                             </div>
                         }
+                        <div className="courtButton">
+                            <Add className="addCourtButton" onClick={handleCourtButton} />
+                            {courtModal ?
+                                <Modal
+                                    content={<NewCourt courtPass={courtPass} />}
+                                    callbackFn={closeModal}
+                                />
+                                : <></>
+                            }
+                        </div>
                         </div>
                         <div className="imageItem">
                             <div className="imageItemTitle">첨부 파일</div>

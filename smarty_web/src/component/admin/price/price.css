@@ -135,3 +135,26 @@
 .modalshowInfoButton {
     margin-top: 20px;
 }
+
+.addPirceButton,
+.canclePirceButton {
+    border: none;
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.addFacilityButton,
+.addPirceButton {
+    background-color: #195E8E;
+}
+
+.cancelFacilityButton,
+.canclePirceButton {
+    background-color: rgb(161, 20, 20);
+}

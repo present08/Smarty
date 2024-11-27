@@ -14,10 +14,17 @@
         select * from court where court_id=#{court_id}
     </select>
 
+    <select id="maxClassId">
+        select max(court_id) from court where facility_id=#{facility_id}
+    </select>
+
     <update id="modify">
         update court set court_name=#{court_name}, court_status=#{court_status} where court_id=#{court_id}
     </update>
 
+<!--    <delete id="remove">-->
+<!--        delete c, r from court c, reservation r where c.court_id=#{court_id}-->
+<!--    </delete>-->
     <delete id="remove">
         delete from court where court_id=#{court_id}
     </delete>

@@ -7,6 +7,7 @@ import NewCourt from "../newCourt/NewCourt"
 import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import { useNavigate, useParams } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
+import CourtModify from "../CourtModify/CourtModify";
 
 const initFacility = {
     facility_name: '',
@@ -25,6 +26,7 @@ const initFacility = {
     facility_images: '',
     file_name: []
 }
+
 const initPrice = {
     basic_fee: '',
     rate_adjustment : '',
@@ -110,6 +112,7 @@ export default function FacilityModify() {
         setPriceModal(true)
     }
     const handleCourtButton = () => {
+        console.log("여기")
         setCourtModal(true)
     }  
     const closeModal = () => {
@@ -357,19 +360,39 @@ export default function FacilityModify() {
                                 : <></>
                             }
                         </div>
-                        <div className="rightItem">
-                            <button className="subItemButton"
-                                onClick={handleCourtButton}>
-                                코트(레일)
-                            </button>
-                            <span className="subItemtext">{currentCourt && currentCourt.length}개의 코트 등록</span>
-                            {courtModal ?
+                        <div className="courtItem">
+                            <div className="courtUpload">
+                                <button className="subItemButton"
+                                    onClick={handleCourtButton}>
+                                    코트 변경
+                                </button>
+                                {courtModal ?
                                 <Modal
-                                    content={<NewCourt courtPass={courtPass} passedCourt={currentCourt} />}
+                                    content={<CourtModify courtPass={courtPass} passedCourt={currentCourt} />}
                                     callbackFn={closeModal}
-                                />
-                                : <></>
-                            }
+                                /> : <></>}
+                            </div>
+                            {currentFacility.court?                            
+                            <div className="courtContainer">                        
+                                {currentCourt && currentCourt.map((court, i) => (
+                                <div className="court" key={i}>
+                                    <label htmlFor="court_name">코트명</label>
+                                    <input
+                                        name="court_name"
+                                        id="court_name"
+                                        type={"text"}
+                                        defaultValue={court.court_name}
+                                        readOnly
+                                    />
+                                    <label htmlFor="court_name">코트 개방</label>
+                                    {court.court_status?
+                                        <div style={{fontWeight: "300"}}> 가능</div>
+                                        :<div style={{fontWeight: "300"}}> 불가</div>}
+                                </div>))}
+                            </div> :
+                            <div className="courtContainer">
+                                <label htmlFor="court_name">등록된 코트가 존재하지 않습니다.</label>
+                            </div>}
                         </div>
                         <div className="imageItem">
                             <div className="imageUpload">
@@ -381,7 +404,7 @@ export default function FacilityModify() {
                                     onChange={(e) => onUpload(e)}
                                 />
                                 <label htmlFor="files" className="subItemButton">이미지 변경</label>
-                                <label className="imageRemoveButton" onClick={handleRemoveImage}>이미지 삭제</label>
+                                <label className="removeButton" onClick={handleRemoveImage}>이미지 삭제</label>
                             </div>
                             {imageUpdate?
                                 (<div className="imageContainer">

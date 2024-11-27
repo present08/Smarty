@@ -1,55 +1,49 @@
-import { useNavigate, useParams } from "react-router-dom"
-import "./newCourt.css"
+import { useParams } from "react-router-dom"
+import "./courtModify.css"
 import { useEffect, useState } from "react"
-import { postAddCourt, putOneCourt } from "../../../../api/admin/courtApi"
+import { deleteOneCourt, postAddCourt } from "../../../../api/admin/courtApi"
+import { getOneFacility, putOneFacility } from "../../../../api/admin/facilityApi"
 
-export default function NewCourt({ courtPass, passedCourt }) {
-    // 시설 추가시 코트 등록인지 여부 확인 : passedCourt를 이용하지 않고 모달창에서 바로 코트 등록
-    const navigate = useNavigate()
+const initFacility = {
+    facility_name: '',
+    open_time: '',
+    close_time: '',
+    default_time: '',
+    basic_fee: '',
+    rate_adjustment: '',
+    hot_time: '',
+    contact: '',
+    info: '',
+    caution: '',
+    court: '',
+    product: '',
+    facility_status: '',
+    facility_images: '',
+    file_name: []
+}
+
+export default function CourtModify({ courtPass, passedCourt }) {
     const {facility_id} = useParams()
-    const [addToggle, setAddToggle] = useState(false)
-    const [courtNum, setCourtNum] = useState(0)     // 생성할 시설 숫자를 저장할 변수
+    const [currentFacility, setCurrentFacility] = useState(initFacility)
     const [court, setCourt] = useState([])   // 생성된 시설 객체를 저장할 배열
+    const [removeToggle, setRemoveToggle] = useState(false)
 
     useEffect(() => {
-      if(!passedCourt) setAddToggle(true)
-    }, [passedCourt])
-
-    useEffect(() => {
-      console.log("추가 모드!", addToggle)
-    }, [addToggle])
-    
-    
+        getOneFacility(facility_id).then(res => {
+            setCurrentFacility(res)
+        }).catch((error) => console.error("ERROR!", error))
+    }, [])
+       
     useEffect(() => {
         if(passedCourt){
-          console.log("설정값 있음")
           setCourt(passedCourt)
         }
       }, [passedCourt]) 
 
     const onClickSubmit = () => {
         courtPass(court)
-        // 부모 컴포넌트에서 전달받은 함수에 결과를 실어보냄(실행)
-    }
-    const onClickAdd = () => {
-        putOneCourt(facility_id, court).then(res => {
-            console.log(res)
-            alert("새로운 코트가 등록되었습니다.")
-            courtPass(court)
-        }).catch((error) => console.error("ERROR! : ", error))
     }
 
-    // step1) 사용자가 생성할 시설의 갯수를 입력하고 생성 버튼 클릭
-    //          -> 저장할 객체 배열 생성, 입력폼 출력
-    const createForm = () => {
-        setCourt(Array.from({ length: courtNum }, (_, i) => ({
-            facility_id: facility_id || '',
-            court_name: '',
-            court_status: true
-        })));
-    }
-
-    // step2) input태그에 입력한 값을 결과 배열(result)에 저장
     const handleInputChange = (i, key, value) => {
         setCourt((prevResult) => {
             const updateResult = [...prevResult]
@@ -63,36 +57,45 @@ export default function NewCourt({ courtPass, passedCourt }) {
         })
     }
 
-    const handleReset = () => {
-        setCourtNum(0)
-        setCourt([])
-        console.log("RESET!")
+    const handleRemove = (item, i) => {
+        // if(window.confirm("해당 코트의 예약 내역이 함께 삭제됩니다.\n계속 진행하시겠습니까?")) {
+        //     setCourt(court.filter((_, idx) => idx != i))
+        //     deleteOneCourt(item.court_id).then(res => {
+        //         if(i == 0 && court.length == 0) {
+        //             currentFacility.court = false
+        //             setCurrentFacility({...currentFacility})
+        //             putOneFacility(facility_id, currentFacility)
+        //             const defaultCourt = {
+        //                 facility_id: facility_id,
+        //                 court_name: currentFacility.facility_name,
+        //                 court_status: currentFacility.facility_status
+        //             }
+        //             const courtArray = [defaultCourt]
+        //             postAddCourt(courtArray)
+        //         }
+        //         alert(res)
+        //     }).catch((error) => ("ERROR! : ", error))
+        // } 
+        setCourt(court.filter((_, idx) => idx != i))
+        
     }
 
-    const handleRemove = (i) => {
-        setCourt(court.filter((_, index) => index !== i))
-    }
 
     useEffect(() => {
-      console.log(court)
+        // if(court.length == 0) {
+        //     const defaultCourt = {
+        //         facility_id: facility_id,
+        //         court_name: currentFacility.facility_name,
+        //         court_status: currentFacility.facility_status
+        //     }
+        //     const courtArray = [defaultCourt]
+        //     postAddCourt(courtArray)
+        // }
+        console.log("코트 길이", court.length)
     }, [court])
     
     return (
         <div className="newCourt">
-            {addToggle? "추가모드" : <></>}
-            <div className="addCourtFormTop">
-                <span className="addCourtFormTitle">코트 등록</span>
-                <input
-                    type="number"
-                    className="addCourtNum"
-                    placeholder="등록 갯수를 입력하세요"
-                    min={0}
-                    onChange={(e) => setCourtNum(e.target.value)}
-                />
-                <button className="createCourtButton" onClick={createForm}>입력창 생성</button>
-                <span className="addCourtFormText">* 코트명 입력, 개방 여부 선택 후 등록 버튼을 누르면 추가됩니다.</span>
-            </div>
-
             <div className="addCourtFormBody">
                 {court.map((court, i) => (
                     <div key={i} className="addCourtItem">
@@ -124,15 +127,18 @@ export default function NewCourt({ courtPass, passedCourt }) {
                             checked={court.court_status? false : true}
                         />
                         <label htmlFor={`closed_${i}`}> 불가</label>
+                        {removeToggle?
+                        <button className="resetCourtButton" onClick={() => handleRemove(court, i)}>삭제</button> : <></>}
                     </div>
                 ))}
+                {removeToggle? 
                 <div className="courtItemButton">
-                    {addToggle?
-                    <button className="saveCourtButton" onClick={onClickAdd}>등록</button> :
-                    <button className="saveCourtButton" onClick={onClickSubmit}>등록</button>
-                    }
-                    <button className="resetCourtButton" onClick={handleReset}>초기화</button>
-                </div>  
+                    <button className="saveCourtButton" onClick={onClickSubmit}>완료</button>
+                </div> : 
+                <div className="courtItemButton">
+                    <button className="saveCourtButton" onClick={onClickSubmit}>수정</button>
+                    <button className="resetCourtButton" onClick={() => setRemoveToggle(true)}>삭제</button>
+                </div>}
             </div> 
 
         </div>

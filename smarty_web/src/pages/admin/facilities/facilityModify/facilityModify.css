@@ -87,11 +87,11 @@
 
 /* 버튼 스타일 */
 .subItemButton,
-.imageRemoveButton {
+.removeButton {
     border: none;
     width: 100px;
+    height: 30px;
     border-radius: 5px;
-    padding: 5px 0px;
     color: white;
     background-color: #58A3BC;
     cursor: pointer;
@@ -103,13 +103,17 @@
     justify-content: center;
 }
 
+
+/* 이미지 */
+
 .imageItem,
 .textItem {
     display: flex;
     gap: 20px;
 }
 
-.imageUpload {
+.imageUpload,
+.courtUpload {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -133,7 +137,10 @@
     display: none;
 }
 .imageUpload>label {
-    display: block;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 img {
@@ -169,6 +176,6 @@ img {
 }
 
 .cancleButton,
-.imageRemoveButton {
+.removeButton {
     background-color: rgb(161, 20, 20);
 }

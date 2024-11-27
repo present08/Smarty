@@ -26,5 +26,4 @@ public interface AdminProductMapper {
     void deleteProductImage(@Param("product_id") String product_id, @Param("file_name") String file_name);
 
     boolean existsByProductId(String product_id);
-
 }

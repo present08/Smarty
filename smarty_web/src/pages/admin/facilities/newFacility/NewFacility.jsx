@@ -120,7 +120,6 @@ export default function NewFacility() {
     const [courtModal, setCourtModal] = useState(false)
     const [productModal, setProductModal] = useState(false)
 
-
     // 시설등록 input value 업데이트 함수
     const handleInput = (e) => {
         facility[e.target.name] = e.target.value
@@ -251,12 +250,10 @@ export default function NewFacility() {
 
     return (
         <div className="newFacility">
-
             <div className="addFacilityTitle">시설 등록</div>
             <div className="addFacilityForm">
                 <div className="addFacilityFormLeft">
                     <div className="leftItemTitle">기본 정보</div>
-
                     <div className="leftItemContent">
                         <div className="leftItem">
                             <label htmlFor="facility_name">시설명</label>

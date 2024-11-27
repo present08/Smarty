@@ -1,38 +1,89 @@
-.productContainer {
-    display: flex;
-    flex-direction: column;
-    margin: 20px;
-}
-
-.productTitle {
-    font-size: 30px;
+/* 최상위 클래스 기준으로 범위 제한 */
+.productList .productTitle {
+    font-size: 28px;
+    font-weight: 300;
     color: #011B2F;
 }
 
-.productListImg {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
+.productList .productContainer .MuiButton-root {
     margin-right: 10px;
+    border-radius: 5px;
+    padding: 8px 16px;
 }
 
-.productAction {
-    display: flex;
-    align-items: center;
+.productList .productContainer .MuiButton-root:first-child {
+    background-color: #28a745;
+    color: white;
 }
 
-.productListEdit {
+.productList .productContainer .MuiButton-root:first-child:hover {
+    background-color: #218838;
+}
+
+.productList .productContainer .MuiButton-root:nth-child(2) {
+    background-color: #007bff;
+    color: white;
+}
+
+.productList .productContainer .MuiButton-root:nth-child(2):hover {
+    background-color: #0056b3;
+}
+
+.productList .productContainer .MuiButton-root:nth-child(3) {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.productList .productContainer .MuiButton-root:nth-child(3):hover {
+    background-color: #5a36a3;
+}
+
+.productList .productAction button {
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 5px 10px;
-    background-color: #3bb077;
+    margin-right: 5px;
     color: white;
     cursor: pointer;
-    margin-right: 10px;
+    font-size: 12px;
 }
 
-.productListDelete {
-    color: red;
-    cursor: pointer;
+.productList .productAction .productListEdit:nth-child(1) {
+    background-color: #17a2b8;
+}
+
+.productList .productAction .productListEdit:nth-child(1):hover {
+    background-color: #138496;
+}
+
+.productList .productAction .productListEdit:nth-child(2) {
+    background-color: #007bff;
+}
+
+.productList .productAction .productListEdit:nth-child(2):hover {
+    background-color: #0056b3;
+}
+
+.productList .productAction .productListEdit:nth-child(3) {
+    background-color: #dc3545;
+}
+
+.productList .productAction .productListEdit:nth-child(3):hover {
+    background-color: #c82333;
+}
+
+.productList .productAction .productListEdit:nth-child(4) {
+    background-color: #28a745;
+}
+
+.productList .productAction .productListEdit:nth-child(4):hover {
+    background-color: #218838;
+}
+
+.productList .productAction .productListDelete {
+    color: #ff4d4f;
+}
+
+.productList .productAction .productListDelete:hover {
+    color: #d42e2f;
 }

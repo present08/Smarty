@@ -31,7 +31,7 @@ public class AdminClassController {
         return list;
     }
 
-    // 강의 하나 조회
+
     @GetMapping("/{class_id}")
     public ClassAdminDTO read(@PathVariable (name = "class_id") String class_id) {
         System.out.println("클래스 하나 조회! class_id = " + class_id);

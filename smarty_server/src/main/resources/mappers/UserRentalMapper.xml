@@ -7,28 +7,11 @@
 <!--    대여 등록-->
     <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
         <!-- 오늘 날짜의 마지막 rental_id 조회 -->
-        <selectKey resultType="String" keyProperty="rental_id" order="BEFORE">
-            SELECT CASE WHEN MAX(rental_id) IS NULL THEN
-            CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '001')
-            ELSE CONCAT(
-                'r_',
-                DATE_FORMAT(NOW(), '%Y%m%d'),
-                LPAD( CAST(
-                    CAST(SUBSTRING(MAX(rental_id), -3) AS UNSIGNED) + 1
-                    AS CHAR ), 3, '0'
-                )
-            )
-            END AS
-                new_rental_id
-            FROM
-                rental
-            WHERE
-                rental_id LIKE CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '%')
-        </selectKey>
         INSERT INTO rental (
             rental_id,
             user_id,
             product_id,
+            payment_id,
             rental_status,
             rental_date,
             return_date,
@@ -37,7 +20,8 @@
             #{rental_id},
             #{user_id},
             #{product_id},
-            true,
+            #{payment_id},
+            #{rental_status},
             #{rental_date},
             #{return_date},
             #{count}
@@ -123,18 +107,17 @@
             rental_id = #{rental_id}
     </select>
 
-    <update id="updateRental" parameterType="com.green.smarty.dto.RentalDTO">
+    <!-- 반납 처리 -->
+    <update id="returnRental" parameterType="com.green.smarty.vo.RentalVO">
         UPDATE rental
-        SET rental_status = #{rental_status}
+        SET rental_status = #{rental_status},
+            return_date = #{return_date}
         WHERE rental_id = #{rental_id}
     </update>
 
-    <!-- 반납 처리 -->
-    <update id="returnRental" parameterType="String">
-        UPDATE rental
-        SET rental_status = false
-        WHERE rental_id = #{rental_id}
-    </update>
+    <resultMap id="RentalVOMap" type="com.green.smarty.vo.RentalVO">
+        <result property="rental_id" column="rental_id" jdbcType="VARCHAR"/>
+    </resultMap>
 
 
 </mapper>

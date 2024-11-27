@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Pagination from './Pagenation'
+import { getProductRentalUser } from '../../api/rentalAPI'
 
 const RentalList = () => {
     const [rentals, setRentals] = useState([]);
-    const [completedRentals, setCompletedRentals] = useState(new Set());
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [rentalCounts, setRentalCounts] = useState({})
+
 
     // 페이지네이션
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
+
+    // 로컬 스토리지에서 rentalCounts를 불러오기
+    useEffect(() => {
+        const storedCounts = localStorage.getItem('rentalCounts');
+        if (storedCounts) {
+            setRentalCounts(JSON.parse(storedCounts));
+        }
+    }, []);
+
+    // rentalCounts가 변경될 때 로컬 스토리지에 저장
+    useEffect(() => {
+        localStorage.setItem('rentalCounts', JSON.stringify(rentalCounts));
+    }, [rentalCounts]);
+
+    // console.log("여기를 확인 렌탈 데이터: ", rentals)
 
     // 로그인한 사용자의 대여 목록 조회
     const getUserRentals = async () => {
@@ -24,13 +41,22 @@ const RentalList = () => {
             }
 
             const user = JSON.parse(userStr);
-            const response = await axios.get(`http://localhost:8080/api/rentals/user/${user.user_id}`);
-            
+            // console.log("API 호출전 : ", user.user_id)
+            const rentals = await getProductRentalUser(user.user_id)
+
+            // 대여 ㅅ량 초기화
+            const counts = rentals.reduce((acc, rental) => {
+                acc[rental.rental_id] = rental.count;
+                return acc;
+            }, {});
+            // console.log("rentalCounts 초기화 데이터: ", counts)
+            setRentalCounts(counts);
+
             // 대여일 기준으로 정렬 (최신순)
-            const sortedRentals = response.data.sort((a, b) => 
+            const sortedRentals = rentals.sort((a, b) =>
                 new Date(b.rental_date) - new Date(a.rental_date)
             );
-            
+
             setRentals(sortedRentals);
         } catch (error) {
             console.error("대여 목록 조회 실패:", error);
@@ -64,33 +90,45 @@ const RentalList = () => {
     };
 
     // 반납 처리
-    const handleReturn = async (rentalId) => {
+    const handleReturn = async (rental_id) => {
+        const rentalCount = rentalCounts[rental_id];
+        console.log("반납 요청 count: ", rentalCount)
+        console.log("반납 요청 count: ", rental_id)
+
         if (!window.confirm('정말 반납하시겠습니까?')) {
             return;
         }
 
         try {
-            const response = await axios.put(`http://localhost:8080/api/rentals/${rentalId}/return`);
+            // count를 params로 전달
+            const response = await axios.put(
+                `http://localhost:8080/api/rentals/${rental_id}/return`,
+                null,
+                { params: { count: rentalCount } } // count를 명시적으로 전달
+            );
+
+            console.log("반납 데이터", response.data)
+            
             if (response.status === 200) {
                 alert("반납이 완료되었습니다.");
-                setCompletedRentals(prev => new Set([...prev, rentalId]));
-                getUserRentals(); // 목록 새로고침
+                getUserRentals(); // 반납 후 목록 새로고침
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("반납 처리 실패:", error);
-            alert("반납 처리 중 오류가 발생했습니다.");
+            alert(error.response?.data || "반납 처리에 실패했습니다.");
         }
     };
 
     if (loading) {
         return <div className="text-center py-8">로딩 중...</div>;
     }
-
+    
     return (
         <div className='p-4'>
             <div className='flex justify-between items-center mb-6'>
                 <h1 className='text-3xl font-extrabold'>내 대여 목록</h1>
-                <button 
+                <button
                     onClick={() => navigate(-1)}
                     className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                 >
@@ -107,11 +145,10 @@ const RentalList = () => {
                     <table className="min-w-full bg-white border rounded-lg mb-4">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 border-b text-left">물품명</th>
-                                <th className="px-6 py-3 border-b text-left">대여일</th>
-                                <th className="px-6 py-3 border-b text-left">반납예정일</th>
-                                <th className="px-6 py-3 border-b text-left">상태</th>
-                                <th className="px-6 py-3 border-b text-left">액션</th>
+                                <td className="px-6 py-3 border-b text-left">물품명</td>
+                                <td className="px-6 py-3 border-b text-left">대여일</td>
+                                <td className="px-6 py-3 border-b text-left">반납예정일</td>
+                                <td className="px-6 py-3 border-b text-left">상태</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,22 +162,30 @@ const RentalList = () => {
                                         {formatDateTime(rental.return_date)}
                                     </td>
                                     <td className="px-6 py-4 border-b">
-                                        {completedRentals.has(rental.rental_id) ? (
-                                            <span className="text-green-600">반납 완료</span>
-                                        ) : (
-                                            <span className="text-blue-600">대여 중</span>
-                                        )}
+                                        {rental.count}
                                     </td>
+                                    
                                     <td className="px-6 py-4 border-b">
-                                        {!completedRentals.has(rental.rental_id) && (
-                                            <button
-                                                onClick={() => handleReturn(rental.rental_id)}
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                반납하기
-                                            </button>
+                                        {rental.rental_status ? (
+                                            <span className='text-blue-600'> 대여 중</span>
+                                        ) : (
+                                            <span className='text-green-600'> 반납 완료 </span>
                                         )}
                                     </td>
+
+                                    <td className="px-6 py-4 border-b">
+                                    {rental.rental_status ? (
+                                        <button
+                                            onClick={() => handleReturn(rental.rental_id)}
+                                            className="text-red-600 hover:text-red-800"
+                                        >
+                                            반납하기
+                                        </button>
+                                    ) : (
+                                        '반납 완료'
+                                    )}
+                                </td>
+
                                 </tr>
                             ))}
                         </tbody>

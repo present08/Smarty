@@ -51,8 +51,8 @@ public class AdminCourtController {
     // Delete (코트 삭제)
     @DeleteMapping("/{court_id}")
     public String remove(@PathVariable(name = "court_id") String court_id) {
-        System.out.println("시설 삭제! court_id = " + court_id);
+        System.out.println("코트 삭제! court_id = " + court_id);
         adminCourtService.remove(court_id);
-        return "시설 삭제 완료";
+        return "코트 및 예약내역이 삭제되었습니다.";
     }
 }

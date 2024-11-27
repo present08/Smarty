@@ -378,7 +378,7 @@ export default function NewFacility() {
                         <div className="rightItem">
                             <button className="subItemButton"
                                 onClick={() => handleCourtButton()}>
-                                코트(레일)
+                                코트 등록
                             </button>
                             <span className="subItemtext">{court.length}개의 코트 등록</span>
                             {courtModal ?

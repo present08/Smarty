@@ -1,26 +1,25 @@
-.newFacility {
+.facilityModify {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     height: 100%;
 }
 
-.addFacilityTitle {
+.facilityModifyTitle {
     height: 10%;
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
 }
 
-/* 시설 등록 폼 스타일 */
-.addFacilityForm {
+.facilityModifyForm {
     height: 90%;
     display: flex;
     width: 100%;
 }
 
-.addFacilityFormLeft,
-.addFacilityFormRight {
+.facilityModifyFormLeft,
+.facilityModifyFormRight {
     flex: 1;
     padding: 20px;
     border: none;
@@ -48,9 +47,7 @@
 .rightItem {
     display: flex;
     align-items: center;
-    /* justify-content: start; */
 }
-
 
 .leftItem {
     gap: 10px;
@@ -77,6 +74,11 @@
     margin-bottom: 20px;
 }
 
+.facilityReadText {
+    font-size: 14px;
+    color: #919191;
+}
+
 .rightItem {
     display: flex;
     gap: 10px;
@@ -84,60 +86,37 @@
 }
 
 /* 버튼 스타일 */
-.subItemButton {
+.subItemButton,
+.removeButton {
     border: none;
     width: 100px;
+    height: 30px;
     border-radius: 5px;
-    padding: 5px 0px;
     color: white;
     background-color: #58A3BC;
     cursor: pointer;
     font-size: 14px;
 }
 
-.facilityButtons {
+.facilityModifyButtons {
     display: flex;
     justify-content: center;
 }
 
-.addFacilityButton,
-.cancelFacilityButton,
-.addPirceButton,
-.canclePirceButton {
-    border: none;
-    width: 60px;
-    height: 30px;
-    border-radius: 5px;
-    color: aliceblue;
-    font-weight: 400;
-    font-size: 14px;
-    margin: 10px;
-    cursor: pointer;
-}
 
-.addFacilityButton,
-.addPirceButton {
-    background-color: #195E8E;
-}
-
-.cancelFacilityButton,
-.canclePirceButton {
-    background-color: rgb(161, 20, 20);
-}
-
-/* 상세 시설 등록 폼 스타일 */
-.modalContent {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
-}
+/* 이미지 */
 
 .imageItem,
 .textItem {
     display: flex;
     gap: 20px;
+}
+
+.imageUpload,
+.courtUpload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .imageContainer {
     width: 350px;
@@ -157,9 +136,11 @@
 .imageUpload>input {
     display: none;
 }
-
 .imageUpload>label {
-    display: block;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 img {
@@ -170,4 +151,31 @@ img {
 .imageDeleteButton {
     color: #555;
     font-size: 27px !important;
+    cursor: pointer;
+}
+
+.facilityModifyButtons {
+    display: flex;
+}
+
+.modifyButton,
+.cancleButton {
+    border: none;
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.modifyButton {
+    background-color: #195E8E;
+}
+
+.cancleButton,
+.removeButton {
+    background-color: rgb(161, 20, 20);
 }

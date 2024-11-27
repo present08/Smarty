@@ -46,5 +46,7 @@ public class FacilityVO {
     public void changeContact(String contact) {this.contact = contact;}
     public void changeInfo(String info) {this.info = info;}
     public void changeCaution(String caution) {this.caution = caution;}
+    public void changeCourt(Boolean court) {this.court = court;}
     public void changeFacilityStatus(Boolean facility_status) {this.facility_status = facility_status;}
+    public void changeFacilityImages(Boolean facility_images) {this.facility_images = facility_images;}
 }

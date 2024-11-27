@@ -111,22 +111,81 @@ public class AdminFacilityService {
     }
 
     public void modify(String facility_id, FacilityVO facilityVO) {
-        // 처리1) 기존의 시설 정보를 불러와서 수정
-//        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
-//        System.out.println("시설 수정 처리1) 기존 시설 정보 originFacilityVO = " + originFacilityVO);
-//
-//        originFacilityVO.changeName(facilityVO.getFacility_name());
-//        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
-//        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
-//        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
-//        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
-//        originFacilityVO.changeHotTime(facilityVO.getHot_time());
-//        originFacilityVO.changeContact(facilityVO.getContact());
-//        originFacilityVO.changeInfo(facilityVO.getInfo());
-//        originFacilityVO.changeCaution(facilityVO.getCaution());
-//        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
+        System.out.println("넘어온 정보 facilityVO : " + facilityVO);
+        // 처리1) 기존 시설 정보 불러와서 수정
+        List<FacilityAttachVO> originAttachList = adminFacilityMapper.getImages(facility_id);
+        FacilityVO originFacilityVO = adminFacilityMapper.read(facility_id);
 
-        adminFacilityMapper.modify(facilityVO);
+        List<String> file_name = originFacilityVO.getFile_name();
+        for (FacilityAttachVO facilityAttachVO : originAttachList) {
+            file_name.add(facilityAttachVO.getFile_name());
+        }
+        originFacilityVO.setFile_name(file_name);
+
+        originFacilityVO.changeName(facilityVO.getFacility_name());
+        originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
+        originFacilityVO.changeCloseTime(facilityVO.getClose_time());
+        originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
+        originFacilityVO.changeRate(facilityVO.getRate_adjustment());
+        originFacilityVO.changeHotTime(facilityVO.getHot_time());
+        originFacilityVO.changeContact(facilityVO.getContact());
+        originFacilityVO.changeInfo(facilityVO.getInfo());
+        originFacilityVO.changeCaution(facilityVO.getCaution());
+        originFacilityVO.changeCourt(facilityVO.isCourt());
+        originFacilityVO.changeFacilityStatus(facilityVO.isFacility_status());
+        originFacilityVO.changeFacilityImages(facilityVO.isFacility_images());
+        System.out.println("시설 수정 처리1) 기존 정보 수정 originFacilityVO = " + originFacilityVO);
+
+        // 처리2) 이미지 수정 여부에 따라 다르게 처리
+        if(facilityVO.isFacility_images() && !facilityVO.getFiles().isEmpty()) {
+            // 처리2-1) 이미지 수정
+
+            // 기존 이미지 삭제
+            adminFacilityMapper.fileRemove(facility_id);
+            customFileUtil.deleteFiles(file_name);
+
+            // 새로운 이미지 등록
+            List<MultipartFile> files = facilityVO.getFiles();
+
+            System.out.println("시설 수정 처리2-1) 이미지 있음, 파일 하나씩 처리");
+
+            // facilityDTO의 첨부파일 리스트 기반으로 경로(원본, 썸네일), 파일명 리스트 생성
+            Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
+            facilityVO.setFile_name(filesInfo.get("file_name"));
+
+            for (int i = 0; i < files.size(); i++) {
+                // 파일 이름 저장
+                Map<String, String> filesUpload = new HashMap<>();
+                filesUpload.put("facility_id", facility_id);
+                filesUpload.put("origin_path", filesInfo.get("origin_path").get(i));
+                filesUpload.put("thumbnail_path", filesInfo.get("thumbnail_path").get(i));
+                filesUpload.put("file_name", filesInfo.get("file_name").get(i));
+                adminFacilityMapper.fileUpload(filesUpload);
+            }
+        } else if(!facilityVO.isFacility_images() && facilityVO.getFiles().isEmpty()) {
+
+            // 기존 이미지 삭제됨, 기본 이미지 등록
+            // 기존 이미지 삭제
+            adminFacilityMapper.fileRemove(facility_id);
+            customFileUtil.deleteFiles(file_name);
+
+            List<MultipartFile> files = facilityVO.getFiles();
+
+            Map<String, List<String>> filesInfo = customFileUtil.saveFiles(files);
+
+            Map<String, String> filesUpload = new HashMap<>();
+            filesUpload.put("facility_id", facility_id);
+            filesUpload.put("origin_path", filesInfo.get("origin_path").get(0));
+            filesUpload.put("thumbnail_path", filesInfo.get("thumbnail_path").get(0));
+            filesUpload.put("file_name", filesInfo.get("file_name").get(0));
+            System.out.println("시설 수정 처리2-2) 기존 이미지 삭제, 기본 이미지 등록");
+            // facility_attach 테이블 등록
+            adminFacilityMapper.fileUpload(filesUpload);
+        }
+        // 이미지 수정 없음, 기존 시설 정보만 수정
+        System.out.println("시설 수정 처리3) 수정 매퍼 전송");
+        adminFacilityMapper.modify(originFacilityVO);
+
     }
 
     public void remove(String facility_id) {

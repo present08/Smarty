@@ -19,6 +19,9 @@ public class UserService {
     @Autowired
     private QRCodeService qrCodeService;
 
+    @Autowired
+    private FCMService fcmService;
+
     // 회원가입
     public boolean signup(UserVO user) {
         try {
@@ -45,6 +48,7 @@ public class UserService {
                 return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             // 오류 발생 시 false 반환
             return false;
         }

@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router-dom';  // BrowserRouter, Route, Routes 제거
 import './App.css';
 import root from './router/root';
-import { sendTokenToBackend } from './firebase';
+import { getFCMToken } from './firebase';
 import { useEffect } from 'react';
 import NotificationHandler from './NotificationHandler';
 
@@ -9,30 +9,30 @@ import NotificationHandler from './NotificationHandler';
 function App() {
   useEffect(() => {
 
-    const registerServiceWorker = () => {
-      if ('serviceWorker' in navigator) {
+    const registerServiceWorker = () => { //Service Worker 등록
+      if('serviceWorker' in navigator){
         navigator.serviceWorker.register('/firebase-messaging-sw.js')
-          .then((registration) => {
-            console.log("registered", registration);
-          })
-          .catch((err) => {
-            console.log("error", err);
-          })
+        .then((registration) => {
+          console.log("registered", registration);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        })
       }
     }
 
-    const requestNotificationPermisson = async () => {
-      if (Notification.permission !== "granted") {
-        const permission = await Notification.requestPermission();
-        if (permission !== "granted") {
-          return;
-        }
+    const requestNotificationPermisson = async () => { //알림 권한 요청
+    if(Notification.permission!=="granted"){
+      const permission = await Notification.requestPermission();
+      if(permission !== "granted"){
+        return;
       }
-      sendTokenToBackend();
-    };
+    }
+  };
 
-    registerServiceWorker();
-    requestNotificationPermisson();
+  registerServiceWorker();
+  requestNotificationPermisson();
+  getFCMToken(); //토큰 발급
   }, []);
 
   return (

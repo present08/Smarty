@@ -32,4 +32,6 @@ public interface UserMapper {
     void updateUserStatus(@Param("userId") String userId, @Param("userStatus") boolean userStatus);
     // 레벨 업데이트
     void updateUserLevel(UserVO userVO);
+    // fcm_token용 findbyid
+    String finByIdFcm(String user_id);
 }

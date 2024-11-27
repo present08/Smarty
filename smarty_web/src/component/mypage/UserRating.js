@@ -87,13 +87,12 @@ const UserRating = () => {
                 setUsageTime(usageDurations); // 도넛 차트 데이터 설정
             }
         };
-
         loadUserData();
     }, []);
 
     return (
         <div style={{
-            display: 'flex', flexDirection: 'column', width: '50%', height: '350px',
+            display: 'flex', flexDirection: 'column', width: '52%', height: '350px',
         }}>
             <div style={{
                 display: 'flex',

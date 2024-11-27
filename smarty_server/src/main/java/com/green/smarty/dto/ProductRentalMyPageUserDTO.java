@@ -13,14 +13,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class ProductRentalUserDTO {
+public class ProductRentalMyPageUserDTO {
 
     private String user_id;
+
     private String user_name;
+
     private String facility_name;
+
     private String product_id;
+
     private String product_name;
+
     private int price;
+
     private String size;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

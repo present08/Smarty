@@ -33,9 +33,4 @@ export const returnRental = async (rental_id) => {
     return response.data;
 }
 
-//렌탈 정보 가져오기
-export const getProductRentalUser = async (user_id) => {
-    const response = await axios.get(`${host}/rentalUser`, {params: {user_id}} );
-    console.log(response.data)
-    return response.data;
-}
+

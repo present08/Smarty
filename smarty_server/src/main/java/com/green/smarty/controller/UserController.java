@@ -1,5 +1,7 @@
 package com.green.smarty.controller;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
 import com.green.smarty.service.UserReservationService;
@@ -69,25 +71,41 @@ public class UserController {
     }
 
 
-    //로그인 처리
+//    //로그인 처리
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
+//        // 사용자 ID와 비밀번호를 기반으로 로그인 시도
+//        UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
+//        if (user != null) {
+//            // 로그인 성공 시 사용자 정보를 JSON으로 반환
+//            System.out.println("로그인 성공: " + user);
+//            session.setAttribute("user" , user); //세션에 사용자 정보 저장
+//            return ResponseEntity.ok(user) ;  // 로그인 성공 시 사용자 정보 반환
+//        } else {
+//            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
+//            System.out.println("로그인 실패");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
+//        }
+//    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
-        // 사용자 ID와 비밀번호를 기반으로 로그인 시도
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
 
         if (user != null) {
-            // 로그인 성공 시 사용자 정보를 JSON으로 반환
-            System.out.println("로그인 성공: " + user);
-            session.setAttribute("user" , user); //세션에 사용자 정보 저장
-            return ResponseEntity.ok(user) ;  // 로그인 성공 시 사용자 정보 반환
+            // 로그인 성공 시 로그인 날짜 업데이트
+            userservice.updateLoginDate(user.getUserId()); // 로그인 날짜 업데이트 호출
 
+            System.out.println("로그인 성공: " + user);
+            session.setAttribute("user", user); // 세션에 사용자 정보 저장
+            return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {
             // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
             System.out.println("로그인 실패");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
         }
-
     }
+
 
     //사용자 정보 가져오기
     @GetMapping("/me")
@@ -223,5 +241,20 @@ public class UserController {
     public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
         userservice.updateUserLevel(user, totalAmount);
         System.out.println(user.getLevel());
+    }
+
+    // 수강 리스트 불러오기
+    @GetMapping("/classApplication")
+    public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
+        return  result;
+    }
+
+    // 대여물품 리스트
+    @GetMapping("/rentalMyPageUser")
+    public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
+        List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
+        return result;
     }
 }

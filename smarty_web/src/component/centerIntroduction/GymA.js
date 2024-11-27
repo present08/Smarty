@@ -46,10 +46,10 @@ export const GymA = ({ selectedComponent, handleToggleComponent }) => {
                                     </div>
                                     <div className='button-box'>
                                         <button>
-                                            <Link to={"/"} style={{ color: '#e7e7e7', fontWeight: 'bold' }}>수강신청</Link>
+                                            <Link to={"/classList"} style={{ color: '#e7e7e7', fontWeight: 'bold' }}>수강신청</Link>
                                         </button>
                                         <button>
-                                            <Link to={"/"} style={{ color: '#e7e7e7', fontWeight: 'bold' }}>일일입장</Link>
+                                            <Link to={"/facilityList"} style={{ color: '#e7e7e7', fontWeight: 'bold' }}>일일입장</Link>
                                         </button>
                                     </div>
                                 </div>

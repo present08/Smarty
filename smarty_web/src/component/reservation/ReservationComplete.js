@@ -1,7 +1,8 @@
-import { rgbToHex } from '@mui/material';
+
 import React, { useState } from 'react'
 import '../../css/reservationComplete.css'
 import { useNavigate } from 'react-router-dom';
+import { LuCalendarCheck } from 'react-icons/lu';
 
 const ReservationComplete = (props) => {
     const { postData, facilityData, user, price, closeModal } = props;
@@ -24,47 +25,38 @@ const ReservationComplete = (props) => {
                 left: '0',
                 zIndex: '9999',
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-
+                backgroundColor: '#F0F0F3',
+                justifyContent: 'space-around'
             }}>
                 <div style={{
                     width: '80%',
-                    height: '80%',
+                    height: '70%',
                     backgroundColor: 'white',
-                    borderRadius: '15px'
+                    borderRadius: '15px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                 }}>
-                    <div>
-                        <h1 style={{ marginTop: '100px', fontSize: '55px' }}>{user.user_name} 님께서 접수하신 {facilityData.facility_name} 예약이 완료 되었습니다!</h1>
-                        <p>접수 일자 : {postData.reservation_start} - {postData.reservation_end}</p>
-                        <p>예약 현황은 마이페이지에서 확인 가능합니다.</p>
-                        <p>이용금액 : {price}</p>
-                        {/* <div className='completeInfo'>
-                            <div className='completeInfoText'>
-                                <div className='completeInfo_list'>
-                                    <div className='completeSubtitle'>예약 시설</div>
-                                    <div className='completeContent'>내용</div>
-                                </div>
-                                <hr style={{ color: 'gainsboro', width: '80%', marginTop: '1rem' }} />
-                                <div className='complete_hottime'>
-                                    <p>주의사항 꼭 읽어주세요</p>
-                                </div> 
-                            </div>
-                        </div>*/}
-                        <button style={{
-                            width: '80px',
-                            height: '30px',
-                            backgroundColor: 'red',
-                            color: 'white'
-                        }} onClick={() => closed("mypage")}>마이페이지로 이동</button>
-                        <button style={{
-                            width: '80px',
-                            height: '30px',
-                            backgroundColor: 'red',
-                            color: 'white'
-                        }} onClick={() => closed("close")}>닫기</button>
+                    <div style={{
+                        width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#28527a', borderRadius: '50px'
+                    }}>
+                        <LuCalendarCheck style={{ width: '40px', height: '40px', color: 'white' }} />
                     </div>
+                    <h3 style={{ marginTop: '100px', fontSize: '21px' }}>{user.user_name} 님께서 접수하신 <span style={{ color: '#50c4d2' }}>{facilityData.facility_name}</span> 예약이 완료 되었습니다!</h3>
+                    <h1 style={{ fontSize: '40px', marginTop: '30px', marginBottom: '30px' }}>{postData.reservation_start} - {postData.reservation_end}</h1>
+                    <h3 style={{ fontSize: '21px' }}>이용금액 {price}원 입니다.</h3>
+                    <h3 style={{ fontSize: '21px', marginTop: '10px' }}>예약 현황은 <span style={{ color: '#50c4d2' }}>마이페이지</span>에서 확인 가능합니다.</h3>
+                    <h3 style={{ fontSize: '20px', marginTop: '10px' }}>이용해주셔서 감사합니다.</h3>
+                </div>
+                <div className='reservationInformationCheck' style={{
+                    width: '30%', display: 'flex', justifyContent: 'space-around'
+                }}>
+                    <button onClick={() => closed("mypage")}>마이페이지로 이동</button>
+                    <button onClick={() => closed("close")}>닫기</button>
                 </div>
             </div>
         </div>

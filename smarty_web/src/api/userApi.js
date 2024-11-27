@@ -32,11 +32,31 @@ export const logout = async () => {
     }
 };
 
-// 예약 정보 데이터 가져오기
+// 일일입장 예약 정보 데이터 가져오기
 export const getReservationInfo = async (user_id) => {
     const response = await axios.get(`${host}/reservationUser`, { params: { user_id } });
     console.log(response.data);
     return response.data;
 }
 
+// 수강신청 예약 정보 데이터 가져오기
+export const getUserClassApplication = async (user_id) => {
+    const response = await axios.get(`${host}/classApplication`, { params: { user_id } });
+    console.log(response.data);
+    return response.data;
+}
+
+//렌탈 정보 가져오기
+export const getProductRentalUser = async (user_id) => {
+    try {
+        const response = await axios.get(`${host}/rentalMyPageUser`, {
+            params: { user_id }
+        });
+        console.log('API Response:', response.data); // 응답 데이터 확인
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
 

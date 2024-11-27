@@ -1,4 +1,4 @@
-import { RouterProvider } from 'react-router-dom';  // BrowserRouter, Route, Routes 제거
+import { RouterProvider } from 'react-router-dom';
 import './App.css';
 import root from './router/root';
 

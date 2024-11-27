@@ -25,12 +25,6 @@ const Main_Banner = () => {
         setCurrentIndex(newIndex);
     };
 
-    // 슬라이드
-    const goToSlide = (index) => {
-        setCurrentIndex(index);
-    };
-
-
     // 자동 슬라이드 설정
     useEffect(() => {
         const slideInterval = setInterval(nextSlide, 6000);
@@ -58,7 +52,7 @@ const Main_Banner = () => {
                 </div>
                 <div className='imgBox'>
                     <img className='banner-img' src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{
-                        width: '650px', height: '650', marginBottom: '2rem',
+                        width: '500px', height: '500px',
                     }} />
                 </div>
             </div>

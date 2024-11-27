@@ -13,6 +13,7 @@ const initRental = {
 }
 
 const ListPage = () => {
+  
   const navigate = useNavigate();
   const [rental, setRental] = useState(initRental);
   const [facility, setFacility] = useState([]);
@@ -157,7 +158,6 @@ const ListPage = () => {
           <button
             onClick={handleChagneSubmit}
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-
           >
             대여하기
           </button>

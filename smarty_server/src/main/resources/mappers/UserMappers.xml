@@ -50,6 +50,13 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 로그인시 login_date 로그인 한 날짜로 업데이트-->
+    <update id="updateLoginDate" parameterType="String">
+        UPDATE user
+        SET login_date = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
     <!-- 상태 업데이트 -->
     <update id="updateUserStatus">
         UPDATE user
@@ -64,13 +71,14 @@
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>
 
-    <!-- 회원 등급 업데이트 -->
+    <!-- 회원 레벨 업데이트 -->
     <update id="updateUserLevel">
         UPDATE user
         SET level = #{level}
         WHERE user_id = #{userId}
     </update>
 
+    <!-- 유저 수강신청 불러오기-->
     <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
         SELECT
         u.user_id,
@@ -91,6 +99,7 @@
 
     </select>
 
+    <!-- 상품 대여 리스트 불러오기-->
     <select id="getUserMyPageRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalMyPageUserDTO">
         SELECT
         u.user_id,
@@ -115,6 +124,3 @@
     </select>
 
 </mapper>
-
-        <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->
-        <!-- 우선 순위는 resultType-->

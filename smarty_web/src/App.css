@@ -139,3 +139,28 @@ p {
   text-decoration: none;
   color: inherit;
 }
+
+@keyframes moveUpDown {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(20px);
+  }
+}
+
+
+@keyframes scaleUpDown {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}

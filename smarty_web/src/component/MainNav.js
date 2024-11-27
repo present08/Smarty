@@ -74,9 +74,6 @@ const MainNav = () => {
 
     return (
         <nav style={{ width: '100%', height: '130px', display: 'flex', flexDirection: 'column', backgroundColor: 'white', zIndex: '1000', position: 'fixed', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-            {/* <button className="menu-toggle" onClick={toggleMenu}>
-                <AiOutlineMenu style={{ width: '40px', height: '40px', color: 'white' }} />
-            </button> */}
             <div className={`subnav ${isMenuOpen ? 'active' : ''}`}>
                 <ul>
                     {isLoggedIn ? (
@@ -103,39 +100,39 @@ const MainNav = () => {
                 <div className='navbox'>
                     <div className='listbox'>
                         <ul>
-                            <li><Link to={"/center/center_in"}>센터소개</Link>
+                            <li><Link to={"/center/center_in"}><h3>센터소개</h3></Link>
                                 <ul>
                                     <li><Link to={"/center/facility"}>시설안내</Link></li>
                                     <li><Link to={"/center/parking"}>주차안내</Link></li>
                                     <li><Link to={"/center/directions"}>오시는길</Link></li>
                                 </ul>
                             </li>
-                            <li><Link to={"/guide/instructions"}>이용안내</Link>
+                            <li><Link to={"/guide/instructions"}><h3>이용안내</h3></Link>
                                 <ul>
                                     <li><Link to={"/guide/hours"}>이용시간</Link></li>
                                     <li><Link to={"/guide/refund"}>환불 및 취소 안내</Link> </li>
                                 </ul>
                             </li>
-                            <li><Link to={"/classList"}>수강신청</Link>
+                            <li><Link to={"/classList"}><h3>수강신청</h3></Link>
                                 <ul>
                                     <li><Link to={"/classList"}>수강신청</Link></li>
                                 </ul>
                             </li>
-                            <li><Link to={"/facilityList"}>일일입장</Link>
+                            <li><Link to={"/facilityList"}><h3>일일입장</h3></Link>
                                 <ul>
                                     <li><Link to={"/facilityList"}>일일입장</Link></li>
                                 </ul>
                             </li>
-                            <li><Link to={"/product"}>물품</Link>
+                            <li><Link to={"/product"}><h3>물품</h3></Link>
                                 <ul>
                                     <li><Link to={"/product"}>물품대여</Link></li>
                                 </ul>
                             </li>
-                            <li><Link to={"/notice"}>커뮤니티</Link>
+                            <li><Link to={"/notice"}><h3>커뮤니티</h3></Link>
                                 <ul>
                                     <li><Link to={"/notice/announce"}>공지사항</Link></li>
                                     <li><Link to={"/notice/board"}>자유게시판</Link></li>
-                                    <li><Link to={"/"}>채용정보</Link></li>
+                                    <li><Link to={"/notice/jobList"}>채용정보</Link></li>
                                 </ul>
                             </li>
                         </ul>

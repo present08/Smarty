@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../../css/dailyAdmissions.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { getfacilityId } from '../../api/reservaionApi';
 import '../../css/reservationPage.css'
+import '../../css/dailyAdmissions.css';
 
 const DailyAdmissions = () => {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const DailyAdmissions = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % facility_id.length);
-        }, 2500);
+        }, 4000);
 
         return () => clearInterval(interval);
     }, [facility_id]);
@@ -28,7 +28,7 @@ const DailyAdmissions = () => {
     };
 
     return (
-        <div className='dailyAdmissions_container'>
+        <div id='oneDiv' className='dailyAdmissions_container'>
             <div className='dailyAdmissions_box'>
                 <div>
                     <h2>일일입장</h2>

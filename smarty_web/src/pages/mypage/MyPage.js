@@ -96,8 +96,8 @@ const MyPage = () => {
                             <h2 style={{ color: '#003f66', fontSize: '21px', marginBottom: '3rem', display: 'flex', }}>SUB BOX</h2>
                         </div>
                         <UserButton user={currentUser} />
-                        <SituationButton user={currentUser} />
-                        <ReceiptButton />
+                        <CancellationButton user={currentUser} />
+                        <ReceiptButton user={currentUser}  />
                     </div>
                     <div style={{ width: '100%', height: '10%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Link onClick={handleLogout} to={"/"} style={{ display: 'flex', alignItems: 'center', color: 'black', cursor: 'pointer' }} >

@@ -8,8 +8,8 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 1920px;
-    height: 900px;
+    width: 100vw;
+    height: 90vh;
 }
 
 /* ------------------------------ */
@@ -24,7 +24,7 @@
 /* ------------------------------ */
 
 .text_iconBox {
-    width: 50%;
+    width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,20 +62,54 @@
 }
 
 .textBox>h1 {
-    font-size: 58px;
-}
-
-.textBox>h1>span {
-    color: #04204b;
+    font-size: 65px;
 }
 
 
 /* ------------------------------ */
 
 .imgBox {
-    width: 50%;
+    width: 40%;
     height: 90%;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
+}
+
+
+/* ------------------------------ */
+
+
+@media (max-width: 768px) {
+
+    .banner_cont {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .text_iconBox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .imgBox {
+        display: none;
+    }
+
+    .iconBox {
+        display: none;
+    }
+
+    .textBox>p {
+        font-size: 30px;
+        margin-top: 3rem;
+    }
+
+    .textBox>h1 {
+        font-size: 40px;
+    }
 }

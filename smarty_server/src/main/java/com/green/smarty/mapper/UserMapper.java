@@ -19,6 +19,7 @@ public interface UserMapper {
     UserVO getByEmail (String email);
     // 사용자 추가 (회원가입) XML 반환
     void insertUser (UserVO user);
+    void updateLoginDate(@Param("userId") String userId);
     //아이디 찾기 XML 반환
     String findByID (String email, String user_name);
     //비밀번호 찾기 XML 반환

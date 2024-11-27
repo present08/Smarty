@@ -11,6 +11,7 @@ const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"
 const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
 const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
 const adminRouter = () => {
+
     return [
         {
             path: "",

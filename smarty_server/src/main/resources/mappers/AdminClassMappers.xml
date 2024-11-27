@@ -11,7 +11,12 @@
         insert into class_detail(class_id, weekday, class_date) values(#{class_id}, #{weekday}, #{class_date});
     </insert>
 
-    <select id="getList" resultType="java.util.List">
-        select * from class C inner join class_detail D on C.class_id = D.class_id;
+    <select id="getList" parameterType="String">
+<!--        select * from class C inner join class_detail D on C.class_id = D.class_id;-->
+        select * from class where facility_id = #{facility_id}
+    </select>
+
+    <select id="read" parameterType="String">
+        select * from class where class_id = #{class_id}
     </select>
 </mapper>

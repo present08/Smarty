@@ -9,7 +9,7 @@ export default function Topbar() {
             {/* 로고 */}
             <Link to="/" className="link">    
                 <div className="topLeft">
-                    <span className="logo">Admin</span>
+                    <div className="adminLogo">SMARTY ADMIN</div>
                 </div>
             </Link>
             {/* 알림, 언어, 설정 프로필 아이콘 */}

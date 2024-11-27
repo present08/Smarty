@@ -1,18 +1,18 @@
 package com.green.smarty.dto;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourtAdminDTO {
-
-    private String court_id;
-    private String facility_id;
-    private String court_name;
-    private boolean court_status;
+@Builder
+public class UserReservationDTO {
+    List<Map<String, Integer>> btnData;
+    int iterable;
 }

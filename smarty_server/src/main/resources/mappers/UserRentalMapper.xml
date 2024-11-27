@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.UserRentalMapper">
     <!--sql 구문을 써서 db에서 불러온다-->
-
+<!--    대여 등록-->
     <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
         <!-- 오늘 날짜의 마지막 rental_id 조회 -->
         <selectKey resultType="String" keyProperty="rental_id" order="BEFORE">
@@ -25,20 +25,115 @@
             WHERE
                 rental_id LIKE CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '%')
         </selectKey>
-
         INSERT INTO rental (
             rental_id,
             user_id,
             product_id,
+            rental_status,
             rental_date,
-            return_date
+            return_date,
+            count
         ) VALUES (
             #{rental_id},
             #{user_id},
             #{product_id},
+            true,
             #{rental_date},
-            #{return_date}
+            #{return_date},
+            #{count}
         )
     </insert>
+
+    <select id="getUserRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalUserDTO">
+        SELECT
+            u.user_id,
+            u.user_name,
+            f.facility_name,
+            p.product_id,
+            p.product_name,
+            p.price,
+            p.size,
+            r.rental_date,
+            r.return_date,
+            r.rental_status,
+            r.rental_id,
+            r.count
+        FROM
+            rental r
+        INNER JOIN
+            user u
+        ON
+            u.user_id = r.user_id
+        INNER JOIN
+            product p
+        ON
+            p.product_id = r.product_id
+        INNER JOIN
+            facility f
+        ON
+            f.facility_id = p.facility_id
+        WHERE
+            u.user_id = #{user_id}
+    </select>
+
+    <!--    상품 재고 감소-->
+    <update id="productStockDown" parameterType="map">
+        UPDATE
+            product
+        SET
+            stock = stock - #{count}
+        WHERE
+            product_id = #{product_id}
+    </update>
+
+    <!--    상품 재고 증가-->
+    <update id="productStockUp" parameterType="map">
+        UPDATE
+            product
+        SET
+            stock = stock + #{count}
+        WHERE
+            product_id = #{product_id}
+    </update>
+
+    <select id="getAllRentals" resultType="com.green.smarty.dto.RentalDTO">
+        SELECT
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            return_date
+        FROM
+            rental
+    </select>
+
+    <select id="getRentalById" parameterType="String" resultType="com.green.smarty.dto.RentalDTO">
+        SELECT
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            return_date,
+            count
+        FROM
+            rental
+        WHERE
+            rental_id = #{rental_id}
+    </select>
+
+    <update id="updateRental" parameterType="com.green.smarty.dto.RentalDTO">
+        UPDATE rental
+        SET rental_status = #{rental_status}
+        WHERE rental_id = #{rental_id}
+    </update>
+
+    <!-- 반납 처리 -->
+    <update id="returnRental" parameterType="String">
+        UPDATE rental
+        SET rental_status = false
+        WHERE rental_id = #{rental_id}
+    </update>
 
 </mapper>

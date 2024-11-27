@@ -32,7 +32,6 @@ const ReservationPage = () => {
     }
     useEffect(() => {
         setFacilityData(location.state)
-        console.log("getLocation", location.state)
         try {
             setCurrentUser(JSON.parse(localStorage.getItem("user")));
         } catch {

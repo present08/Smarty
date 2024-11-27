@@ -1,0 +1,181 @@
+.facilityModify {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.facilityModifyTitle {
+    height: 10%;
+    font-size: 28px;
+    font-weight: 300;
+    color: #011B2F;
+}
+
+.facilityModifyForm {
+    height: 90%;
+    display: flex;
+    width: 100%;
+}
+
+.facilityModifyFormLeft,
+.facilityModifyFormRight {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    margin: 0 40px 0px 0;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+.leftItemTitle,
+.rightItemTitle {
+    flex: 1;
+    font-size: 16px;
+    color: #555;
+    display: flex;
+}
+.leftItemContent,
+.rightItemContent {
+    flex: 9;
+}
+.leftItem,
+.rightItem {
+    display: flex;
+    align-items: center;
+}
+
+.leftItem {
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.leftItem>label,
+.rightItem>label,
+.textItem>label,
+.subItemtext {
+    font-weight: 300;
+    font-size: 14px;
+    color: #555;
+}
+
+.leftItem>input {
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
+    height: 30px;
+}
+
+.textItem>textarea {
+    border: 1px solid #bdbdbd;
+    margin-bottom: 20px;
+}
+
+.facilityReadText {
+    font-size: 14px;
+    color: #919191;
+}
+
+.rightItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+.subItemButton,
+.removeButton {
+    border: none;
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    color: white;
+    background-color: #58A3BC;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.facilityModifyButtons {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* 이미지 */
+
+.imageItem,
+.textItem {
+    display: flex;
+    gap: 20px;
+}
+
+.imageUpload,
+.courtUpload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.imageContainer {
+    width: 350px;
+    height: 184px;
+    overflow-y: auto;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+.imageContainer>span {
+    line-height: 184px;
+}
+.imageUpload>input {
+    display: none;
+}
+.imageUpload>label {
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    width: 300px;
+    height: 180px;
+}
+
+.imageDeleteButton {
+    color: #555;
+    font-size: 27px !important;
+    cursor: pointer;
+}
+
+.facilityModifyButtons {
+    display: flex;
+}
+
+.modifyButton,
+.cancleButton {
+    border: none;
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.modifyButton {
+    background-color: #195E8E;
+}
+
+.cancleButton,
+.removeButton {
+    background-color: rgb(161, 20, 20);
+}

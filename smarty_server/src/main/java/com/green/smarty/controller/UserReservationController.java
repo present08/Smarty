@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.UserReservationService;
@@ -65,6 +66,7 @@ public class UserReservationController {
         return dto;
     }
 
+    // Default time 기준으로 버튼 데이터 리턴
     @GetMapping("/{facility_id}")
     public List<Map<String, Integer>> getFacility(@PathVariable String facility_id, @RequestParam String court_id,
             @RequestParam String date) {
@@ -77,16 +79,15 @@ public class UserReservationController {
 
     // 예약 완료 시 호출
     @PostMapping("/{facility_id}")
-    public List<Map<String, Integer>> dateToTime(@RequestBody ReservationDTO dto) {
-        List<Map<String, Integer>> result = reservationService.insertReservation(dto);
+    public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
+        UserReservationDTO result = reservationService.insertReservation(dto);
         System.out.println(dto);
         return result;
     }
 
+    // 예약 데이터 삭제
     @DeleteMapping("/{reservation_id}")
     public List<ReservationUserDTO> remove(@PathVariable String reservation_id, @RequestParam String user_id) {
-        System.out.println(reservation_id);
-        System.out.println(user_id);
         Map<String, String> paramsMap = new HashMap<>();
         List<PaymentVO> paymentList = publicMapper.getPaymentAll();
         for (PaymentVO i : paymentList) {

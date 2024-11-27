@@ -7,15 +7,25 @@ import '../../css/classList.css'
 import ClassPage from './ClassPage'
 import BackToTopButton from '../../component/BackToTopButton'
 import { AiOutlineBook, AiOutlineCalendar, AiOutlineCheck, AiOutlineClockCircle } from 'react-icons/ai'
+import { useLocation } from 'react-router-dom'
 
 
 const ClassList = () => {
+
     const [classList, setClassList] = useState([])
     const [weekdays, setWeekdays] = useState(["월요일", "화요일", "수요일", '목요일', '금요일', '토요일', '일요일']);
     const [classData, setClassData] = useState(null);
     const [facilityName, setFacilityName] = useState([]);
     const [origin, setOrigin] = useState([]);
     const [prevItem, setPrevItem] = useState('');
+    const location = useLocation();
+
+    useEffect(() => {
+        if(location.state){
+            setClassData(location.state)
+        }
+    }, [location])
+    
 
     useEffect(() => {
         const facility = [];

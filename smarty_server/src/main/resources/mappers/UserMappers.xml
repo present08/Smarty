@@ -14,8 +14,8 @@
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code, fcmToken)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode}, #{fcmToken})
     </insert>
 
     <!-- 아이디 찾기-->
@@ -23,6 +23,11 @@
         SELECT user_id FROM user
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
+    </select>
+<!--    fcm_token용 아이디 찾기-->
+    <select id="finByIdFcm">
+        SELECT fcmToken FROM user
+        WHERE user_id = #{user_id}
     </select>
 
     <!-- 비밀번호 찾기 -->
@@ -50,6 +55,13 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 로그인시 login_date 로그인 한 날짜로 업데이트-->
+    <update id="updateLoginDate" parameterType="String">
+        UPDATE user
+        SET login_date = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
     <!-- 상태 업데이트 -->
     <update id="updateUserStatus">
         UPDATE user
@@ -64,13 +76,56 @@
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>
 
-    <!-- 회원 등급 업데이트 -->
+    <!-- 회원 레벨 업데이트 -->
     <update id="updateUserLevel">
         UPDATE user
         SET level = #{level}
         WHERE user_id = #{userId}
     </update>
-</mapper>
 
-        <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->
-        <!-- 우선 순위는 resultType-->
+    <!-- 유저 수강신청 불러오기-->
+    <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        e.enrollment_id,
+        e.class_id,
+        c.class_name,
+        c.start_date,
+        c.end_date,
+        c.start_time,
+        c.end_time,
+        c.price
+        FROM
+        enrollment e
+        INNER JOIN user u ON u.user_id = #{user_id}
+        INNER JOIN class c ON e.class_id = c.class_id
+        WHERE e.user_id = #{user_id}
+
+    </select>
+
+    <!-- 상품 대여 리스트 불러오기-->
+    <select id="getUserMyPageRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalMyPageUserDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        f.facility_name,
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.size,
+        r.rental_date,
+        r.return_date
+        FROM
+        rental r
+        INNER JOIN user u
+        ON u.user_id = r.user_id
+        INNER JOIN product p
+        ON p.product_id = r.product_id
+        INNER JOIN facility f
+        ON f.facility_id = p.facility_id
+        WHERE
+        u.user_id = #{user_id};
+    </select>
+
+</mapper>

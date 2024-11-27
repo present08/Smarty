@@ -5,7 +5,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 
 const host = 'http://localhost:8080';
 
-const UserButton = ( props ) => {
+const UserButton = (props) => {
 
     const [currentUser, setCurrentUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const UserButton = ( props ) => {
             return;
         }
 
-        const userInfo = { user_id: currentUser.user_id, address: newAddress, phone:newPhone }; // user_id로 변경
+        const userInfo = { user_id: currentUser.user_id, address: newAddress, phone: newPhone }; // user_id로 변경
 
         console.log("전송할 사용자 정보:", userInfo); // 디버깅을 위한 로그
 
@@ -47,7 +47,7 @@ const UserButton = ( props ) => {
     };
 
     return (
-        <div style={{ width: '90%', height: '85px', backgroundColor: '#28527a', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', margin: '0 auto', marginBottom: '20px', borderRadius: '20px' }}>
+        <div style={{ width: '90%', height: '85px', backgroundColor: '#28527a', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.6)', margin: '0 auto', marginBottom: '20px', borderRadius: '20px' }}>
             <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{ width: '20%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '50px', border: 'none', backgroundColor: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '10px' }}>
@@ -60,9 +60,9 @@ const UserButton = ( props ) => {
                 </div>
                 {isModalOpen && (
                     <div style={{
-                        width: '100%', height: '100%', position: 'fixed', top: '0', left: '0', display: 'flex', justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)',
+                        width: '100%', height: '100%', position: 'fixed', top: '0', left: '0', display: 'flex', justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', zIndex: '999'
                     }}>
-                        <div style={{ width: '30%', height: '100%', position: 'fixed', right: '0', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', borderBottomLeftRadius: '30px', borderTopLeftRadius: '30px' }}>
+                        <div style={{ width: '30%', height: '100%', position: 'fixed', right: '0', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '100' }}>
                             <div style={{ width: '90%', height: '90%' }}>
                                 <div style={{ width: '100%', height: '5%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                                     <IoCloseSharp style={{ width: '30px', height: '30px' }} onClick={closeModal} />

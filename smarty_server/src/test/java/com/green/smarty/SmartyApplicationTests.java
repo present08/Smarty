@@ -81,11 +81,11 @@ class SmartyApplicationTests {
 
 	@Test
 	public void insert_court() {
-		String[] facility_id = { "fc_1730949353199",
-				"fc_1730949353249",
-				"fc_1730949353252",
-				"fc_1730949353254",
-				"fc_1730949353256", };
+		String[] facility_id = { "fc_1731986897322",
+				"fc_1731986897365",
+				"fc_1731986897375",
+				"fc_1731986897382",
+				"fc_1731986897388"};
 		for (int i = 1; i < 3; i++) {
 			for (int j = 0; j < facility_id.length; j++) {
 				CourtVO vo = CourtVO.builder()

@@ -5,6 +5,7 @@ import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
 import Footer from '../Footer';
+import { noticeApi } from '../../api/noticeApi';
 
 const NoticeBoard = () => {
     const [activeItem, setActiveItem] = useState(null);
@@ -24,33 +25,20 @@ const NoticeBoard = () => {
     // 초기 로딩 시 백엔드에서 공지사항 데이터를 가져오는 함수
     useEffect(() => {
         const fetchNotices = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/notice/announce/user/list');
-                setNotices(response.data); // 가져온 데이터를 notices 상태에 업데이트
-            } catch (error) {
-                console.error('공지사항을 가져오는 중 오류가 발생했습니다:', error);
-            }
+                const data = await noticeApi.announcement.getNotices();
+                setNotices(data);
         };
-
         fetchNotices();
-    }, []); // 빈 배열로 설정하여 컴포넌트가 처음 더링될 때만 호출
+    }, []);
 
     const toggleItem = async (id) => {
-        if (activeItem !== id) {  // 새로운 항목을 열 때만 조회수 증가
-            try {
-                console.log('조회수 증가 API 호출:', id);
-                const response = await axios.post(`http://localhost:8080/notice/announce/user/view/${id}`);
-                console.log('API 응답:', response.data);
-
-                // 로컬 상태 업데이트
+        if (activeItem !== id) {
+                await noticeApi.announcement.increaseViewCount(id);
                 setNotices(notices.map(notice =>
                     notice.announce_id === id
                         ? { ...notice, view_count: notice.view_count + 1 }
                         : notice
                 ));
-            } catch (error) {
-                console.error('조회수 업데이트 중 오류 상세:', error.response || error);
-            }
         }
         setActiveItem(activeItem === id ? null : id);
     };
@@ -73,9 +61,9 @@ const NoticeBoard = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/notice/announce/user/write', newNoticeItem);
-            if (response.data) {
-                setNotices(prev => [response.data, ...prev]);
+            const data = await noticeApi.announcement.writeNotice(newNoticeItem);
+            if (data) {
+                setNotices(prev => [data, ...prev]);
                 setNewNotice({
                     title: '',
                     content: '',
@@ -94,10 +82,8 @@ const NoticeBoard = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/notice/announce/user/search`, {
-                params: { type: searchType, keyword: keyword }
-            });
-            setNotices(response.data);
+            const data = await noticeApi.announcement.searchNotices(searchType, keyword);
+            setNotices(data);
         } catch (error) {
             console.error('검색 중 오류가 발생했습니다:', error);
         }
@@ -146,10 +132,12 @@ const NoticeBoard = () => {
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div className="notice-board">
-                <div className="header">
-                    <h1 className="header-title">공지사항</h1>
-                    <p className="header-subtitle">SMARTY의 새로운 소식을 확인하세요</p>
+            <div className="ann-notice-board">
+                <div className="ann-header">
+                    <div className="ann-header-content">
+                        <h1 className="ann-header-title">공지사항</h1>
+                        <p className="ann-header-subtitle">공지사항을 확인해주세요</p>
+                    </div>
                 </div>
 
                 <div className="content-wrapper">

@@ -132,8 +132,8 @@ public class UserRentalService{
         }
 
         RentalVO rentalVO = publicMapper.getRental(rental_id);
-            rentalVO.setRental_status(false);
-            rentalVO.setReturn_date(LocalDateTime.now());
+        rentalVO.setRental_status(false);
+        rentalVO.setReturn_date(LocalDateTime.now());
         System.out.println("--------"+rentalVO);
 
 

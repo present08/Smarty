@@ -52,7 +52,7 @@ public class UserReservationService {
         FacilityVO f_vo = reservationMapper.getFacility(facility_id);
         List<ReservationDTO> r_vo = reservationMapper.getReservation(getReservation);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS);
 
         int start = Integer.parseInt(f_vo.getOpen_time().split(":")[0]);
         int end = Integer.parseInt(f_vo.getClose_time().split(":")[0]);
@@ -60,26 +60,30 @@ public class UserReservationService {
         int cnt = 0;
 
         // reservation 등록되어있는 시간 제외
-        List<Integer> list = new ArrayList<>();
+        List<Integer> reservation_list = new ArrayList<>();
         for (ReservationDTO vo : r_vo) {
             if (vo.getReservation_start().toLocalDate().toString().equals(date)) {
                 int start1 = Integer.parseInt(vo.getReservation_start().toLocalTime().toString().split(":")[0]);
                 int end1 = Integer.parseInt(vo.getReservation_end().toLocalTime().toString().split(":")[0]);
                 for (int i = 0; i < end1 - start1; i++) {
-                    list.add(start1 + i);
+                    reservation_list.add(start1 + i);
                 }
             }
         }
-        System.out.println(list);
+        System.out.println(reservation_list);
+        String[] dateList = date.split("-");
 
         List<Map<String, Integer>> timeBtn = new ArrayList<>();
         for (int i = 0; i < (end - start); i++) {
+            LocalDateTime nowStart = LocalDateTime.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),
+                    Integer.parseInt(dateList[2]), start + i, 0).truncatedTo(ChronoUnit.HOURS);
             Map<String, Integer> timeMap = new HashMap<>();
             timeMap.put("start", start + i);
             timeMap.put("end", start + i + 1);
             timeMap.put("id", cnt);
             timeMap.put("active", 0);
-            if ((end - start) % default_time > (end - start) - i - 1 || list.contains(start + i)) {
+            if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i)
+                    || now.compareTo(nowStart.minusHours((long) default_time)) == 1) {
                 timeMap.put("disabled", 1);
             } else {
                 timeMap.put("disabled", 0);

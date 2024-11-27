@@ -1,6 +1,7 @@
 package com.green.smarty.mapper;
 
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.vo.RentalVO;
 import org.apache.ibatis.annotations.Mapper;

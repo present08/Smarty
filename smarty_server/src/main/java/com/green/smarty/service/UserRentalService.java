@@ -1,11 +1,13 @@
 package com.green.smarty.service;
 
-import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.fasterxml.jackson.core.JsonToken;
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.mapper.UserRentalMapper;
 import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.dto.ProductDTO;
 import com.green.smarty.vo.ProductVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.UserVO;
@@ -30,8 +32,10 @@ public class UserRentalService{
     private UserMapper userMapper;
     @Autowired
     private UserProductMapper userProductMapper;
-    
-    public int insertRental(RentalVO vo) {
+    @Autowired
+    private PublicMapper publicMapper;
+
+    public int insertRental(RentalVO vo, int count) {
 
         System.out.println("대여 등록 시작: " + vo);
 
@@ -128,8 +132,8 @@ public class UserRentalService{
         }
 
         RentalVO rentalVO = publicMapper.getRental(rental_id);
-            rentalVO.setRental_status(false);
-            rentalVO.setReturn_date(LocalDateTime.now());
+        rentalVO.setRental_status(false);
+        rentalVO.setReturn_date(LocalDateTime.now());
         System.out.println("--------"+rentalVO);
 
 
@@ -152,8 +156,8 @@ public class UserRentalService{
     }
 
 
-    public int updateRental(RentalDTO dto) {
-        return userRentalMapper.updateRental(dto);
+    public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
+        List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
+        return result;
     }
-
 }

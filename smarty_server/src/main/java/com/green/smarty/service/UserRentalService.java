@@ -26,7 +26,7 @@ public class UserRentalService{
     private UserMapper userMapper;
     @Autowired
     private UserProductMapper userProductMapper;
-
+    
     public int insertRental(RentalVO vo) {
 
         log.info("대여 등록 시작: {}", vo);

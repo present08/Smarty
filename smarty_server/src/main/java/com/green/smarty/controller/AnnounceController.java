@@ -50,6 +50,7 @@ public class AnnounceController {
         }
     }
 
+    // 조건부 검색
     @GetMapping("/search")
     public ResponseEntity<List<AnnounceDTO>> searchAnnounce(
             @RequestParam("type") String type,

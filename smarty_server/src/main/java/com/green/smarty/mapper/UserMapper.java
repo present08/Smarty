@@ -40,4 +40,6 @@ public interface UserMapper {
     List<UserClassApplicationDTO> getClassUserApplication(String user_id);
     // 대여한 리스트 정보 가져오기
     List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(String user_id);
+     // fcm_token용 findbyid
+    String finByIdFcm(String user_id);
 }

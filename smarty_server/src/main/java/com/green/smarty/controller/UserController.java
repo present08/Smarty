@@ -10,6 +10,7 @@ import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,6 +50,7 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
+        System.out.println(userVO.getFcmToken());
 
         boolean isSuccess = userservice.signup(userVO);
 
@@ -243,7 +245,7 @@ public class UserController {
         System.out.println(user.getLevel());
     }
 
-    // 수강 리스트 불러오기
+     // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
         System.out.println("유저아이디 확인 : "+user_id);
@@ -256,5 +258,20 @@ public class UserController {
     public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
         List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
         return result;
+    }   
+
+    // 로그인 세션 체크
+    @GetMapping("/check-session")
+    public ResponseEntity<UserVO> checkLogin(HttpServletRequest request) {
+        // 세션에서 user 속성 가져오기
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            UserVO userVO = (UserVO) session.getAttribute("user");
+            System.out.println("session: "+ userVO);// user이 있다면 로그인 상태로 간주
+            return ResponseEntity.ok(userVO);
+        }else{
+            System.out.println("세션없음");
+            return null;
+        }
     }
 }

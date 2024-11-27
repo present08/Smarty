@@ -11,17 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardDTO {
+public class ReplyDTO {
+    private int reply_id;
     private int board_id;
-    private String title;
+    private String user_id;
     private String content;
     private LocalDateTime send_date;
-    private String content_type;
-    private int view_count;
-    private int good_btn;
-    private int bad_btn;
-    private String user_id;
-    private LocalDateTime update_date;
-    private int is_deleted;
-    private LocalDateTime deleted_date;
+    private Integer parent_id;  // 대댓글을 위한 필드
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { getFCMToken } from '../../firebase';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp } from '../../api/userApi';
+//import { useFCM } from '../../context/FCMContext';
 
 
 const SignUp = () => {
@@ -14,18 +16,28 @@ const SignUp = () => {
     const [birthday, setBirthday] = useState('');
     const [error, setError] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState(''); // QR 코드 URL 상태
-    const [selectEmail, setSelectEmail] = useState('')
-    const userData = { user_id: userId, user_name: userName, email, password, phone, address, birthday, };
+    const [selectEmail, setSelectEmail] = useState('');
+    const [fcmToken, setFCMToken] = useState('');
+    const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcmToken: fcmToken };
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setEmail(email + "@" + selectEmail)
         console.log(email)
-    }, [selectEmail])
+    }, [selectEmail]);
+
+    useEffect(() => {
+        const func = async () => {
+            var tk = await getFCMToken();
+            setFCMToken(tk);
+        };
+        func();
+    }, [])
 
     const handleSignUp = (e) => {
         e.preventDefault();
+        console.log('userdata', userData);
         if (window.confirm("회원가입 하시겠습니까?")) {
             signUp(userData).then(e => {
                 console.log('회원가입 성공:', e);

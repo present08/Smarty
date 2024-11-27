@@ -136,4 +136,15 @@
         WHERE rental_id = #{rental_id}
     </update>
 
+      <select id="getAllRentals" resultType="com.green.smarty.dto.RentalDTO">
+        SELECT
+        rental_id,
+        user_id,
+        product_id,
+        rental_date,
+        return_date
+        FROM
+        rental
+    </select>
+
 </mapper>

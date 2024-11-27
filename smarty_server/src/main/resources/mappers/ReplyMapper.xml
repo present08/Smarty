@@ -7,12 +7,14 @@
         board_id,
         content,
         send_date,
-        parent_id
+        parent_id,
+        user_id
         ) VALUES (
         #{board_id},
         #{content},
         NOW(),
-        #{parent_id}
+        #{parent_id},
+        #{user_id}
         )
     </insert>
 
@@ -30,4 +32,8 @@
         COALESCE(parent_id, reply_id),
         send_date ASC
     </select>
+
+    <delete id="deleteById">
+        DELETE FROM board WHERE board_id = #{board_id}
+    </delete>
 </mapper>

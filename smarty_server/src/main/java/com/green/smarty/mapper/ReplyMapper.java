@@ -10,4 +10,5 @@ public interface ReplyMapper {
     // ReplyDTO에서 int로 반환 타입 변경
     int insertReply(ReplyDTO replyDTO);
     List<ReplyDTO> getCommentsByBoardId(int board_id);
+    void deleteById(int board_id);
 }

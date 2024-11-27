@@ -22,15 +22,8 @@ public class BoardController {
     private BoardService boardService;
 
     @PostMapping("/write")
-    public ResponseEntity<BoardDTO> insertBoard(@RequestBody BoardDTO boardDTO, HttpServletRequest request) {
-        try {
-            log.info("받은 데이터: {}", boardDTO);  // 로깅 추가
-            // ... 나머지 코드
-        } catch (Exception e) {
-            log.error("게시글 작성 중 오류 발생", e);  // 상세 에러 로깅
-            return ResponseEntity.internalServerError().build();
-        }
-        return null;
+    public int insertBoard(@RequestBody BoardDTO boardDTO, HttpServletRequest request) {
+        return boardService.insertBoard(boardDTO);
     }
 
     @GetMapping("/list")
@@ -82,17 +75,31 @@ public class BoardController {
     @PutMapping("/modify/{board_id}")
     public ResponseEntity<String> updateBoard(
             @PathVariable("board_id") int boardId,
-            @RequestBody BoardDTO request) {
+            @RequestBody BoardDTO boardDTO) {
         try {
-            int updatedRows = boardService.updateBoardById(request.getBoard_id(), request.getTitle(), request.getContent(), request.getContent_type());
+            log.info("수정 요청 데이터 - board_id: {}, title: {}, content: {}, contentType: {}",
+                    boardId, boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getContent_type());
+
+            // 수정 요청 처리
+            boardDTO.setBoard_id(boardId); // DTO에 board_id 명시적으로 설정
+            int updatedRows = boardService.updateBoardById(boardDTO);
+
+            // 결과 처리
             if (updatedRows > 0) {
-                return ResponseEntity.ok("게시글이 성공적으로 업데이트되었습니다.");
+                log.info("게시글 수정 성공 - board_id: {}", boardId);
+                return ResponseEntity.ok("게시글이 성공적으로 수정되었습니다.");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("업데이트에 실패했습니다.");
+                log.warn("게시글 수정 실패 - board_id: {}", boardId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("수정할 게시글을 찾을 수 없습니다.");
             }
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 요청 데이터: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (NoSuchElementException e) {
+            log.error("게시글 수정 실패: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            log.error("서버 오류 발생: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
         }
     }
@@ -149,6 +156,8 @@ public class BoardController {
         boardService.deletedDate(board_id);
         return ResponseEntity.ok().build();
     }
+
+
 
 
 

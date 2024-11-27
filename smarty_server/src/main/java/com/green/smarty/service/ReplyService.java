@@ -2,7 +2,9 @@ package com.green.smarty.service;
 
 import com.green.smarty.dto.ReplyDTO;
 import com.green.smarty.mapper.ReplyMapper;
+import com.green.smarty.mapper.UserMapper;
 import jakarta.transaction.Transactional;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,12 @@ public class ReplyService {
     @Autowired
     private ReplyMapper replyMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public ReplyDTO insertReply(ReplyDTO replyDTO) {
         // insert 후 영향받은 행의 수를 반환
+
         int result = replyMapper.insertReply(replyDTO);
         if (result > 0) {
             // 성공적으로 삽입된 경우 replyDTO 반환

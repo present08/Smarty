@@ -23,6 +23,5 @@ public class BoardDTO {
     private String user_id;
     private LocalDateTime update_date;
     private int is_deleted;
-    private String ip_address;
     private LocalDateTime deleted_date;
 }

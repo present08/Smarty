@@ -5,6 +5,7 @@ const Loading = <div>Loading...</div>;
 const Notice = lazy(() => import("../component/announcement/Announcement"));
 const NoticeBoard = lazy(() => import("../component/announcement/NoticeBoard"));
 const NoticeModifyPage = lazy(() => import("../component/announcement/NoticeModifyPage"));
+const Community = lazy(() => import("../component/announcement/Community"));
 
 const newNoticeRouter = () => {
     return [
@@ -23,6 +24,10 @@ const newNoticeRouter = () => {
         {
             path: "board/modify/:board_id",
             element: <Suspense fallback={Loading}><NoticeModifyPage /></Suspense>
+        },
+        {
+            path: "notice/allList",
+            element: <Suspense fallback={Loading}><Community /></Suspense>
         }
     ];
 }

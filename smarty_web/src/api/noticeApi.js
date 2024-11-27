@@ -5,53 +5,28 @@ const BASE_URL = "http://localhost:8080";
 export const noticeApi = {
     // 게시글 작성
     writeNotice: async (data) => {
-        try {
-            // 요청 전 데이터 로깅
-            console.log('API 요청 데이터:', data);
-            
-            const response = await axios.post(`${BASE_URL}/notice/board/user/write`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            // 응답 로깅
-            console.log('API 응답:', response);
-            
-            return response;
-        } catch (error) {
-            // 자세한 에러 정보 로깅
-            console.error('API 에러 상세:', {
-                status: error.response?.status,
-                statusText: error.response?.statusText,
-                data: error.response?.data,
-                message: error.message,
-                config: error.config
-            });
-            throw error;
-        }
+        const response = await axios.post(`${BASE_URL}/notice/board/user/write`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
     },
-
     // 게시글 목록 조회
     getNoticeList: async () => {
-        return await axios.get(`${BASE_URL}/notice/board/user/nodeletelist`);
+        const response = await axios.get(`${BASE_URL}/notice/board/user/list`);
+        return response.data;
     },
 
     // 게시글 검색
     searchNotice: async (keyword, type) => {
-        try {
-            const response = await axios.get(`${BASE_URL}/notice/board/user/search`, {
-                params: {
-                    keyword: keyword,
-                    type: type
-                }
-            });
-            console.log('검색 응답:', response);  // 디버깅용
-            return response;
-        } catch (error) {
-            console.error('검색 API 오류:', error);
-            throw error;
-        }
+        const response = await axios.get(`${BASE_URL}/notice/board/user/search`, {
+            params: {
+                keyword: keyword,
+                type: type
+            }
+        });
+        return response;
     },
 
     // 조회수 업데이트
@@ -65,14 +40,8 @@ export const noticeApi = {
     },
 
     modifyBoard: async (boardId, boardData) => {
-        try {
-            const response = await axios.put(`${BASE_URL}/notice/board/user/modify/${boardId}`, boardData);
-            console.log('수정 응답:', response);
-            return response;
-        } catch (error) {
-            console.error('수정 API 오류:', error);
-            throw error;
-        }
+        const response = await axios.put(`${BASE_URL}/notice/board/user/modify/${boardId}`, boardData);
+        return response;
     },
 
     // 게시글 삭제
@@ -109,6 +78,86 @@ export const noticeApi = {
         // 답글 작성
         writeReply: async (replyData) => {
             return await axios.post(`${BASE_URL}/notice/board/comments/reply`, replyData);
+        },
+
+        // 댓글 삭제
+        deleteCommnet : async (commentId) => {
+            return await axios.delete(`${BASE_URL}/notice/board/comments/delete/${commentId}`);
+        }
+    },
+
+    // 수정된 updateBoard 함수
+    updateBoard: (board_id, boardData) => {
+        return axios.put(`${BASE_URL}/notice/board/user/modify/${board_id}`, boardData);
+    },
+
+    // 공지사항(announcement) 관련 API 추가
+    announcement: {
+        // 공지사항 목록 조회
+        getNotices: async () => {
+            const response = await axios.get(`${BASE_URL}/notice/announce/user/list`);
+            return response.data;
+        },
+
+        // 조회수 증가
+        increaseViewCount: async (id) => {
+            const response = await axios.post(`${BASE_URL}/notice/announce/user/view/${id}`);
+            return response.data;
+        },
+
+        // 공지사항 작성
+        createNotice: async (noticeData) => {
+            const response = await axios.post(`${BASE_URL}/notice/announce/user/write`, noticeData);
+            return response.data;
+        },
+
+        // 공지사항 검색
+        searchNotices: async (type, keyword) => {
+            const response = await axios.get(`${BASE_URL}/notice/announce/user/search`, {
+                params: { type, keyword }
+            });
+            return response.data;
+        },
+    },
+
+    // 게시글 작성
+    createNotice: async (noticeData) => {
+        const response = await axios.post(
+            `${BASE_URL}/notice/board/user/write`,
+            noticeData,
+            {
+                withCredentials: true,
+                headers: { 'Content-Type': 'application/json' }
+            }
+        );
+        return response.data;
+    },
+
+    // 조회수 증가
+    incrementViewCount: async (boardId) => {
+        await axios.post(`${BASE_URL}/notice/board/user/view/${boardId}`);
+    },
+
+    // 게시글 검색
+    searchNotices: async (keyword, type) => {
+        const response = await axios.get(`${BASE_URL}/notice/board/user/search`, {
+            params: { keyword, type }
+        });
+        return response.data;
+    },
+
+    // 세션 체크
+    checkSession: async () => {
+        const response = await axios.get(`${BASE_URL}/api/check-session`, {
+            withCredentials: true
+        });
+        return response.data;
+    },
+
+    community: {
+        getCommunity : async () => {
+            const response = await axios.get(`${BASE_URL}/notice/allList`);
+            return response.data;
         }
     }
 };

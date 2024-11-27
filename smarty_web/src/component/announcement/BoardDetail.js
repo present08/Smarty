@@ -118,6 +118,9 @@ function BoardDetail() {
             <button onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
               수정
             </button>
+            <button onClick={() => navigate('/notice/board')}>
+              목록
+            </button>
           </div>
         </>
       )}

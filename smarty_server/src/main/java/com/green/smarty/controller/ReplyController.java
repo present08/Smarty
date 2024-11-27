@@ -2,6 +2,7 @@ package com.green.smarty.controller;
 
 import com.green.smarty.dto.ReplyDTO;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.mapper.ReplyMapper;
 import com.green.smarty.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +24,9 @@ import java.util.Map;
 public class ReplyController {
     @Autowired
     private ReplyService replyService;
+
+    @Autowired
+    private ReplyMapper replyMapper;
 
     // 댓글 작성
     @PostMapping
@@ -46,5 +50,10 @@ public class ReplyController {
             log.error("댓글 목록 조회 실패:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @DeleteMapping("/delete/{board_id}")
+    public void replyMapper(@PathVariable int board_id){
+        replyMapper.deleteById(board_id);
     }
 }

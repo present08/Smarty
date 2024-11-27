@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { noticeApi } from '../../api/noticeApi';
+import "../../css/NoticeModify.css";
+
 
 function NoticeModifyPage() {
   const { board_id } = useParams();
   const navigate = useNavigate();
   const [board, setBoard] = useState({
     title: "",
-    content: ""
+    content: "",
+    content_type: ""
   });
 
   useEffect(() => {
@@ -16,7 +19,8 @@ function NoticeModifyPage() {
         const response = await noticeApi.getBoardDetail(board_id);
         setBoard({
           title: response.data.title,
-          content: response.data.content
+          content: response.data.content,
+          content_type: response.data.content_type
         });
       } catch (error) {
         console.error("Error:", error);
@@ -58,6 +62,19 @@ function NoticeModifyPage() {
             value={board.title}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label>게시글 유형</label>
+          <select
+            name="content_type"
+            value={board.content_type}
+            onChange={handleChange}
+          >
+            <option value="">선택하세요</option>
+            <option value="NOTICE">가입인사</option>
+            <option value="EVENT">수다</option>
+            <option value="UPDATE">질문</option>
+          </select>
         </div>
         <div>
           <label>내용</label>

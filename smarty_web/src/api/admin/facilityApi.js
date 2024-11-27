@@ -34,13 +34,23 @@ export const getOneFacility = async(facility_id) => {
     }
 }
 
-// export const putOneFacility = async(facility_id, facility) => {
-//     const header = {headers: {"Content-Type": "multipart/form-data"}}
-//     const res = await axios.put(`${prefix}/${facility_id}`, facility, header)
-//     return res.data
-// }
+export const putOneFacility = async(facility_id, facility) => {
+    try {
+        const header = {headers: {"Content-Type": "multipart/form-data"}}
+        const res = await axios.put(`${prefix}/${facility_id}`, facility, header)
+        console.log("putOneFacility : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}
 
-// export const deleteOneFacility = async(facility_id) => {
-//     const res = await axios.delete(`${prefix}/${facility_id}`)
-//     return res.data
-// }
+export const deleteOneFacility = async(facility_id) => {
+    try {
+        const res = await axios.delete(`${prefix}/${facility_id}`)
+        console.log("deleteOneFacility : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ",  error)
+    }
+}

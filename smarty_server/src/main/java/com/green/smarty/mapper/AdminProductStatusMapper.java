@@ -14,14 +14,20 @@ public interface AdminProductStatusMapper {
 
     // 상품 상태 등록 메서드
     void insertProductStatus(ProductStatusVO status);
-
     // 특정 ID에 대한 최대 suffix 값 조회 메서드
     int findMaxSuffix(@Param("baseId") String baseId);
-
     // 중복된 status_id 존재 여부 확인 메서드 - 파라미터 이름 일치
     boolean existsByStatusId(@Param("status_id") String status_id);
     // 대여상품 상태 수정
     void updateProductStatus(@Param("status_id") String statusId, @Param("product_status") String productStatus);
     // 대여상품 수량 수정
     void updateProductStock(@Param("product_id") String productId, @Param("stock") int newStock);
+    // updated_at 업데이트
+    void updateProductStatusUpdatedAt(@Param("product_id") String productId);
+    // 상태 ID로 상품 정보 조회
+    Map<String, Object> getProductInfoByStatusId(@Param("status_id") String statusId);
+    // 상태별 수량 조회
+    List<Map<String, Object>> findStatusCountsByProductId(@Param("productId") String productId);
+
+
 }

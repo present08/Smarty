@@ -35,10 +35,18 @@
         WHERE status_id = #{status_id}
     </update>
 
+    <!-- stock 업데이트 -->
     <update id="updateProductStock" parameterType="map">
         UPDATE product
         SET stock = #{stock}
-        WHERE product_id = #{product_id}
+        WHERE product_id = #{product_id};
+    </update>
+
+    <!-- updated_at 업데이트 -->
+    <update id="updateProductStatusUpdatedAt" parameterType="map">
+        UPDATE product_status
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE product_id = #{product_id};
     </update>
 
     <select id="findMaxSuffix" parameterType="string" resultType="int">
@@ -50,6 +58,27 @@
     <select id="existsByStatusId" parameterType="string" resultType="boolean">
         SELECT COUNT(*) > 0 FROM product_status WHERE status_id = #{status_id}
     </select>
+
+    <select id="getProductInfoByStatusId" parameterType="string" resultType="map">
+        SELECT ps.status_id, ps.product_status, p.product_id, p.stock, p.management_type
+        FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
+        WHERE ps.status_id = #{status_id};
+    </select>
+
+    <select id="findStatusCountsByProductId" parameterType="string" resultType="map">
+        SELECT
+        ps.product_status,
+        CASE
+        WHEN ps.product_status = '대여 가능' THEN p.stock
+        ELSE 0
+        END AS count
+        FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
+        WHERE ps.product_id = #{productId}
+        GROUP BY ps.product_status, p.stock;
+    </select>
+
 
 
 </mapper>

@@ -30,6 +30,7 @@ export const createRental = async (rentalData) => {
 // 렌탈 반납
 export const returnRental = async (rental_id) => {
     const response = await axios.put(`${host}/rentals/${rental_id}/return`);
+    
     return response.data;
 }
 

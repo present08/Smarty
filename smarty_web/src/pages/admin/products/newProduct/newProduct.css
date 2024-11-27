@@ -44,6 +44,18 @@
   gap: 10px;             /* 항목 간격 */
 }
 
+.addSizeOpitionText {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.addSizeFromText {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
 .addProductItem .sizeOptions label {
   display: flex;
   align-items: center;
@@ -55,22 +67,22 @@
 }
 
 
-  .addProductButton,
-  .submitProductButton,
-  .resetProductButton {
-    margin-top: 10px;
-    padding: 7px 10px;
-    border: none;
-    border-radius: 10px;
-    background-color: darkblue;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-  }
+.addProductButton,
+.submitProductButton,
+.resetProductButton {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: darkblue;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-  .addProductButton {
-    background-color: #58A3BC;
-  }
-  .resetProductButton {
-    background-color: rgb(167, 16, 16);
-  }
+.addProductButton {
+  background-color: #58A3BC;
+}
+.resetProductButton {
+  background-color: rgb(167, 16, 16);
+}

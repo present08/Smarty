@@ -51,6 +51,11 @@ try {
             alert('로그인이 필요하거나 필요한 정보가 누락되었습니다.');
             return;
         }
+        const count = quantity || 1 ;
+        if (!count || count <= 0) {
+            alert('대여 수량은 1개 이상이어야 합니다.');
+            return;
+        }
     
         setLoading(true);
         try {
@@ -68,7 +73,7 @@ try {
 
             const today = new Date();
             const returnDate = new Date(today);
-            returnDate.setDate(today.getDate() + 3);
+            returnDate.setDate(today.getDate() + 1);
     
             const rentalData = {
                 user_id: user_id,
@@ -76,7 +81,7 @@ try {
                 facility_id: selectProduct.facility_id,
                 rental_date: formatDate(today),         // 형식 변경된 날짜
                 return_date: formatDate(returnDate),    // 형식 변경된 날짜
-                quantity: quantity || 1,
+                count,    
                 price: selectProduct.price || price
             };
     
@@ -100,7 +105,6 @@ try {
     useEffect(() => {
         console.log('현재 데이터:', {
             selectProduct,
-            quantity,
             price,
             user_id
         });

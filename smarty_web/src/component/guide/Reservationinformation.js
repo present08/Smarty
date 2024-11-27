@@ -42,7 +42,7 @@ const Reservationinformation = () => {
                             <h5>입장권 가격</h5>
                             <hr />
                             <p>시설마다 다르니 확인 바람</p>
-                            <button><Link to={"/facilityList"}>일일입장</Link></button>
+                            <button><Link to={"/guide/hours"}>일일입장</Link></button>
                         </div>
                     </div>
                 </div>
@@ -83,10 +83,9 @@ const Reservationinformation = () => {
                             <div>
                                 <h5>예약방법</h5>
                                 <div className='reservation_box'>
-                                    <p>1. 단기입장 매뉴를 선택합니다.</p>
-                                    <p>2. 원하는 시설을 선택합니다</p>
-                                    <p>3. 상세화면애서 내용을 확인 후 [예약하기] 버튼을 클릭합니다.</p>
-                                    <p>4. 접수 가능한 일자 선택 , 맞는 시간대 선택 후 [신청완료] 버튼을 클릭합니다. </p>
+                                    <p>1. 수강신청 매뉴를 선택합니다.</p>
+                                    <p>2. 원하는 클래스를 선택합니다</p>
+                                    <p>3. 모달창에서 내용을 확인하고 [등록하기] 버튼을 클릭합니다.</p>
                                     <p>5. 예약 내역 안내창이 뜨면 [확인] 버튼을 클릭하면 예약이 완료됩니다.</p>
                                     <p>6. 마이페이지에서 예약내역을 확인합니다.</p>
                                 </div>

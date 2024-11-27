@@ -4,6 +4,7 @@ import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
 import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
+import ReservationComplete from './ReservationComplete.js';
 
 
 const ReservationComponent = (props) => {
@@ -12,7 +13,7 @@ const ReservationComponent = (props) => {
     const [timeLine, setTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
-
+    const [complete, setComplete] = useState(false)
     const [price, setPrice] = useState(facilityData.basic_fee)
     const initData = {
         reservation_id: null,
@@ -26,17 +27,15 @@ const ReservationComponent = (props) => {
     }
     const [postData, setPostData] = useState(initData)
 
-    useEffect(() => {
-    }, []);
     // calendar props date Data
     const Date1 = (date) => {
         setDate(date);
-        console.log(date)
     }
     useEffect(() => {
         setTimeLine(reserved)
     }, [reserved])
 
+    // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
             if (tl.id === item.id) {
@@ -45,23 +44,22 @@ const ReservationComponent = (props) => {
             return { ...item, active: 0 }
         })
         setTimeLine(newTimeLine)
-        // console.log(tl.id)
         setPrice(facilityData.basic_fee)
         extra_price(tl.id)
     };
 
+    // 첫타임/막타임 할인/할증요금 계산
     const extra_price = (id) => {
         const frist_time = timeLine.find(item => item.id === id)?.start || ''
         const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
         if (frist_time == timeLine[0].start) {
-            console.log(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
             setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
         } else if (last_time == timeLine[timeLine.length - 1].end) {
             setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
-            console.log(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
         }
     }
 
+    // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
     useEffect(() => {
         const frist = timeLine.find(item => item.active == 1)?.start || ''
         const last = timeLine.filter(item => item.active).slice(-1)[0]?.end || ''
@@ -69,6 +67,7 @@ const ReservationComponent = (props) => {
         last < 10 ? setLastNum('0' + last) : setLastNum(last)
     }, [handleClick])
 
+    // Server에 전송할 데이터 저장
     useEffect(() => {
         const start_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), fristNum);
         const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
@@ -87,12 +86,21 @@ const ReservationComponent = (props) => {
         // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
     }, [lastNum])
 
+    // server 전송
     const insertReservation = () => {
         updatePlan(postData, facilityData.facility_id)
             .then(e => {
-                alert("예약완료")
-                setTimeLine(e)
+                if (e.iterable == 0) {
+                    setTimeLine(e.btnData)
+                    setComplete(!complete)
+                } else {
+                    alert("연속적으로 예약할수 없습니다.")
+                }
             })
+    }
+
+    const closeModal = (e) => {
+        setComplete(e)
     }
 
     return (
@@ -109,7 +117,7 @@ const ReservationComponent = (props) => {
                 </div>
             </div>
             <div className='reservation_final'>
-                <h2 className='reservation_minititle'><FaRegCheckSquare />  체육시설 예약 신청 현황</h2>
+                <h2 className='reservation_minititle'><FaRegCheckSquare />  체육시설 예약 확인</h2>
                 <table className='reservation_option'>
                     <colgroup>
                         <col style={{ width: '20%' }} />
@@ -137,6 +145,7 @@ const ReservationComponent = (props) => {
                 </table>
                 <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
             </div>
+            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
         </div>
     )
 }

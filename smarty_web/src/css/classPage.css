@@ -1,0 +1,74 @@
+.classModal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(184, 184, 184, 0.4);
+    z-index: 9999;
+    top: 0;
+    left: 0;
+
+}
+
+.classContainer {
+    width: 30%;
+    height: 100vh;
+    background-color: white;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.classContent{
+    margin:200px auto 0;
+    width: 70%;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.classInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+}
+
+.classTitle{
+    margin-bottom: 30px;
+}
+
+.classInfo>* {
+    padding: 5px 0px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.classInfo>.classSubtitle {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    text-align: left;
+}
+
+
+.classInfo>.classText {
+    text-indent: 10px;
+    text-align: right;
+    color: gray;
+}
+
+.classClose{
+    position:absolute;
+    top:30px;
+    right:50px;
+}
+
+.enrollBtn{
+    border: 0;
+    padding:20px 50px;
+    font-size: 1.2em;
+    border-radius: 30px;
+    background-color: #011b2f;
+    color:white;
+    margin-top: 50px;
+    cursor: pointer;
+}

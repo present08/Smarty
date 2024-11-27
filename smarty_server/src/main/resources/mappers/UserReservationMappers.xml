@@ -48,9 +48,17 @@
     </select>
 
       <select id="getReservationUserDate" parameterType="string" resultType="com.green.smarty.dto.ReservationUserDTO">
-        select u.user_id, u.user_name, r.reservation_start, r.reservation_end, c.court_name, f.facility_name from reservation r join user u on r.user_id = #{user_id}  and u.user_id = #{user_id}
+        select u.user_id, u.user_name, r.reservation_start, r.reservation_end, c.court_name, f.facility_name, r.reservation_id from reservation r join user u on r.user_id = #{user_id}  and u.user_id = #{user_id}
         join court c on r.court_id = c.court_id
         join facility f on f.facility_id = c.facility_id;
     </select>
+
+    <delete id="deleteReservationID" parameterType="map" >
+        delete from ${table} where reservation_id = #{reservation_id}
+    </delete>
+
+    <delete id="deleteReservation" parameterType="string" >
+        delete from reservation where reservation_id = #{reservation_id}
+    </delete>
 
 </mapper>

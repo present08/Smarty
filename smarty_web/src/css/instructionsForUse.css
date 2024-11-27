@@ -1,0 +1,160 @@
+.InstructionsForUse_container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.InstructionsForUse_container>h5 {
+    font-size: 20px;
+    width: 80%;
+    font-weight: bold;
+    text-align: left;
+    display: flex;
+    margin-bottom: 10px;
+    color: gray;
+}
+
+.InstructionsForUse_container>h2 {
+    font-size: 45px;
+    width: 80%;
+    text-align: left;
+    display: flex;
+    color: black;
+}
+
+.InstructionsForUse_box {
+    width: 80%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feature-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31%;
+    height: 75%;
+    background-color: white;
+    border-radius: 30px;
+    position: relative;
+}
+
+.feature-card>div {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rgb(220, 245, 255);
+    margin-bottom: 25px;
+}
+
+.feature-title {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.feature-description {
+    font-size: 20px;
+    color: gray;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.feature-button {
+    width: 160px;
+    height: 50px;
+    background-color: #d7d7d7;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.feature-card:hover .feature-icon,
+.feature-card:hover .feature-title,
+.feature-card:hover .feature-description {
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transform: scale(1.05);
+}
+
+.feature-card:hover .feature-button {
+    transition: display 0.3s ease;
+    background-color: #011b2f;
+}
+
+.feature-card:hover .feature-button {
+    color: aliceblue;
+}
+
+
+@media (max-width: 768px) {
+
+    .InstructionsForUse_container>h5 {
+        font-size: 15px;
+        margin-top: 3rem;
+    }
+
+    .InstructionsForUse_container>h2 {
+        font-size: 25px;
+        margin-bottom: 3rem;
+    }
+
+    .InstructionsForUse_box {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .feature-card {
+        width: 70%;
+        margin-bottom: 50px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .feature-title {
+        font-size: 19px;
+    }
+
+    .feature-description {
+        font-size: 15px;
+    }
+
+    .feature-button {
+        width: 100px;
+        height: 40px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+}

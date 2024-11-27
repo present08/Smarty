@@ -1,11 +1,10 @@
 package com.green.smarty.service;
 
-import com.green.smarty.dto.ProductRentalUserDTO;
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.mapper.UserRentalMapper;
 import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.dto.ProductDTO;
 import com.green.smarty.vo.ProductVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.UserVO;
@@ -70,9 +69,4 @@ public class UserRentalService{
         return userRentalMapper.updateRental(dto);
     }
 
-
-    public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
-        List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
-        return result;
-    }
 }

@@ -4,8 +4,11 @@ import BoardDetail from '../component/announcement/BoardDetail';
 const Loading = <div>Loading...</div>;
 const Notice = lazy(() => import("../component/announcement/Announcement"));
 const NoticeBoard = lazy(() => import("../component/announcement/NoticeBoard"));
+const JobList = lazy(() => import("../pages/announcement/JobListPage"));
 const NoticeModifyPage = lazy(() => import("../component/announcement/NoticeModifyPage"));
 const Community = lazy(() => import("../component/announcement/Community"));
+
+
 
 const newNoticeRouter = () => {
     return [
@@ -26,10 +29,13 @@ const newNoticeRouter = () => {
             element: <Suspense fallback={Loading}><BoardDetail /></Suspense>
         },
         {
+            path: "jobList",
+            element: <Suspense fallback={Loading}><JobList /></Suspense>
+        },
+        {
             path: "board/modify/:board_id",
             element: <Suspense fallback={Loading}><NoticeModifyPage /></Suspense>
         },
-
     ];
 }
 

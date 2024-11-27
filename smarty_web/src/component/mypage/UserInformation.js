@@ -11,7 +11,7 @@ const UserInformation = (props) => {
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-            setCurrentUser(props.user);
+        setCurrentUser(props.user);
     }, [props]);
 
     return (
@@ -44,11 +44,11 @@ const UserInformation = (props) => {
                         </div>
                         <div style={{ width: '65%', height: '100%', display: 'flex', marginLeft: '1rem', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
                             <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
-                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><FaRegUserCircle style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />{currentUser.user_id}</p>
-                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><MdOutlineAttachEmail style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />{currentUser.email}</p>
-                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><IoCallOutline style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />{currentUser.phone}</p>
-                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><GoHome style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />{currentUser.address}</p>
-                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><LiaBirthdayCakeSolid style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '20px' }} />{currentUser.birthday}</p>
+                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><FaRegUserCircle style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />ID : {currentUser.user_id}</p>
+                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><MdOutlineAttachEmail style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />EMAIL : {currentUser.email}</p>
+                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><IoCallOutline style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />전화번호 : {currentUser.phone}</p>
+                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><GoHome style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '10px' }} />주소 : {currentUser.address}</p>
+                                <p style={{ color: 'gray', textAlign: 'center', fontSize: '18px', display: 'flex' }}><LiaBirthdayCakeSolid style={{ width: '25px', height: '25px', marginRight: '15px', marginBottom: '20px' }} />생년월일 : {currentUser.birthday}</p>
                             </div>
                         </div>
                     </div>

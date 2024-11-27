@@ -16,24 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductVO {
 
-    private String product_id;
-    private String facility_id;
-    private String product_name;
-    private int price;
-    private String size;
-    private int stock;
-    private boolean product_images;
-
-    @Builder.Default
-    private List<MultipartFile> files = new ArrayList<>();
-    @Builder.Default
-    private List<String> file_name = new ArrayList<>();
-
-    public void update(String product_name, int price, String size, int stock, boolean product_images) {
-        this.product_name = product_name;
-        this.price = price;
-        this.size = size;
-        this.stock = stock;
-        this.product_images = product_images;
-    }
+    private String product_id;          // 상품 ID
+    private String facility_id;         // 시설 ID
+    private String product_name;        // 상품명
+    private String management_type;     // 관리 방식
+    private String size;                // 사이즈 정보 (콤마로 구분된 문자열)
+    private int stock;                  // 수량
+    private int price;                  // 가격
+    private boolean product_images;     // 이미지 유무
 }

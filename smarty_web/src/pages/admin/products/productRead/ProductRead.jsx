@@ -1,85 +1,161 @@
-import { Link } from "react-router-dom"
-import "./productRead.css"
-import Chart from "../../../../component/admin/chart/Chart"
-
-import { Publish } from "@mui/icons-material"
-import { productData } from "../../../../component/admin/dummyData"
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+    getOneProduct,
+    uploadProductFiles,
+    getProductFiles,
+    deleteProductFile,
+} from "../../../../api/admin/productApi";
+import { getRentalsByProduct } from "../../../../api/admin/rentalApi";
+import "./productRead.css";
 
 export default function ProductRead() {
-  return (
-    <div className="product">
-        <div className="productTitleContainer">
-            <h1 className="productTitle">Product</h1>
-            <Link to="/products/add">
-                <button className="productAddButton">Create</button>
-            </Link>
-        </div>
-        <div className="productTop">
-            <div className="productTopLeft">
-                <Chart data={productData} dataKey="Sales" title="Sales Performance" />
-            </div>
-            <div className="productTopRight">
-                <div className="productInfoTop">
-                    <img 
-                        src="https://cdn.pixabay.com/photo/2014/12/10/12/26/iphone-563067_640.jpg" 
-                        alt="" 
-                        className="productInfoImg" 
-                    />
-                    <span className="productName">Apple Airpods</span>
-                </div>
-                <div className="productInfoBottom">
-                    <div className="productInfoItem">
-                        <span className="productInfoKey">id:</span>
-                        <span className="productInfoValue">123</span>
-                    </div>
-                    <div className="productInfoItem">
-                        <span className="productInfoKey">sales:</span>
-                        <span className="productInfoValue">5123</span>
-                    </div>
-                    <div className="productInfoItem">
-                        <span className="productInfoKey">active:</span>
-                        <span className="productInfoValue">yes</span>
-                    </div>
-                    <div className="productInfoItem">
-                        <span className="productInfoKey">in stock:</span>
-                        <span className="productInfoValue">no</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="productBottom">
-            <form className="productForm">
-                <div className="productFormLeft">
-                    <label>Product Name</label>
-                    <input type="text" placeholder="Apple Airpod" />
-                    <label>In Stock</label>
-                    <select name="inStock" id="inStock">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                    <label>Active</label>
-                    <select name="active" id="active">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-                <div className="productFormRight">
-                    <div className="productUpload">
-                        <img 
-                            src="https://cdn.pixabay.com/photo/2014/10/30/00/28/apple-inc-508812_640.jpg" 
-                            alt="" 
-                            className="productUploadImg" 
-                        />
-                        <label for="file">
-                            <Publish />
-                        </label>
-                        <input type="file" id="file" style={{display:"none"}} /> 
-                    </div>
-                    <button className="productButton">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-  )
-}
+    const { product_id } = useParams();
+    const [productData, setProductData] = useState(null);
+    const [rentals, setRentals] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
+    // Fetch product details, rentals, and files
+    useEffect(() => {
+        console.log("요청된 product_id:", product_id); // 디버깅 로그 추가
+        fetchProductDetails();
+        fetchRentals();
+        fetchFiles();
+    }, [product_id]);
+
+    const fetchProductDetails = async () => {
+        try {
+            const data = await getOneProduct(product_id);
+            setProductData(data);
+        } catch (error) {
+            if (error.response?.status === 404) {
+                console.error("상품 정보가 존재하지 않습니다.");
+                alert("해당 상품 정보를 찾을 수 없습니다.");
+            } else {
+                console.error("상품 조회 실패:", error.response?.data || error.message);
+                alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+            }
+        }
+    };
+
+    const fetchRentals = async () => {
+        try {
+            const data = await getRentalsByProduct(product_id);
+            setRentals(data);
+        } catch (error) {
+            console.error("대여 정보 조회 실패:", error);
+        }
+    };
+
+    const fetchFiles = async () => {
+        try {
+            const data = await getProductFiles(product_id);
+            console.log("첨부파일 데이터:", data); // 디버깅 로그 추가
+            setFiles(data);
+        } catch (error) {
+            console.error("첨부파일 조회 실패:", error.response?.data || error.message);
+        }
+    };
+    
+
+    const handleFileUpload = async () => {
+        try {
+            await uploadProductFiles(product_id, selectedFiles);
+            setSelectedFiles([]);
+            fetchFiles(); // 업로드 후 파일 목록 갱신
+        } catch (error) {
+            console.error("파일 업로드 실패:", error);
+        }
+    };
+
+    const handleFileDelete = async (fileName) => {
+        try {
+            await deleteProductFile(product_id, fileName);
+            fetchFiles(); // 삭제 후 파일 목록 갱신
+        } catch (error) {
+            console.error("파일 삭제 실패:", error);
+        }
+    };
+
+    if (!productData) {
+        return <div>로딩 중...</div>;
+    }
+
+    return (
+        <div className="product">
+            <div className="productTitleContainer">
+                <h1 className="productTitle">상품 상세 정보</h1>
+            </div>
+
+            <div className="productTop">
+                {/* 상단 좌측: 상품 정보 */}
+                <div className="productInfo">
+                    <h2>상품 정보</h2>
+                    <p><strong>상품 ID:</strong> {productData.product_id}</p>
+                    <p><strong>상품 이름:</strong> {productData.product_name}</p>
+                    <p><strong>가격:</strong> ₩{productData.price}</p>
+                    <p><strong>재고량:</strong> {productData.stock}</p>
+                    <p><strong>관리 방식:</strong> {productData.management_type}</p>
+                    {productData.size ? (
+                        <p><strong>사이즈:</strong> {productData.size}</p>
+                    ) : (
+                        <p><strong>사이즈:</strong> 없음</p>
+                    )}
+                </div>
+
+                {/* 상단 우측: 첨부파일 관리 */}
+                <div className="fileManagement">
+                    <h2>이미지 관리</h2>
+                    <ul>
+                        {files.map((file, index) => (
+                            <li key={index}>
+                                <img
+                                    src={file}
+                                    alt={`file-${index}`}
+                                    style={{ width: "100px" }}
+                                />
+                                <button onClick={() => handleFileDelete(file)}>삭제</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <input
+                        type="file"
+                        multiple
+                        onChange={(e) => setSelectedFiles([...e.target.files])}
+                    />
+                    <button onClick={handleFileUpload}>이미지 업로드</button>
+                </div>
+            </div>
+
+            {/* 하단: 대여 정보 */}
+            <div className="rentalInfo">
+                <h2>대여 정보</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>사용자 ID</th>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>전화번호</th>
+                            <th>대여 수량</th>
+                            <th>대여 상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rentals.map((rental, index) => (
+                            <tr key={index}>
+                                <td>{rental.user_id}</td>
+                                <td>{rental.user_name}</td>
+                                <td>{rental.email}</td>
+                                <td>{rental.phone}</td>
+                                <td>{rental.count}</td>
+                                <td>{rental.rental_status ? "대여 중" : "반납 완료"}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}

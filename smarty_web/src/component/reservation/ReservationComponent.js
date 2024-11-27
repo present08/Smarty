@@ -6,7 +6,6 @@ import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
 import ReservationComplete from './ReservationComplete.js';
 
-
 const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')

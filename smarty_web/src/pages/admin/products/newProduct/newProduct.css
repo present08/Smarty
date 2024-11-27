@@ -37,6 +37,24 @@
     padding: 10px;
   }
   
+/* 사이즈 선택란 스타일 */
+.addProductItem .sizeOptions {
+  display: grid;         /* Grid 컨테이너로 변경 */
+  grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개씩 배치 */
+  gap: 10px;             /* 항목 간격 */
+}
+
+.addProductItem .sizeOptions label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;       /* 텍스트 크기 조정 */
+}
+
+.addProductItem .sizeOptions label input {
+  margin-right: 5px;     /* 체크박스와 텍스트 사이 간격 */
+}
+
+
   .addProductButton,
   .submitProductButton,
   .resetProductButton {

@@ -110,12 +110,41 @@ export const getProductFiles = async (productId) => {
 // 첨부파일 삭제
 export const deleteProductFile = async (productId, fileName) => {
   try {
-      const encodedFileName = encodeURIComponent(fileName); // URL 인코딩
-      const response = await axios.delete(`${prefix}/files/${productId}/${encodedFileName}`);
-      console.log("첨부파일 삭제 성공:", response.data);
+      const response = await axios.delete(
+          `${prefix}/files/${productId}/${fileName}`
+      );
+      console.log("파일 삭제 성공:", response.data);
+  } catch (error) {
+      console.error("파일 삭제 실패:", error.response?.data || error.message);
+  }
+};
+
+export const updateProductStatusWithStock = (statusId, newStatus) => {
+  return axios.put(`${statusprefix}/update-status-with-stock`, null, {
+      params: {
+          statusId,
+          newStatus,
+      },
+  });
+};
+
+// 특정 상품의 상태별 수량 조회
+export const fetchStatusCountsByProduct = async (productId) => {
+  try {
+      const response = await axios.get(`${statusprefix}/status-counts/${productId}`);
       return response.data;
   } catch (error) {
-      console.error("첨부파일 삭제 실패:", error.response?.data || error.message);
+      console.error("상태별 수량 조회 실패:", error.response?.data || error.message);
       throw error;
   }
+};
+
+export const updateProductStatusWithQuantity = (statusId, newStatus, quantity) => {
+  return axios.put(`${statusprefix}/update-status-with-quantity`, null, {
+    params: {
+      statusId,
+      newStatus,
+      quantity,
+    },
+  });
 };

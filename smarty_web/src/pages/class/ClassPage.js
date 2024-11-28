@@ -6,6 +6,7 @@ import BackToTopButton from '../../component/BackToTopButton';
 import { useLocation } from 'react-router-dom';
 import { classEnroll } from '../../api/classAPI';
 import '../../css/classPage.css'
+import { IoMdClose } from "react-icons/io";
 
 
 
@@ -29,7 +30,8 @@ const ClassPage = (props) => {
     return (
         <div className='classModal'>
             <div className="classContainer">
-                <div onClick={closeModal} className='classClose'>close</div>
+                <div onClick={closeModal} className='classClose'><IoMdClose style={{ width: '30px', height: '30px' }} />
+                </div>
                 <div className='classContent'>
                     <h1 className='classTitle'>선택하신 정보를 확인해주세요.</h1>
                     <div className='classInfo'>

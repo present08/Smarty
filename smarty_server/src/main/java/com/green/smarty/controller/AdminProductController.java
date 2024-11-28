@@ -7,6 +7,7 @@ import com.green.smarty.vo.ProductVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,12 +98,17 @@ public class AdminProductController {
         }
     }
 
-//    // 상품 이미지 반환
-//    @GetMapping("/images/{file_name}")
-//    public ResponseEntity<Resource> showProductImage(@PathVariable(name = "file_name") String file_name) {
-//        log.info("상품 이미지 요청 - file_name: {}", file_name);
-//        return adminProductService.showProductImage(file_name); // Resource 타입 반환
-//    }
+    // 상품 이미지 반환
+    @GetMapping("/images/{file_name}")
+    public ResponseEntity<Resource> showProductImage(@PathVariable(name = "file_name") String file_name) {
+        log.info("상품 이미지 요청 - file_name: {}", file_name);
+        try {
+            return adminProductService.showProductImage(file_name);
+        } catch (Exception e) {
+            log.error("상품 이미지 조회 실패 - file_name: {}, 이유: {}", file_name, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     // 첨부파일 조회
     @GetMapping("/files/{product_id}")

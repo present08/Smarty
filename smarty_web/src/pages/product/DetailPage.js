@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { deleteProduct, getProductDetail } from '../../api/productAPI';
+import { deleteProduct, getProductDetail } from '../../api/productApi';
 import ProductDetail from '../../component/product/ProductDetail';
 import ActionButtons from '../../component/product/ActionButtons';
 import MainNav from '../../component/MainNav';

@@ -25,6 +25,7 @@ public class UserVO {
     private boolean user_status;
     private byte[] qrCode;
     private String level;
+    private String fcmToken;
 
     // 사용자 ID에 대한 getter
     public String getUserId() {
@@ -50,4 +51,5 @@ public class UserVO {
     public boolean isUserStatus() {
         return user_status; // user_status에 대한 getter
     }
+
 }

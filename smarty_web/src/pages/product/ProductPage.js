@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFailityData, getProduct } from '../../api/productAPI';
+import { getFailityData, getProduct } from '../../api/productApi';
 import { getFaility } from '../../api/facilityApi';
 import Footer from '../../component/Footer';
 import MainNav from '../../component/MainNav';
@@ -9,6 +9,7 @@ import Pagenation from '../../component/product/Pagenation';
 import '../../css/productPage.css'
 
 const ProductPage = () => {
+  
   const [facility, setFacility] = useState([]);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);

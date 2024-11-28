@@ -1,6 +1,6 @@
 package com.green.smarty.service;
 
-import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserProductMapper;

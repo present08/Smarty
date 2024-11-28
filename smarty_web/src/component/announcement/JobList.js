@@ -97,7 +97,7 @@ const JobList = () => {
             {showNotification && (
                 <div className='showNotificBut' >
                     지원이 완료되었습니다!
-                    <button ><AiOutlineClose style={{ width: '50px', height: '50px' }} /></button>
+                    <AiOutlineClose style={{ width: '30px', height: '30px' }} />
                 </div>
             )}
             <div className='jobList_box'>

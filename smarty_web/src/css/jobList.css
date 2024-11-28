@@ -5,13 +5,18 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-top: 4rem;
-    margin-bottom: 5rem;
+    background-color: #f9f9f9;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    position: relative;
 }
 
 .showNotificBut {
+    position: absolute;
+    top: 5%;
+    right: 10%;
     width: 200px;
-    height: 50px;
+    height: 30px;
     border-radius: 10px;
     background-color: beige;
     display: flex;
@@ -33,10 +38,12 @@
 .jobList_box>div:first-child {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 70%;
     height: 20vh;
     align-items: center;
     justify-content: center;
+    /* background-color: rgb(248, 249, 250); */
+    margin-bottom: 3rem;
 }
 
 .jobList_box>div:first-child>.jobList_header {
@@ -141,10 +148,10 @@
 
 .jobCont>div>button {
     width: 15%;
-    height: 30%;
+    height: 25%;
     background-color: blue;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     color: white;
     font-weight: bold;
 }

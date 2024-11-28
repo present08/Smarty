@@ -9,7 +9,7 @@ import guideRouter from "./guideRouter"
 import newNoticeRouter from "./newNoticeRouter";
 
 const Loading = <div><SyncLoader /></div>;
-const Main = lazy(() => import("../component/Main"));
+const Main = lazy(() => import("../pages/main/Main"));
 const FirstInfor = lazy(() => import("../pages/centerIntroduction/FirstInfor"));
 const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const FacilityList = lazy(() => import('../pages/reservation/Facility_list'));
@@ -24,6 +24,7 @@ const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
 const RentalList = lazy(() => import("../component/product/RentalList"));
+
 
 const root = createBrowserRouter([
     {

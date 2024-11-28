@@ -1,5 +1,7 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private QRCodeService qrCodeService;
+
+    @Autowired
+    private FCMService fcmService;
 
     // 회원가입
     public boolean signup(UserVO user) {
@@ -45,6 +51,7 @@ public class UserService {
                 return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             // 오류 발생 시 false 반환
             return false;
         }
@@ -67,6 +74,10 @@ public class UserService {
             System.out.println("로그인 실패");
             return null;
         }
+    }
+
+    public void updateLoginDate(String userId) {
+        userMapper.updateLoginDate(userId); // 로그인 날짜 업데이트 호출
     }
 
     // 아이디 찾기
@@ -96,13 +107,10 @@ public class UserService {
 
     // 비밀번호 변경
     public boolean updatePassword(String user_id, String newPassword ) {
-
         // 사용자가 입력한 아이디로 사용자 조회
         UserVO user = userMapper.getById(user_id);
-
         // 비밀번호를 UserVO 객체에 설정
         user.setPassword(newPassword); // 비밀번호 필드 업데이트
-
         // 비밀번호를 데이터베이스에 업데이트
         int updatedRows = userMapper.updatePassword(user);
         System.out.println(updatedRows);
@@ -146,5 +154,18 @@ public class UserService {
         }else {
             userVO.setLevel("일반");
         }
+    }
+
+    // 등록한 클래스 정보 가져오기
+    public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {
+        List<UserClassApplicationDTO> result = userMapper.getClassUserApplication(user_id);
+        return result;
+    }
+
+    // 대여 리스트 가져오기
+    public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(String user_id) {
+        System.out.println(user_id);
+        List<ProductRentalMyPageUserDTO> result = userMapper.getUserMyPageRentalListData(user_id);
+        return result;
     }
 }

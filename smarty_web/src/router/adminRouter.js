@@ -15,6 +15,7 @@ const ClassModify = lazy(() => import("../pages/admin/classes/classModify/ClassM
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
 const adminRouter = () => {
+
     return [
         {
             path: "",

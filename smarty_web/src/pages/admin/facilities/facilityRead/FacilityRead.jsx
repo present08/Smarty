@@ -19,29 +19,29 @@ const initFacility = {
     info: '',
     caution: '',
     facility_status: false,
-    file_name : []
+    file_name: []
 }
 
 export default function FacilityRead() {
     const navigate = useNavigate()
-    const {facility_id} = useParams()
+    const { facility_id } = useParams()
     const [currentFacility, setCurrentFacility] = useState(initFacility)
     const [currentCourt, setCurrentCourt] = useState([])
     const [showHotTime, setShowHotTime] = useState()
     const [courtModal, setCourtModal] = useState(false)
     const [newCourt, setNewCourt] = useState([])
 
-  useEffect(() => {
-    getOneFacility(facility_id).then(res => {
-      setCurrentFacility(res)
-      getListCourt(facility_id)
-    }).catch((error) => console.error("ERROR!", error))
-  }, [facility_id, newCourt])
+    useEffect(() => {
+        getOneFacility(facility_id).then(res => {
+            setCurrentFacility(res)
+            getListCourt(facility_id)
+        }).catch((error) => console.error("ERROR!", error))
+    }, [facility_id, newCourt])
 
     useEffect(() => {
-        if(currentFacility.hot_time === 0) setShowHotTime("기본 요금")
-        else if(currentFacility.hot_time === 1) setShowHotTime("조조 할인")
-        else if(currentFacility.hot_time === 2) setShowHotTime("야간 할증")
+        if (currentFacility.hot_time === 0) setShowHotTime("기본 요금")
+        else if (currentFacility.hot_time === 1) setShowHotTime("조조 할인")
+        else if (currentFacility.hot_time === 2) setShowHotTime("야간 할증")
         else setShowHotTime("모두 적용")
         getListCourt(facility_id).then(res => {
             setCurrentCourt(res)
@@ -72,7 +72,7 @@ export default function FacilityRead() {
             navigate(0)
         })
     }
-  
+
     return (
         <div className="facilityRead">
             <div className="facilityReadTitle">시설 조회</div>
@@ -124,11 +124,12 @@ export default function FacilityRead() {
                             <input
                                 name="default_time"
                                 id="default_time"
-                                type={"text"}
+                                type={"number"}
                                 min={0}
-                                defaultValue={currentFacility.default_time + "시간"}
+                                defaultValue={currentFacility.default_time}
+                                // defaultValue={currentFacility.default_time + " 시간"}
                                 readOnly
-                            />                       
+                            />
                         </div>
                         <div className="textItem">
                             <label htmlFor="info">이용안내</label>
@@ -154,15 +155,15 @@ export default function FacilityRead() {
                         </div>
                         <div className="leftItem">
                             <label>시설 개방</label>
-                            {currentFacility.facility_status?
-                                <div style={{fontWeight: "300"}}> 가능</div>
-                                :<div style={{fontWeight: "300"}}> 불가</div>
+                            {currentFacility.facility_status ?
+                                <div style={{ fontWeight: "300" }}> 가능</div>
+                                : <div style={{ fontWeight: "300" }}> 불가</div>
                             }
                         </div>
-                        {currentFacility.court?
-                        <div className="leftItem">
-                            <span className="facilityReadText">  * 코트가 존재하는 경우 시설 개방은 코트 개방 여부에 따라 자동으로 설정됩니다.</span>
-                        </div> : <></> }
+                        {currentFacility.court ?
+                            <div className="leftItem">
+                                <span className="facilityReadText">  * 코트가 존재하는 경우 시설 개방은 코트 개방 여부에 따라 자동으로 설정됩니다.</span>
+                            </div> : <></>}
                     </div>
                 </div>
                 <div className="facilityReadFormRight">
@@ -173,16 +174,18 @@ export default function FacilityRead() {
                             <input
                                 name="basic_fee"
                                 id="basic_fee"
-                                type={"text"}
-                                defaultValue={currentFacility.basic_fee.toLocaleString('ko-KR') + "원"}
+                                type={"number"}
+                                defaultValue={currentFacility.basic_fee}
+                                // defaultValue={currentFacility.basic_fee.toLocaleString('ko-KR') + "원"}
                                 readOnly
                             />
                             <label htmlFor="rate_adjustment">가격 변동률</label>
                             <input
                                 name="rate_adjustment"
                                 id="rate_adjustment"
-                                type={"text"}
-                                defaultValue={Number(currentFacility.rate_adjustment) * 100 + "%"}
+                                type={"number"}
+                                defaultValue={currentFacility.rate_adjustment}
+                                // defaultValue={Number(currentFacility.rate_adjustment) * 100 + "%"}
                                 readOnly
                             />
                             <label htmlFor="rate_adjustment">적용 방식</label>
@@ -195,52 +198,52 @@ export default function FacilityRead() {
                         </div>
                         <div className="courtItem">
                             <div className="courtItemTitle">코트 정보</div>
-                            {currentFacility.court?
-                            <div className="courtContainer">                        
-                                {currentCourt && currentCourt.map((court, i) => (
-                                <div className="court" key={i}>
-                                    <label htmlFor="court_name">코트명</label>
-                                    <input
-                                        name="court_name"
-                                        id="court_name"
-                                        type={"text"}
-                                        defaultValue={court.court_name}
-                                        readOnly
-                                    />
-                                    <label htmlFor="court_name">코트 개방</label>
-                                    {court.court_status?
-                                        <div style={{fontWeight: "300"}}> 가능</div>
-                                        :<div style={{fontWeight: "300"}}> 불가</div>}
-                                </div>))}
-                            </div> :
-                            <div className="courtContainer">
-                                <label htmlFor="court_name">등록된 코트가 존재하지 않습니다.</label>
-                            </div>
-                        }
-                        <div className="courtButton">
-                            <Add className="addCourtButton" onClick={handleCourtButton} />
-                            {courtModal ?
-                                <Modal
-                                    content={<NewCourt courtPass={courtPass} />}
-                                    callbackFn={closeModal}
-                                />
-                                : <></>
+                            {currentFacility.court ?
+                                <div className="courtContainer">
+                                    {currentCourt && currentCourt.map((court, i) => (
+                                        <div className="court" key={i}>
+                                            <label htmlFor="court_name">코트명</label>
+                                            <input
+                                                name="court_name"
+                                                id="court_name"
+                                                type={"text"}
+                                                defaultValue={court.court_name}
+                                                readOnly
+                                            />
+                                            <label htmlFor="court_name">코트 개방</label>
+                                            {court.court_status ?
+                                                <div style={{ fontWeight: "300" }}> 가능</div>
+                                                : <div style={{ fontWeight: "300" }}> 불가</div>}
+                                        </div>))}
+                                </div> :
+                                <div className="courtContainer">
+                                    <label htmlFor="court_name">등록된 코트가 존재하지 않습니다.</label>
+                                </div>
                             }
-                        </div>
+                            <div className="courtButton">
+                                <Add className="addCourtButton" onClick={handleCourtButton} />
+                                {courtModal ?
+                                    <Modal
+                                        content={<NewCourt courtPass={courtPass} />}
+                                        callbackFn={closeModal}
+                                    />
+                                    : <></>
+                                }
+                            </div>
                         </div>
                         <div className="imageItem">
                             <div className="imageItemTitle">첨부 파일</div>
                             <div className="imageContainer">
-                                {currentFacility? currentFacility.file_name.map((file, i) => (
-                                    <div key={i}>                               
-                                        <img src={`${API_SERVER_HOST}/api/admin/facilities/images/s_${file}`} alt={`${i}`}/>
+                                {currentFacility ? currentFacility.file_name.map((file, i) => (
+                                    <div key={i}>
+                                        <img src={`${API_SERVER_HOST}/api/admin/facilities/images/s_${file}`} alt={`${i}`} />
                                     </div>)) : (<></>)
                                 }
                             </div>
                         </div>
-                        <button className="facilityModifyButton" onClick={() => navigate({pathname: `/admin/facilities/modify/${facility_id}`})}>수정</button>
+                        <button className="facilityModifyButton" onClick={() => navigate({ pathname: `/admin/facilities/modify/${facility_id}` })}>수정</button>
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
     )

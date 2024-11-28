@@ -12,25 +12,14 @@ export default function NewCourt({ courtPass, passedCourt }) {
     const [court, setCourt] = useState([])   // 생성된 시설 객체를 저장할 배열
 
     useEffect(() => {
-      if(!passedCourt) setAddToggle(true)
+      if(passedCourt) setCourt(passedCourt)
+      else setAddToggle(true)
     }, [passedCourt])
-
-    useEffect(() => {
-      console.log("추가 모드!", addToggle)
-    }, [addToggle])
-    
-    
-    useEffect(() => {
-        if(passedCourt){
-          console.log("설정값 있음")
-          setCourt(passedCourt)
-        }
-      }, [passedCourt]) 
 
     const onClickSubmit = () => {
         courtPass(court)
-        // 부모 컴포넌트에서 전달받은 함수에 결과를 실어보냄(실행)
     }
+    
     const onClickAdd = () => {
         putOneCourt(facility_id, court).then(res => {
             console.log(res)
@@ -79,7 +68,6 @@ export default function NewCourt({ courtPass, passedCourt }) {
     
     return (
         <div className="newCourt">
-            {addToggle? "추가모드" : <></>}
             <div className="addCourtFormTop">
                 <span className="addCourtFormTitle">코트 등록</span>
                 <input
@@ -128,8 +116,8 @@ export default function NewCourt({ courtPass, passedCourt }) {
                 ))}
                 <div className="courtItemButton">
                     {addToggle?
-                    <button className="saveCourtButton" onClick={onClickAdd}>등록</button> :
-                    <button className="saveCourtButton" onClick={onClickSubmit}>등록</button>
+                        <button className="saveCourtButton" onClick={onClickAdd}>등록</button> :
+                        <button className="saveCourtButton" onClick={onClickSubmit}>등록</button>
                     }
                     <button className="resetCourtButton" onClick={handleReset}>초기화</button>
                 </div>  

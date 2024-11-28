@@ -7,7 +7,7 @@ import { LuCalendarCheck } from 'react-icons/lu';
 const ReservationComplete = (props) => {
     const { postData, facilityData, user, price, closeModal } = props;
     const navigate = useNavigate()
-
+    console.log("complete ",postData)
     const closed = (e) => {
         if (e == "mypage") {
             navigate('/mypage', { state: { user } })

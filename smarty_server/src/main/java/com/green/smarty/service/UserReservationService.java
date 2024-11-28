@@ -70,7 +70,7 @@ public class UserReservationService {
                 }
             }
         }
-        System.out.println(reservation_list);
+        System.out.println("reservationList " + reservation_list);
         String[] dateList = date.split("-");
 
         List<Map<String, Integer>> timeBtn = new ArrayList<>();
@@ -83,7 +83,7 @@ public class UserReservationService {
             timeMap.put("id", cnt);
             timeMap.put("active", 0);
             if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i)
-                    || now.compareTo(nowStart.minusHours((long)default_time+1)) == 1) {
+                    || now.compareTo(nowStart.minusHours((long) default_time + 1)) == 1) {
                 timeMap.put("disabled", 1);
             } else {
                 timeMap.put("disabled", 0);

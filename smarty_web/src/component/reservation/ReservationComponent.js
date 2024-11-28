@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LuAlarmClock } from 'react-icons/lu';
 import CustomCalender from './CustomCalender.tsx';
 import { FaRegCheckSquare } from 'react-icons/fa';
@@ -11,6 +11,7 @@ const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')
     const [timeLine, setTimeLine] = useState([])
+    const [resTimeLine, setResTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
     const [complete, setComplete] = useState(false)
@@ -35,6 +36,16 @@ const ReservationComponent = (props) => {
         setTimeLine(reserved)
     }, [reserved])
 
+    // 첫타임/막타임 할인/할증요금 계산
+    const extra_price = (id) => {
+        const frist_time = timeLine.find(item => item.id === id)?.start || ''
+        const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
+        if (frist_time == timeLine[0].start) {
+            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
+        } else if (last_time == timeLine[timeLine.length - 1].end) {
+            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
+        }
+    }
     // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
@@ -48,29 +59,15 @@ const ReservationComponent = (props) => {
         extra_price(tl.id)
     };
 
-    // 첫타임/막타임 할인/할증요금 계산
-    const extra_price = (id) => {
-        const frist_time = timeLine.find(item => item.id === id)?.start || ''
-        const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
-        if (frist_time == timeLine[0].start) {
-            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
-        } else if (last_time == timeLine[timeLine.length - 1].end) {
-            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
-        }
-    }
 
-    // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
     useEffect(() => {
+        // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
         const frist = timeLine.find(item => item.active == 1)?.start || ''
         const last = timeLine.filter(item => item.active).slice(-1)[0]?.end || ''
         frist < 10 ? setFristNum('0' + frist) : setFristNum(frist)
         last < 10 ? setLastNum('0' + last) : setLastNum(last)
-    }, [handleClick])
 
-    // Server에 전송할 데이터 저장
-    useEffect(() => {
-        const start_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), fristNum);
-        const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
+        // Server에 전송할 데이터 저장
         setPostData({
             reservation_id: null,
             court_id: facilityData.court_id,
@@ -78,21 +75,18 @@ const ReservationComponent = (props) => {
             court_status: true,
             facility_id: facilityData.facility_id,
             user_id: user.user_id,
-            reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
-            reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
+            reservation_start: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), frist < 10 ? '0' + frist : frist)).format("YYYY-MM-DD HH:mm:ss"),
+            reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
         })
-
-        // console.log(moment(start_date).format("YYYY-MM-DD HH:mm:ss"))
-        // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
-    }, [lastNum])
+    }, [timeLine])
 
     // server 전송
     const insertReservation = () => {
         updatePlan(postData, facilityData.facility_id)
             .then(e => {
                 if (e.iterable == 0) {
-                    setTimeLine(e.btnData)
                     setComplete(!complete)
+                    setResTimeLine(e.btnData)
                 } else {
                     alert("연속적으로 예약할수 없습니다.")
                 }
@@ -101,6 +95,7 @@ const ReservationComponent = (props) => {
 
     const closeModal = (e) => {
         setComplete(e)
+        setTimeLine(resTimeLine)
     }
 
     return (
@@ -128,7 +123,7 @@ const ReservationComponent = (props) => {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col">시설명</th>
+                            <th scope="col">시설명{postData.reservation_start}</th>
                             <th scope="col">예약일자</th>
                             <th scope="col">예약시간</th>
                             <th scope="col">이용요금</th>

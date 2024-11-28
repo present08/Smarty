@@ -3,6 +3,7 @@ package com.green.smarty.service;
 import com.green.smarty.dto.ClassAdminDTO;
 import com.green.smarty.mapper.AdminClassMapper;
 import com.green.smarty.vo.ClassDetailVO;
+import com.green.smarty.vo.ClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,12 +79,17 @@ public class AdminClassService {
     }
 
     // 선택한 시설 관련 강의 전체 조회
-    public List<ClassAdminDTO> getList(String facility_id) {
+    public List<ClassVO> getList(String facility_id) {
         return adminClassMapper.getList(facility_id);
     }
 
+    // 선택 강의 상세 조회
+    public List<ClassDetailVO> getDetailList(String class_id) {
+        return adminClassMapper.getDetailList(class_id);
+    }
+
     // 강의 하나 조회
-    public ClassAdminDTO read(String class_id) {
+    public ClassVO read(String class_id) {
         return adminClassMapper.read(class_id);
     }
 }

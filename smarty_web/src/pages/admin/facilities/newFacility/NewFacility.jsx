@@ -6,7 +6,7 @@ import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
 import NewProduct from '../../products/newProduct/NewProduct';
 import { postAddCourt } from "../../../../api/admin/courtApi"
-import { postAddProduct, postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
+import { postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
 import { useNavigate } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
 
@@ -25,31 +25,27 @@ const initFacility = {
     product: false,
     facility_status: false,
 }
+const initPrice = {
+    basic_fee: 0,
+    rate_adjustment: 0,
+    hot_time: 0
+}
 
 export default function NewFacility() {
     const navigate = useNavigate()
-
-    // FacilityDTO 구성
-    const [facility, setFacility] = useState({ ...initFacility })
-
-    // FacilityDTO boolean 필드값 상태관리
+    const [facility, setFacility] = useState(initFacility)
+    const [price, setPrice] = useState(initPrice)           // facility 가격 항목
     const [courtFlag, setCourtFlag] = useState(false)
-    const [productFlag, setProductFlag] = useState(false)
-
-    // FacilityDTO 첨부파일 저장 변수
-    const facilityImages = useRef()
-
-    // 자식 컴포넌트에서 부모 컴포넌트로 props 전달 방법
-    // 전달받은 값을 저장할 useState, 값 전달 역할을 할 함수를 선언
-    // 자식 컴포넌트로 함수 전달
-    // 자식 컴포넌트에서 함수를 실행하면 부모 컴포넌트의 함수가 실행되면서 인자값을 전달받음
-
-    // facility 가격 항목 구성(basic_fee, rate_adjustment, hot_time)
-    const [price, setPrice] = useState({
-        basic_fee: 0,
-        rate_adjustment: 0,
-        hot_time: 0
-    })
+    const [productFlag, setProductFlag] = useState(false)   // facility boolean값 상태관리
+    const facilityImages = useRef()                         // facility 첨부파일 저장 변수
+    const [court, setCourt] = useState([])
+    const [product, setProduct] = useState([])     
+    const [priceModal, setPriceModal] = useState(false)
+    const [courtModal, setCourtModal] = useState(false)
+    const [productModal, setProductModal] = useState(false) // 모달창 상태관리       
+    const [imageSrc, setImageSrc] = useState([])
+    const [updateFile, setUpdateFile] = useState([])        // 첨부파일 미리보기
+    
     const pricePass = (price) => {
         setPrice(price)
         setPriceModal(false)
@@ -60,36 +56,18 @@ export default function NewFacility() {
       facility.hot_time = price.hot_time
       setFacility({ ...facility })
     }, [price])
-    
 
-    // CourtDTO 구성
-    const [court, setCourt] = useState(Array.from({ length: 0 }, (_, i) => ({
-        facility_id: '',
-        court_name: '',
-        court_status: ''
-    })))
     const courtPass = (court) => {
         setCourt(court)
         setCourtModal(false)
     }
-
-    // ProductDTO 구성
-    const [product, setProduct] = useState(Array.from({ length: 0 }, (_, i) => ({
-        product_id: '',
-        facility_id: '',
-        product_name: '',
-        stock: '',
-        price: '',
-        files: []
-    })))
+   
     const productPass = (productList) => {
         setProduct(productList)
         setProductModal(false)
     }
+    
 
-    // 첨부파일 미리보기
-    const [imageSrc, setImageSrc] = useState([])
-    const [updateFile, setUpdateFile] = useState([])
     
     const onUpload = (e) => {
         // 이미지 등록 버튼 누를때마다 새로운 이미지 배열 생성, 최종 파일만 저장
@@ -109,16 +87,13 @@ export default function NewFacility() {
         setUpdateFile(updateFile.filter((_, index) => index !== id))
     }
 
-    useEffect(() => {
-        console.log(updateFile)
-        console.log(imageSrc)
-    }, [onUpload, handleDeleteImage])
+    // useEffect(() => {
+    //     console.log(updateFile)
+    //     console.log(imageSrc)
+    // }, [onUpload, handleDeleteImage])
     
 
-    // 가격변동률, 코트, 물품등록시 모달창 상태관리
-    const [priceModal, setPriceModal] = useState(false)
-    const [courtModal, setCourtModal] = useState(false)
-    const [productModal, setProductModal] = useState(false)
+
 
     // 시설등록 input value 업데이트 함수
     const handleInput = (e) => {
@@ -164,7 +139,6 @@ export default function NewFacility() {
     
     // 입력된 데이터로 API 호출
     const handleFacilityAdd = () => {
-        // const facilityFiles = facilityImages.current.files
         const facilityForm = new FormData()
 
         for (let i = 0; i < updateFile.length; i++) {

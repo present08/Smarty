@@ -23,6 +23,16 @@ export const getListClass = async(facility_id) => {
     }
 }
 
+export const getListClassDetail = async(class_id) => {
+    try {
+        const res = await axios.get(`${prefix}/detailList/${class_id}`)
+        console.log("getListClassDetail : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR ! : ", error)
+    }
+}
+
 export const getOneClass = async(court_id) => {
     try {        
         const res = await axios.get(`${prefix}/${court_id}`)

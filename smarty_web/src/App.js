@@ -36,7 +36,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App main-content">
+    <div className="App main-content" style={{ overflowX:'hidden' }}>
       <NotificationHandler />
       <RouterProvider router={root}></RouterProvider>
     </div>

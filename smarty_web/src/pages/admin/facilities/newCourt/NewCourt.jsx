@@ -7,6 +7,7 @@ export default function NewCourt({ courtPass, passedCourt }) {
     // 시설 추가시 코트 등록인지 여부 확인 : passedCourt를 이용하지 않고 모달창에서 바로 코트 등록
     const navigate = useNavigate()
     const {facility_id} = useParams()
+    const [showButton, setShowButton] = useState(false)
     const [addToggle, setAddToggle] = useState(false)
     const [courtNum, setCourtNum] = useState(0)     // 생성할 시설 숫자를 저장할 변수
     const [court, setCourt] = useState([])   // 생성된 시설 객체를 저장할 배열
@@ -36,6 +37,7 @@ export default function NewCourt({ courtPass, passedCourt }) {
             court_name: '',
             court_status: true
         })));
+        setShowButton(true)
     }
 
     // step2) input태그에 입력한 값을 결과 배열(result)에 저장
@@ -114,13 +116,14 @@ export default function NewCourt({ courtPass, passedCourt }) {
                         <label htmlFor={`closed_${i}`}> 불가</label>
                     </div>
                 ))}
+                {showButton?
                 <div className="courtItemButton">
                     {addToggle?
                         <button className="saveCourtButton" onClick={onClickAdd}>등록</button> :
                         <button className="saveCourtButton" onClick={onClickSubmit}>등록</button>
                     }
                     <button className="resetCourtButton" onClick={handleReset}>초기화</button>
-                </div>  
+                </div> : <></>} 
             </div> 
 
         </div>

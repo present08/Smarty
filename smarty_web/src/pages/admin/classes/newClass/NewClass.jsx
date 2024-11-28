@@ -3,14 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getOneFacility } from '../../../../api/admin/facilityApi'
 import { useEffect, useState } from "react"
 import { postAddClass } from '../../../../api/admin/classApi'
+import { Add, Remove } from '@mui/icons-material';
 
-export default function NewClass() {
+export default function NewClass(classPass) {
   const navigate = useNavigate()
   const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
   
   const [classList, setClassList] = useState([])  // 강의 정보 객체들의 리스트
   const [weekdayList, setWeekdayList] = useState([]) // 각각의 강의 정보
+
   
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -91,26 +93,23 @@ export default function NewClass() {
     postAddClass(classList).then(res => {
       console.log(res)
       alert("신규 강의가 등록되었습니다.")
-      navigate({ pathname: `/admin/classes/${facility_id}`})
+      classPass.classPass(classList)
     }).catch((error) => console.error("ERROR!", error))  
+  }
+
+  const handleCancel = () => {
+    classPass.classPass(classList)
   }
 
   return (
     <div className="newClass">
       <div className="newClassContainer">
-
-
-        <div className="addClassFormHead">
+       <div className="addClassFormHead">
           <div className="addClassTitle">
             {currentFacility && currentFacility.facility_name} 신규 강의 등록
           </div>
-          <div className="addClassFormButton">
-            <button className='addClassButton' onClick={handleAddClass}>강의 추가</button>
-            {classList.length > 0?
-              <button className='submitClassButton' onClick={handleSubmit}>등록하기</button>
-            : <></>}
-          </div>
-        </div>
+          <Add className='addClassButton' onClick={handleAddClass} />
+      </div>
  
         <div className="addClassFormBody">
           {classList.map((item, i) => (
@@ -155,6 +154,8 @@ export default function NewClass() {
                   min={new Date().toISOString().substring(0, 10)}
                   onChange={(e) => handleInput(i, 'end_date', e.target.value)}
                 />
+              </div>
+              <div className="addClassFormItem3">
                 <div className="addClassFormItemTitle">시작시간</div>
                 <input 
                   type='time'
@@ -169,9 +170,8 @@ export default function NewClass() {
                   onChange={(e) => handleInput(i, 'end_time', e.target.value)}
                 />
               </div>
-
-              <div className="addClassFormItem3">
-                <div className="addClassFormItemTitle">수업일(복수선택 가능)</div>
+              <div className="addClassFormItem4">
+                <div className="addClassFormItemTitle">수업일</div>
                 <input 
                   id={`mon${i}`}
                   name={`weekday${i}`}
@@ -228,12 +228,17 @@ export default function NewClass() {
                   onChange={(e) => handleClickWeekday(i, e)}
                 />
                 <label htmlFor={`sun${i}`}>일요일</label>
-                <button className='cancleClassButton' onClick={() => handleDelete(item, i)}>삭제</button>           
+                <Remove className='cancleClassButton' onClick={() => handleDelete(item, i)} />           
               </div>
             </div>
           ))}
         </div>
-
+        {classList.length > 0?
+          <div className="facilityButtons">
+            <button className='submitClassButton' onClick={handleSubmit}>등록</button>
+            <button className="cancelClassButton" onClick={handleCancel}>취소</button>
+          </div>
+          : <></>}
       </div>
     </div>
   )

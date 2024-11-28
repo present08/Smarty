@@ -1,6 +1,5 @@
 .classContainerTop {
     display: flex;
-    gap: 30px;
     align-items: center;
 }
 
@@ -8,17 +7,12 @@
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
+    margin-right: 1rem;
 }
 
 .classAddButton {
-    width: 80px;
-    height: 25px;
-    border: none;
-    background-color: #003f66;
-    color: aliceblue;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
+    color: #919191;
+    font-size: 30px !important;
     cursor: pointer;
 }
 

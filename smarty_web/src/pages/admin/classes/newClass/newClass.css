@@ -1,24 +1,24 @@
 .newClassContainer {
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 .addClassFormHead {
     height: 10%;
     display: flex;
-    align-items: center;
-    border-bottom: 1px solid #f7f7f7;
 }
 
 .addClassTitle {
-    font-size: 24px;
-    color: #011B2F;
-    font-weight: 500;
-    margin-right: 50px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #105066;
+    margin-right: 1rem;
 }
 
-.addClassButton,
 .submitClassButton {
     width: 80px;
     height: 25px;
@@ -31,50 +31,47 @@
     cursor: pointer;
     margin-right: 10px;
 }
-.addClassButton {
-    background-color: #195E8E;
-}
+.addClassButton,
 .cancleClassButton {
-    width: 50px;
-    height: 25px;
-    border: none;
-    color: #555;
-    border-radius: 5px;
-    margin-left: 130px;
+    color: #919191;
+    font-size: 30px !important;
     cursor: pointer;
+}
+
+.cancleClassButton {
+    margin-left: 65px;
 }
 
 .addClassFormBody {
     height: 90%;
-    width: 770px;
+    width: 620px;
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 .addClassForm {
-    height: 80px;
+    height: 120px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin: 20px 0 0 20px;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(191,189,189,0.7);
+    border-bottom: 1px solid #cecdcd;
+    padding: 0 10px;
 }
 
 .addClassFormItem1,
 .addClassFormItem2,
-.addClassFormItem3 {
+.addClassFormItem3,
+.addClassFormItem4 {
     flex: 1;
     display: flex;
     align-items: center;
 }
 
 .addClassFormItem1>input,
-.addClassFormItem2>input {
+.addClassFormItem2>input,
+.addClassFormItem3>input {
+    width: 120px;
     margin-right: 20px;
     border: none;
     border-bottom: 1px solid #bdbdbd;
@@ -83,9 +80,31 @@
 .addClassFormItem1>div,
 .addClassFormItem2>div,
 .addClassFormItem3>div,
-.addClassFormItem3>label {
+.addClassFormItem4>div,
+.addClassFormItem4>label {
     margin-right: 10px;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
+}
+
+.submitClassButton,
+.cancelClassButton{
+    border: none;
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.submitClassButton {
+    background-color: #195E8E;
+}
+
+.cancelClassButton {
+    background-color: rgb(161, 20, 20);
 }

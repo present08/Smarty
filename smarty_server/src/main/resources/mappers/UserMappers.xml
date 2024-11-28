@@ -14,8 +14,8 @@
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code, fcm_token)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode}, #{fcm_token})
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code, fcmToken)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode}, #{fcmToken})
     </insert>
 
     <!-- 아이디 찾기-->
@@ -78,11 +78,11 @@
     </update>
 
     <!-- 회원 레벨 업데이트 -->
-    <update id="updateUserLevel">
-        UPDATE user
-        SET level = #{level}
-        WHERE user_id = #{userId}
-    </update>
+<!--    <update id="updateUserLevel">-->
+<!--        UPDATE user-->
+<!--        SET level = #{level}-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </update>-->
 
     <!-- 유저 수강신청 불러오기-->
     <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">

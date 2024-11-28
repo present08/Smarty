@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getFCMToken } from '../../firebase';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp } from '../../api/userApi';
 //import { useFCM } from '../../context/FCMContext';
 
 
 const SignUp = () => {
+    
     const [userId, setUserId] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,6 +17,8 @@ const SignUp = () => {
     const [error, setError] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState(''); // QR 코드 URL 상태
     const [selectEmail, setSelectEmail] = useState('');
+
+    //영준이 코드
     const [fcmToken, setFCMToken] = useState('');
     const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcmToken: fcmToken };
 
@@ -27,6 +29,7 @@ const SignUp = () => {
         console.log(email)
     }, [selectEmail]);
 
+    // 영준이 코드
     useEffect(() => {
         const func = async () => {
             var tk = await getFCMToken();

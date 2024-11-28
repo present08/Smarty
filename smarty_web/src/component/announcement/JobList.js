@@ -124,7 +124,7 @@ const JobList = () => {
                             <option value="Adobe XD">Adobe XD</option>
                             <option value="Figma">Figma</option>
                             <option value="HTML">HTML</option>
-                            <option value="Css">Css</option>
+                            <option value="CSS">CSS</option>
                             <option value="jQuery">jQuery</option>
                             <option value="Node.js">Node.js</option>
                             <option value="Express">Express</option>

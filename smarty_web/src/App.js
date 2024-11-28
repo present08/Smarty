@@ -7,36 +7,40 @@ import NotificationHandler from './NotificationHandler';
 
 
 function App() {
+
   useEffect(() => {
 
     const registerServiceWorker = () => { //Service Worker 등록
-      if('serviceWorker' in navigator){
+      if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then((registration) => {
-          console.log("registered", registration);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        })
+          .then((registration) => {
+            console.log("가입완료", registration);
+          })
+          .catch((err) => {
+            console.log("error", err);
+          })
       }
     }
 
     const requestNotificationPermisson = async () => { //알림 권한 요청
-    if(Notification.permission!=="granted"){
-      const permission = await Notification.requestPermission();
-      if(permission !== "granted"){
-        return;
+      if (Notification.permission !== "granted") {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          console.log("허가")
+          return;
+        }
       }
-    }
-  };
+    };
 
-  registerServiceWorker();
-  requestNotificationPermisson();
-  getFCMToken(); //토큰 발급
+    registerServiceWorker();
+    requestNotificationPermisson();
+    getFCMToken(); //토큰 발급
   }, []);
 
+  console.log(Notification.permission)
+
   return (
-    <div className="App main-content">
+    <div className="App main-content" style={{ overflowX:'hidden' }}>
       <NotificationHandler />
       <RouterProvider router={root}></RouterProvider>
     </div>

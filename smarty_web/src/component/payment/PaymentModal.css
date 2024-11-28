@@ -1,0 +1,108 @@
+/* PaymentModal.css */
+
+/* 모달 컨테이너 스타일 */
+.payment-modal {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 800px;
+    max-width: 90%;
+    /* 반응형을 고려하여 최대 너비 제한 */
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    /* 오버레이 위에 표시 */
+    height: 700px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* 모달 오버레이 스타일 */
+.payment-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 배경을 반투명하게 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    /* Flexbox로 중앙 정렬 */
+    align-items: flex-start;
+    /* 세로 중앙 정렬 */
+    justify-content: center;
+    /* 가로 중앙 정렬 */
+    z-index: 1000;
+    /* MainNav 위에 표시 */
+    padding-top: 40%;
+}
+
+/* 버튼 스타일링 */
+.payment-modal button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.payment-modal button:first-child {
+    background-color: #007bff;
+    /* 결제 버튼 색상 */
+    color: white;
+}
+
+.payment-modal button:first-child:hover {
+    background-color: #0056b3;
+    /* 결제 버튼 호버 색상 */
+}
+
+.payment-modal button:first-child:disabled {
+    background-color: #6c757d;
+    color: black;
+}
+
+.payment-modal button:last-child {
+    background-color: #6c757d;
+    /* 취소 버튼 색상 */
+    color: white;
+}
+
+.payment-modal button:last-child:hover {
+    background-color: #5a6268;
+    /* 취소 버튼 호버 색상 */
+}
+
+/* ----------------------------------------------------- */
+
+.contentBox {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.listBox {
+    width: 100%;
+    height: 280px;
+    /* background-color: red; */
+    box-shadow: 1px 1px 10px #aaa inset;
+    overflow-y: auto;
+    padding: 2%;
+    box-sizing: border-box;
+}
+
+.listBox>li {
+    padding: 2%;
+    cursor: pointer;
+}
+
+.listBox>li.active{
+    background-color: aquamarine;
+}

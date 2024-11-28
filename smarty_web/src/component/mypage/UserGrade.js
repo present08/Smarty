@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/userGrade.css';
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineRuby } from 'react-icons/ai';
 
 
 const UserGrade = (props) => {
 
     const membershipBenefits = [
+
         { benefits: '입장권 5% 할인' },
         { benefits: '입장권 7% 할인' },
         { benefits: '입장권 10% 할인' },
@@ -80,16 +81,15 @@ const UserGrade = (props) => {
     }
 
 
-
     return (
         <div className='gradeContainer'>
-            <button onClick={openModal}>Grade</button>
+            <button onClick={openModal}><AiOutlineRuby style={{ width: '30px', height: '30px' }} /></button>
             {modal && (
                 <div className='gradeModalContainer'>
                     <div className='gradeModalBox'>
                         <div className='gradeModalCont'>
                             <div>
-                                <AiOutlineClose style={{ width: '30px', height: '30px' }} onClick={closeModal} />
+                                <AiOutlineClose style={{ width: '40px', height: '40px' }} onClick={closeModal} />
                             </div>
                             <div className='gradeModalUserBox'>
                                 <div className='imggradebox'>

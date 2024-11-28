@@ -1,6 +1,6 @@
 package com.green.smarty.controller;
 
-import com.green.smarty.dto.ProductRentalUserDTO;
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.service.UserRentalService;
 
 import com.green.smarty.dto.RentalDTO;
@@ -42,33 +42,35 @@ public class UserRentalController {
         try {
             String user_id = (String) rentalRequest.get("user_id");
             String product_id = (String) rentalRequest.get("product_id");
-
             String rental_date = (String) rentalRequest.get("rental_date");
             String return_date = (String) rentalRequest.get("return_date");
-
             int count = (int) rentalRequest.get("count");
 
             System.out.println("대여 요청 데이터: user_id=" + user_id + ", product_id=" + product_id + ", count=" + count);
 
+            //데이터 생성
             RentalVO vo = new RentalVO();
             vo.setUser_id(user_id);
             vo.setProduct_id(product_id);
-
             vo.setRental_date(LocalDateTime.parse(rental_date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             vo.setReturn_date(LocalDateTime.parse(return_date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             vo.setRental_status(true);
+            vo.setCount(count);
 
+            //대여 생성 및 ID 반환
             int rentalId = userRentalService.insertRental(vo, count);
+            System.out.println("rental_id 반환 확인: " + rentalId);
 
-            return ResponseEntity.ok()
-                    .body(Map.of(
-                            "message", "대여가 완료되었습니다.",
-                            "rental_id", rentalId
+            //대여 ID 반환
+            return ResponseEntity.ok(Map.of(
+                            "message",
+                            "대여가 완료되었습니다.",
+                            "rental_id", String.valueOf(rentalId)
                     ));
         } catch (Exception e) {
             System.err.println("대여 등록 중 오류: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("대여 등록 중 오류가 발생했습니다.");
+                    .body("대여 등록 중 오류가 발생했습니다." + e.getMessage());
         }
     }
 
@@ -104,14 +106,6 @@ public class UserRentalController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/rentalUser")
-    public List<ProductRentalUserDTO> getUserRentalListData(@RequestParam String user_id) {
-        System.out.println("유저아이디 확인 : "+user_id);
-        List<ProductRentalUserDTO> result = userRentalService.getUserRentalListData(user_id);
-        return result;
-    }
-
 
 
 }

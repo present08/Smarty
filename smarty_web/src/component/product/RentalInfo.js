@@ -35,7 +35,7 @@ const RentalInfo = ({ product, quantity, price }) => {
                 <table>
                     <thead>
                         <tr>
-                            <th>상품명/선택사항</th>
+                            <th>상품명</th>
                             <th>수량</th>
                             <th>대여 및 사용일자</th>
                             <th>금액</th>
@@ -55,7 +55,7 @@ const RentalInfo = ({ product, quantity, price }) => {
                                     </div>
                                     <div className="product-details">
                                         <p>{product.product_name}</p>
-                                        <p>L 사이즈/전품 / {quantity}개</p>
+                                        <p>{product.size}</p>
                                     </div>
                                 </div>
                             </td>

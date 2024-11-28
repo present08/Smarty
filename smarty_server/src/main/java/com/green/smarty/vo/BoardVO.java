@@ -20,5 +20,8 @@ public class BoardVO {
     private int view_count;
     private int good_btn;
     private int bad_btn;
-    private int user_id;
+    private String user_id;
+    private LocalDateTime update_date;
+    private int is_deleted;
+    private LocalDateTime deleted_date;
 }

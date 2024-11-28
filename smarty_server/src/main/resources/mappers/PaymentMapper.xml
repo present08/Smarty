@@ -2,12 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.PaymentMapper">
     <!--    게시글 작성-->
-    <insert id="insertPayment">
+    <insert id="insertPayment" parameterType="com.green.smarty.vo.PaymentVO">
         INSERT INTO payment (
             payment_id,
             reservation_id,
             enrollment_id,
-            rental_id,
             amount,
             payment_date
         )
@@ -15,26 +14,19 @@
             #{payment_id},
             #{reservation_id},
             #{enrollment_id},
-            #{rental_id},
             #{amount},
-            NOW()
+            #{payment_date}
         )
     </insert>
-
-    <update id="updatePaymentStatus">
-        UPDATE
-            payment
-        SET
-            status = #{status}
-        WHERE
-            payment_id = #{payment_id}
-    </update>
 
     <select id="getPaymentById" resultType="com.green.smarty.vo.PaymentVO">
         SELECT * FROM
             payment
         WHERE
             payment_id = #{payment_id}
+    </select>
+    <select id="getEnrollmentClass" resultType="com.green.smarty.dto.EnrollmentClassDTO">
+        select * from enrollment e join class c using(class_id)
     </select>
 
 

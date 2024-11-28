@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -18,7 +19,8 @@ public class PaymentVO {
     private String enrollment_id;
     private String rental_id;
     private float amount;
+    private boolean payment_status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate payment_date;
+    private LocalDateTime payment_date;
 }

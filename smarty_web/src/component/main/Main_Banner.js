@@ -25,12 +25,6 @@ const Main_Banner = () => {
         setCurrentIndex(newIndex);
     };
 
-    // 슬라이드
-    const goToSlide = (index) => {
-        setCurrentIndex(index);
-    };
-
-
     // 자동 슬라이드 설정
     useEffect(() => {
         const slideInterval = setInterval(nextSlide, 6000);
@@ -43,8 +37,8 @@ const Main_Banner = () => {
             <div className='banner_cont'>
                 <div className='text_iconBox'>
                     <div className='textBox'>
-                        <h3 style={{ marginBottom: '1rem' }}>복합문화체육시설 SMARTY</h3>
-                        <h3>통합 예약시스템</h3>
+                        <h1 style={{ marginBottom: '1rem' }}>복합문화체육시설 SMARTY</h1>
+                        <h1>통합 예약시스템</h1>
                         <p>모든 예약을 한번에 간편하게!</p>
                     </div>
                     <div className='iconBox'>
@@ -58,7 +52,7 @@ const Main_Banner = () => {
                 </div>
                 <div className='imgBox'>
                     <img className='banner-img' src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{
-                        width: '650px', height: '650', marginBottom: '2rem',
+                        width: '500px', height: '500px',
                     }} />
                 </div>
             </div>

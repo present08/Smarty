@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const ProductGrid = ({ productList, selectedFacility }) => {
+    
     const navigate = useNavigate()
     const location = useLocation()
 

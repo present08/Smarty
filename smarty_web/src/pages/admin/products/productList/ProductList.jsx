@@ -67,38 +67,73 @@ export default function ProductList() {
     }));
   };
 
-  // 개별 저장 처리
+  //개별 저장 로직
   const handleSaveRow = async (statusId) => {
     const product = data.find((item) => item.status_id === statusId);
     const changes = modifiedData[statusId] || {};
-
-    // 기본값을 포함한 상태 변경 처리
+  
     const newStatus = changes.product_status ?? "대여 가능";
     const currentStatus = product.product_status;
     const newStock = changes.stock ?? product.stock;
-
+  
+    console.log("Before Update:", {
+      statusId,
+      productId: product.product_id,
+      currentStatus,
+      newStatus,
+      currentStock: product.stock,
+      newStock,
+    });
+    
     const promises = [];
-
-    // 현재 상태와 다른 경우에만 업데이트
-    if (newStatus !== currentStatus) {
-      promises.push(updateProductStatus(statusId, newStatus));
+  
+    if (product.managementType === "개별 관리") {
+      if (newStatus !== currentStatus) {
+        promises.push(updateProductStatus(statusId, newStatus));
+  
+        if (currentStatus === "대여 가능" && newStatus !== "대여 가능") {
+          if (product.stock > 0) {
+            console.log("Decreasing stock for product:", product.product_id);
+            promises.push(updateProductStock(product.product_id, newStock - 1));
+          } else {
+            alert("재고가 부족하여 상태를 변경할 수 없습니다.");
+            return;
+          }
+        }
+  
+        if (currentStatus !== "대여 가능" && newStatus === "대여 가능") {
+          console.log("Increasing stock for product:", product.product_id);
+          promises.push(updateProductStock(product.product_id, newStock + 1));
+        }
+      }
+    } else {
+      if (newStatus !== currentStatus) {
+        promises.push(updateProductStatus(statusId, newStatus));
+      }
+  
+      if (newStock !== product.stock) {
+        promises.push(updateProductStock(product.product_id, newStock));
+      }
     }
-
-    if (newStock !== product.stock) {
-      promises.push(updateProductStock(product.product_id, newStock));
-    }
-
+  
     if (promises.length === 0) {
       alert("변경된 값이 없습니다.");
       return;
     }
-
+  
     try {
       await Promise.all(promises);
+  
+      console.log("After Update:", {
+        statusId,
+        productId: product.product_id,
+        newStatus,
+        updatedStock: newStock,
+      });
+  
       alert("변경 사항이 저장되었습니다.");
-      updateRowData(statusId, { product_status: newStatus, stock: newStock }); // UI 즉시 업데이트
-
-      // 저장 후 select 박스를 기본값으로 초기화
+      updateRowData(statusId, { product_status: newStatus, stock: newStock });
+  
       setModifiedData((prev) => {
         const updated = { ...prev };
         delete updated[statusId];
@@ -108,7 +143,7 @@ export default function ProductList() {
       console.error("저장 실패:", error);
     }
   };
-
+  
   // 일괄 저장 처리
   const handleBulkSaveChanges = () => {
     const updates = selectedRowKeys.map((key) => {
@@ -156,7 +191,7 @@ export default function ProductList() {
 
   // 렌더링 로직 수정
   const columns = [
-    { field: "status_id", headerName: "상태 ID", width: 120 },
+    { field: "status_id", headerName: "상태 ID", width: 150 },
     { field: "product_name", headerName: "물품명", width: 160 },
     {
       field: "stock",
@@ -232,6 +267,14 @@ export default function ProductList() {
             }
           />
         </div>
+      ),
+    },
+    {
+      field: "updated_at",
+      headerName: "마지막 수정일",
+      width: 250,
+      renderCell: (params) => (
+        <div>{params.row.updated_at ? new Date(params.row.updated_at).toLocaleString() : "N/A"}</div>
       ),
     },
   ];

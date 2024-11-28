@@ -1,0 +1,17 @@
+/* 전체 페이지 레이아웃 */
+.rental-page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 메인 컨텐츠와 Footer 간격 */
+.rental-content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Footer 고정 */
+footer {
+    margin-top: auto;
+}

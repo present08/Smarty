@@ -6,6 +6,8 @@ import com.green.smarty.util.CustomFileUtil;
 import com.green.smarty.vo.ProductVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -138,11 +140,23 @@ public class AdminProductService {
         return fileNames;
     }
 
-//    // 상품 이미지 반환
-//    public ResponseEntity<Resource> showProductImage(@PathVariable(name = "file_name") String file_name) {
-//        log.info("서비스 파일 조회 요청 - file_name: {}", file_name);
-//        return customFileUtil.getFile(file_name); // Resource 반환
-//    }
+    public ResponseEntity<Resource> showProductImage(String file_name) {
+        log.info("서비스 파일 조회 요청 - file_name: {}", file_name);
+
+        // 파일 이름이 null 또는 빈 값일 경우 기본 이미지 반환
+        if (file_name == null || file_name.trim().isEmpty()) {
+            log.warn("파일 이름이 비어있습니다. 기본 이미지로 반환합니다.");
+            file_name = "default.jpg";
+        }
+
+        try {
+            // CustomFileUtil을 사용해 파일 반환
+            return customFileUtil.getFile(file_name);
+        } catch (Exception e) {
+            log.error("파일 조회 중 오류 발생 - file_name: {}", file_name, e);
+            throw new RuntimeException("파일 조회 중 오류 발생", e);
+        }
+    }
 
     public void deleteProductImage(String product_id, String file_name) {
         adminProductMapper.deleteProductImage(product_id, file_name); // DB에서 파일 기록 삭제

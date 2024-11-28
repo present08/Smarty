@@ -11,6 +11,7 @@ const RentalDetailPage = () => {
     const [completedRental, setCompletedRental] = useState(false);
     const [productImages, setProductImages] = useState([])
 
+    
     const fetchProductImages = async (productId) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/products/${productId}/images`);

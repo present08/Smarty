@@ -87,3 +87,23 @@
 .productList .productAction .productListDelete:hover {
     color: #d42e2f;
 }
+
+/* 갯수 입력란 스타일 */
+.productList .quantityInput {
+    width: 100px; /* 드롭다운과 동일한 폭 */
+    height: 35px; /* 드롭다운과 동일한 높이 */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center; /* 숫자 중앙 정렬 */
+    font-size: 14px;
+}
+
+/* 상태 변경 드롭다운 스타일 */
+.productList .statusSelect {
+    width: 100px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+}

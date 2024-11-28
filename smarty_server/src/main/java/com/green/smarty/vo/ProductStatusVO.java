@@ -17,5 +17,5 @@ public class ProductStatusVO {
     private String product_id;
     private String product_status;
     private LocalDateTime updated_at;
-
+    private Integer quantity = 0; // 기본값 설정
 }

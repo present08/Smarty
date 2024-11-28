@@ -70,9 +70,16 @@ export const getOneProduct = async (product_id) => {
 };
 
 // 시설별 대여물품 상태 가져오기 (관리자용)
-export const fetchProductStatusByFacility = (facilityId) => {
-    return axios.get(`${statusprefix}/${facilityId}`);
+export const fetchProductStatusByFacility = async (facilityId) => {
+  try {
+    const response = await axios.get(`${statusprefix}/${facilityId}`);
+    return response.data || []; // 데이터가 없으면 빈 배열 반환
+  } catch (error) {
+    console.error("특정 시설 물품 상태 조회 실패:", error);
+    return []; // 오류 발생 시 빈 배열 반환
   }
+};
+
   
   // 시설별 대여물품 상태 수정 (관리자용)
   export const updateProductStatus = (statusId, newStatus) => {
@@ -144,6 +151,16 @@ export const updateProductStatusWithQuantity = (statusId, newStatus, quantity) =
     params: {
       statusId,
       newStatus,
+      quantity,
+    },
+  });
+};
+
+// 상태별 복구
+export const restoreToAvailable = (statusId, quantity) => {
+  return axios.put(`${statusprefix}/restore-to-available`, null, {
+    params: {
+      statusId,
       quantity,
     },
   });

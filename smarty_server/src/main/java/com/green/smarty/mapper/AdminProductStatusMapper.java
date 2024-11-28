@@ -29,5 +29,6 @@ public interface AdminProductStatusMapper {
     // 상태별 수량 조회
     List<Map<String, Object>> findStatusCountsByProductId(@Param("productId") String productId);
 
-
+    // 상태 및 수량 복구
+    void restoreToAvailable(@Param("status_id") String statusId, @Param("quantity") int quantity);
 }

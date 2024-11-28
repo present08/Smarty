@@ -38,10 +38,16 @@ public class AdminProductStatusController {
 
     // 특정 facility_id의 모든 상품 상태 조회 엔드포인트
     @GetMapping("/{facilityId}")
-    public ResponseEntity<List<Map<String, Object>>> getProductStatusByFacility(@PathVariable("facilityId") String facilityId){
-        List<Map<String, Object>> productStatusList = productStatusService.getProductStatusByFacility(facilityId);
-        return ResponseEntity.ok(productStatusList);
+    public ResponseEntity<List<Map<String, Object>>> getProductStatusByFacility(@PathVariable("facilityId") String facilityId) {
+        try {
+            List<Map<String, Object>> productStatusList = productStatusService.getProductStatusByFacility(facilityId);
+            return ResponseEntity.ok(productStatusList);
+        } catch (Exception e) {
+            log.error("Failed to retrieve product status for facility {}: {}", facilityId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
 
     @PutMapping("/update-status")
     public ResponseEntity<String> updateProductStatus(@RequestParam("statusId") String statusId, @RequestParam("newStatus") String newStatus) {
@@ -111,6 +117,20 @@ public class AdminProductStatusController {
         } catch (Exception e) {
             log.error("상태 및 수량 변경 실패: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status and quantity.");
+        }
+    }
+
+    @PutMapping("/restore-to-available")
+    public ResponseEntity<String> restoreToAvailable(
+            @RequestParam("statusId") String statusId,
+            @RequestParam("quantity") int quantity) {
+        try {
+            productStatusService.restoreToAvailable(statusId, quantity);
+            return ResponseEntity.ok("복구 성공");
+        } catch (Exception e) {
+            log.error("복구 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("복구 실패");
         }
     }
 

@@ -5,8 +5,14 @@
 <mapper namespace="com.green.smarty.mapper.AdminProductStatusMapper">
 
     <select id="findProductStatusByFacility" parameterType="string" resultType="map">
-        SELECT ps.status_id, ps.product_id, ps.product_status, ps.updated_at,
+        SELECT
+        ps.status_id,
+        ps.product_id,
+        ps.product_status,
+        ps.quantity,
+        ps.updated_at,
         p.product_name,
+        p.size,
         CASE
         WHEN ps.status_id LIKE '%Ind%' THEN 1
         ELSE p.stock
@@ -59,8 +65,9 @@
         SELECT COUNT(*) > 0 FROM product_status WHERE status_id = #{status_id}
     </select>
 
-    <select id="getProductInfoByStatusId" parameterType="string" resultType="map">
-        SELECT ps.status_id, ps.product_status, p.product_id, p.stock, p.management_type
+    <!-- 상태 ID로 현재 상태 및 수량 조회 -->
+    <select id="getProductInfoByStatusId" resultType="map">
+        SELECT ps.status_id, ps.product_status, ps.quantity, p.product_id, p.stock
         FROM product_status ps
         JOIN product p ON ps.product_id = p.product_id
         WHERE ps.status_id = #{status_id};
@@ -79,6 +86,16 @@
         GROUP BY ps.product_status, p.stock;
     </select>
 
+    <!-- 상태 복구 -->
+    <update id="restoreToAvailable">
+        UPDATE product_status
+        SET
+        product_status = '대여 가능',
+        quantity = quantity + #{quantity} <!-- 수량 증가 -->
+        WHERE
+        status_id = #{status_id}
+        AND product_status != '대여 가능'; <!-- 대여 가능 상태는 제외 -->
+    </update>
 
 
 </mapper>

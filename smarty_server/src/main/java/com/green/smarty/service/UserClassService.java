@@ -21,11 +21,12 @@ public class UserClassService {
 
     public Map<String, List<String>> getClassWeekday() {
         List<ClassDetailVO> detail = userClassMapper.getClassDetail();
+        // 데이터를 받아서 중복제거 후
         Map<String, List<String>> result = detail.stream()
                 .collect(Collectors.groupingBy(
                         ClassDetailVO::getClass_id,
                         Collectors.mapping(ClassDetailVO::getWeekday, Collectors.toList())));
-
+        // 월요일부터 재배열
         result = result.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,

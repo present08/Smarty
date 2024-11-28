@@ -123,7 +123,7 @@ const ReservationComponent = (props) => {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col">시설명{postData.reservation_start}</th>
+                            <th scope="col">시설명</th>
                             <th scope="col">예약일자</th>
                             <th scope="col">예약시간</th>
                             <th scope="col">이용요금</th>

@@ -58,6 +58,7 @@ public class UserReservationService {
         int end = Integer.parseInt(f_vo.getClose_time().split(":")[0]);
         int default_time = f_vo.getDefault_time();
         int cnt = 0;
+        int prevTime = 0;
 
         // reservation 등록되어있는 시간 제외
         List<Integer> reservation_list = new ArrayList<>();
@@ -82,15 +83,22 @@ public class UserReservationService {
             timeMap.put("end", start + i + 1);
             timeMap.put("id", cnt);
             timeMap.put("active", 0);
-            if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i)
-                    || now.compareTo(nowStart.minusHours((long) default_time + 1)) == 1) {
+            System.out.println("cnt : " + cnt);
+            System.out.println("now : " + now.compareTo(nowStart));
+            if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i))
                 timeMap.put("disabled", 1);
-            } else {
+            else
                 timeMap.put("disabled", 0);
-            }
             timeBtn.add(timeMap);
+            if (now.compareTo(nowStart) == 0)
+                prevTime = cnt;
             if ((i + 1) % default_time == 0)
                 cnt++;
+        }
+        // 현재시간 이전 Btn disabled
+        for (Map<String, Integer> i : timeBtn) {
+            if (prevTime > i.get("id"))
+                i.put("disabled", 1);
         }
         return timeBtn;
     }

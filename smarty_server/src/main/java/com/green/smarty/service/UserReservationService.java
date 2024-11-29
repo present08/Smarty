@@ -74,6 +74,7 @@ public class UserReservationService {
         System.out.println("reservationList " + reservation_list);
         String[] dateList = date.split("-");
 
+        // timeLine Btn 신규 버튼 생성
         List<Map<String, Integer>> timeBtn = new ArrayList<>();
         for (int i = 0; i < (end - start); i++) {
             LocalDateTime nowStart = LocalDateTime.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),
@@ -83,8 +84,7 @@ public class UserReservationService {
             timeMap.put("end", start + i + 1);
             timeMap.put("id", cnt);
             timeMap.put("active", 0);
-            System.out.println("cnt : " + cnt);
-            System.out.println("now : " + now.compareTo(nowStart));
+
             if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i))
                 timeMap.put("disabled", 1);
             else
@@ -97,7 +97,7 @@ public class UserReservationService {
         }
         // 현재시간 이전 Btn disabled
         for (Map<String, Integer> i : timeBtn) {
-            if (prevTime > i.get("id"))
+            if (prevTime >= i.get("id"))
                 i.put("disabled", 1);
         }
         return timeBtn;

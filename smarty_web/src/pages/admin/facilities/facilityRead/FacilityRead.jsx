@@ -75,7 +75,10 @@ export default function FacilityRead() {
 
     return (
         <div className="facilityRead">
-            <div className="facilityReadTitle">시설 조회</div>
+            <div className="facilityReadHead">
+                <div className="facilityReadTitle">시설 조회</div>
+                <button className="facilityModifyButton" onClick={() => navigate({ pathname: `/admin/facilities/modify/${facility_id}` })}>수정</button>
+            </div>
             <div className="facilityReadForm">
                 <div className="facilityReadFormLeft">
                     <div className="leftItemTitle">기본 정보</div>
@@ -156,8 +159,8 @@ export default function FacilityRead() {
                         <div className="leftItem">
                             <label>시설 개방</label>
                             {currentFacility.facility_status ?
-                                <div style={{ fontWeight: "300" }}> 가능</div>
-                                : <div style={{ fontWeight: "300" }}> 불가</div>
+                                <div style={{ fontWeight: "700", color: "#555" }}> 가능</div>
+                                : <div style={{ fontWeight: "700", color: "#555" }}> 불가</div>
                             }
                         </div>
                         {currentFacility.court ?
@@ -241,7 +244,7 @@ export default function FacilityRead() {
                                 }
                             </div>
                         </div>
-                        <button className="facilityModifyButton" onClick={() => navigate({ pathname: `/admin/facilities/modify/${facility_id}` })}>수정</button>
+                        
                     </div>
                 </div>
             </div>

@@ -254,7 +254,7 @@ export default function NewFacility() {
                             <input
                                 name="open_time"
                                 id="open_time"
-                                type={"number"}
+                                type={"time"}
                                 min={5}
                                 max={23}
                                 value={facility.open_time}
@@ -264,7 +264,7 @@ export default function NewFacility() {
                             <input
                                 name="close_time"
                                 id="close_time"
-                                type={"number"}
+                                type={"time"}
                                 min={5}
                                 max={23}
                                 value={facility.close_time}
@@ -403,7 +403,7 @@ export default function NewFacility() {
                     </div>
                     <div className="facilityButtons">
                         <button className="addFacilityButton" onClick={handleFacilityAdd}>등록</button>
-                        <button className="cancelFacilityButton" onClick={() => navigate({pathname: "/admin/facilities"})}>취소</button>
+                        <button className="cancelFacilityButton" onClick={() => navigate({pathname: "/admin"})}>취소</button>
                     </div>
                  </div>
             </div>

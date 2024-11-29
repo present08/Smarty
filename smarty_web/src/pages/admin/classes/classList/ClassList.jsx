@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import { getOneFacility } from "../../../../api/admin/facilityApi"
 import { Link, useParams } from "react-router-dom"
-import { getListClass } from '../../../../api/admin/classApi';
+import { deleteOneClass, getListClass } from '../../../../api/admin/classApi';
 import Modal from '../../../../component/admin/modal/Modal';
 import ClassRead from '../classRead/ClassRead';
 import NewClass from './../newClass/NewClass';
@@ -11,12 +11,13 @@ import { Add, Remove } from '@mui/icons-material';
 
 export default function ClassList() {
   const {facility_id} = useParams()
-  const [currentFacility, setCurrentFacility] = useState(null)
-  const [currentClass, setCurrentClass] = useState(null)
+  const [currentFacility, setCurrentFacility] = useState(null)  // 조회한 시설 정보
+  const [currentClass, setCurrentClass] = useState(null)        // 조회한 강의 정보
   const [classList, setClassList] = useState([])
   const [class_id, setClass_id] = useState(null)
   const [classReadModal, setClassReadModal] = useState(false)
   const [classAddModal, setClassAddModal] = useState(false)
+  const [removeToggle, setRemoveToggle] = useState(false)
 
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -26,14 +27,19 @@ export default function ClassList() {
 
   useEffect(() => {
     getListClass(facility_id).then(res => {
-      setClassList(res)
+      setCurrentClass(res)
     }).catch((error) => console.error("ERROR!", error))
-  }, [facility_id, currentClass])
+  }, [facility_id, removeToggle, classList])
 
   const handleReadButton = (class_id) => {
     setClassReadModal(true)
     setClass_id(class_id)
     console.log(class_id)
+  }
+  const handleRemoveButton = (class_id) => {
+    if(window.confirm("해당 강의를 삭제하시겠습니까?")) {
+      deleteOneClass(class_id).then(setRemoveToggle(!removeToggle)).catch((error) => console.error("ERROR!", error))
+    }
   }
 
   const handleAddbutton = () => {
@@ -45,7 +51,7 @@ export default function ClassList() {
   }
   
   const classPass = (result) => {
-    setCurrentClass(result)
+    setClassList(result)
     setClassAddModal(false)
   }
   
@@ -64,10 +70,11 @@ export default function ClassList() {
         return (
           <div className="classAction">
             <button 
-              className="classReadButton"
-              onClick={() => handleReadButton(params.row.class_id)}
-            >조회</button>
-            <button className="classDeleteButton">삭제</button>
+              className="classListButton"
+              onClick={() => handleReadButton(params.row.class_id)}>조회</button>
+            <button 
+              className="classListButton" 
+              onClick={() => handleRemoveButton(params.row.class_id)}>삭제</button>
           </div>
         )
       }
@@ -84,7 +91,7 @@ export default function ClassList() {
           </div>
           <DataGrid
             className="classTable"
-            rows={classList}
+            rows={currentClass}
             disableRowSelectionOnClick
             columns={columns}
             getRowId={(row) => row.class_id}
@@ -97,7 +104,7 @@ export default function ClassList() {
           <Modal content={<ClassRead class_id={class_id} />} callbackFn={closeModal}/>
           : <></>}
           {classAddModal?
-          <Modal content={<NewClass classPass={classPass} />} callbackFn={closeModal}/>
+          <Modal content={<NewClass classPass={classPass} passedClass={currentClass} passedFacility={currentFacility} />} callbackFn={closeModal}/>
           : <></>}
       </div>
     </div>

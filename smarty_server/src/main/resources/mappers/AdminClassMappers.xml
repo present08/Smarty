@@ -23,4 +23,18 @@
         select distinct weekday, class_id from class_detail where class_id = #{class_id}
     </select>
 
+    <update id="modify">
+        update class set class_name=#{class_name}, start_date=#{start_date}, end_date=#{end_date},
+        start_time=#{start_time}, end_time=#{end_time}, price=#{price}, class_size=#{class_size}
+        where court_id=#{court_id}
+    </update>
+
+    <delete id="remove">
+        delete from class where class_id=#{class_id}
+    </delete>
+    <delete id="removeDetail">
+        delete from class_detail where class_id=#{class_id}
+    </delete>
+
+
 </mapper>

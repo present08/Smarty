@@ -15,4 +15,7 @@ public interface AdminClassMapper {
     List<ClassVO> getList(String facility_id);
     ClassVO read(String class_id);
     List<ClassDetailVO> getDetailList(String class_id);
+    void modify(ClassVO classVO);
+    void remove(String class_id);
+    void removeDetail(String class_id);
 }

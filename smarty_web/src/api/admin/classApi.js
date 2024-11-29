@@ -19,7 +19,7 @@ export const getListClass = async(facility_id) => {
         console.log("getListClass : ", res.data)
         return res.data
     } catch(error) {
-        console.error("ERROR ! : ", error)
+        console.error("ERROR! : ", error)
     }
 }
 
@@ -29,7 +29,7 @@ export const getListClassDetail = async(class_id) => {
         console.log("getListClassDetail : ", res.data)
         return res.data
     } catch(error) {
-        console.error("ERROR ! : ", error)
+        console.error("ERROR! : ", error)
     }
 }
 
@@ -39,16 +39,26 @@ export const getOneClass = async(court_id) => {
         console.log("getOneClass : ", res.data)
         return res.data
     } catch(error) {
-        console.error("ERROR ! : ", error)
+        console.error("ERROR! : ", error)
     }
 }
 
-// export const putOneClass = async(court_id, court) => {
-//     const res = await axios.put(`${prefix}/${court_id}`, court)
-//     return res.data
-// }
+export const putOneClass = async(court_id, court) => {
+    try {
+        const res = await axios.put(`${prefix}/${court_id}`, court)
+        console.log("putOneClass : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}
 
-// export const deleteOneClass = async(court_id) => {
-//     const res = await axios.delete(`${prefix}/${court_id}`)
-//     return res.data
-// }
+export const deleteOneClass = async(court_id) => {
+    try {        
+        const res = await axios.delete(`${prefix}/${court_id}`)
+        console.log("deleteOneClass : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}

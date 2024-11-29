@@ -22,6 +22,7 @@ export default function ClassRead(class_id) {
   const [currentClass, setCurrentClass] = useState(initClass)
   const [classDetail, setClassDetail] = useState([])
   const [weekday, setWeekday] = useState([])
+  const [modifyToggle, setModifyToggle] = useState(true)
 
   useEffect(() => {
     getOneClass(class_id.class_id).then(res => {
@@ -135,86 +136,99 @@ export default function ClassRead(class_id) {
   
   return (
     <div className="classRead">
-      <div className="classReadContainer">
-       <div className="classReadTitle">{currentClass && currentClass.class_name}</div>
-       <div className="classReadFormBody">
+        <div className="classReadContainer">
           <div className="classReadItem">
-            <div className="addClassFormItem2Title">강의명</div>
+            <div className="classReadItemTitle">강의명</div>
             <input 
               type='text'
               name={`class_name`}
               placeholder={`ex) 강의명`}
               defaultValue={currentClass.class_name || ''}
               // onChange={(e) => handleInput(i, 'class_name', e.target.value)}
+              readonly={modifyToggle}
             />
-            <div className="addClassFormItem2Title">수강료</div>
+          </div>
+          <div className="classReadItem">
+            <div className="classReadItemTitle">가격</div>
             <input 
               type='text'
               name={`price`}
               placeholder={`ex) 10000`}
               defaultValue={currentClass.price || ''}
               // onChange={(e) => handleInput(i, 'price', e.target.value)}
+              readonly={modifyToggle}
             />
-            <div className="addClassFormItemTitle">정원</div>
+          </div>
+          <div className="classReadItem">
+            <div className="classReadItemTitle">정원</div>
             <input 
               type='text'
               name={`class_size`}
               placeholder={`ex) 50`}
               defaultValue={currentClass.class_size || ''}
               // onChange={(e) => handleInput(i, 'class_size', e.target.value)}
+              readonly={modifyToggle}
             />
           </div>
           <div className="classReadItem">
-            <div className="addClassFormItem1Title">시작일</div>
+            <div className="classReadItemTitle">수강기간</div>
             <input 
               type='date'
               name={`start_date`}
               // min={new Date().toISOString().substring(0, 10)}
               // onChange={(e) => handleInput(i, 'start_date', e.target.value)}
               defaultValue={currentClass.start_date || ''}
-            />
-            <div className="addClassFormItem1Title">종료일</div>
+              readonly={modifyToggle}
+            /> - 
             <input 
               type='date'
               name={`end_date`}
               // min={new Date().toISOString().substring(0, 10)}
               // onChange={(e) => handleInput(i, 'end_date', e.target.value)}
               defaultValue={currentClass.end_date || ''}
+              readonly={modifyToggle}
             />
           </div>
           <div className="classReadItem">
-            <div className="addClassFormItemTitle">시작시간</div>
+            <div className="classReadItemTitle">수강일</div>
+            {weekday &&
+            ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map((day, index) => (
+              <div key={index}>
+                <input
+                  id={day}
+                  name="weekday"
+                  type="checkbox"
+                  value={day}
+                  // onChange={(e) => handleClickWeekday(e)}
+                  checked={weekday.includes(day)} // weekday 배열에 해당 day가 포함되어 있으면 체크
+                  readonly={modifyToggle}
+                />
+                <label htmlFor={day}>{day}</label>
+              </div>
+            ))}
+          </div>
+          <div className="classReadItem">
+            <div className="classReadItemTitle">수강시간</div>
             <input 
               type='time'
               name={`start_time`}
               // onChange={(e) => handleInput(i, 'start_time', e.target.value)}
               defaultValue={currentClass.start_time || ''}
-            />
-            <div className="addClassFormItemTitle">종료시간</div>
+              readonly={modifyToggle}
+            /> - 
             <input 
               type='time'
               name={`end_time`}
               // max={currentFacility.close_time}
               // onChange={(e) => handleInput(i, 'end_time', e.target.value)}
               defaultValue={currentClass.end_time || ''}
+              readonly={modifyToggle}
             />
           </div>
-          <div className="classReadItem">
-            <div className="addClassFormItemTitle">수업일</div>
-            {weekday && weekday.map(i => (
-              <div>{i}</div>
-            ))}
-          </div>            
+        </div>        
+        <div className="classReadButton">
+          <button onClick={() => setModifyToggle(!modifyToggle)}>수정</button> 
         </div>
-
-
-        {classList.length > 0?
-          <div className="facilityButtons">
-            {/* <button className='submitClassButton' onClick={handleSubmit}>등록</button> */}
-            {/* <button className="cancelClassButton" onClick={handleCancel}>취소</button> */}
-          </div>
-          : <></>}
-      </div>
     </div>
   )
 }

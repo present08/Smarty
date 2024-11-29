@@ -72,24 +72,6 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
-//        UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
-//
-//        if (user != null) {
-//            // 로그인 성공 시 로그인 날짜 업데이트
-//            userservice.updateLoginDate(user.getUserId()); // 로그인 날짜 업데이트 호출
-//
-//            System.out.println("로그인 성공: " + user);
-//            session.setAttribute("user", user); // 세션에 사용자 정보 저장
-//            return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
-//        } else {
-//            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
-//            System.out.println("로그인 실패");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
-//        }
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
@@ -188,20 +170,14 @@ public class UserController {
     }
 
     //로그아웃
-//    @PostMapping("/logout")
-//    public ResponseEntity<String> logout(HttpSession session) {
-//        // 세션에서 사용자 정보 제거
-//        session.invalidate(); //전체 세션 무효화
-//
-//        System.out.println("로그아웃 성공");
-//        return ResponseEntity.ok("로그아웃 성공");
-//    }
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate(); // 세션 무효화
+        // 세션에서 사용자 정보 제거
+        session.invalidate(); //전체 세션 무효화
+
+        System.out.println("로그아웃 성공");
         return ResponseEntity.ok("로그아웃 성공");
     }
-
 
     //사용자 휴면 여부 확인
     @GetMapping("/me/{userId}")

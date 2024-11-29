@@ -4,12 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.AdminProductStatusMapper">
 
+    <insert id="insertProductStatus" parameterType="com.green.smarty.vo.ProductStatusVO" useGeneratedKeys="true" keyProperty="status_id">
+        INSERT INTO product_status (status_id, product_id, current_status, updated_at)
+        VALUES (#{status_id}, #{product_id}, #{current_status}, CURRENT_TIMESTAMP)
+    </insert>
+
     <select id="findProductStatusByFacility" parameterType="string" resultType="map">
         SELECT
         ps.status_id,
         ps.product_id,
-        ps.product_status,
-        ps.quantity,
+        ps.current_status,
+        ps.changed_status,
+        ps.change_quantity,
         ps.updated_at,
         p.product_name,
         p.size,
@@ -21,11 +27,6 @@
         JOIN product p ON ps.product_id = p.product_id
         WHERE p.facility_id = #{facilityId}
     </select>
-
-    <insert id="insertProductStatus" parameterType="com.green.smarty.vo.ProductStatusVO" useGeneratedKeys="true" keyProperty="status_id">
-        INSERT INTO product_status (status_id, product_id, product_status, updated_at)
-        VALUES (#{status_id}, #{product_id}, #{product_status}, CURRENT_TIMESTAMP)
-    </insert>
 
     <select id="getAllProductStatuses" resultType="com.green.smarty.vo.ProductStatusVO">
         SELECT * FROM product_status;
@@ -67,35 +68,44 @@
 
     <!-- 상태 ID로 현재 상태 및 수량 조회 -->
     <select id="getProductInfoByStatusId" resultType="map">
-        SELECT ps.status_id, ps.product_status, ps.quantity, p.product_id, p.stock
+        SELECT
+        ps.status_id,
+        ps.current_status,
+        ps.changed_status,
+        ps.change_quantity,
+        p.product_id,
+        p.stock
         FROM product_status ps
         JOIN product p ON ps.product_id = p.product_id
         WHERE ps.status_id = #{status_id};
     </select>
 
-    <select id="findStatusCountsByProductId" parameterType="string" resultType="map">
-        SELECT
-        ps.product_status,
-        CASE
-        WHEN ps.product_status = '대여 가능' THEN p.stock
-        ELSE 0
-        END AS count
-        FROM product_status ps
-        JOIN product p ON ps.product_id = p.product_id
-        WHERE ps.product_id = #{productId}
-        GROUP BY ps.product_status, p.stock;
-    </select>
-
-    <!-- 상태 복구 -->
-    <update id="restoreToAvailable">
+    <!-- 변경된 상태 업데이트 -->
+    <update id="updateChangedStatus" parameterType="map">
         UPDATE product_status
-        SET
-        product_status = '대여 가능',
-        quantity = quantity + #{quantity} <!-- 수량 증가 -->
-        WHERE
-        status_id = #{status_id}
-        AND product_status != '대여 가능'; <!-- 대여 가능 상태는 제외 -->
+        SET changed_status = #{changedStatus},
+        change_quantity = #{quantity},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE status_id = #{statusId}
     </update>
 
+    <!-- 상태 복구 -->
+    <update id="restoreToAvailable" parameterType="string">
+        UPDATE product_status
+        SET changed_status = NULL,
+        change_quantity = 0,
+        updated_at = CURRENT_TIMESTAMP
+        WHERE status_id = #{statusId}
+    </update>
+
+    <!-- 특정 Product의 상태별 수량 조회 -->
+    <select id="findStatusCountsByProductId" parameterType="string" resultType="map">
+        SELECT
+        ps.changed_status,
+        SUM(ps.change_quantity) AS total_quantity
+        FROM product_status ps
+        WHERE ps.product_id = #{productId}
+        GROUP BY ps.changed_status
+    </select>
 
 </mapper>

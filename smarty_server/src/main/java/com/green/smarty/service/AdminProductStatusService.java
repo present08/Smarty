@@ -17,6 +17,8 @@ import java.util.Map;
 public class AdminProductStatusService {
     @Autowired
     private AdminProductStatusMapper productStatusMapper;
+    @Autowired
+    private AdminProductMapper productMapper;
 
     public void registerDefaultStatus(String productId, String managementType, int stock, String size) {
         log.info("상태 등록 - productId: {}, managementType: {}, stock: {}, size: {}", productId, managementType, stock, size);
@@ -39,7 +41,7 @@ public class AdminProductStatusService {
 
                     status.setStatus_id(statusId);
                     status.setProduct_id(productId);
-                    status.setProduct_status("대여 가능");
+                    status.setCurrent_status("대여 가능");
                     productStatusMapper.insertProductStatus(status);
 
                     log.info("등록된 개별 관리 상태: {}", status);
@@ -59,7 +61,7 @@ public class AdminProductStatusService {
 
                 bulkStatus.setStatus_id(bulkStatusId);
                 bulkStatus.setProduct_id(productId);
-                bulkStatus.setProduct_status("대여 가능");
+                bulkStatus.setCurrent_status("대여 가능");
                 productStatusMapper.insertProductStatus(bulkStatus);
 
                 log.info("등록된 일괄 관리 상태: {}", bulkStatus);
@@ -79,7 +81,7 @@ public class AdminProductStatusService {
 
                     sizeStatus.setStatus_id(sizeStatusId);
                     sizeStatus.setProduct_id(productId);
-                    sizeStatus.setProduct_status("대여 가능");
+                    sizeStatus.setCurrent_status("대여 가능");
                     productStatusMapper.insertProductStatus(sizeStatus);
 
                     log.info("등록된 사이즈별 관리 상태: {}", sizeStatus);
@@ -102,9 +104,29 @@ public class AdminProductStatusService {
     }
 
     // 대여 상품 상태 수정
-    public void udpateProductStatus(String statusId, String newStatus) {
-        productStatusMapper.updateProductStatus(statusId, newStatus);
+    public void changeStatus(String statusId, String changedStatus, int quantity) {
+        Map<String, Object> statusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
+
+        String currentStatus = (String) statusInfo.get("current_status");
+        if (!"대여 가능".equals(currentStatus)) {
+            throw new IllegalArgumentException("현재 상태가 '대여 가능'이어야 변경 가능합니다.");
+        }
+
+        productStatusMapper.updateChangedStatus(statusId, changedStatus, quantity);
     }
+
+    // 상태 복구 (변경된 상태 → 대여 가능)
+    public void restoreToAvailable(String statusId) {
+        Map<String, Object> statusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
+
+        String changedStatus = (String) statusInfo.get("changed_status");
+        if (changedStatus == null) {
+            throw new IllegalArgumentException("복구할 변경 상태가 없습니다.");
+        }
+
+        productStatusMapper.restoreToAvailable(statusId);
+    }
+
     // 대여 상품 수량 수정
     public void updateProductStockAndUpdatedAt(String productId, int newStock) {
         // stock 업데이트
@@ -116,68 +138,9 @@ public class AdminProductStatusService {
         log.info("상품 ID {}: stock={}, updated_at 갱신 완료", productId, newStock);
     }
 
-    public void updateStatusAndStock(String statusId, String newStatus) {
-        // 현재 상태 및 관리 방식 조회
-        Map<String, Object> productInfo = productStatusMapper.getProductInfoByStatusId(statusId);
-        String currentStatus = (String) productInfo.get("product_status");
-        String managementType = (String) productInfo.get("management_type");
-        int quantity = (int) productInfo.get("quantity");
-
-        // 관리 방식 확인
-        if (!"개별 관리".equals(managementType)) {
-            throw new IllegalArgumentException("개별 관리 방식에 대해서만 처리 가능합니다.");
-        }
-
-        // 상태 변경 로직
-        if ("대여 가능".equals(currentStatus) && !"대여 가능".equals(newStatus)) {
-            // 재고 감소
-            if (quantity <= 0) {
-                throw new IllegalArgumentException("재고가 부족하여 상태를 변경할 수 없습니다.");
-            }
-            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), quantity - 1);
-        } else if (!"대여 가능".equals(currentStatus) && "대여 가능".equals(newStatus)) {
-            // 재고 증가
-            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), quantity + 1);
-        }
-
-        // 상태 업데이트
-        productStatusMapper.updateProductStatus(statusId, newStatus);
-    }
-
     public List<Map<String, Object>> getStatusCountsByProductId(String productId) {
         return productStatusMapper.findStatusCountsByProductId(productId);
     }
 
-    public void updateStatusWithQuantity(String statusId, String newStatus, int quantity) {
-        // 현재 상태 조회
-        Map<String, Object> currentStatusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
-        String currentStatus = (String) currentStatusInfo.get("product_status");
-        int currentQuantity = (int) currentStatusInfo.get("quantity");
-
-        // 수량 검증
-        if (quantity > quantity) {
-            throw new IllegalArgumentException("변경할 수량이 현재 재고를 초과할 수 없습니다.");
-        }
-
-        // 재고 감소
-        productStatusMapper.updateProductStock((String) currentStatusInfo.get("product_id"), quantity - quantity);
-
-        // 상태 변경
-        productStatusMapper.updateProductStatus(statusId, newStatus);
-    }
-
-    public void restoreToAvailable(String statusId, int quantity) {
-        Map<String, Object> statusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
-
-        // 기존 상태 검증
-        String currentStatus = (String) statusInfo.get("product_status");
-        if ("대여 가능".equals(currentStatus)) {
-            throw new IllegalArgumentException("이미 대여 가능한 상태입니다.");
-        }
-
-        // 재고 증가 및 상태 복구
-        productStatusMapper.updateProductStock((String) statusInfo.get("product_id"), quantity);
-        productStatusMapper.updateProductStatus(statusId, "대여 가능");
-    }
 
 }

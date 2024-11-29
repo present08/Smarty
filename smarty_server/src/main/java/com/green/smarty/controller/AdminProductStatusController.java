@@ -49,17 +49,28 @@ public class AdminProductStatusController {
     }
 
 
+    // 상태 변경 (대여 가능 → 변경된 상태)
     @PutMapping("/update-status")
-    public ResponseEntity<String> updateProductStatus(@RequestParam("statusId") String statusId, @RequestParam("newStatus") String newStatus) {
-        log.info("상태 ID: {} 변경된 상태 : {}" , statusId, newStatus);
+    public ResponseEntity<String> updateProductStatus(
+            @RequestParam("statusId") String statusId,
+            @RequestParam("changedStatus") String changedStatus,
+            @RequestParam("quantity") int quantity) {
+        log.info("상태 변경 요청 - statusId: {}, changedStatus: {}, quantity: {}", statusId, changedStatus, quantity);
+
         try {
-            productStatusService.udpateProductStatus(statusId, newStatus);
-            return ResponseEntity.ok("Product status updated successfully");
+            productStatusService.changeStatus(statusId, changedStatus, quantity);
+            return ResponseEntity.ok("Status updated successfully.");
+        } catch (IllegalArgumentException e) {
+            log.warn("Validation error: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update product status");
+            log.error("Failed to update status for statusId {}: {}", statusId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update status.");
         }
     }
 
+    // 상품 총량 변경
     @PutMapping("/update-stock")
     public ResponseEntity<String> updateProductStock(
             @RequestParam("productId") String productId,
@@ -75,23 +86,23 @@ public class AdminProductStatusController {
         }
     }
 
-    @PutMapping("/update-status-with-stock")
-    public ResponseEntity<String> updateStatusWithStock(
-            @RequestParam("statusId") String statusId,
-            @RequestParam("newStatus") String newStatus) {
+    // 상태 복구 (변경된 상태 → 대여 가능)
+    @PutMapping("/restore-to-available")
+    public ResponseEntity<String> restoreToAvailable(
+            @RequestParam("statusId") String statusId) {
+        log.info("상태 복구 요청 - statusId: {}", statusId);
+
         try {
-            productStatusService.updateStatusAndStock(statusId, newStatus);
-            log.info("상태 변경 및 재고 처리 완료 - statusId: {}, newStatus: {}", statusId, newStatus);
-            return ResponseEntity.ok("Status and stock updated successfully.");
-        } catch (IllegalArgumentException e) {
-            log.warn("요청 처리 중 오류 발생: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            productStatusService.restoreToAvailable(statusId);
+            return ResponseEntity.ok("Status restored to '대여 가능'.");
         } catch (Exception e) {
-            log.error("상태 및 재고 처리 실패: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status and stock.");
+            log.error("Failed to restore status for statusId {}: {}", statusId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to restore status.");
         }
     }
 
+    // 특정 Product 상태별 수량 조회
     @GetMapping("/status-counts/{productId}")
     public ResponseEntity<List<Map<String, Object>>> getStatusCountsByProductId(
             @PathVariable("productId") String productId) {
@@ -99,38 +110,8 @@ public class AdminProductStatusController {
             List<Map<String, Object>> statusCounts = productStatusService.getStatusCountsByProductId(productId);
             return ResponseEntity.ok(statusCounts);
         } catch (Exception e) {
-            log.error("상태별 수량 조회 실패: {}", e.getMessage());
+            log.error("{} 상태별 수량 조회 실패:  {}", productId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PutMapping("/update-status-with-quantity")
-    public ResponseEntity<String> updateStatusWithQuantity(
-            @RequestParam("statusId") String statusId,
-            @RequestParam("newStatus") String newStatus,
-            @RequestParam("quantity") int quantity
-    ) {
-        try {
-            productStatusService.updateStatusWithQuantity(statusId, newStatus, quantity);
-            log.info("상태 및 수량 변경 완료 - statusId: {}, newStatus: {}, 변경 수량: {}", statusId, newStatus, quantity);
-            return ResponseEntity.ok("Status and quantity updated successfully.");
-        } catch (Exception e) {
-            log.error("상태 및 수량 변경 실패: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status and quantity.");
-        }
-    }
-
-    @PutMapping("/restore-to-available")
-    public ResponseEntity<String> restoreToAvailable(
-            @RequestParam("statusId") String statusId,
-            @RequestParam("quantity") int quantity) {
-        try {
-            productStatusService.restoreToAvailable(statusId, quantity);
-            return ResponseEntity.ok("복구 성공");
-        } catch (Exception e) {
-            log.error("복구 실패: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("복구 실패");
         }
     }
 

@@ -82,16 +82,29 @@ export const fetchProductStatusByFacility = async (facilityId) => {
 
   
   // 시설별 대여물품 상태 수정 (관리자용)
-  export const updateProductStatus = (statusId, newStatus) => {
-    return axios.put(`${statusprefix}/update-status`, null, {
-      params: {
-        statusId: statusId,
-        newStatus: newStatus
-      }
-    });
+  export const updateProductStatus = async (statusId, newStatus, quantity) => {
+    try {
+      await axios.put(`${statusprefix}/update-status`, null, {
+        params: { statusId, newStatus, quantity },
+      });
+    } catch (error) {
+      console.error("상태 업데이트 실패:", error.message);
+      throw error;
+    }
   };
   
-  
+  // 대여 가능 복구
+export const restoreToAvailable = async (statusId) => {
+  try {
+    await axios.put(`${statusprefix}/restore-to-available`, null, {
+      params: { statusId },
+    });
+  } catch (error) {
+    console.error("복구 실패:", error.message);
+    throw error;
+  }
+};
+
   // 시설별 대여물품 수량 수정 (관리자용)
   export const updateProductStock = (productId, newStock) => {
     return axios.put(`${statusprefix}/update-stock`, null,{
@@ -144,24 +157,4 @@ export const fetchStatusCountsByProduct = async (productId) => {
       console.error("상태별 수량 조회 실패:", error.response?.data || error.message);
       throw error;
   }
-};
-
-export const updateProductStatusWithQuantity = (statusId, newStatus, quantity) => {
-  return axios.put(`${statusprefix}/update-status-with-quantity`, null, {
-    params: {
-      statusId,
-      newStatus,
-      quantity,
-    },
-  });
-};
-
-// 상태별 복구
-export const restoreToAvailable = (statusId, quantity) => {
-  return axios.put(`${statusprefix}/restore-to-available`, null, {
-    params: {
-      statusId,
-      quantity,
-    },
-  });
 };

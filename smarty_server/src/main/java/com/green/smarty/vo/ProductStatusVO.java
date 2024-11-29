@@ -15,7 +15,10 @@ import java.time.LocalDateTime;
 public class ProductStatusVO {
     private String status_id;
     private String product_id;
-    private String product_status;
+    @Builder.Default
+    private String current_status = "대여 가능";
+    private String changed_status;
     private LocalDateTime updated_at;
+    @Builder.Default
     private Integer quantity = 0; // 기본값 설정
 }

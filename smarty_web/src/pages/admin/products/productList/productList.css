@@ -5,47 +5,65 @@
     color: #011B2F;
 }
 
-.productList .productContainer .MuiButton-root {
-    margin-right: 10px;
-    border-radius: 5px;
-    padding: 8px 16px;
+/* 로그 아이템 스타일 */
+.productList .logItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px; /* 로그 간격 */
 }
 
-.productList .productContainer .MuiButton-root:first-child {
-    background-color: #28a745;
+.productList .logText {
+    margin-right: 10px; /* 복구 버튼과 간격 */
+    font-size: 14px;
+    color: #011b2f;
+}
+
+/* 복구 버튼 스타일 */
+.productList .recoveryButton {
+    background-color: #4caf50;
     color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
 }
 
-.productList .productContainer .MuiButton-root:first-child:hover {
+.productList .recoveryButton:hover {
     background-color: #218838;
 }
 
-.productList .productContainer .MuiButton-root:nth-child(2) {
-    background-color: #007bff;
-    color: white;
+/* 상태 변경 드롭다운 스타일 */
+.productList .statusSelect {
+    width: 100px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    text-align: center;
 }
 
-.productList .productContainer .MuiButton-root:nth-child(2):hover {
-    background-color: #0056b3;
+/* 수량 입력란 스타일 */
+.productList .quantityInput {
+    width: 100px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
 }
 
-.productList .productContainer .MuiButton-root:nth-child(3) {
-    background-color: #6f42c1;
-    color: white;
-}
-
-.productList .productContainer .MuiButton-root:nth-child(3):hover {
-    background-color: #5a36a3;
-}
-
-.productList .productAction button {
+/* 작업 버튼 */
+.productList .productAction .productListEdit {
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-right: 5px;
     color: white;
     cursor: pointer;
     font-size: 12px;
+    margin-right: 5px;
 }
 
 .productList .productAction .productListEdit:nth-child(1) {
@@ -80,30 +98,36 @@
     background-color: #218838;
 }
 
-.productList .productAction .productListDelete {
-    color: #ff4d4f;
+/* 엑셀 내보내기 버튼 */
+.productList .MuiButton-root {
+    margin-right: 10px;
+    border-radius: 5px;
+    padding: 8px 16px;
 }
 
-.productList .productAction .productListDelete:hover {
-    color: #d42e2f;
+.productList .MuiButton-root:first-child {
+    background-color: #28a745;
+    color: white;
 }
 
-/* 갯수 입력란 스타일 */
-.productList .quantityInput {
-    width: 100px; /* 드롭다운과 동일한 폭 */
-    height: 35px; /* 드롭다운과 동일한 높이 */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: center; /* 숫자 중앙 정렬 */
-    font-size: 14px;
+.productList .MuiButton-root:first-child:hover {
+    background-color: #218838;
 }
 
-/* 상태 변경 드롭다운 스타일 */
-.productList .statusSelect {
-    width: 100px;
-    height: 35px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 14px;
+.productList .MuiButton-root:nth-child(2) {
+    background-color: #007bff;
+    color: white;
+}
+
+.productList .MuiButton-root:nth-child(2):hover {
+    background-color: #0056b3;
+}
+
+.productList .MuiButton-root:nth-child(3) {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.productList .MuiButton-root:nth-child(3):hover {
+    background-color: #5a36a3;
 }

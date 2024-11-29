@@ -24,7 +24,8 @@
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
     </select>
-<!--    fcm_token용 아이디 찾기-->
+
+<!--fcm_token용 아이디 찾기-->
     <select id="finByIdFcm">
         SELECT fcmToken FROM user
         WHERE user_id = #{user_id}
@@ -77,11 +78,11 @@
     </update>
 
     <!-- 회원 레벨 업데이트 -->
-    <update id="updateUserLevel">
-        UPDATE user
-        SET level = #{level}
-        WHERE user_id = #{userId}
-    </update>
+<!--    <update id="updateUserLevel">-->
+<!--        UPDATE user-->
+<!--        SET level = #{level}-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </update>-->
 
     <!-- 유저 수강신청 불러오기-->
     <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">

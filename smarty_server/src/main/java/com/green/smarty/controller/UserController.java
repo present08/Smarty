@@ -72,24 +72,6 @@ public class UserController {
         }
     }
 
-
-//    //로그인 처리
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
-//        // 사용자 ID와 비밀번호를 기반으로 로그인 시도
-//        UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
-//        if (user != null) {
-//            // 로그인 성공 시 사용자 정보를 JSON으로 반환
-//            System.out.println("로그인 성공: " + user);
-//            session.setAttribute("user" , user); //세션에 사용자 정보 저장
-//            return ResponseEntity.ok(user) ;  // 로그인 성공 시 사용자 정보 반환
-//        } else {
-//            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
-//            System.out.println("로그인 실패");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
-//        }
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());

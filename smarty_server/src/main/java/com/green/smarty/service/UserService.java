@@ -5,16 +5,21 @@ import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // PasswordEncoder 주입
 
     @Autowired
     private UserMapper userMapper;
@@ -26,34 +31,83 @@ public class UserService {
     private FCMService fcmService;
 
     // 회원가입
+//    public boolean signup(UserVO user) {
+//        try {
+//            // 이메일 및 사용자 ID 중복 체크
+//            if (userMapper.getById(user.getUser_id()) != null || userMapper.getByEmail(user.getEmail()) != null) {
+//                System.out.println("Email, Id 중복");
+//                return false; // 중복된 경우 false 반환
+//            } else {
+//                // 사용자 추가
+//                userMapper.insertUser(user);
+//                System.out.println("회원등록성공");
+//
+//                //QR 코드 생성
+//                byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
+//                System.out.println("코드생성 완료 : "+qrCode);
+//
+//                //QR 코드를 UserVO 객체에 저장
+//                user.setQrCode(qrCode);
+//
+//                //QR 코드를 포함한 사용자 정보를 업데이트
+//                userMapper.updateUserWithQRCode(user);
+//                System.out.println("업데이트_완료 : "+user.getQrCode());
+//
+//                return true;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            // 오류 발생 시 false 반환
+//            return false;
+//        }
+//    }
+
+    // 회원가입
     public boolean signup(UserVO user) {
         try {
+            // 비밀번호 암호화
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+            // 빌더 패턴을 사용하여 UserVO 객체 생성
+            UserVO newUser = UserVO.builder()
+                    .user_id(user.getUser_id())
+                    .user_name(user.getUser_name())
+                    .email(user.getEmail())
+                    .password(encodedPassword) // 암호화된 비밀번호 설정
+                    .phone(user.getPhone())
+                    .address(user.getAddress())
+                    .birthday(user.getBirthday())
+                    .join_date(LocalDateTime.now())
+                    .login_date(LocalDate.now())
+                    .user_status(true)
+                    .fcmToken(user.getFcmToken())
+                    .build();
+
             // 이메일 및 사용자 ID 중복 체크
-            if (userMapper.getById(user.getUser_id()) != null || userMapper.getByEmail(user.getEmail()) != null) {
+            if (userMapper.getById(newUser.getUser_id()) != null || userMapper.getByEmail(newUser.getEmail()) != null) {
                 System.out.println("Email, Id 중복");
                 return false; // 중복된 경우 false 반환
             } else {
                 // 사용자 추가
-                userMapper.insertUser(user);
+                userMapper.insertUser(newUser);
                 System.out.println("회원등록성공");
 
-                //QR 코드 생성
-                byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
-                System.out.println("코드생성 완료 : "+qrCode);
+                // QR 코드 생성
+                byte[] qrCode = qrCodeService.generateQRCode(newUser.getEmail());
+                System.out.println("코드생성 완료 : " + qrCode);
 
-                //QR 코드를 UserVO 객체에 저장
-                user.setQrCode(qrCode);
+                // QR 코드를 UserVO 객체에 저장
+                newUser.setQrCode(qrCode);
 
-                //QR 코드를 포함한 사용자 정보를 업데이트
-                userMapper.updateUserWithQRCode(user);
-                System.out.println("업데이트_완료 : "+user.getQrCode());
+                // QR 코드를 포함한 사용자 정보를 업데이트
+                userMapper.updateUserWithQRCode(newUser);
+                System.out.println("업데이트_완료 : " + newUser.getQrCode());
 
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // 오류 발생 시 false 반환
-            return false;
+            return false; // 오류 발생 시 false 반환
         }
     }
 

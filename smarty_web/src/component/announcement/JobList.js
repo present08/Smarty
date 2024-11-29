@@ -75,6 +75,7 @@ const JobList = () => {
         },
     ]
 
+    // 지원완료 알림창
     const handleApply = (job) => {
         if (appliedJobs.some(appliedJob => appliedJob.id === job.id)) {
             alert('이미 지원한 직무입니다.');
@@ -87,6 +88,7 @@ const JobList = () => {
         }, 3000);
     };
 
+    // 필터링 
     const filteredJobs = jobList.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedCategory === '' || job.tags.includes(selectedCategory))

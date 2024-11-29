@@ -233,3 +233,202 @@ body,
     color: #495057;
     font-weight: 600;
 }
+
+.bd-notice-board {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.bd-header {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.bd-header-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.bd-header-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.bd-search-form {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.bd-search-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    min-width: 120px;
+}
+
+.bd-serach-input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    min-width: 120px;
+}
+
+.bd-serach-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border : none;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.bd-search-result-message {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+
+.bd-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.bd-page-title {
+    font-size: 24px;
+    color: #333;
+}
+
+.bd-write-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bd-table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bd-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.bd-table-row {
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.bd-table-row:hover {
+    background-color: #f8f9fa;
+}
+
+.bd-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.bd-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.bd-modal-content {
+    background-color: white;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.bd-submit-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bd-cancel-button {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bd-pagination-button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.bd-pagination-button.active {
+    background-color: white;
+}
+
+.bd-pagination-button.disabled {
+    cursor: not-allowed;
+}
+
+.bd-pagenation-button2 {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.bd-pagenation-button3 {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.bd-pagenation-button3.active {
+    background-color: white;
+}
+
+.bd-pagenation-button3.disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}

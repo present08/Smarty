@@ -14,7 +14,7 @@ public interface AnnounceMapper {
     // insert도 일반적으로 int형으로 값을 반환하여 성공 유무를 체크함
     // 다른 CRUD 들도 값을 반환하여 성공유무를 판단할 수 있지만 보통은 update 와 delete는 void로 반환함
     int insertAnnounce (AnnounceDTO announceDTO);
-    void modifyAnnounce(AnnounceDTO announceDTO);
+    int modifyAnnounce(AnnounceDTO announceDTO);
     void removeAnnounce(int announce_id);
     AnnounceDTO selectAnnounceById(int announce_id);
     // 조회수 증가 메서드

@@ -37,7 +37,7 @@ public class NotificationSchedule {
 
             if(difference==-7) try{ fcmService.sendNotification(fcmToken, "제목", "대여 만료 일주일 전입니다."); }catch (Exception e) { e.printStackTrace(); } //7일 전일 경우
             if(difference==-1) try{ fcmService.sendNotification(fcmToken, "제목", "대여 만료 하루 전입니다."); }catch (Exception e) { e.printStackTrace(); } //하루 전일 경우
-            if (difference>0&&difference%7==0) try{ fcmService.sendNotification(fcmToken, "제목", String.format("대여 만료 %d일 후입니다..", difference)); }catch (Exception e) { e.printStackTrace(); } //7*n일 후일 경우
+            if (difference>0&&difference%7==0) try{ fcmService.sendNotification(fcmToken, "제목", String.format("대여 만료 %d일 후입니다..", difference)); } catch (Exception e) { e.printStackTrace(); } //7*n일 후일 경우
 
 
         }

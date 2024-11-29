@@ -192,51 +192,23 @@ function Announcement() {
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div className="notice-board" style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: '20px'
-            }}>
-                <div className="header" style={{
-                    backgroundColor: '#f8f9fa',
-                    padding: '40px 0',
-                    textAlign: 'center',
-                    borderRadius: '10px',
-                    marginBottom: '30px'
-                }}>
-                    <div className="header-content">
-                        <h1 className="header-title" style={{
-                            fontSize: '2.5rem',
-                            color: '#333',
-                            marginBottom: '10px'
-                        }}>커뮤니티</h1>
-                        <p className="header-subtitle" style={{
-                            fontSize: '1.1rem',
-                            color: '#666'
-                        }}>회원들과 자유롭게 소통해보세요</p>
+            <div className="bd-notice-board">
+                <div className="bd-header">
+                    <div className="bd-header-content">
+                        <h1 className="bd-header-title">자유 게시판</h1>
+                        <p className="bd-header-subtitle">회원들과 자유롭게 소통해보세요</p>
                     </div>
                 </div>
 
                 <div className="container">
                     {/* 검색 폼 추가 */}
-                    <form onSubmit={handleSearch} style={{
-                        marginBottom: '20px',
-                        display: 'flex',
-                        gap: '10px',
-                        alignItems: 'center',
-                        backgroundColor: '#f8f9fa',
-                        padding: '15px',
-                        borderRadius: '8px'
-                    }}>
+                    <form
+                        className='bd-search-form'
+                        onSubmit={handleSearch}>
                         <select
                             value={searchType}
+                            className='bd-search-select'
                             onChange={(e) => setSearchType(e.target.value)}
-                            style={{
-                                padding: '8px 12px',
-                                borderRadius: '5px',
-                                border: '1px solid #ddd',
-                                minWidth: '120px'
-                            }}
                         >
                             <option value="all">전체</option>
                             <option value="user_id">아이디</option>
@@ -248,117 +220,55 @@ function Announcement() {
                             type="text"
                             value={searchKeyword}
                             onChange={(e) => setSearchKeyword(e.target.value)}
-                            placeholder="검색어를 입력하세요"
-                            style={{
-                                padding: '8px 12px',
-                                borderRadius: '5px',
-                                border: '1px solid #ddd',
-                                flex: 1
-                            }}
+                            placeholder="검색어를 입력��세요"
+                            className='bd-serach-input'
                         />
 
                         <button
                             type="submit"
                             disabled={isSearching}
-                            style={{
-                                padding: '8px 16px',
-                                backgroundColor: '#007bff',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                minWidth: '80px'
-                            }}
+                            className='bd-serach-button'
                         >
                             {isSearching ? '검색 중...' : '검색'}
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={handleResetSearch}
-                            style={{
-                                padding: '8px 16px',
-                                backgroundColor: '#6c757d',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            초기화
                         </button>
                     </form>
 
                     {/* 검색 결과가 없을 때 메시지 표시 */}
                     {boards.length === 0 && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '20px',
-                            color: '#666'
-                        }}>
+                        <div
+                            className='bd-search-result-message'>
                             검색 결과가 없습니다.
                         </div>
                     )}
 
-                    <div className="button-container" style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '20px'
-                    }}>
-                        <h2 className="page-title" style={{
-                            fontSize: '1.5rem',
-                            color: '#333'
-                        }}>전체 게시글</h2>
+                    <div className="bd-button-container">
+                        <h2 className="bd-page-title">전체 게시글</h2>
                         <button
-                            className="write-button"
+                            className="bd-write-button"
                             onClick={() => setIsModalState(true)}
-                            style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#007bff',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s'
-                            }}
                         >
                             글쓰기
                         </button>
                     </div>
 
-                    <div className="table-container" style={{
-                        backgroundColor: 'white',
-                        borderRadius: '10px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                    }}>
-                        <table className="table" style={{
-                            width: '100%',
-                            borderCollapse: 'collapse'
-                        }}>
+                    <div className="bd-table-container">
+                        <table className="bd-table">
                             <thead>
                                 <tr>
                                     <th className="th" style={{ width: '8%' }}>번호</th>
                                     <th className="th" style={{ width: '15%' }}>카테고리</th>
-                                    <th className="th" style={{ width: '45%' }}>제목</th>
-                                    <th className="th" style={{ width: '15%' }}>작성자</th>
-                                    <th className="th" style={{ width: '17%' }}>작성일</th>
-                                    <th className="th" style={{ width: '15%' }}>조회수</th>
+                                    <th className="th" style={{ width: '40%' }}>제목</th>
+                                    <th className="th" style={{ width: '12%' }}>작성자</th>
+                                    <th className="th" style={{ width: '15%' }}>작성일</th>
+                                    <th className="th" style={{ width: '10%' }}>조회수</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {currentPosts.map((item, index) => (
                                     <tr
                                         key={item.board_id}
-                                        className="table-row"
+                                        className="bd-table-row"
                                         onClick={() => toggleItem(item.board_id)}
-                                        style={{
-                                            cursor: 'pointer',
-                                            transition: 'background-color 0.2s',
-                                            ':hover': {
-                                                backgroundColor: '#f8f9fa'
-                                            }
-                                        }}
                                     >
                                         <td className="td">{boards.length - ((currentPage - 1) * postsPerPage + index)}</td>
                                         <td className="td">{item.content_type}</td>
@@ -374,23 +284,12 @@ function Announcement() {
                         </table>
 
                         {/* 페이지네이션 UI 추가 */}
-                        <div className="pagination" style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            gap: '10px',
-                            margin: '20px 0'
-                        }}>
+                        <div className="bd-pagination">
                             {/* 이전 페이지 버튼 */}
                             <button
+                                className='bd-pagination-button'
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                style={{
-                                    padding: '5px 10px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '5px',
-                                    backgroundColor: currentPage === 1 ? '#f8f9fa' : 'white',
-                                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
-                                }}
                             >
                                 이전
                             </button>
@@ -398,16 +297,9 @@ function Announcement() {
                             {/* 페이지 번호 버튼들 */}
                             {Array.from({ length: pageNumbers }, (_, i) => i + 1).map(number => (
                                 <button
+                                    className='bd-pagenation-button2'
                                     key={number}
                                     onClick={() => handlePageChange(number)}
-                                    style={{
-                                        padding: '5px 10px',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '5px',
-                                        backgroundColor: currentPage === number ? '#007bff' : 'white',
-                                        color: currentPage === number ? 'white' : 'black',
-                                        cursor: 'pointer'
-                                    }}
                                 >
                                     {number}
                                 </button>
@@ -417,38 +309,15 @@ function Announcement() {
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === pageNumbers}
-                                style={{
-                                    padding: '5px 10px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '5px',
-                                    backgroundColor: currentPage === pageNumbers ? '#f8f9fa' : 'white',
-                                    cursor: currentPage === pageNumbers ? 'not-allowed' : 'pointer'
-                                }}
+                                className='bd-pagenation-button3'
                             >
                                 다음
                             </button>
                         </div>
 
                         {isModalState && (
-                            <div className='modal' style={{
-                                position: 'fixed',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                zIndex: 1000
-                            }}>
-                                <div className='modal-content' style={{
-                                    backgroundColor: 'white',
-                                    padding: '20px',
-                                    borderRadius: '10px',
-                                    width: '90%',
-                                    maxWidth: '600px'
-                                }}>
+                            <div className='bd-modal'>
+                                <div className='bd-modal-content'>
                                     <div className='modal-header'>
                                         <h2 className='modal-title'>게시글 작성</h2>
                                         <button className='modal-close-button' onClick={handleModalState}>
@@ -460,7 +329,7 @@ function Announcement() {
                                         flexDirection: 'column',
                                         gap: '20px'
                                     }}>
-                                        <div className='form-group'>
+                                        <div className='bd-form-group'>
                                             <label className='form-label'>제목</label>
                                             <input type='text' name='title'
                                                 value={announcements.title}
@@ -494,28 +363,13 @@ function Announcement() {
                                             gap: '10px',
                                             justifyContent: 'flex-end'
                                         }}>
-                                            <button type="submit" className="submit-button" style={{
-                                                padding: '10px 20px',
-                                                backgroundColor: '#007bff',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '5px',
-                                                cursor: 'pointer'
-                                            }}>
+                                            <button type="submit" className="bd-submit-button">
                                                 등록
                                             </button>
                                             <button
                                                 type="button"
-                                                className="cancel-button"
-                                                onClick={handleModalState}
-                                                style={{
-                                                    padding: '10px 20px',
-                                                    backgroundColor: '#6c757d',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '5px',
-                                                    cursor: 'pointer'
-                                                }}>
+                                                className="bd-cancel-button"
+                                                onClick={handleModalState}>
                                                 취소
                                             </button>
                                         </div>

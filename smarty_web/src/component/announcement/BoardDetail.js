@@ -105,21 +105,23 @@ function BoardDetail() {
             <p>{board.content}</p>
           </div>
 
-          <div className="board-actions">
+          <div className="bdd-board-actions">
             <button onClick={handleGoodBtn}>
-              좋아요 {board.good_btn}
+              👍 좋아요 {board.good_btn}
             </button>
             <button onClick={handleBadBtn}>
-              싫어요 {board.bad_btn}
-            </button>
-            <button onClick={handleDelete}>
-              삭제
-            </button>
-            <button onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
-              수정
+              👎 싫어요 {board.bad_btn}
             </button>
             <button onClick={() => navigate('/notice/board')}>
               목록
+            </button>
+            <button
+              onClick={handleDelete}>
+              삭제
+            </button>
+            <button
+              onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
+              수정
             </button>
           </div>
         </>

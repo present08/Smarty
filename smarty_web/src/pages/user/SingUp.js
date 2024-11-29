@@ -171,7 +171,7 @@ const SignUp = () => {
                             <p >&gt;</p>
                             <Link to="/user/login" style={{ textDecoration: 'none', color: 'black', padding: '10px' }}>LOGIN</Link>
                             <p >&gt;</p>
-                            <Link to="/user/signUp" style={{ textDecoration: 'none', color: 'black', padding: '10px', marginRight: '10px' }}>SIGNUP</Link>
+                            <Link to="/user/signUp" style={{ textDecoration: 'none', color: 'black', padding: '10px', marginRight: '10px', color: '#17468c' }}>SIGNUP</Link>
 
                         </nav>
                     </div>

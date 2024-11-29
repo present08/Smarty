@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const host = "http://localhost:8080/api/user/reservation"
 
@@ -16,7 +16,6 @@ export const getCourt = async (facility_id, court_id, date) => {
 
 // reservation success event( update timeLine )
 export const updatePlan = async (postData, facility_id) => {
-    console.log("post----------------------",postData)
     const response = await axios.post(`${host}/${facility_id}`, postData)
     return response.data
 }

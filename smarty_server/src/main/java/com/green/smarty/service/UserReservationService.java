@@ -96,9 +96,12 @@ public class UserReservationService {
                 cnt++;
         }
         // 현재시간 이전 Btn disabled
-        for (Map<String, Integer> i : timeBtn) {
-            if (prevTime >= i.get("id"))
-                i.put("disabled", 1);
+        if (now.toLocalDate().compareTo(LocalDate.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),
+                Integer.parseInt(dateList[2]))) == 0) {
+            for (Map<String, Integer> i : timeBtn) {
+                if (prevTime >= i.get("id"))
+                    i.put("disabled", 1);
+            }
         }
         return timeBtn;
     }

@@ -7,27 +7,26 @@ import NotificationHandler from './NotificationHandler';
 
 
 function App() {
+
   useEffect(() => {
 
-    const registerServiceWorker = async () => {
-      console.log("Registering service worker...");
+    const registerServiceWorker = () => { //Service Worker 등록
       if ('serviceWorker' in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-          console.log("Service Worker registered successfully:", registration);
-        } catch (error) {
-          console.error("Service Worker registration failed:", error);
-        }
-      } else {
-        console.error("Service workers are not supported in this browser.");
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            console.log("가입완료", registration);
+          })
+          .catch((err) => {
+            console.log("error", err);
+          })
       }
-    };
-
+    }
 
     const requestNotificationPermisson = async () => { //알림 권한 요청
       if (Notification.permission !== "granted") {
         const permission = await Notification.requestPermission();
         if (permission !== "granted") {
+          console.log("허가")
           return;
         }
       }
@@ -38,8 +37,10 @@ function App() {
     getFCMToken(); //토큰 발급
   }, []);
 
+  console.log(Notification.permission)
+
   return (
-    <div className="App main-content">
+    <div className="App main-content" style={{ overflowX:'hidden' }}>
       <NotificationHandler />
       <RouterProvider router={root}></RouterProvider>
     </div>

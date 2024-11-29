@@ -220,7 +220,7 @@ function Announcement() {
                             type="text"
                             value={searchKeyword}
                             onChange={(e) => setSearchKeyword(e.target.value)}
-                            placeholder="검색어를 입력��세요"
+                            placeholder="검색어를 입력하세요"
                             className='bd-serach-input'
                         />
 

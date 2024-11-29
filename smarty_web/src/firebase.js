@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
-import { FCMProvider, useFCM } from "./context/FCMContext";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAQgG03woC9QFnVaAK1XGCWdZ1OxwD1dCI",
@@ -14,24 +13,24 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
-
 const getFCMToken = async () => {
     console.log("function called");
+    console.log("Step 1: Starting getFCMToken function");
     try {
-        const token = await getToken(messaging, { vapidKey: "BOfKp82VMmDat4yOTyK3Kd-I6B8j2Xmt_3wio76qYaU_2-LvM_Q3Khp_ItOXQS8Md9WCPaCcneHKTrmkc1WdUZM" });  //토큰 발급(firebase)
+        console.log("Step 2: Attempting to get token");
+        const token = await getToken(messaging, { vapidKey: "BL5sHWEB--rDYVffjvHXmasZaYkf7sAR7x8Xx6UMRADBH6rBbV15HF5C55U7OYNjJL20pmeuk10kpFYINUeUC6U" });  //토큰 발급(firebase)
+        console.log("Step 3: Token retrieved:", token);
         if (token) { //토큰값이 있을 경우
             console.log("token:", token);
             //SetFCMToken(token); //Context API를 이용해 해당 값 저장
             return token; //토큰 값 반환
         } else {
-            console.log("no token");
+            console.warn("no token");
             return;
         }
-    } catch (err) {
-        console.log("err", err);
+    } catch (error) {
+        console.log("Error fetching FCM token : ", error.message, error);
         return;
     }
 }
-
-
 export { messaging, getFCMToken };

@@ -34,10 +34,18 @@ function BoardDetail() {
       return;
     }
 
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('로그인이 필요한 서비스 입니다.');
+      navigate('/user/login');
+      return;
+    }
+
     try {
       const commentData = {
         board_id: parseInt(board_id),
-        content: newComment
+        content: newComment,
+        user_id: userId
       };
 
       await noticeApi.comments.writeComment(commentData);
@@ -45,6 +53,7 @@ function BoardDetail() {
       const commentsResponse = await noticeApi.comments.getComments(board_id);
       setComments(commentsResponse.data);
       setNewComment('');
+      console.log(commentData);
       alert('댓글이 작성되었습니다.');
     } catch (error) {
       console.error('댓글 작성 실패:', error);

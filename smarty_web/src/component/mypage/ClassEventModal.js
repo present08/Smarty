@@ -4,13 +4,12 @@ import { AiFillCheckCircle } from 'react-icons/ai'
 import { enrollpayment } from '../../api/paymentAPI'
 
 const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
-    console.log("classEvent", classEvent)
     const init = {
         enrollment_id: classEvent.enrollment_id, amount: classEvent.price
     }
     const [enrollData, setEnrollData] = useState(init);
+    // classEventModal Data UPdate
     useEffect(() => {
-        console.log("classEvent update : ", classEvent)
         setEnrollData({ enrollment_id: classEvent.enrollment_id, amount: classEvent.price })
     }, [classEvent])
 
@@ -18,6 +17,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
         enrollmentPayment();
     }
 
+    //enrollment payment system
     const enrollmentPayment = () => {
         //iamport Payment System
         const { IMP } = window
@@ -38,8 +38,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
     const insertEnrollment = () => {
         enrollpayment(enrollData).then(e => {
             closeModal()
-            // window.location.reload();
-            console.log(e)
+            window.location.reload();
         })
     }
 

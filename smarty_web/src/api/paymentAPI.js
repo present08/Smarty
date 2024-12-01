@@ -32,9 +32,15 @@ export const handlePayment = async () => {
 }
 
 
+// resservation Payment
+export const reserpayment = async (postData) => {
+  console.log("전송 데이터 확인 ", postData)
+  const response = await axios.post(`${host}/reservation`, postData);
+  return response.data;
+}
+
 // enrollment Payment
 export const enrollpayment = async (postData) => {
-  console.log("전송 데이터 확인 : ",postData)
   const response = await axios.post(`${host}/enrollment`, postData);
   return response.data;
 }

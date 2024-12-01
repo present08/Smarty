@@ -128,10 +128,13 @@ public class UserReservationService {
         if (iterable == 0) {
             // 마지막 예약번호 받아오기(배열에 데이터가 없을 경우 예외처리)
             String nowDate = "" + LocalDate.now().getYear() + LocalDate.now().getMonthValue()
-                    + LocalDate.now().getDayOfMonth();
+                    + (LocalDate.now().getDayOfMonth() < 10 ? String.format("%02d", LocalDate.now().getDayOfMonth())
+                            : LocalDate.now().getDayOfMonth());
             int last_id = 0;
+            System.out.println(nowDate);
 
             try {
+                System.out.println(selectVO.get(selectVO.size() - 1).getReservation_id().substring(2, 10));
                 if (selectVO.get(selectVO.size() - 1).getReservation_id().substring(2, 10).equals(nowDate)) {
                     last_id = Integer.parseInt(selectVO.get(selectVO.size() - 1).getReservation_id().substring(10));
                 } else {
@@ -140,13 +143,14 @@ public class UserReservationService {
             } catch (Exception e) {
                 last_id = 0;
             }
-            dto.setReservation_id("R_" + nowDate + String.format("%02d", last_id + 1));
-            reservationMapper.insertReservation(dto);
+            dto.setReservation_id("R_" + nowDate + String.format("%03d", last_id + 1));
+            // reservationMapper.insertReservation(dto);
 
         }
 
         List<Map<String, Integer>> btnData = createTimeBtn(dto.getFacility_id(), dto.getCourt_id(), date);
-        UserReservationDTO resultDTO = UserReservationDTO.builder().btnData(btnData).iterable(iterable).build();
+        UserReservationDTO resultDTO = UserReservationDTO.builder().btnData(btnData).iterable(iterable)
+                .reservation_id(dto.getReservation_id()).build();
 
         return resultDTO;
     }

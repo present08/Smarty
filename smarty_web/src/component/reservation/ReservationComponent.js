@@ -11,6 +11,7 @@ const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')
     const [timeLine, setTimeLine] = useState([])
+    const [timeList, setTimeList] = useState([])
     const [resTimeLine, setResTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
@@ -77,31 +78,33 @@ const ReservationComponent = (props) => {
             user_id: user.user_id,
             reservation_start: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), frist < 10 ? '0' + frist : frist)).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
+            amount: price
         })
+
     }, [timeLine])
 
     // server 전송
-    const insertReservation = (success) => {
-        console.log("success", success)
-        if (success.success) {
-            updatePlan(postData, facilityData.facility_id)
-                .then(e => {
-                    if (e.iterable == 0) {
-                        setComplete(!complete)
-                        setResTimeLine(e.btnData)
-                    } else {
-                        alert("연속적으로 예약할수 없습니다.")
-                    }
-                })
-        } else {
-            alert(success.error_msg)
-        }
+    const insertReservation = () => {
+        updatePlan(postData, facilityData.facility_id)
+            .then(e => {
+                console.log("reservationID : ", e)
+                if (e.iterable != 0) {
+                    alert("연속적으로 예약할수 없습니다.")
+                } else {
+                    setPostData(prevData => ({
+                        ...prevData,
+                        reservation_id: e.reservation_id
+                    }));
+                    reservationPayment()
+                }
+            })
     }
 
-    const closeModal = (e) => {
+    const closeModal = (e, btnData) => {
         setComplete(e)
-        setTimeLine(resTimeLine)
+        setTimeLine(btnData)
     }
+
     const reservationPayment = () => {
         // iamport Payment System
         const { IMP } = window
@@ -116,7 +119,14 @@ const ReservationComponent = (props) => {
             buyer_name: user.user_id,                           // 구매자 이름
         };
 
-        IMP.request_pay(data, insertReservation)
+        IMP.request_pay(data, function nextFunc(success) {
+            if (success.success) {
+                setComplete(!complete)
+                setResTimeLine(timeList)
+            } else {
+                alert(success.error_msg)
+            }
+        })
 
     }
 
@@ -160,7 +170,7 @@ const ReservationComponent = (props) => {
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={reservationPayment} className='reservation_btn'>선택완료</button>
+                <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
                 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
                 <script src="/main.js"></script>
             </div>

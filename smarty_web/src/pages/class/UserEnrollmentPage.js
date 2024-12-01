@@ -40,8 +40,10 @@ const UserEnrollmentPage = () => {
         IMP.request_pay(data, insertEnrollment)
     }
 
-    const insertEnrollment = () => {
-        enrollpayment(enrollData).then(e => console.log(e))
+    const insertEnrollment = (success) => {
+        if (success.success) {
+            enrollpayment(enrollData).then(e => alert(e))
+        }
     }
     return (
         <div>

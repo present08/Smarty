@@ -1,19 +1,25 @@
 
-import React, { useState } from 'react'
-import '../../css/reservationComplete.css'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { LuCalendarCheck } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
+import { reserpayment } from '../../api/paymentAPI';
+import '../../css/reservationComplete.css';
 
 const ReservationComplete = (props) => {
     const { postData, facilityData, user, price, closeModal } = props;
+    const [btnData, setBtnData] = useState({})
     const navigate = useNavigate()
-    console.log("complete ",postData)
     const closed = (e) => {
         if (e == "mypage") {
             navigate('/mypage', { state: { user } })
         }
-        closeModal(false)
+        closeModal(false, btnData)
     }
+    useEffect(() => {
+        console.log("complete ", postData)
+        reserpayment(postData).then(e => setBtnData(e.btnData))
+    }, [props])
+
 
     return (
         <div>

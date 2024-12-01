@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.green.smarty.dto.EnrollmentClassDTO;
 import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.UserActivityDTO;
+import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.PaymentMapper;
 import com.green.smarty.mapper.PublicMapper;
+import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.PaymentService;
+import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.ReservationVO;
@@ -38,6 +42,12 @@ public class PaymentController {
 
     @Autowired
     private PaymentMapper paymentMapper;
+
+    @Autowired
+    private UserReservationMapper reservationMapper;
+
+    @Autowired
+    private UserReservationService reservationService;
 
     // 결제 생성
     @PostMapping("/create")
@@ -152,8 +162,10 @@ public class PaymentController {
         return result;
     }
 
+    // enrollment Payment
     @PostMapping("/enrollment")
     public String enrollPayment(@RequestBody Map<String, String> enrollData) {
+
         System.out.println(enrollData);
         LocalDateTime now = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
@@ -178,6 +190,40 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
         return "예약 완료";
+    }
+
+    // reservation Payment
+    @PostMapping("/reservation")
+    public UserReservationDTO reserPayment(@RequestBody ReservationDTO dto) {
+        // 결제 승인시 reservation Table insert
+        reservationMapper.insertReservation(dto);
+        System.out.println("payment" + dto);
+        LocalDateTime now = LocalDateTime.now();
+        List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
+        List<PaymentVO> paymentList = new ArrayList<>();
+        for (PaymentVO i : paymentVO) {
+            if (i.getPayment_id().substring(2, 10)
+                    .equals(now.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))) {
+                paymentList.add(i);
+            }
+        }
+        String id = "P_" + now.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                + String.format("%03d", paymentList.size() + 1);
+        PaymentVO vo = PaymentVO.builder()
+                .reservation_id(dto.getReservation_id())
+                .enrollment_id(null)
+                .payment_id(id)
+                .amount(dto.getAmount())
+                .payment_date(now)
+                .payment_status(true)
+                .build();
+
+        System.out.println(vo);
+        paymentMapper.insertPayment(vo);
+
+        UserReservationDTO result = reservationService.insertReservation(dto);
+
+        return result;
     }
 
 }

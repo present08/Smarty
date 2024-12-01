@@ -10,7 +10,6 @@ const RentalList = () => {
     const navigate = useNavigate();
     const [rentalCounts, setRentalCounts] = useState({})
 
-
     // 페이지네이션
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
@@ -106,8 +105,8 @@ const RentalList = () => {
                 null,
                 { params: { count: rentalCount } } // count를 명시적으로 전달
             );
-
             console.log("반납 데이터", response.data)
+
             
             if (response.status === 200) {
                 alert("반납이 완료되었습니다.");
@@ -148,7 +147,7 @@ const RentalList = () => {
                                 <td className="px-6 py-3 border-b text-left">물품명</td>
                                 <td className="px-6 py-3 border-b text-left">대여일</td>
                                 <td className="px-6 py-3 border-b text-left">반납예정일</td>
-                                <td className="px-6 py-3 border-b text-left">상태</td>
+                                <td className="px-6 py-3 border-b text-left">수량</td>
                             </tr>
                         </thead>
                         <tbody>

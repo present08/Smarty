@@ -53,10 +53,12 @@ public class PaymentController {
                     .enrollment_id(dto.getEnrollment_id())
                     .amount(dto.getAmount())
                     .payment_date(date)
+                    .payment_status(true)
                     .build();
 
         paymentMapper.insertPayment(vo);
         RentalVO rentalID = paymentService.insertRental(dto, id);
+        System.out.println(rentalID);
 
         return id;
     }

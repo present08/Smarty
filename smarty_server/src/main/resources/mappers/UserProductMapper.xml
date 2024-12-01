@@ -6,13 +6,9 @@
     <!--sql 구문을 써서 db에서 불러온다-->
 
     <insert id="insertProduct" parameterType="com.green.smarty.vo.ProductVO">
-        INSERT INTO product ( product_id, facility_id, product_name, stock, price, product_images, size )
-        VALUES (#{product_id}, #{facility_id}, #{product_name}, #{stock}, #{price}, #{product_images}, #{size} )
+        INSERT INTO product ( product_id, facility_id, product_name, management_type, stock, price, product_images, size )
+        VALUES (#{product_id}, #{facility_id}, #{product_name}, #{management_type}, #{stock}, #{price}, #{product_images}, #{size} )
     </insert>
-
-<!--    <select  id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">-->
-<!--        select * from product-->
-<!--    </select>-->
 
     <select  id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">
         SELECT
@@ -33,47 +29,6 @@
         ORDER BY
          p.product_id DESC
     </select>
-
-<!--    <insert id="register" parameterType="com.green.smarty.vo.ProductVO" useGeneratedKeys="true" keyProperty="product_id">-->
-<!--        INSERT INTO product_tbl (-->
-<!--            facility_id,-->
-<!--            product_name,-->
-<!--            price,-->
-<!--            facility_name-->
-<!--        )-->
-<!--        SELECT-->
-<!--            #{facility_id},-->
-<!--            #{product_name},-->
-<!--            #{price},-->
-<!--            f.facility_name-->
-<!--        FROM-->
-<!--            facility_tbl f-->
-<!--        WHERE-->
-<!--            f.facility_id = #{facility_id}-->
-
-<!--    </insert>-->
-
-<!--    <select id="getAllProducts" resultMap="ProductMap">-->
-<!--        SELECT-->
-<!--            p.*,-->
-<!--            f.facility_name,-->
-<!--            a.uuid,-->
-<!--            a.upload_path,-->
-<!--            a.file_name,-->
-<!--            a.image-->
-<!--        FROM-->
-<!--            product_tbl p-->
-<!--        LEFT JOIN-->
-<!--            facility_tbl f-->
-<!--        ON-->
-<!--            p.facility_id = f.facility_id-->
-<!--        LEFT JOIN-->
-<!--            attach_file a-->
-<!--        ON-->
-<!--            p.product_id = a.product_id-->
-<!--        ORDER BY-->
-<!--            p.product_id DESC-->
-<!--    </select>-->
 
     <delete id="deleteProduct">
         DELETE FROM product WHERE product_id = #{product_id}

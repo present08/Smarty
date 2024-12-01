@@ -1,13 +1,8 @@
 package com.green.smarty.service;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
-import com.green.smarty.mapper.PublicMapper;
-import com.green.smarty.mapper.UserProductMapper;
-import com.green.smarty.mapper.UserRentalMapper;
-import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.dto.ProductDTO;
+import com.green.smarty.mapper.*;
 import com.green.smarty.vo.ProductVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.UserVO;
@@ -24,6 +19,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 
 public class UserRentalService{
     @Autowired
@@ -65,7 +61,6 @@ public class UserRentalService{
         vo.setRental_status(true);
         vo.setCount(count);
 
-
         int rentalId = userRentalMapper.insertRental(vo);
         String rentalIdString = String.valueOf(rentalId);
         System.out.println("렌탈 확인: " + rentalId);
@@ -88,35 +83,6 @@ public class UserRentalService{
         return rentalList;
     }
 
-
-//    public int returnRental(String rental_id, int count) {
-//        System.out.println("반납할 렌탈 ID: " + rental_id + ", count: " + count);
-//
-//        RentalDTO rental = userRentalMapper.getRentalById(rental_id);
-//
-//        if (rental == null) {
-//            throw new RuntimeException("대여 정보가 존재하지 않습니다 ID: " + rental_id);
-//        }
-//
-//        if (!rental.isRental_status()) {
-//            throw new RuntimeException("이미 반납된 대여입니다 ID: " + rental_id);
-//        }
-//
-//        rental.setRental_status(false);
-//        rental.setReturn_date(LocalDateTime.now());
-//
-//        int result = userRentalMapper.updateRental(rental);
-//
-//        if (result > 0) {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("product_id", rental.getProduct_id());
-//            map.put("count", count);
-//            System.out.println("재고 증가 처리 데이터: "+map);
-//            userRentalMapper.productStockUp(map);
-//            System.out.println("상품 재고 증가 상품ID: " +  rental.getProduct_id() + ", 증가 수량: " + count);
-//        }
-//        return result;
-//    }
 
     public int returnRental(String rental_id, int count) {
         System.out.println("반납할 렌탈 ID: " + rental_id + ", count: " + count);
@@ -146,6 +112,27 @@ public class UserRentalService{
             System.out.println("재고 증가 처리 데이터: "+map);
             userRentalMapper.productStockUp(map);
             System.out.println("상품 재고 증가 상품ID: " +  rental.getProduct_id() + ", 증가 수량: " + count);
+
+            int paymentUpdateResult = updatePaymentStatus(rental_id, false);
+
+            if (paymentUpdateResult > 0) {
+                System.out.println("결제 상태 업데이트 성공: " + rental_id);
+            } else {
+                throw new RuntimeException("결제 상태 업데이트 실패" + rental_id);
+            }
+
+        }
+        return result;
+    }
+
+    public int updatePaymentStatus(String rental_id, boolean payment_status) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("rental_id", rental_id);
+        map.put("payment_status", payment_status);
+
+        int result = userRentalMapper.updatePaymentStatus(map);
+        if (result == 0) {
+            throw new RuntimeException("Payment status 업데이트 실패 : ");
         }
         return result;
     }

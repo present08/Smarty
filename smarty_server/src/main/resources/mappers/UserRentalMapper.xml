@@ -119,5 +119,11 @@
         <result property="rental_id" column="rental_id" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
+        UPDATE payment
+        SET payment_status = #{payment_status}
+        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id})
+    </update>
+
 
 </mapper>

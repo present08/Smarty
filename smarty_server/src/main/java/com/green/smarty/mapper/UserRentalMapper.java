@@ -33,6 +33,8 @@ public interface UserRentalMapper {
     //대여 반납 처리
     int returnRental(RentalVO vo);
 
+    int updatePaymentStatus(Map<String, Object> map);
+
     //특정 사용자 대여 목록 조회
     List<ProductRentalUserDTO> getUserRentalListData(String user_id);
 }

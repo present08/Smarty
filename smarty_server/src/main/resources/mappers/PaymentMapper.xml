@@ -8,14 +8,16 @@
             reservation_id,
             enrollment_id,
             amount,
-            payment_date
+            payment_date,
+            payment_status
         )
         VALUES (
             #{payment_id},
             #{reservation_id},
             #{enrollment_id},
             #{amount},
-            #{payment_date}
+            #{payment_date},
+            #{payment_status}
         )
     </insert>
 

@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,19 @@ public class PaymentService {
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("product_id", dto.getProduct_id());
+        map.put("count", dto.getCount());
+        System.out.println("product_id 확인: " + map.get("product_id"));
+        System.out.println("count 확인: "+map.get("count"));
+        int stockDown = userRentalMapper.productStockDown(map);
+
+        if (stockDown > 0) {
+        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+        } else {
+            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+        }
         return vo;
     }
 

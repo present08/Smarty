@@ -5,6 +5,7 @@
 # Compiled class file
 *.class
 upload/
+*.mp4
 
 # Log file
 *.log

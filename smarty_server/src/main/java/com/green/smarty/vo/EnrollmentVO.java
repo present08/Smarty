@@ -13,4 +13,5 @@ public class EnrollmentVO {
     private String enrollment_id;
     private String user_id;
     private String class_id;
+    private String enrollment_status;
 }

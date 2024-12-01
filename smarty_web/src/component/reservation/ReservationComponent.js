@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { LuAlarmClock } from 'react-icons/lu';
-import CustomCalender from './CustomCalender.tsx';
-import { FaRegCheckSquare } from 'react-icons/fa';
-import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { FaRegCheckSquare } from 'react-icons/fa';
+import { LuAlarmClock } from 'react-icons/lu';
+import { updatePlan } from './../../api/reservaionApi';
+import CustomCalender from './CustomCalender.tsx';
 import ReservationComplete from './ReservationComplete.js';
 
 
@@ -81,21 +81,43 @@ const ReservationComponent = (props) => {
     }, [timeLine])
 
     // server 전송
-    const insertReservation = () => {
-        updatePlan(postData, facilityData.facility_id)
-            .then(e => {
-                if (e.iterable == 0) {
-                    setComplete(!complete)
-                    setResTimeLine(e.btnData)
-                } else {
-                    alert("연속적으로 예약할수 없습니다.")
-                }
-            })
+    const insertReservation = (success) => {
+        console.log("success", success)
+        if (success.success) {
+            updatePlan(postData, facilityData.facility_id)
+                .then(e => {
+                    if (e.iterable == 0) {
+                        setComplete(!complete)
+                        setResTimeLine(e.btnData)
+                    } else {
+                        alert("연속적으로 예약할수 없습니다.")
+                    }
+                })
+        } else {
+            alert(success.error_msg)
+        }
     }
 
     const closeModal = (e) => {
         setComplete(e)
         setTimeLine(resTimeLine)
+    }
+    const reservationPayment = () => {
+        // iamport Payment System
+        const { IMP } = window
+        IMP.init("imp57034437");
+
+        const data = {
+            pg: 'html5_inicis',                           // PG사
+            pay_method: 'card',                           // 결제수단
+            merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
+            amount: price,                                 // 결제금액
+            name: facilityData.facility_name,                  // 주문명
+            buyer_name: user.user_id,                           // 구매자 이름
+        };
+
+        IMP.request_pay(data, insertReservation)
+
     }
 
     return (
@@ -138,7 +160,9 @@ const ReservationComponent = (props) => {
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
+                <button onClick={reservationPayment} className='reservation_btn'>선택완료</button>
+                <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+                <script src="/main.js"></script>
             </div>
             {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
         </div>

@@ -24,5 +24,5 @@ public interface UserClassMapper {
 
     List<EnrollmentVO> getEnrollment();
 
-    void classEnroll(Map<String, String> enrollData);
+    void classEnroll(EnrollmentVO vo);
 }

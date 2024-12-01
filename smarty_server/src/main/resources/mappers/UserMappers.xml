@@ -89,6 +89,7 @@
         u.user_id,
         u.user_name,
         e.enrollment_id,
+        e.enrollment_status,
         e.class_id,
         c.class_name,
         c.start_date,

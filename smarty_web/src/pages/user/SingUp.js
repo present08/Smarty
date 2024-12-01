@@ -103,7 +103,7 @@ const SignUp = () => {
                                     id="email"
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="이메일을 입력하세요."
-                                    require
+                                    required
                                 />@
                                 <input type="text" disabled={selectEmail !== '' ? true : false} placeholder={selectEmail} />
                                 <select onChange={(e) => setSelectEmail(e.target.value)}>

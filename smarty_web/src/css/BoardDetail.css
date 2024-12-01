@@ -135,9 +135,54 @@
 }
 
 .comment {
-  padding: 1rem;
-  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
   border-radius: 4px;
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.comment-actions {
+  margin-left: auto;
+}
+
+.comment-actions button {
+  margin-left: 8px;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment-edit-form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.comment-edit-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.comment-edit-buttons button {
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .comment-content {

@@ -10,6 +10,11 @@ function BoardDetail() {
   const [board, setBoard] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedContent, setEditedContent] = useState('');
+
+  const user = localStorage.getItem('user');
+  const userId = JSON.parse(user).userId;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,11 +39,22 @@ function BoardDetail() {
       return;
     }
 
-    const userId = localStorage.getItem('userId');
     if (!userId) {
-      alert('로그인이 필요한 서비스 입니다.');
-      navigate('/user/login');
-      return;
+      try {
+        const sessionCheck = await noticeApi.checkSession();
+        if (sessionCheck.userId) {
+          localStorage.setItem('userId', sessionCheck.userId);
+        } else {
+          alert('로그인이 필요한 서비스 입니다.');
+          navigate('/user/login');
+          return;
+        }
+      } catch (error) {
+        console.error('세션 확인 실패:', error);
+        alert('로그인이 필요한 서비스 입니다.');
+        navigate('/user/login');
+        return;
+      }
     }
 
     try {
@@ -96,7 +112,49 @@ function BoardDetail() {
     }
   };
 
+  const handleCommentEdit = async (commentId, content) => {
+    setEditingCommentId(commentId);
+    setEditedContent(content);
+  };
 
+  const handleCommentUpdate = async (reply_id) => {
+    try {
+      const commentData = {
+        content: editedContent,
+        reply_id: reply_id,
+        board_id: board_id,
+        user_id: userId
+      };
+
+      await noticeApi.comments.modifyComment(reply_id, commentData);
+      alert('댓글이 수정되었습니다.');
+
+      // 댓글 목록 새로고침
+      const commentsResponse = await noticeApi.comments.getComments(board_id);
+      setComments(commentsResponse.data);
+
+      // 수정 모드 종료
+      setEditingCommentId(null);
+      setEditedContent('');
+    } catch (error) {
+      console.error('댓글 수정 실패:', error);
+      alert('댓글 수정에 실패했습니다.');
+    }
+  };
+
+  const handleCommentDelete = async (reply_id) => {
+    if (window.confirm('댓글을 삭제하시겠습니까?')) {
+      try {
+        await noticeApi.comments.deleteCommnet(reply_id);
+        const commentsResponse = await noticeApi.comments.getComments(board_id);
+        setComments(commentsResponse.data);
+        alert('댓글이 삭제되었습니다.');
+      } catch (error) {
+        console.error('댓글 삭제 실패:', error);
+        alert('댓글 삭제에 실패했습니다.');
+      }
+    }
+  };
 
   return (
     <div className="board-detail">
@@ -107,6 +165,7 @@ function BoardDetail() {
             <div className="board-info">
               <span>작성일: {new Date(board.send_date).toLocaleString()}</span>
               <span>조회수: {board.view_count}</span>
+              <span>작성자: {board.user_id}</span>
             </div>
           </div>
 
@@ -151,10 +210,43 @@ function BoardDetail() {
         <div className="comments-list">
           {comments.map((comment) => (
             <div key={comment.reply_id} className="comment">
-              <div className="comment-content">{comment.content}</div>
-              <div className="comment-date">
-                {new Date(comment.send_date).toLocaleString()}
-              </div>
+              {editingCommentId === comment.reply_id ? (
+                <div className="comment-edit-form">
+                  <textarea
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                    rows="3"
+                  />
+                  <div className="comment-edit-buttons">
+                    <button onClick={() => handleCommentUpdate(comment.reply_id)}>
+                      저장
+                    </button>
+                    <button onClick={() => setEditingCommentId(null)}>
+                      취소
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="comment-content">{comment.content}</div>
+                  <div className="comment-info">
+                    <div className="comment-date">
+                      {new Date(comment.send_date).toLocaleString()}
+                    </div>
+                    <span className="comment-author">작성자: {comment.user_id}</span>
+                    {comment.user_id === userId && (
+                      <div className="comment-actions">
+                        <button onClick={() => handleCommentEdit(comment.reply_id, comment.content)}>
+                          수정
+                        </button>
+                        <button onClick={() => handleCommentDelete(comment.reply_id)}>
+                          삭제
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>

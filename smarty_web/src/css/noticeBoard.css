@@ -241,16 +241,20 @@ body,
 }
 
 .bd-header {
-    background-color: #f8f9fa;
-    padding: 40px 0;
+    background-color: #357abd;
+    padding: 20px 0;
     text-align: center;
     border-radius: 10px;
     margin-bottom: 30px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bd-header-title {
     font-size: 24px;
-    color: #333;
+    color: #ffffff;
     margin: 0;
     font-weight: 600;
 }
@@ -258,6 +262,7 @@ body,
 .bd-header-subtitle {
     font-size: 1.1rem;
     opacity: 0.9;
+    color: #ffffff;
 }
 
 .bd-search-form {

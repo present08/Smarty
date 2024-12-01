@@ -41,4 +41,13 @@ public class ReplyService {
     public List<ReplyDTO> getCommentsByBoardId(int board_id) {
         return replyMapper.getCommentsByBoardId(board_id);
     }
+
+    public void deleteById(int reply_id){
+        replyMapper.deleteById(reply_id);
+    }
+
+    public int updateById(ReplyDTO replyDTO){
+        int result = replyMapper.updateById(replyDTO);
+        return result;
+    }
 }

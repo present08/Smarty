@@ -83,6 +83,11 @@ export const noticeApi = {
         // 댓글 삭제
         deleteCommnet: async (commentId) => {
             return await axios.delete(`${BASE_URL}/notice/board/comments/delete/${commentId}`);
+        },
+
+        // 댓글 수정
+        modifyComment: async (reply_id, replyData) => {
+            return await axios.put(`${BASE_URL}/notice/board/comments/modify/${reply_id}`, replyData);
         }
     },
 

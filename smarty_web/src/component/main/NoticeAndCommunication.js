@@ -27,7 +27,7 @@ const NoticeAndCommunication = () => {
                         <img src="/img/3dicons-notify-heart-front-color.png" alt="" style={{ width: '200px', height: '200px', position: 'absolute', left: '0%', top: '-15%', animation: 'scaleUpDown 2.5s ease-in-out infinite', filter: 'drop-shadow(1px 1px 30px rgba(128, 128, 128, 0.5))' }} />
                         <img src="/img/3dicons-thumb-up-front-color.png" alt="" style={{ width: '200px', height: '200px', position: 'absolute', right: '-6%', top: '35%', animation: 'moveUpDown 3s ease-in-out infinite', filter: 'drop-shadow(1px 1px 30px rgba(128, 128, 128, 0.5))' }} />
                         <h4 style={{ fontSize: '38px', color: 'white' }}>Free bulletin board</h4>
-                        <Link to={"/notice/announce"} style={{
+                        <Link to={"/notice/board"} style={{
                             width: '160px', height: '50px', backgroundColor: 'white', border: 'none', borderRadius: '10px',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px', fontWeight: 'bold', color: 'black', marginTop: '20px'
                         }}>바로가기</Link>

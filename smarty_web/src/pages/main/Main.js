@@ -46,6 +46,15 @@ const Main = () => {
         <ShortBanner />
         <div ref={productRef} ></div>
         <MainProductList />
+        {/* <div style={{ width: '100%', height: '50vh' }}>
+          <video
+            src="/img/994015_sports_soccer_football_21082607Family Outdoors4k004.mp4"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(80%)' }}
+            autoPlay={true}
+            muted
+            loop
+          />
+        </div> */}
       </Wrapper>
       <Footer />
     </div>

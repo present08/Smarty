@@ -1,10 +1,15 @@
 package com.green.smarty.dto;
 
-import lombok.*;
-
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
@@ -24,4 +29,5 @@ public class ReservationDTO {
     private String court_name;
     private String facility_id;
     private boolean court_status;
+    private float amount;
 }

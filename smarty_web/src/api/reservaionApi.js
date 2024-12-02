@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const host = "http://localhost:8080/api/user/reservation"
 

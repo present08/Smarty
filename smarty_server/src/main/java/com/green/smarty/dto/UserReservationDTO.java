@@ -15,4 +15,5 @@ import lombok.NoArgsConstructor;
 public class UserReservationDTO {
     List<Map<String, Integer>> btnData;
     int iterable;
+    String reservation_id;
 }

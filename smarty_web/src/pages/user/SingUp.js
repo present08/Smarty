@@ -18,7 +18,7 @@ const SignUp = () => {
     const [qrCodeUrl, setQrCodeUrl] = useState(''); // QR 코드 URL 상태
     const [selectEmail, setSelectEmail] = useState('');
     const [fcmToken, setFCMToken] = useState('');
-    const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcmToken: fcmToken };
+    const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcm_token: fcmToken };
 
     const navigate = useNavigate();
 

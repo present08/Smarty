@@ -4,7 +4,8 @@
 ### Java ###
 # Compiled class file
 *.class
-/upload/
+upload/
+*.mp4
 
 # Log file
 *.log

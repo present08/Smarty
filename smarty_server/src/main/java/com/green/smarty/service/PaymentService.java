@@ -57,8 +57,8 @@ public class PaymentService {
     }
 
     // 결제 생성
-    public String createPayment(PaymentVO paymentVO) {
-        try {
+    // public String createPayment(PaymentVO paymentVO) {
+    //     try {
 //            String rentalIdString = String.valueOf(paymentVO.getRental_id());
 //            paymentVO.setRental_id(rentalIdString);
 //
@@ -69,25 +69,25 @@ public class PaymentService {
 //                throw new IllegalArgumentException("rental_id가 존재하지 않습니다: " + rentalIdString);
 //            }
 
-            String payment_id = generatePaymentId();
-            paymentVO.setPayment_id(payment_id);
-//            paymentVO.setPayment_date(LocalDate.now());
+//             String payment_id = generatePaymentId();
+//             paymentVO.setPayment_id(payment_id);
+// //            paymentVO.setPayment_date(LocalDate.now());
 
-            // 필수 데이터 검증
-            if (paymentVO.getAmount() <= 0) {
-                throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
-            }
-            if (paymentVO.getRental_id() == null) {
-                throw new IllegalArgumentException("렌탈 ID가 누락되었습니다.");
-            }
+//             // 필수 데이터 검증
+//             if (paymentVO.getAmount() <= 0) {
+//                 throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
+//             }
+//             if (paymentVO.getRental_id() == null) {
+//                 throw new IllegalArgumentException("렌탈 ID가 누락되었습니다.");
+//             }
 
-            paymentMapper.insertPayment(paymentVO); // 데이터 삽입
-            return payment_id;
-        } catch (Exception e) {
-            System.out.println("결제 생성중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("결제 생성 실패: " + e.getMessage(), e);
-        }
-    }
+//             paymentMapper.insertPayment(paymentVO); // 데이터 삽입
+//             return payment_id;
+//         } catch (Exception e) {
+//             System.out.println("결제 생성중 오류 발생: " + e.getMessage());
+//             throw new RuntimeException("결제 생성 실패: " + e.getMessage(), e);
+//         }
+//     }
 
     //고유 결제 ID 생성
     private String generatePaymentId() {

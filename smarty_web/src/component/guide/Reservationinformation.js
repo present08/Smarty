@@ -42,7 +42,7 @@ const Reservationinformation = () => {
                             <h5>입장권 가격</h5>
                             <hr />
                             <p>시설마다 다르니 확인 바람</p>
-                            <button><Link to={"/guide/hours"}>일일입장</Link></button>
+                            <button><Link to={"/guide/hours"}>이용시간</Link></button>
                         </div>
                     </div>
                 </div>

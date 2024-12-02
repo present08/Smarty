@@ -120,3 +120,31 @@
     justify-content: center;
     align-items: center;
 }
+
+
+@media (max-width: 768px) {
+
+    .login-container {
+        width: 100%;
+    }
+
+    .login-container>h1 {
+        font-size: 28px;
+    }
+
+    .login-container>form>div>input {
+        max-width: 100%;
+    }
+
+    .login-container>form>button {
+        width: 80%;
+    }
+
+    .login_text_box>button {
+        margin-bottom: 10px;
+    }
+
+    .login_submenu_box {
+        display: none;
+    }
+}

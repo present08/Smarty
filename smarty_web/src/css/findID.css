@@ -48,10 +48,10 @@
     height: 55px;
     margin-bottom: 20px;
     border: none;
-    background-color:#f2f3f4 ;
+    background-color: #f2f3f4;
     border-radius: 10px;
     padding-left: 10px;
-} 
+}
 
 .findId-container>form>button {
     width: 195px;
@@ -92,3 +92,25 @@
 }
 
 
+@media (max-width: 768px) {
+
+    .findId-container {
+        width: 100%;
+    }
+
+    .findId-container>h1 {
+        font-size: 28px;
+    }
+
+    .findId-container>form>div>input {
+        max-width: 100%;
+    }
+
+    .findId-container>form>button {
+        width: 80%;
+    }
+
+    .findID_submenu_box {
+        display: none;
+    }
+}

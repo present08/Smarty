@@ -49,22 +49,18 @@ export default function Sidebar() {
                             >
                                 {facility.facility_name}
                                 <ul className="sidebarSubListItem">
-                                    <Link to={`/admin/facilities/read/${facility.facility_id}`}
-                                        className="link"
-                                    >
+                                    <Link to={`/admin/facilities/read/${facility.facility_id}`} className="link">
                                         <li className="sidebarSublistItem">시설</li>
                                     </Link>
-                                    <Link to={`/admin/classes/${facility.facility_id}`}
-                                        className="link"
-                                    >
+                                    <Link to={`/admin/classes/${facility.facility_id}`} className="link">
                                         <li className="sidebarSublistItem">강의</li>
                                     </Link>
-                                    <Link to={`/admin/products/${facility.facility_id}`}
-                                    className="link"
-                                    >
-                                    <li className="sidebarSublistItem">물품</li>
+                                    <Link to={`/admin/products/${facility.facility_id}`} className="link">
+                                        <li className="sidebarSublistItem">물품</li>
                                     </Link>
-                                    <li className="sidebarSublistItem">이용현황</li>
+                                    <Link to={`/admin/status/${facility.facility_id}`} className="link">
+                                        <li className="sidebarSublistItem">이용현황</li>
+                                    </Link>
                                 </ul>
                             </li>
                         ))}

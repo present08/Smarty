@@ -1,9 +1,9 @@
-
 import './classRead.css'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getListClassDetail, getOneClass } from '../../../../api/admin/classApi'
 import { getOneFacility } from '../../../../api/admin/facilityApi'
+import { HorizontalRule } from '@mui/icons-material';
 
 const initClass = {
   key: Date.now(),
@@ -145,7 +145,7 @@ export default function ClassRead(class_id) {
               placeholder={`ex) 강의명`}
               defaultValue={currentClass.class_name || ''}
               // onChange={(e) => handleInput(i, 'class_name', e.target.value)}
-              readonly={modifyToggle}
+              disabled={modifyToggle}
             />
           </div>
           <div className="classReadItem">
@@ -156,7 +156,7 @@ export default function ClassRead(class_id) {
               placeholder={`ex) 10000`}
               defaultValue={currentClass.price || ''}
               // onChange={(e) => handleInput(i, 'price', e.target.value)}
-              readonly={modifyToggle}
+              disabled={modifyToggle}
             />
           </div>
           <div className="classReadItem">
@@ -167,7 +167,7 @@ export default function ClassRead(class_id) {
               placeholder={`ex) 50`}
               defaultValue={currentClass.class_size || ''}
               // onChange={(e) => handleInput(i, 'class_size', e.target.value)}
-              readonly={modifyToggle}
+              disabled={modifyToggle}
             />
           </div>
           <div className="classReadItem">
@@ -178,15 +178,18 @@ export default function ClassRead(class_id) {
               // min={new Date().toISOString().substring(0, 10)}
               // onChange={(e) => handleInput(i, 'start_date', e.target.value)}
               defaultValue={currentClass.start_date || ''}
-              readonly={modifyToggle}
-            /> - 
+              disabled={modifyToggle}
+            />
+            <div className="dashIcon">
+              <HorizontalRule />
+            </div>
             <input 
               type='date'
               name={`end_date`}
               // min={new Date().toISOString().substring(0, 10)}
               // onChange={(e) => handleInput(i, 'end_date', e.target.value)}
               defaultValue={currentClass.end_date || ''}
-              readonly={modifyToggle}
+              disabled={modifyToggle}
             />
           </div>
           <div className="classReadItem">
@@ -201,9 +204,9 @@ export default function ClassRead(class_id) {
                   value={day}
                   // onChange={(e) => handleClickWeekday(e)}
                   checked={weekday.includes(day)} // weekday 배열에 해당 day가 포함되어 있으면 체크
-                  readonly={modifyToggle}
+                  disabled={modifyToggle}
                 />
-                <label htmlFor={day}>{day}</label>
+                <label className='checkboxLabel' htmlFor={day}>{day}</label>
               </div>
             ))}
           </div>
@@ -214,20 +217,23 @@ export default function ClassRead(class_id) {
               name={`start_time`}
               // onChange={(e) => handleInput(i, 'start_time', e.target.value)}
               defaultValue={currentClass.start_time || ''}
-              readonly={modifyToggle}
-            /> - 
+              disabled={modifyToggle}
+            />
+            <div className="dashIcon">
+              <HorizontalRule />
+            </div>
             <input 
               type='time'
               name={`end_time`}
               // max={currentFacility.close_time}
               // onChange={(e) => handleInput(i, 'end_time', e.target.value)}
               defaultValue={currentClass.end_time || ''}
-              readonly={modifyToggle}
+              disabled={modifyToggle}
             />
           </div>
         </div>        
         <div className="classReadButton">
-          <button onClick={() => setModifyToggle(!modifyToggle)}>수정</button> 
+          <button className='classModifyButton' onClick={() => setModifyToggle(!modifyToggle)}>수정</button> 
         </div>
     </div>
   )

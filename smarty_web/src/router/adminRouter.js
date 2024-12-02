@@ -14,6 +14,8 @@ const ClassModify = lazy(() => import("../pages/admin/classes/classModify/ClassM
 
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
+
+const FacilityStatus = lazy(() => import("../component/admin/facilityStatus/FacilityStatus"))
 const adminRouter = () => {
 
     return [
@@ -60,6 +62,10 @@ const adminRouter = () => {
         {
             path: "products/:facility_id/read/:product_id",
             element: <Suspense fallback={<SyncLoader />}><ProductRead /></Suspense>,
+        },
+        {
+            path: "status/:facility_id",
+            element: <Suspense fallback={<SyncLoader />}><FacilityStatus /></Suspense>,
         }
     ]
 }

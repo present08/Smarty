@@ -7,7 +7,7 @@ import { deleteOneClass, getListClass } from '../../../../api/admin/classApi';
 import Modal from '../../../../component/admin/modal/Modal';
 import ClassRead from '../classRead/ClassRead';
 import NewClass from './../newClass/NewClass';
-import { Add, Remove } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 
 export default function ClassList() {
   const {facility_id} = useParams()

@@ -4,7 +4,6 @@ import com.green.smarty.dto.ClassAdminDTO;
 import com.green.smarty.service.AdminClassService;
 import com.green.smarty.vo.ClassDetailVO;
 import com.green.smarty.vo.ClassVO;
-import com.green.smarty.vo.CourtVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

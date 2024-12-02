@@ -3,10 +3,10 @@
 <mapper namespace="com.green.smarty.mapper.AdminStatusMapper">
 
     <select id="getReservation">
-        select * from reservation where court_id=#{court_id}
+        select * from reservation where court_id=#{court_id} order by court_id
     </select>
     <select id="getEnrollment">
-        select * from enrollment where class_id=#{class_id}
+        select * from enrollment where class_id=#{class_id} order by class_id
     </select>
     <select id="getResAttendance">
         select * from attendance where reservation_id=#{reservation_id}

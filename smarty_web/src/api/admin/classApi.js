@@ -33,9 +33,9 @@ export const getListClassDetail = async(class_id) => {
     }
 }
 
-export const getOneClass = async(court_id) => {
+export const getOneClass = async(class_id) => {
     try {        
-        const res = await axios.get(`${prefix}/${court_id}`)
+        const res = await axios.get(`${prefix}/${class_id}`)
         console.log("getOneClass : ", res.data)
         return res.data
     } catch(error) {
@@ -43,9 +43,9 @@ export const getOneClass = async(court_id) => {
     }
 }
 
-export const putOneClass = async(court_id, court) => {
+export const putOneClass = async(class_id, classList) => {
     try {
-        const res = await axios.put(`${prefix}/${court_id}`, court)
+        const res = await axios.put(`${prefix}/${class_id}`, classList)
         console.log("putOneClass : ", res.data)
         return res.data
     } catch(error) {
@@ -53,9 +53,9 @@ export const putOneClass = async(court_id, court) => {
     }
 }
 
-export const deleteOneClass = async(court_id) => {
+export const deleteOneClass = async(class_id) => {
     try {        
-        const res = await axios.delete(`${prefix}/${court_id}`)
+        const res = await axios.delete(`${prefix}/${class_id}`)
         console.log("deleteOneClass : ", res.data)
         return res.data
     } catch(error) {

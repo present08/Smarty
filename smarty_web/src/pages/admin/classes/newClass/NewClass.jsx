@@ -28,7 +28,7 @@ export default function NewClass({ classPass, passedClass, passedFacility }) {
     const initClass = {
       key: Date.now(),
       facility_id: currentFacility.facility_id,
-      class_id: '',
+      class_id: null,
       class_name: '',
       start_date: '',
       end_date: '',

@@ -16,8 +16,10 @@ const SignUp = () => {
     const [error, setError] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState('');
     const [selectEmail, setSelectEmail] = useState('');
-    const navigate = useNavigate();
     const [fcmToken, setFCMToken] = useState('');
+    const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcm_token: fcmToken };
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const func = async () => {
@@ -186,7 +188,7 @@ const SignUp = () => {
                     {qrCodeUrl && (
                         <div className='qr_box'>
                             <img src={qrCodeUrl} alt="Generated QR Code" />
-                            <p>QR 코드가 생성되었습니다.</p> 
+                            <p>QR 코드가 생성되었습니다.</p>
                         </div>
                     )}
                 </div>

@@ -49,13 +49,12 @@ public class AdminCourtService {
     }
 
     public void modify(String facility_id, List<CourtVO> courtList) {
-        // 처리1) 비교할 기존의 코트 가져오기
+        // 처리1) 비교할 기존의 코트 목록 가져오기
         List<CourtVO> originCourtList = adminCourtMapper.getList(facility_id);
         FacilityVO facilityVO = adminFacilityMapper.read(facility_id);
-        String maxClassId = adminCourtMapper.maxClassId(facility_id);
+        String maxCourtIdx = adminCourtMapper.maxCourtIdx(facility_id);
 
         if(!facilityVO.isCourt() && courtList.get(0).getCourt_id() == null) {
-            System.out.println("if1");
             // 1. 기본 코트만 존재 -> 신규 코트 추가
             // 처리1-1) 기본 코트 삭제, facilityVO의 court 값 변경
             adminCourtMapper.remove(originCourtList.get(0).getCourt_id());
@@ -74,10 +73,9 @@ public class AdminCourtService {
                 adminCourtMapper.register(courtList.get(i));
             }
         } else if(facilityVO.isCourt() && courtList.get(0).getCourt_id() == null) {
-            System.out.println("if2");
             // 2. 생성 코트 존재 + 신규 코트 추가
             // 가장 큰 class_id의 끝 2자리 추출 -> 숫자로 변환 -> 1 큰 숫자부터 id 생성
-            int maxIdx = Integer.parseInt(maxClassId.substring(6));
+            int maxIdx = Integer.parseInt(maxCourtIdx.substring(6));
             for(int i = 0; i < courtList.size(); i++) {
                 String idx = "";
                 if( (maxIdx+(i+1))-10 < 0 ) idx = "0" + (maxIdx+(i+1));
@@ -86,8 +84,7 @@ public class AdminCourtService {
                 courtList.get(i).setCourt_id(court_id);
                 adminCourtMapper.register(courtList.get(i));
             }
-        } else if(facilityVO.isCourt() && courtList.size() == originCourtList.size()) {
-            System.out.println("if3");
+        } else if(facilityVO.isCourt() && courtList.get(0).getCourt_id().equals(originCourtList.get(0).getCourt_id())) {
             // 3. 코트 내용만 변경
             for (CourtVO newCourt : courtList) {
                 originCourtList.stream().filter(originCourt -> originCourt.getCourt_id().equals(newCourt.getCourt_id()))

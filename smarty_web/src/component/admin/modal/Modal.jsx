@@ -16,16 +16,6 @@ export default function Modal({title, content, callbackFn}) {
             <div className="modalBoxContent">
                 {content}
             </div>
-            {/* <div className="modalBoxBottom">
-                <button 
-                    className="checkButton"
-                    onClick={() => {
-                        if(callbackFn) callbackFn()
-                    }}
-                >
-                    등록
-                </button>
-            </div> */}
         </div>       
     </div>
   )

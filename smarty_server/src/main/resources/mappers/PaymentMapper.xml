@@ -8,14 +8,16 @@
             reservation_id,
             enrollment_id,
             amount,
-            payment_date
+            payment_date,
+            payment_status
         )
         VALUES (
             #{payment_id},
             #{reservation_id},
             #{enrollment_id},
             #{amount},
-            #{payment_date}
+            #{payment_date},
+            #{payment_status}
         )
     </insert>
 
@@ -25,9 +27,14 @@
         WHERE
             payment_id = #{payment_id}
     </select>
+
+    <!-- enrollment -->
     <select id="getEnrollmentClass" resultType="com.green.smarty.dto.EnrollmentClassDTO">
         select * from enrollment e join class c using(class_id)
     </select>
+    <update id="updateEnroll" parameterType="string">
+        update enrollment set enrollment_status ='승인대기' where enrollment_id = #{enrollment_id}
+    </update>
 
 
 </mapper>

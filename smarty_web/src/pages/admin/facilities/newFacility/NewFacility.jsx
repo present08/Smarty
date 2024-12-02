@@ -45,7 +45,8 @@ export default function NewFacility() {
     const [productModal, setProductModal] = useState(false) // 모달창 상태관리       
     const [imageSrc, setImageSrc] = useState([])
     const [updateFile, setUpdateFile] = useState([])        // 첨부파일 미리보기
-    
+
+    //==================================컴포넌트간 객체 전달 함수================================//    
     const pricePass = (price) => {
         setPrice(price)
         setPriceModal(false)
@@ -66,9 +67,9 @@ export default function NewFacility() {
         setProduct(productList)
         setProductModal(false)
     }
-    
+    //=========================================================================================//
 
-    
+    //==================================이미지 미리보기=========================================//
     const onUpload = (e) => {
         // 이미지 등록 버튼 누를때마다 새로운 이미지 배열 생성, 최종 파일만 저장
         const imageList = Array.from(e.target.files)
@@ -83,25 +84,20 @@ export default function NewFacility() {
     }
 
     const handleDeleteImage = (id) => {
+        // 이미지 항목 삭제 반영
         setImageSrc(imageSrc.filter((_, index) => index !== id))
         setUpdateFile(updateFile.filter((_, index) => index !== id))
     }
+    //============================================================================================//
 
-    // useEffect(() => {
-    //     console.log(updateFile)
-    //     console.log(imageSrc)
-    // }, [onUpload, handleDeleteImage])
-    
-
-
-
-    // 시설등록 input value 업데이트 함수
+    //===================================시설 Input Update========================================//
     const handleInput = (e) => {
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
     }
+    //============================================================================================//
 
-    // 코트 등록 버튼 클릭 시 실행 함수
+    //==========================================MODAL=============================================//
     const handlePriceButton = (e) => {
         setPriceModal(true)
     }
@@ -112,7 +108,6 @@ export default function NewFacility() {
         setCourtModal(true)
         console.log("시설 : ", courtFlag)
     }
-    // 물품 등록 버튼 클릭 시 실행 함수
     const handleProductButton = (e) => {
         setProductFlag(true)
         facility.product = productFlag
@@ -128,16 +123,15 @@ export default function NewFacility() {
         else setPriceModal(false)
     }
 
-     // 모달창 닫기 함수 (수정)
+    // 모달창 닫기 함수 (수정)
     //  const closeModal = (modalType) => {
     //     if (modalType === 'court') setCourtModal(false)
     //     else if (modalType === 'product') setProductModal(false)
     //     else if (modalType === 'price') setPriceModal(false)
     // }
-
+    //============================================================================================//
     
-    
-    // 입력된 데이터로 API 호출
+    //=========================================API 호출===========================================//
     const handleFacilityAdd = () => {
         const facilityForm = new FormData()
 
@@ -167,60 +161,60 @@ export default function NewFacility() {
             facilityForm.append("product", true)
         } else facilityForm.append("product", false)
 
-        postAddFacility(facilityForm).then(id => {
-            console.log(id)
-            // 시설 등록에 성공하고 나면 facility_id를 반환받음
-            // 이후 코트, 물품등록 여부에 따라 아래 코드 실행
-            if (court.length > 0) {
-                court.map(court => {
-                    court.facility_id = id
-                    setCourt({ ...court })
-                })
-                postAddCourt(court)
-            } else {
-                const defaultCourt = {
-                    facility_id: id,
-                    court_name: facility.facility_name,
-                    court_status: facility.facility_status
-                }
-                const courtArray = [defaultCourt]
-                console.log("전송하는코트 : ", courtArray)
-                postAddCourt(courtArray)
-            }
-
-            if (product.length > 0) {
-                const productArray = product.map((product) => ({
-                    facility_id: id,
-                    product_name: product.product_name,
-                    stock: product.stock,
-                    price: product.price,
-                    management_type: product.management_type,
-                    size: product.size,
-                }));    
-    
-                // 상품 등록
-                postProductData(productArray).then((productIds) => {
-                    console.log("등록된 상품 IDs:", productIds);
-
-                    // 각 상품에 파일 업로드 처리
-                    product.forEach((prod, index) => {
-                        if (prod.files && prod.files.length > 0) {
-                            uploadProductFiles(productIds[index], prod.files);
-                        } else {
-                            console.log(`상품 ID ${productIds[index]}에 파일 없음. 기본 이미지 처리`);
-                            uploadProductFiles(productIds[index], []); // 기본 이미지 처리
-                        }
-                    });
-                }).catch((error) => {
-                    console.error("상품 등록 또는 파일 업로드 실패:", error);
-                    alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
-                });
-            }
-
-            alert("등록된 시설 ID는 " + id + " 입니다.")
-            navigate({pathname: `/admin/facilities/read/${id}`})
-        })
+        postAddFacility(facilityForm).then(res => handleSubAdd(res)).catch((error) => console.error("ERROR! : ", error))
     }
+
+    const handleSubAdd = (facilityID) => {
+        console.log("시설id : ", facilityID)
+        if (court.length > 0) {
+            court.map(court => {
+                court.facility_id = facilityID
+                setCourt({ ...court })
+            })
+            postAddCourt(court)
+        } else {
+            const defaultCourt = {
+                facility_id: facilityID,
+                court_name: facility.facility_name,
+                court_status: facility.facility_status
+            }
+            const courtArray = [defaultCourt]
+            console.log("전송하는코트 : ", courtArray)
+            postAddCourt(courtArray)
+        }
+
+        if (product.length > 0) {
+            const productArray = product.map((product) => ({
+                facility_id: facilityID,
+                product_name: product.product_name,
+                stock: product.stock,
+                price: product.price,
+                management_type: product.management_type,
+                size: product.size,
+            }));    
+
+            // 상품 등록
+            postProductData(productArray).then((productIds) => {
+                console.log("등록된 상품 IDs:", productIds);
+
+                // 각 상품에 파일 업로드 처리
+                product.forEach((prod, index) => {
+                    if (prod.files && prod.files.length > 0) {
+                        uploadProductFiles(productIds[index], prod.files);
+                    } else {
+                        console.log(`상품 ID ${productIds[index]}에 파일 없음. 기본 이미지 처리`);
+                        uploadProductFiles(productIds[index], []); // 기본 이미지 처리
+                    }
+                });
+            }).catch((error) => {
+                console.error("상품 등록 또는 파일 업로드 실패:", error);
+                alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
+            });
+        }
+        alert(`등록된 시설 ID는 ${facilityID} 입니다.`)
+        navigate({pathname: `/admin/facilities/read/${facilityID}`})
+    }    
+    //============================================================================================//
 
     return (
         <div className="newFacility">

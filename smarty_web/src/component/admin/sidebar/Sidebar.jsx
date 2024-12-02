@@ -35,6 +35,11 @@ export default function Sidebar() {
                                 시설추가
                             </Link>
                         </li>
+                        <li className="sidebarListItem">
+                            <Link to="/admin" className="link">
+                                MUAM
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

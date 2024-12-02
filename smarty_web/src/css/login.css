@@ -124,8 +124,14 @@
 
 @media (max-width: 768px) {
 
+    .login-box {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+    }
+
     .login-container {
         width: 100%;
+        height: 90%;
     }
 
     .login-container>h1 {
@@ -145,6 +151,11 @@
     }
 
     .login_submenu_box {
+        width: 80%;
+        height: 10%;
+    }
+
+    .login_image_box {
         display: none;
     }
 }

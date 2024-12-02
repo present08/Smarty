@@ -1,65 +1,52 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import '../css/nav.css'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../css/nav.css';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import { checkLoginStatus, logout } from '../api/userApi';
 import { IoCartOutline } from "react-icons/io5";
 
 const MainNav = () => {
-
-    // 검색창 모달 구현하기 
     const [searchModal, setSearchModal] = useState(false);
     const modalBackcground = useRef();
-
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
-    // 검색창
-    const [search, setSearch] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
     const [user, setUser] = useState('');
     const navigate = useNavigate();
-
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // 로그인 상태를 확인하는 함수
     useEffect(() => {
-        console.log("getLogin")
-        console.log(localStorage.getItem('user'))
         checkLoginStatus().then(e => {
             setIsLoggedIn(e.isLoggedIn);
             localStorage.setItem('isLoggedIn', e.isLoggedIn);
-        })
-    }, []); // 컴포넌트 마운트 시 한 번만 실행
+        });
+    }, []);
 
     useEffect(() => {
         if (isLoggedIn) {
-            setUser(JSON.parse(localStorage.getItem("user")))
+            setUser(JSON.parse(localStorage.getItem("user")));
         }
-    }, [isLoggedIn])
+    }, [isLoggedIn]);
 
-    // user data 전달
     const moveMypage = () => {
-        navigate("/mypage", { state: { user } })
-    }
+        navigate("/mypage", { state: { user } });
+    };
 
     const handleLogout = () => {
-        logout().then(e => {
+        logout().then(() => {
             alert("로그아웃 성공");
             setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', 'false');
-            localStorage.setItem('user', "")
-            window.location.reload(); // 새로고침
+            localStorage.setItem('user', "");
+            window.location.reload();
         }).catch((error) => {
-            console.log("로그인 상태 확인 중 에러 발생: ", error);
-        })
+            console.error("로그인 상태 확인 중 에러 발생: ", error);
+        });
     };
-
-
 
     return (
         <nav style={{ width: '100%', height: '130px', display: 'flex', flexDirection: 'column', backgroundColor: 'white', zIndex: '1000', position: 'fixed', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -126,7 +113,11 @@ const MainNav = () => {
                             </li>
                         </ul>
                     </div>
+                    <div className='toggleIcon'>
+                        <AiOutlineMenu onClick={toggleMenu} style={{ width: '50px', height: '50px', }} />
+                    </div>
                     <div className='iconbox'>
+                        {/* 현재오빠 카트 아이콘 추가  */}
                         <IoCartOutline className='modal-open-bt' />
                         <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
                         <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />

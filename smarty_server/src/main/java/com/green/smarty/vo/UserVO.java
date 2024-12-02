@@ -26,8 +26,7 @@ public class UserVO {
     private boolean user_status;
     private byte[] qrCode;
     private String level;
-    @Column(name = "fcm_token")
-    private String fcmToken;
+    private String fcm_token;
 
     // 사용자 ID에 대한 getter
     public String getUserId() {
@@ -54,12 +53,14 @@ public class UserVO {
         return user_status; // user_status에 대한 getter
     }
 
-    public String getFcmToken() {  // 표준 getter
-        return fcmToken;
+    // fcm_token에 대한 getter 메소드 추가
+    public String getFcm_token() {
+        return fcm_token;
     }
 
-    public void setFcmToken(String fcmToken) {  // 표준 setter
-        this.fcmToken = fcmToken;
+    // fcm_token에 대한 setter 메소드 추가 (필요하다면)
+    public void setFcm_token(String fcm_token) {
+        this.fcm_token = fcm_token;
     }
 
 }

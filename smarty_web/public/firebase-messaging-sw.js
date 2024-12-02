@@ -1,9 +1,5 @@
 // firebase-messaging-sw.js
 
-// Firebase 라이브러리 가져오기
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js');
-
 // Firebase 설정 초기화
 firebase.initializeApp({
     apiKey: "AIzaSyAQgG03woC9QFnVaAK1XGCWdZ1OxwD1dCI",

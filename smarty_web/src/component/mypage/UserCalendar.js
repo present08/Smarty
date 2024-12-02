@@ -38,11 +38,11 @@ const UserCalendar = (props) => {
     const openClassModal = () => setClassModalOpen(true);
 
     // 모달 닫기
-    const closeMainModal = () => setMainModalOpen(false);
-    const closeClassModal = () => {
-        setClassModalOpen(false);
-        setClassEventModalOpen(false);
+    const closeMainModal = () => {
+        setMainModalOpen(false);
+        setEventModalOpen(false);
     }
+    const closeClassModal = () => setClassModalOpen(false);
     const closeClassEventModal = () => setClassEventModalOpen(false);
     const closeEventModal = () => setEventModalOpen(false);
 
@@ -103,6 +103,7 @@ const UserCalendar = (props) => {
         }
     }, [props.user]);
 
+    
     // 수강신청 정보 가져오기
     useEffect(() => {
         if (props.user) {
@@ -127,7 +128,6 @@ const UserCalendar = (props) => {
                 });
         }
     }, [props.user]);
-
 
 
     return (

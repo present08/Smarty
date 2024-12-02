@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import '../css/nav.css'
 import { AiOutlineClose, AiOutlineMenu, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import { checkLoginStatus, logout } from '../api/userApi';
+import { IoCartOutline } from "react-icons/io5";
 
 const MainNav = () => {
 
@@ -22,18 +23,6 @@ const MainNav = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [user, setUser] = useState('');
     const navigate = useNavigate();
-
-    const onChange = (e) => {
-        const searchValue = e.target.value;
-        setSearch(e.target.value);
-
-        //예시 검색 결과를 위한 필터링 로직 실제로 API 연결 가능
-        const result = dummyData.fillter(item =>
-            item.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setSearchResults(result);
-    }
-    const dummyData = ['apple', 'banana', 'orange']
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -138,6 +127,7 @@ const MainNav = () => {
                         </ul>
                     </div>
                     <div className='iconbox'>
+                        <IoCartOutline className='modal-open-bt' />
                         <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
                         <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />
                     </div>
@@ -150,7 +140,7 @@ const MainNav = () => {
                         <AiOutlineClose className='modal-close-btn' onClick={() => setSearchModal(false)} />
                         <p>SEARCH</p>
                         <div className='searchBox'>
-                            <input type="search" onChange={onChange} placeholder='검색어를 입력해주세요.' value={searchTerm} />
+                            <input type="search" placeholder='검색어를 입력해주세요.' value={searchTerm} />
                             <AiOutlineSearch style={{ width: '30px', height: '30px', }} />
                         </div>
                     </div>

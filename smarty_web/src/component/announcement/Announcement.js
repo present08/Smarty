@@ -221,26 +221,28 @@ const NoticeBoard = () => {
                                                 {notice.view_count}
                                             </span>
                                         </div>
-                                        <div className="notice-actions">
-                                            <button
-                                                onClick={() => handleDeleteNotice(notice.announce_id)}
-                                                className="ann-delete-button"
-                                            >
-                                                삭제
-                                            </button>
-                                            <button
-                                                className="ann-notice-modify"
-                                                onClick={() => navigate(`/notice/announce/modify/${notice.announce_id}`)}
-                                            >
-                                                수정
-                                            </button>
-                                        </div>
+
                                     </div>
                                     {activeItem === notice.announce_id && (
-                                        <div
-                                            className="announcement-content"
-                                        >
-                                            {notice.content}
+                                        <div className="announcement-content">
+                                            <div className="content-text">
+                                                {notice.content}
+                                            </div>
+                                            <div className="notice-actions" style={{ marginTop: '20px', textAlign: 'right' }}>
+                                                <button
+                                                    onClick={() => handleDeleteNotice(notice.announce_id)}
+                                                    className="ann-delete-button"
+                                                    style={{ marginRight: '10px' }}
+                                                >
+                                                    삭제
+                                                </button>
+                                                <button
+                                                    className="ann-notice-modify"
+                                                    onClick={() => navigate(`/notice/announce/modify/${notice.announce_id}`)}
+                                                >
+                                                    수정
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

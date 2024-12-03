@@ -121,14 +121,27 @@ body {
 
 .notice-actions {
     display: flex;
-    gap: 8px;
-    position: absolute;
-    right: -200px;
+    justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .ann-delete-button,
 .ann-notice-modify {
-    padding: 4px 8px;
+    padding: 8px 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.ann-delete-button {
+    background-color: #ff4444;
+    color: white;
+}
+
+.ann-notice-modify {
+    background-color: #4CAF50;
+    color: white;
 }
 
 .notice-type {
@@ -572,8 +585,6 @@ body {
 }
 
 .announcement-content {
-    white-space: pre-wrap;
-    word-break: break-word;
     padding: 20px 30px;
     line-height: 1.6;
     color: #333;
@@ -745,4 +756,8 @@ body {
 .ann-notice-modify:active {
     transform: translateY(1px);
     box-shadow: 0 1px 6px rgba(53, 122, 189, 0.2);
+}
+
+.content-text {
+    margin-bottom: 20px;
 }

@@ -1,5 +1,6 @@
 package com.green.smarty.vo;
 
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -50,6 +51,16 @@ public class UserVO {
     // 사용자 상태에 대한 getter
     public boolean isUserStatus() {
         return user_status; // user_status에 대한 getter
+    }
+
+    // fcm_token에 대한 getter 메소드 추가
+    public String getFcm_token() {
+        return fcm_token;
+    }
+
+    // fcm_token에 대한 setter 메소드 추가 (필요하다면)
+    public void setFcm_token(String fcm_token) {
+        this.fcm_token = fcm_token;
     }
 
 }

@@ -1,30 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Footer from '../../component/Footer';
-import Wrapper from '../../component/Wrapper';
-import MainNav from '../../component/MainNav';
-import BackToTopButton from '../../component/BackToTopButton';
-import { useLocation } from 'react-router-dom';
-import { classEnroll } from '../../api/classAPI';
-import '../../css/classPage.css'
+import React, { useEffect, useState } from 'react';
 import { IoMdClose } from "react-icons/io";
+import { useNavigate } from 'react-router-dom';
+import '../../css/classPage.css';
+import { classEnroll } from '../../api/classAPI';
 
 
 
 const ClassPage = (props) => {
     const { classData, setModal } = props;
     const [enrollData, setEnrollData] = useState({ user_id: '', class_id: '' });
-    const user = JSON.parse(localStorage.getItem("user")).user_id;
+    const user = JSON.parse(localStorage.getItem("user"));
     const closeModal = () => {
         setModal(null)
     }
+    const navigate = useNavigate();
 
     useEffect(() => {
-        setEnrollData({ user_id: user, class_id: classData.class_id });
+        setEnrollData({ user_id: user.user_id, class_id: classData.class_id });
     }, [])
 
 
     const enrollClass = () => {
-        classEnroll(enrollData).then(e => alert("수강신청이 완료되었습니다. \n수강번호 : " + e))
+        classEnroll(enrollData).then(e => {
+            alert("수강신청이 완료되었습니다. \n수강번호 : " + e)
+            navigate(`/enrollment/${classData.class_id}`, { state: { classData, user, e } })
+        })
     }
 
     return (

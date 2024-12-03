@@ -6,19 +6,18 @@ import { AiOutlineClose, AiOutlineRuby } from 'react-icons/ai';
 const UserGrade = (props) => {
 
     const membershipBenefits = [
-
         { benefits: '입장권 5% 할인' },
         { benefits: '입장권 7% 할인' },
         { benefits: '입장권 10% 할인' },
         { benefits: '입장권 15% 할인' }
-    ]
+    ];
 
     const membershipCriteria = [
         { criteria: '총 결제금액 - 300,000원 달성시' },
         { criteria: '총 결제금액 - 500,000원 달성시' },
         { criteria: '총 결제금액 - 1,000,000원 달성시' },
         { criteria: '총 결제금액 - 1,500,000원 달성시' },
-    ]
+    ];
 
     const images = [
         '/img/silver.jpg',
@@ -42,6 +41,7 @@ const UserGrade = (props) => {
         setCurrentUser(props.user);
     }, [props]);
 
+
     // 잠시 프론트엔드에서 데이터 사용 나중에 결제 구현이 되면 백엔드에서 다시 블러오기 
     let total = 500000;
     let grade = '';
@@ -50,6 +50,7 @@ const UserGrade = (props) => {
     let imageSrc = '';
     let benefits = '';
     let criteria = '';
+
 
     if (total <= 300000) {
         grade = '실버';

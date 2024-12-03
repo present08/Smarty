@@ -3,16 +3,21 @@ import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
 import { getOneFacility } from "../../../../api/admin/facilityApi"
 import { Link, useParams } from "react-router-dom"
-import { getListClass } from '../../../../api/admin/classApi';
+import { deleteOneClass, getListClass } from '../../../../api/admin/classApi';
 import Modal from '../../../../component/admin/modal/Modal';
 import ClassRead from '../classRead/ClassRead';
+import NewClass from './../newClass/NewClass';
+import { Add, Remove } from '@mui/icons-material';
 
 export default function ClassList() {
   const {facility_id} = useParams()
-  const [currentFacility, setCurrentFacility] = useState(null)
+  const [currentFacility, setCurrentFacility] = useState(null)  // 조회한 시설 정보
+  const [currentClass, setCurrentClass] = useState(null)        // 조회한 강의 정보
   const [classList, setClassList] = useState([])
   const [class_id, setClass_id] = useState(null)
-  const [classModal, setClassModal] = useState(false)
+  const [classReadModal, setClassReadModal] = useState(false)
+  const [classAddModal, setClassAddModal] = useState(false)
+  const [removeToggle, setRemoveToggle] = useState(false)
 
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -22,17 +27,32 @@ export default function ClassList() {
 
   useEffect(() => {
     getListClass(facility_id).then(res => {
-      setClassList(res)
+      setCurrentClass(res)
     }).catch((error) => console.error("ERROR!", error))
-  }, [facility_id])
+  }, [facility_id, removeToggle, classList])
 
   const handleReadButton = (class_id) => {
-    setClassModal(true)
+    setClassReadModal(true)
     setClass_id(class_id)
     console.log(class_id)
   }
+  const handleRemoveButton = (class_id) => {
+    if(window.confirm("해당 강의를 삭제하시겠습니까?")) {
+      deleteOneClass(class_id).then(setRemoveToggle(!removeToggle)).catch((error) => console.error("ERROR!", error))
+    }
+  }
+
+  const handleAddbutton = () => {
+    setClassAddModal(true)
+  }
   const closeModal = () => {
-    setClassModal(false)
+    if(classReadModal) setClassReadModal(false)
+    else setClassAddModal(false)
+  }
+  
+  const classPass = (result) => {
+    setClassList(result)
+    setClassAddModal(false)
   }
   
   const columns = [
@@ -50,39 +70,42 @@ export default function ClassList() {
         return (
           <div className="classAction">
             <button 
-              className="classReadButton"
-              onClick={() => handleReadButton(params.row.class_id)}
-            >조회</button>
-            <button className="classDeleteButton">삭제</button>
+              className="classListButton"
+              onClick={() => handleReadButton(params.row.class_id)}>조회</button>
+            <button 
+              className="classListButton" 
+              onClick={() => handleRemoveButton(params.row.class_id)}>삭제</button>
           </div>
         )
       }
     }
   ];
   const paginationModel = { page: 0, pageSize: 10 };
+
   return (
     <div className="classList">
       <div className="classContainer">
         <div className="classContainerTop">
           <div className="classTitle">{currentFacility && currentFacility.facility_name} 강의 목록</div>
-          <Link to={`/admin/classes/${facility_id}/add`}>
-            <button className="classAddButton">강의 추가</button>
-          </Link>
-        </div>
-        <DataGrid
-          className="classTable"
-          rows={classList}
-          disableRowSelectionOnClick
-          columns={columns}
-          getRowId={(row) => row.class_id}
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
-          checkboxSelection
-          sx={{ border: 0 }}
-        />
-        {classModal? 
-        <Modal content={<ClassRead class_id={class_id}/>} callbackFn={closeModal}/>
-        : <></>}
+            <Add className="classAddButton" onClick={handleAddbutton} />
+          </div>
+          <DataGrid
+            className="classTable"
+            rows={currentClass}
+            disableRowSelectionOnClick
+            columns={columns}
+            getRowId={(row) => row.class_id}
+            initialState={{ pagination: { paginationModel } }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+            sx={{ border: 0 }}
+          />
+          {classReadModal? 
+          <Modal content={<ClassRead class_id={class_id} />} callbackFn={closeModal}/>
+          : <></>}
+          {classAddModal?
+          <Modal content={<NewClass classPass={classPass} passedClass={currentClass} passedFacility={currentFacility} />} callbackFn={closeModal}/>
+          : <></>}
       </div>
     </div>
   )

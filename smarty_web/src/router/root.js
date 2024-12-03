@@ -1,12 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { createBrowserRouter } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
-import userRouter from "./userRouter";
-import centerRouter from "./centerRouter";
 import adminRouter from "./adminRouter";
-import productRouter from "./productRouter";
-import guideRouter from "./guideRouter"
+import centerRouter from "./centerRouter";
+import guideRouter from "./guideRouter";
 import newNoticeRouter from "./newNoticeRouter";
+import productRouter from "./productRouter";
+import userRouter from "./userRouter";
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../pages/main/Main"));
@@ -24,7 +24,8 @@ const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
 const RentalList = lazy(() => import("../component/product/RentalList"));
-const CartPage = lazy(() => import("../pages/cart/CartPage"))
+const UserEnrollmentPage = lazy(() => import("../pages/class/UserEnrollmentPage"));
+
 
 const root = createBrowserRouter([
     {
@@ -100,6 +101,10 @@ const root = createBrowserRouter([
     {
         path: "notice",
         children: newNoticeRouter()
+    },
+    {
+        path: "enrollment/:class_id",
+        element: <Suspense fallback={Loading}> <UserEnrollmentPage /> </Suspense>
     },
 ]);
 

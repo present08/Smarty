@@ -1,29 +1,34 @@
 import './newClass.css'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getOneFacility } from '../../../../api/admin/facilityApi'
 import { useEffect, useState } from "react"
 import { postAddClass } from '../../../../api/admin/classApi'
+import { Add, Remove } from '@mui/icons-material';
 
-export default function NewClass() {
+export default function NewClass({ classPass, passedClass, passedFacility }) {
+  console.log("HERE!", passedClass)
   const navigate = useNavigate()
-  const {facility_id} = useParams()
   const [currentFacility, setCurrentFacility] = useState(null)
-  
-  const [classList, setClassList] = useState([])  // 강의 정보 객체들의 리스트
-  const [weekdayList, setWeekdayList] = useState([]) // 각각의 강의 정보
+  const [addClassToggle, setAddClassTogle] = useState(false) // 강의 추가등록 여부 확인값
+  const [maxClassIdx, setMaxClassIdx] = useState()
+  const [classList, setClassList] = useState([])        // ClassVO 리스트
+  const [weekdayList, setWeekdayList] = useState([])    // 각 ClassVO의 classDetailVO
+
   
   useEffect(() => {
-    getOneFacility(facility_id).then(res => {
-      setCurrentFacility(res)
-      console.log("facility :", res)
-    }).catch((error) => console.error("ERROR!", error))
+    setCurrentFacility(passedFacility)
+    if(passedClass.length > 0) {
+      setAddClassTogle(true)
+      setMaxClassIdx(Number(passedClass[passedClass.length-1].class_id.slice(6)))
+    }
   }, [])
+  console.log(currentFacility && currentFacility.facility_id.slice(12))
   
   // 강의 등록폼 추가
   const handleAddClass = () => {
     const initClass = {
       key: Date.now(),
-      facility_id: facility_id,
+      facility_id: currentFacility.facility_id,
+      class_id: '',
       class_name: '',
       start_date: '',
       end_date: '',
@@ -34,19 +39,30 @@ export default function NewClass() {
       weekday: []
     }
     setClassList(prevClass => [...prevClass, initClass])
+
     setWeekdayList(prevWeek => [...prevWeek, []])
     console.log("classList : ", classList)
     console.log("weekdayList : ", weekdayList)
   }
-
   // 사용자 입력값 classList에 저장
   const handleInput = (i, key, value) => {
+    if(addClassToggle) {
+      // 신규 강의가 아닌 경우 class_id 생성
+      let idx = "";
+      if( (maxClassIdx+i+1)-10 < 0 ) idx = "0" + (maxClassIdx+i+1);
+      else idx = (maxClassIdx+i+1) + "";
+      let classID = "C_" + currentFacility.facility_id.slice(12) + idx
+      setClassList((prevList) => {
+        const updateList = [...prevList]
+        updateList[i] = {...updateList[i], class_id: classID}
+        return updateList
+      })
+    }
     setClassList((prevList) => {
       const updateList = [...prevList]
       updateList[i] = {...updateList[i], [key]: value}
       return updateList
-    })
-    console.log("input classList : ", classList)  
+    }) 
   }
 
   // 선택 요일 weekdayList에 저장
@@ -69,6 +85,7 @@ export default function NewClass() {
     })
     setClassList(newClassList)
   }, [weekdayList])
+
   
   // 선택 항목 classList, weekdayList에서 삭제
   const handleDelete = (item, i) => {    
@@ -83,34 +100,32 @@ export default function NewClass() {
 
   useEffect(() => {
     console.log("최종 class : ", classList)
-    console.log("최종 week : ", weekdayList)  
+    console.log("최종 week : ", weekdayList)
   }, [classList, weekdayList])
 
   // 서버로 전송
   const handleSubmit = () => {
+
     postAddClass(classList).then(res => {
       console.log(res)
       alert("신규 강의가 등록되었습니다.")
-      navigate({ pathname: `/admin/classes/${facility_id}`})
-    }).catch((error) => console.error("ERROR!", error))  
+      classPass(classList)
+    }).catch((error) => console.error("ERROR!", error))
+  }
+
+  const handleCancel = () => {
+    classPass.classPass(classList)
   }
 
   return (
     <div className="newClass">
       <div className="newClassContainer">
-
-
-        <div className="addClassFormHead">
+       <div className="addClassFormHead">
           <div className="addClassTitle">
             {currentFacility && currentFacility.facility_name} 신규 강의 등록
           </div>
-          <div className="addClassFormButton">
-            <button className='addClassButton' onClick={handleAddClass}>강의 추가</button>
-            {classList.length > 0?
-              <button className='submitClassButton' onClick={handleSubmit}>등록하기</button>
-            : <></>}
-          </div>
-        </div>
+          <Add className='addClassButton' onClick={handleAddClass} />
+      </div>
  
         <div className="addClassFormBody">
           {classList.map((item, i) => (
@@ -155,6 +170,8 @@ export default function NewClass() {
                   min={new Date().toISOString().substring(0, 10)}
                   onChange={(e) => handleInput(i, 'end_date', e.target.value)}
                 />
+              </div>
+              <div className="addClassFormItem3">
                 <div className="addClassFormItemTitle">시작시간</div>
                 <input 
                   type='time'
@@ -165,13 +182,12 @@ export default function NewClass() {
                 <input 
                   type='time'
                   name={`end_time${i}`}
-                  max={currentFacility.close_time}
+                  // max={currentFacility.close_time}
                   onChange={(e) => handleInput(i, 'end_time', e.target.value)}
                 />
               </div>
-
-              <div className="addClassFormItem3">
-                <div className="addClassFormItemTitle">수업일(복수선택 가능)</div>
+              <div className="addClassFormItem4">
+                <div className="addClassFormItemTitle">수업일</div>
                 <input 
                   id={`mon${i}`}
                   name={`weekday${i}`}
@@ -228,12 +244,17 @@ export default function NewClass() {
                   onChange={(e) => handleClickWeekday(i, e)}
                 />
                 <label htmlFor={`sun${i}`}>일요일</label>
-                <button className='cancleClassButton' onClick={() => handleDelete(item, i)}>삭제</button>           
+                <Remove className='cancleClassButton' onClick={() => handleDelete(item, i)} />           
               </div>
             </div>
           ))}
         </div>
-
+        {classList.length > 0?
+          <div className="facilityButtons">
+            <button className='submitClassButton' onClick={handleSubmit}>등록</button>
+            <button className="cancelClassButton" onClick={handleCancel}>취소</button>
+          </div>
+          : <></>}
       </div>
     </div>
   )

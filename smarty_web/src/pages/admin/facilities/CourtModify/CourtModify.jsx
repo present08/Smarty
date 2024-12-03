@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom"
 import "./courtModify.css"
+import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { deleteOneCourt, postAddCourt } from "../../../../api/admin/courtApi"
 import { getOneFacility, putOneFacility } from "../../../../api/admin/facilityApi"
@@ -23,10 +23,12 @@ const initFacility = {
 }
 
 export default function CourtModify({ courtPass, passedCourt }) {
+    const navigate = useNavigate()
     const {facility_id} = useParams()
     const [currentFacility, setCurrentFacility] = useState(initFacility)
-    const [court, setCourt] = useState([])   // 생성된 시설 객체를 저장할 배열
+    const [court, setCourt] = useState([])
     const [removeToggle, setRemoveToggle] = useState(false)
+    const [lastCheck, setLastCheck] = useState(false)
 
     useEffect(() => {
         getOneFacility(facility_id).then(res => {
@@ -38,60 +40,54 @@ export default function CourtModify({ courtPass, passedCourt }) {
         if(passedCourt){
           setCourt(passedCourt)
         }
-      }, [passedCourt]) 
-
-    const onClickSubmit = () => {
-        courtPass(court)
-    }
-
+    }, [passedCourt]) 
+      
     const handleInputChange = (i, key, value) => {
         setCourt((prevResult) => {
             const updateResult = [...prevResult]
-            // prevResult를 복사하여 updateResult라는 새 배열 생성
-            // -> 불변성 유지, 기존 배열을 수정하지 않고 새로운 배열을 생성
             updateResult[i] = { ...updateResult[i], [key]: value }
-            // updateResult의 i번째 요소를 복사하여 새로운 객체 생성
-            // [key]: value 로 특정 속성만 업데이트
             return updateResult
-            // 최종 수정된 updateResult 배열을 반환하여 result의 새 상태로 설정
         })
     }
-
+    
+    const handleRedirect = () => {
+        if(window.confirm("추가 수정을 원하십니까?")) navigate({pathname: `/admin/facilities/modify/${facility_id}`})
+        else navigate({pathname: `/admin/facilities/read/${facility_id}`})
+    }
+    const handleModify = () => {
+        if(window.confirm("수정하시겠습니까?")) {
+            alert("시설 수정 페이지의 수정 버튼을 클릭하면\n시설, 코트 수정 사항이 반영됩니다.")
+            courtPass(court)
+        } else navigate({pathname: `/admin/facilities/modify/${facility_id}`})
+    }
     const handleRemove = (item, i) => {
-        // if(window.confirm("해당 코트의 예약 내역이 함께 삭제됩니다.\n계속 진행하시겠습니까?")) {
-        //     setCourt(court.filter((_, idx) => idx != i))
-        //     deleteOneCourt(item.court_id).then(res => {
-        //         if(i == 0 && court.length == 0) {
-        //             currentFacility.court = false
-        //             setCurrentFacility({...currentFacility})
-        //             putOneFacility(facility_id, currentFacility)
-        //             const defaultCourt = {
-        //                 facility_id: facility_id,
-        //                 court_name: currentFacility.facility_name,
-        //                 court_status: currentFacility.facility_status
-        //             }
-        //             const courtArray = [defaultCourt]
-        //             postAddCourt(courtArray)
-        //         }
-        //         alert(res)
-        //     }).catch((error) => ("ERROR! : ", error))
-        // } 
-        setCourt(court.filter((_, idx) => idx != i))
-        
+        if(window.confirm("해당 코트의 예약 내역이 함께 삭제됩니다.\n계속 진행하시겠습니까?")) {
+            if(lastCheck && window.confirm("마지막 코트를 삭제하시겠습니까?")) {
+                deleteOneCourt(item.court_id).then(res => alert(res)).catch((error) => ("ERROR! : ", error))
+                // 1. facility의 court 값 false로 전환 (수정)
+                currentFacility.court = false
+                setCurrentFacility({...currentFacility})
+                putOneFacility(facility_id, currentFacility).then(res => console.log(res)).catch((error) => ("ERROR! : ", error))
+                // 2. 기본 코트 등록
+                const defaultCourt = {
+                    facility_id: facility_id,
+                    court_name: currentFacility.facility_name,
+                    court_status: currentFacility.facility_status
+                }
+                const courtArray = [defaultCourt]
+                postAddCourt(courtArray).then(res => console.log(res)).catch((error) => ("ERROR! : ", error))
+                // 3. 조회 페이지로 이동
+                navigate({pathname: `/admin/facilities/read/${facility_id}`})
+            } else navigate({pathname: `/admin/facilities/modify/${facility_id}`})
+            setCourt(court.filter((_, idx) => idx != i))
+            deleteOneCourt(item.court_id).then(res => alert(res)).catch((error) => ("ERROR! : ", error))
+        } else navigate({pathname: `/admin/facilities/modify/${facility_id}`})
     }
 
-
     useEffect(() => {
-        // if(court.length == 0) {
-        //     const defaultCourt = {
-        //         facility_id: facility_id,
-        //         court_name: currentFacility.facility_name,
-        //         court_status: currentFacility.facility_status
-        //     }
-        //     const courtArray = [defaultCourt]
-        //     postAddCourt(courtArray)
-        // }
-        console.log("코트 길이", court.length)
+        if(court.length == 1) {
+            setLastCheck(true)
+        }
     }, [court])
     
     return (
@@ -133,10 +129,10 @@ export default function CourtModify({ courtPass, passedCourt }) {
                 ))}
                 {removeToggle? 
                 <div className="courtItemButton">
-                    <button className="saveCourtButton" onClick={onClickSubmit}>완료</button>
+                    <button className="saveCourtButton" onClick={handleRedirect}>완료</button>
                 </div> : 
                 <div className="courtItemButton">
-                    <button className="saveCourtButton" onClick={onClickSubmit}>수정</button>
+                    <button className="saveCourtButton" onClick={handleModify}>수정</button>
                     <button className="resetCourtButton" onClick={() => setRemoveToggle(true)}>삭제</button>
                 </div>}
             </div> 

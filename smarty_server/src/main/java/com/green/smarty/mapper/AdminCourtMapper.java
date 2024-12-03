@@ -10,7 +10,7 @@ public interface AdminCourtMapper {
     void register(CourtVO courtVO);
     List<CourtVO> getList(String facility_id);
     CourtVO read(String court_id);
-    String maxClassId(String facility_id);
+    String maxCourtIdx(String facility_id);
     void modify(CourtVO courtVO);
     void remove(String court_id);
 }

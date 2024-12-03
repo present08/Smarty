@@ -33,6 +33,9 @@ public class PaymentService {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
+
+        String formatDate = date.getYear() + String.format("%02d",date.getMonthValue()) + String.format("%02d",date.getDayOfMonth());
+
         for(RentalVO item : rentalVO){
             String itemDate = item.getRental_id().substring(2,10);
             System.out.println(itemDate);
@@ -41,7 +44,7 @@ public class PaymentService {
             }
         }
 
-        String id = "R_"+ date.getYear() + date.getMonthValue() + date.getDayOfMonth() + String.format("%03d",rentalList.size()+1);
+        String id = "R_"+ formatDate + String.format("%03d",rentalList.size()+1);
         System.out.println("rental ID : "+ id);
 
         RentalVO vo = RentalVO.builder()

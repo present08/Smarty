@@ -113,13 +113,13 @@ public class UserRentalService{
             userRentalMapper.productStockUp(map);
             System.out.println("상품 재고 증가 상품ID: " +  rental.getProduct_id() + ", 증가 수량: " + count);
 
-            int paymentUpdateResult = updatePaymentStatus(rental_id, false);
-
-            if (paymentUpdateResult > 0) {
-                System.out.println("결제 상태 업데이트 성공: " + rental_id);
-            } else {
-                throw new RuntimeException("결제 상태 업데이트 실패" + rental_id);
-            }
+//            int paymentUpdateResult = updatePaymentStatus(rental_id, false);
+//
+//            if (paymentUpdateResult > 0) {
+//                System.out.println("결제 상태 업데이트 성공: " + rental_id);
+//            } else {
+//                throw new RuntimeException("결제 상태 업데이트 실패" + rental_id);
+//            }
 
         }
         return result;

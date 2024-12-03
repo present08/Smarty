@@ -37,6 +37,7 @@ public class PaymentController {
         LocalDateTime date = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
+        String formatDate = date.getYear()+String.format("%02d", date.getMonthValue())+String.format("%02d", date.getDayOfMonth());
         for(PaymentVO item : paymentVO){
             String itemDate = item.getPayment_id().substring(2,10);
             System.out.println(itemDate);
@@ -45,7 +46,7 @@ public class PaymentController {
             }
         }
 
-        String id = "P_"+ date.getYear() + date.getMonthValue() + date.getDayOfMonth() + String.format("%03d",paymentList.size()+1);
+        String id = "P_"+ formatDate + String.format("%03d",paymentList.size()+1);
         System.out.println("payment ID : "+ id);
         PaymentVO vo = PaymentVO.builder()
                     .payment_id(id)

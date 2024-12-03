@@ -24,7 +24,7 @@ const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
 const RentalList = lazy(() => import("../component/product/RentalList"));
-
+const CartPage = lazy(() => import("../pages/cart/CartPage"))
 
 const root = createBrowserRouter([
     {
@@ -92,6 +92,10 @@ const root = createBrowserRouter([
     {
         path: "rentals/list",
         element: <Suspense fallback={Loading}> <RentalList /> </Suspense>
+    },
+    {
+        path: "cart",
+        element: <Suspense fallback={Loading}> <CartPage /> </Suspense>
     },
     {
         path: "notice",

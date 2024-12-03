@@ -54,6 +54,10 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
         navigate('/rentals/list');
     };
 
+    const handleMyCart = () => {
+        navigate('/cart')
+    }
+
     return (
         <div className='facility-select-container'>
             <div className="select-button-group">
@@ -73,12 +77,17 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
                     ))}
                 </select>
                 {isLoggedIn && (
+                    <div>
+                    <button onClick={handleMyCart}>
+                        장바구니
+                    </button>
                     <button
                         className="rental-button"
                         onClick={handleMyRental}
                     >
                         내 대여 목록
                     </button>
+                    </div>
                 )}
             </div>
         </div>

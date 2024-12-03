@@ -158,6 +158,9 @@ const UserReservation = (props) => {
                                 </div>
                             </div>
                             <div className="reservationModalFooter">
+                                {/* <Link to={"/"} className="refundButton">
+                                    환불하기
+                                </Link> */}
                                 <button onClick={modalClose} className="primaryButton">
                                     닫기
                                 </button>

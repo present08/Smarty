@@ -35,7 +35,7 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
         IMP.init('imp43324543')
 
         const data = {
-            pg: 'kakaopay',
+            pg: 'html5_inicis',
             pay_method: 'card',
             name: rentalInfo.product_name,
             amount: amount,

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.CartMapper">
+
+    <insert id="addToCart" parameterType="com.green.smarty.vo.CartVO">
+        INSERT INTO cart (user_id, product_id, quantity)
+        VALUES (#{user_id}, #{product_id}, #{quantity})
+        ON DUPLICATE KEY UPDATE quantity = quantity + #{quantity}
+    </insert>
+
+    <select id="getUserCart" parameterType="String" resultType="com.green.smarty.vo.CartVO">
+        SELECT
+            cart_id, user_id, product_id, quantity, created_at, updated_at
+        FROM
+            cart
+        WHERE
+            user_id = #{user_id}
+    </select>
+
+    <update id="updateCart" parameterType="com.green.smarty.vo.CartVO">
+        UPDATE
+            cart
+        SET
+            quantity = #{quantity}
+        WHERE
+            cart_id = #{cart_id}
+    </update>
+
+    <delete id="removeCart" parameterType="Long">
+        DELETE FROM cart WHERE cart_id = #{cart_id}
+    </delete>
+
+    <delete id="clearCart" parameterType="String">
+        DELETE FROM cart WHERE user_id = #{user_id}
+    </delete>
+
+</mapper>

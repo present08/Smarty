@@ -1,10 +1,14 @@
 package com.green.smarty.vo;
 
-import jakarta.persistence.Column;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -53,13 +57,11 @@ public class UserVO {
         return user_status; // user_status에 대한 getter
     }
 
-    // fcm_token에 대한 getter 메소드 추가
-    public String getFcm_token() {
+    public String getFcmToken() { // 표준 getter
         return fcm_token;
     }
 
-    // fcm_token에 대한 setter 메소드 추가 (필요하다면)
-    public void setFcm_token(String fcm_token) {
+    public void setFcmToken(String fcm_token) { // 표준 setter
         this.fcm_token = fcm_token;
     }
 

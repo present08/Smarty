@@ -16,6 +16,9 @@ const ProductList = lazy(() => import("../pages/admin/products/productList/Produ
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
 
 const FacilityStatus = lazy(() => import("../component/admin/facilityStatus/FacilityStatus"))
+
+const Permission = lazy(() => import("../component/admin/permission/Permission"))
+
 const adminRouter = () => {
 
     return [
@@ -57,7 +60,7 @@ const adminRouter = () => {
         },
         {
             path: "products/:facility_id",
-            element: <Suspense fallback={<SyncLoader />}><ProductList/></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ProductList /></Suspense>,
         },
         {
             path: "products/:facility_id/read/:product_id",
@@ -66,6 +69,10 @@ const adminRouter = () => {
         {
             path: "status/:facility_id",
             element: <Suspense fallback={<SyncLoader />}><FacilityStatus /></Suspense>,
+        },
+        {// muam i 77ㅓ
+            path: "permission",
+            element: <Suspense fallback={<SyncLoader />}><Permission /></Suspense>,
         }
     ]
 }

@@ -45,7 +45,8 @@ public class UserClassService {
                 enrollList.add(i);
             }
         }
-        String id = "E_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
+        String id = "E_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() > 10 ? date.getDayOfMonth() : "0" + date.getDayOfMonth())
                 + String.format("%03d", enroll.size() == 0 ? 1 : enroll.size() + 1);
         enrollData.put("enrollment_id", id);
         EnrollmentVO vo = EnrollmentVO.builder()

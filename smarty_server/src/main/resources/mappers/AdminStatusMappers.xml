@@ -14,4 +14,10 @@
     <select id="getEnrAttendance">
         select * from attendance where enrollment_id=#{enrollment_id}
     </select>
+    <select id="getPermission" resultType = "com.green.smarty.dto.PermissionDTO">
+        select e.enrollment_id, u.user_id, u.user_name, c.class_name, c.start_date, c.end_date, p.amount, e.enrollment_status from enrollment e join class c on e.class_id = c.class_id join user u on u.user_id = e.user_id join payment p on p.enrollment_id = e.enrollment_id where e.enrollment_status = '승인대기'
+    </select>
+    <update id = "enrollment_update" parameterType="string">
+        update enrollment set enrollment_status = '승인완료' where enrollment_id = #{enrollment_id}
+    </update>
 </mapper>

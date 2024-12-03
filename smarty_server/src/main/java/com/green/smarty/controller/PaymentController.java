@@ -56,27 +56,29 @@ public class PaymentController {
         LocalDateTime date = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
-        for (PaymentVO item : paymentVO) {
-            String itemDate = item.getPayment_id().substring(2, 10);
+        String formatDate = date.getYear()+String.format("%02d", date.getMonthValue())+String.format("%02d", date.getDayOfMonth());
+        for(PaymentVO item : paymentVO){
+            String itemDate = item.getPayment_id().substring(2,10);
             System.out.println(itemDate);
             if (itemDate.equals("" + date.getYear() + date.getMonthValue() + date.getDayOfMonth())) {
                 paymentList.add(item);
             }
         }
 
-        String id = "P_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
-                + String.format("%03d", paymentList.size() + 1);
-        System.out.println("payment ID : " + id);
+        String id = "P_"+ formatDate + String.format("%03d",paymentList.size()+1);
+        System.out.println("payment ID : "+ id);
         PaymentVO vo = PaymentVO.builder()
                 .payment_id(id)
                 .reservation_id(dto.getReservation_id())
                 .enrollment_id(dto.getEnrollment_id())
                 .amount(dto.getAmount())
                 .payment_date(date)
+                .payment_status(true)
                 .build();
 
         paymentMapper.insertPayment(vo);
         RentalVO rentalID = paymentService.insertRental(dto, id);
+        System.out.println(rentalID);
 
         return id;
     }

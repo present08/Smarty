@@ -60,25 +60,24 @@
             u.user_id = #{user_id}
     </select>
 
-    <!--    상품 재고 감소-->
-    <update id="productStockDown" parameterType="map">
-        UPDATE
-            product
-        SET
-            stock = stock - #{count}
-        WHERE
-            product_id = #{product_id}
-    </update>
+    <!-- 대여 가능한 재고 확인 -->
+    <select id="getAvailableStock" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM product_status
+        WHERE product_id = #{product_id} AND current_status = TRUE;
+    </select>
 
-    <!--    상품 재고 증가-->
-    <update id="productStockUp" parameterType="map">
-        UPDATE
-            product
-        SET
-            stock = stock + #{count}
-        WHERE
-            product_id = #{product_id}
-    </update>
+    <!-- 대여 로그 추가 -->
+    <insert id="insertRentalLog" parameterType="map">
+        INSERT INTO product_status_log (status_id, change_type, change_quantity, created_at)
+        VALUES (#{status_id}, #{change_type}, #{change_quantity}, CURRENT_TIMESTAMP);
+    </insert>
+
+    <!-- 대여 로그 삭제 -->
+    <delete id="deleteRentalLog" parameterType="map">
+        DELETE FROM product_status_log
+        WHERE status_id = #{status_id} AND change_quantity = #{count};
+    </delete>
 
     <select id="getAllRentals" resultType="com.green.smarty.dto.RentalDTO">
         SELECT

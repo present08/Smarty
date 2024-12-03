@@ -1,6 +1,7 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.service.UserRentalService;
 
 import com.green.smarty.dto.RentalDTO;
@@ -107,5 +108,10 @@ public class UserRentalController {
         }
     }
 
-
+    @GetMapping("/rentalUser")
+    public List<ProductRentalUserDTO> getUserRentalListData(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<ProductRentalUserDTO> result = userRentalService.getUserRentalListData(user_id);
+        return result;
+    }
 }

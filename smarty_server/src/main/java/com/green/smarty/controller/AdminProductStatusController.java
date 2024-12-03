@@ -1,6 +1,7 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.service.AdminProductStatusService;
+import com.green.smarty.vo.ProductStatusLogVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,22 +52,21 @@ public class AdminProductStatusController {
 
     // 상태 변경 (대여 가능 → 변경된 상태)
     @PutMapping("/update-status")
-    public ResponseEntity<String> updateProductStatus(
+    public ResponseEntity<String> updateProductStatusWithLog(
             @RequestParam("statusId") String statusId,
             @RequestParam("changedStatus") String changedStatus,
             @RequestParam("quantity") int quantity) {
         log.info("상태 변경 요청 - statusId: {}, changedStatus: {}, quantity: {}", statusId, changedStatus, quantity);
 
         try {
-            productStatusService.changeStatus(statusId, changedStatus, quantity);
-            return ResponseEntity.ok("Status updated successfully.");
+            productStatusService.changeStatusWithLog(statusId, changedStatus, quantity);
+            return ResponseEntity.ok("상태가 성공적으로 변경되고 로그가 저장되었습니다.");
         } catch (IllegalArgumentException e) {
-            log.warn("Validation error: {}", e.getMessage());
+            log.warn("유효성 검사 오류: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            log.error("Failed to update status for statusId {}: {}", statusId, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update status.");
+            log.error("상태 변경 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상태 변경에 실패했습니다.");
         }
     }
 
@@ -87,18 +87,19 @@ public class AdminProductStatusController {
     }
 
     // 상태 복구 (변경된 상태 → 대여 가능)
-    @PutMapping("/restore-to-available")
-    public ResponseEntity<String> restoreToAvailable(
-            @RequestParam("statusId") String statusId) {
+    @PutMapping("/restore-status")
+    public ResponseEntity<String> restoreProductStatusWithLog(@RequestParam("statusId") String statusId) {
         log.info("상태 복구 요청 - statusId: {}", statusId);
 
         try {
-            productStatusService.restoreToAvailable(statusId);
-            return ResponseEntity.ok("Status restored to '대여 가능'.");
+            productStatusService.restoreStatusWithLog(statusId);
+            return ResponseEntity.ok("상태가 성공적으로 복구되고 로그가 업데이트되었습니다.");
+        } catch (IllegalArgumentException e) {
+            log.warn("유효성 검사 오류: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            log.error("Failed to restore status for statusId {}: {}", statusId, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to restore status.");
+            log.error("상태 복구 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상태 복구에 실패했습니다.");
         }
     }
 
@@ -111,6 +112,33 @@ public class AdminProductStatusController {
             return ResponseEntity.ok(statusCounts);
         } catch (Exception e) {
             log.error("{} 상태별 수량 조회 실패:  {}", productId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // 특정 상품 상태 로그 조회
+    @GetMapping("/status/{statusId}/logs")
+    public ResponseEntity<List<ProductStatusLogVO>> getStatusLogs(@PathVariable("statusId") String statusId) {
+        try {
+            List<ProductStatusLogVO> logs = productStatusService.getLogsByStatusId(statusId);
+            log.info("status_id {} - 로그 데이터: {}", statusId,logs); // 최종 반환 데이터 확인
+
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            log.error("로그 조회 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // 특정 product_id 기반 로그 조회
+    @GetMapping("/product/{productId}/logs")
+    public ResponseEntity<List<ProductStatusLogVO>> getLogsByProductId(@PathVariable String productId) {
+        try {
+            List<ProductStatusLogVO> logs = productStatusService.getLogsByProductId(productId);
+            log.info("Product ID {}에 대한 로그 데이터: {}", productId, logs); // 로그 데이터 확인
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            log.error("상품 로그 조회 실패: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

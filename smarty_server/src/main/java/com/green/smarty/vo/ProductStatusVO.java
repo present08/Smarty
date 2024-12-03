@@ -1,6 +1,5 @@
 package com.green.smarty.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +14,6 @@ import java.time.LocalDateTime;
 public class ProductStatusVO {
     private String status_id;
     private String product_id;
-    @Builder.Default
-    private String current_status = "대여 가능";
-    private String changed_status;
+    private boolean current_status; // 대여 가능, 손상 등
     private LocalDateTime updated_at;
-    @Builder.Default
-    private Integer quantity = 0; // 기본값 설정
 }

@@ -5,7 +5,7 @@ import {
     getProductFiles,
     deleteProductFile,
     uploadProductFiles,
-    fetchStatusCountsByProduct, // 새로운 API 함수
+    fetchLogsByProductId,
 } from "../../../../api/admin/productApi";
 import { getRentalsByProduct } from "../../../../api/admin/rentalApi";
 import "./productRead.css";
@@ -13,22 +13,27 @@ import "./productRead.css";
 export default function ProductRead() {
     const { product_id } = useParams();
     const [productData, setProductData] = useState(null);
-    const [statusCounts, setStatusCounts] = useState({});
+    const [statusLogs, setStatusLogs] = useState([]);
     const [files, setFiles] = useState([]);
-    const [selectedFiles, setSelectedFiles] = useState([]);
     const [rentals, setRentals] = useState([]);
 
-    // Fetch product details, rentals, and files
     useEffect(() => {
         fetchProductDetails();
-        fetchStatusCounts();
         fetchFiles();
-        fetchRentals(); // 대여 정보 가져오기
+        fetchRentals();
     }, [product_id]);
 
+    useEffect(() => {
+        if (productData) {
+            fetchStatusLogs(); // 상태 로그를 항상 호출
+        }
+    }, [productData]);
+
+    // 상품 상세 정보 가져오기
     const fetchProductDetails = async () => {
         try {
             const data = await getOneProduct(product_id);
+            console.log("상품 정보:", data);
             setProductData(data);
         } catch (error) {
             console.error("상품 조회 실패:", error.response?.data || error.message);
@@ -36,19 +41,18 @@ export default function ProductRead() {
         }
     };
 
-    const fetchStatusCounts = async () => {
+    // 상태 로그 가져오기
+    const fetchStatusLogs = async () => {
         try {
-            const data = await fetchStatusCountsByProduct(product_id);
-            const counts = data.reduce((acc, item) => {
-                acc[item.product_status] = item.count;
-                return acc;
-            }, {});
-            setStatusCounts(counts);
+            const data = await fetchLogsByProductId(product_id);
+            console.log("상태 로그 데이터 확인:", data);
+            setStatusLogs(data);
         } catch (error) {
-            console.error("상태별 수량 조회 실패:", error.response?.data || error.message);
+            console.error("상태 로그 조회 실패:", error.message);
         }
     };
 
+    // 첨부파일 가져오기
     const fetchFiles = async () => {
         try {
             const data = await getProductFiles(product_id);
@@ -58,6 +62,7 @@ export default function ProductRead() {
         }
     };
 
+    // 대여 정보 가져오기
     const fetchRentals = async () => {
         try {
             const data = await getRentalsByProduct(product_id);
@@ -68,18 +73,16 @@ export default function ProductRead() {
     };
 
     const handleFileUpload = async () => {
-        if (!selectedFiles || selectedFiles.length === 0) {
+        if (!files || files.length === 0) {
             alert("첨부파일을 선택해주세요.");
             return;
         }
 
         try {
-            await uploadProductFiles(product_id, selectedFiles);
-            setSelectedFiles([]);
+            await uploadProductFiles(product_id, files);
             fetchFiles();
         } catch (error) {
             console.error("파일 업로드 실패:", error.response?.data || error.message);
-            alert("파일 업로드 중 오류가 발생했습니다.");
         }
     };
 
@@ -96,6 +99,31 @@ export default function ProductRead() {
         return <div>로딩 중...</div>;
     }
 
+    // 재고량 및 상태 계산
+    const totalStock = productData.stock || 0;
+    const rentedQuantity = rentals.reduce((sum, rental) => sum + rental.count, 0);
+
+    // 상태 로그를 통해 상태별 대여 제한 수량 반영
+    const totalChangedQuantity = statusLogs.reduce(
+        (sum, log) => sum + (log.change_quantity || 0),
+        0
+    );
+
+    // 대여 가능 수량 계산
+    const availableStock = totalStock - rentedQuantity - totalChangedQuantity;
+
+    // 상태별 수량 요약
+    const statusSummary = statusLogs.reduce((acc, log) => {
+        const status = log.changed_status || "대여 가능";
+        const quantity = log.change_quantity || 0;
+
+        if (!acc[status]) {
+            acc[status] = 0;
+        }
+        acc[status] += quantity;
+        return acc;
+    }, {});
+
     return (
         <div className="productRead">
             <div className="productTitleContainer">
@@ -103,16 +131,18 @@ export default function ProductRead() {
             </div>
 
             <div className="productTop">
-                {/* 상단 좌측: 상품 정보 */}
+                {/* 상품 정보 */}
                 <div className="productInfo">
                     <h2>상품 정보</h2>
                     <p><strong>상품 ID:</strong> {productData.product_id}</p>
                     <p><strong>상품 이름:</strong> {productData.product_name}</p>
                     <p><strong>가격:</strong> {productData.price} ₩</p>
                     <p>
-                        <strong>재고량:</strong> {productData.stock} (
-                        {Object.entries(statusCounts).map(([status, count]) => (
-                            <span key={status}>{status}: {count} </span>
+                        <strong>총량:</strong> {totalStock} (
+                        <span>대여 가능: {availableStock}</span>,{" "}
+                        <span>대여 중: {rentedQuantity}</span>
+                        {Object.entries(statusSummary).map(([status, quantity]) => (
+                            <span key={status}>, {status}: {quantity}개</span>
                         ))}
                         )
                     </p>
@@ -124,7 +154,7 @@ export default function ProductRead() {
                     )}
                 </div>
 
-                {/* 상단 우측: 첨부파일 관리 */}
+                {/* 첨부파일 관리 */}
                 <div className="fileManagement">
                     <h2>이미지 관리</h2>
                     <ul>
@@ -142,13 +172,13 @@ export default function ProductRead() {
                     <input
                         type="file"
                         multiple
-                        onChange={(e) => setSelectedFiles([...e.target.files])}
+                        onChange={(e) => setFiles([...e.target.files])}
                     />
                     <button onClick={handleFileUpload}>이미지 업로드</button>
                 </div>
             </div>
 
-            {/* 하단: 대여 정보 */}
+            {/* 대여 정보 */}
             <div className="rentalInfo">
                 <h2>대여 정보</h2>
                 <table>

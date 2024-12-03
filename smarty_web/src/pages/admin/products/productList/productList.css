@@ -1,133 +1,162 @@
-/* 최상위 클래스 기준으로 범위 제한 */
-.productList .productTitle {
-    font-size: 28px;
-    font-weight: 300;
-    color: #011B2F;
+/* 전체 테이블 스타일 */
+.productList .productTable {
+  font-family: Arial, sans-serif;
 }
 
-/* 로그 아이템 스타일 */
-.productList .logItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 5px; /* 로그 간격 */
+/* 상단 버튼 영역 */
+.productList .productContainer {
+    margin-bottom: 20px;
+  }
+  
+  /* 제목 스타일 */
+  .productList .productTitle {
+    font-size: 28px;
+    font-weight: 600;
+    color: #011B2F;
+  }
+  
+  /* 버튼 스타일 */
+  .productList .MuiButton-root {
+    margin-right: 10px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* 엑셀 내보내기 버튼 */
+  .productList .MuiButton-root:first-child {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .productList .MuiButton-root:first-child:hover {
+    background-color: #218838;
+  }
+  
+  /* 선택 저장 버튼 */
+  .productList .MuiButton-root:nth-child(2) {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .productList .MuiButton-root:nth-child(2):hover {
+    background-color: #0056b3;
+  }
+  
+  /* 상품 추가 버튼 */
+  .productList .MuiButton-root:nth-child(3) {
+    background-color: #6f42c1;
+    color: white;
+  }
+  
+  .productList .MuiButton-root:nth-child(3):hover {
+    background-color: #5a36a3;
+  }
+
+/* 상태 변경 및 수량 입력 셀 스타일 */
+.productList .statusChangeCell {
+  display: flex;
+  gap: 10px;    
+  align-items: center;
 }
+
+/* 상태 변경 드롭다운 */
+.productList .statusSelect {
+  width: 100px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 수량 입력 필드 */
+.productList .quantityInput {
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* 저장 버튼 */
+.productList .saveButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.productList .saveButton:hover {
+  background-color: #0056b3;
+}
+
+/* 로그 컨테이너 */
+.productList .logContainer {
+    white-space: pre-wrap; /* 줄바꿈 적용 */
+    word-break: break-word; /* 긴 텍스트 자동 줄바꿈 */
+    padding: 5px;
+}
+
 
 .productList .logText {
-    margin-right: 10px; /* 복구 버튼과 간격 */
-    font-size: 14px;
-    color: #011b2f;
+  font-size: 14px;
+  color: #555;
+  white-space: pre-wrap; /* 텍스트 줄바꿈 */
 }
 
-/* 복구 버튼 스타일 */
+.productList .noLogs {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* 복구 버튼 */
 .productList .recoveryButton {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
 }
 
 .productList .recoveryButton:hover {
-    background-color: #218838;
+  background-color: #45a049;
 }
 
-/* 상태 변경 드롭다운 스타일 */
-.productList .statusSelect {
-    width: 100px;
-    height: 35px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 14px;
-    text-align: center;
+/* 총량 증감 셀 스타일 */
+.productList .stockAdjustmentCell {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-/* 수량 입력란 스타일 */
-.productList .quantityInput {
-    width: 100px;
-    height: 35px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: center;
+/* 적용 버튼 */
+.productList .applyButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.productList .applyButton:hover {
+  background-color: #0056b3;
 }
 
 /* 작업 버튼 */
 .productList .productAction .productListEdit {
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    color: white;
-    cursor: pointer;
-    font-size: 12px;
-    margin-right: 5px;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.productList .productAction .productListEdit:nth-child(1) {
-    background-color: #17a2b8;
-}
-
-.productList .productAction .productListEdit:nth-child(1):hover {
-    background-color: #138496;
-}
-
-.productList .productAction .productListEdit:nth-child(2) {
-    background-color: #007bff;
-}
-
-.productList .productAction .productListEdit:nth-child(2):hover {
-    background-color: #0056b3;
-}
-
-.productList .productAction .productListEdit:nth-child(3) {
-    background-color: #dc3545;
-}
-
-.productList .productAction .productListEdit:nth-child(3):hover {
-    background-color: #c82333;
-}
-
-.productList .productAction .productListEdit:nth-child(4) {
-    background-color: #28a745;
-}
-
-.productList .productAction .productListEdit:nth-child(4):hover {
-    background-color: #218838;
-}
-
-/* 엑셀 내보내기 버튼 */
-.productList .MuiButton-root {
-    margin-right: 10px;
-    border-radius: 5px;
-    padding: 8px 16px;
-}
-
-.productList .MuiButton-root:first-child {
-    background-color: #28a745;
-    color: white;
-}
-
-.productList .MuiButton-root:first-child:hover {
-    background-color: #218838;
-}
-
-.productList .MuiButton-root:nth-child(2) {
-    background-color: #007bff;
-    color: white;
-}
-
-.productList .MuiButton-root:nth-child(2):hover {
-    background-color: #0056b3;
-}
-
-.productList .MuiButton-root:nth-child(3) {
-    background-color: #6f42c1;
-    color: white;
-}
-
-.productList .MuiButton-root:nth-child(3):hover {
-    background-color: #5a36a3;
+.productList .productAction .productListEdit:hover {
+  background-color: #138496;
 }

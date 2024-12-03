@@ -9,6 +9,7 @@ import {
   updateProductStatus,
   restoreToAvailable,
   updateProductStock,
+  fetchLogsByStatusId,
 } from "../../../../api/admin/productApi";
 import Modal from "../../../../component/admin/modal/Modal";
 import NewProduct from "../../products/newProduct/NewProduct";
@@ -25,22 +26,35 @@ export default function ProductList() {
   // 데이터 로드
   const fetchData = async () => {
     try {
+      // 물품 상태 데이터 가져오기
       const response = await fetchProductStatusByFacility(facility_id);
-      const transformedData = response.map((item) => ({
+
+      // 상태 ID별 로그 데이터 가져오기
+      const logsPromises = response.map(async (item) => {
+        const logs = await fetchLogsByStatusId(item.status_id);
+        return { ...item, logs }; // 상태 데이터에 로그를 추가
+      });
+
+      // 모든 상태 및 로그 데이터를 병합
+      const transformedData = await Promise.all(logsPromises);
+
+      // 데이터 상태 업데이트
+      const finalData = transformedData.map((item) => ({
         id: item.status_id,
         status_id: item.status_id,
         product_id: item.product_id,
         product_name: item.product_name || "N/A",
         size: item.size || "N/A",
         stock: item.stock || 0,
-        availableStock: item.stock - (item.logs?.reduce((sum, log) => sum + log.quantity, 0) || 0),
+        availableStock: item.stock - (item.logs.reduce((sum, log) => sum + log.change_quantity, 0) || 0),
         current_status: item.current_status || "대여 가능",
         changed_status: item.changed_status || null,
         change_quantity: item.change_quantity || 0,
         updated_at: item.updated_at,
         logs: item.logs || [],
       }));
-      setData(transformedData);
+
+      setData(finalData);
     } catch (error) {
       console.error("데이터 로드 실패:", error.message);
     }
@@ -51,9 +65,9 @@ export default function ProductList() {
   }, [facility_id]);
 
   // 체크박스 문제 해결: 열 클릭 방지
-const handleRowClick = (params, event) => {
-  event.stopPropagation(); // 열 클릭 이벤트 차단
-};
+  const handleRowClick = (params, event) => {
+    event.stopPropagation(); // 열 클릭 이벤트 차단
+  };
 
   // 상태 변경 및 수량 입력 처리
   const handleStatusChange = (statusId, newStatus, quantity) => {
@@ -69,7 +83,7 @@ const handleRowClick = (params, event) => {
       return;
     }
 
-    if (quantity <= 0) {
+    if (quantity < 0) {
       alert("수량은 0보다 커야 합니다.");
       return;
     }
@@ -94,11 +108,11 @@ const handleRowClick = (params, event) => {
       prevData.map((item) =>
         item.status_id === statusId
           ? {
-              ...item,
-              changed_status: newStatus,
-              change_quantity: quantity,
-              availableStock: newAvailableStock,
-            }
+            ...item,
+            changed_status: newStatus,
+            change_quantity: quantity,
+            availableStock: newAvailableStock,
+          }
           : item
       )
     );
@@ -127,33 +141,36 @@ const handleRowClick = (params, event) => {
     }));
   };
 
-  // 복구 처리
+  // 로그 표시 및 복구 처리
   const handleRecovery = async (statusId) => {
     try {
+      // 상태 복구 요청
       await restoreToAvailable(statusId);
 
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.status_id === statusId
-            ? {
-                ...item,
-                changed_status: null,
-                change_quantity: 0,
-                availableStock: item.stock,
-                current_status: "대여 가능",
-              }
-            : item
-        )
-      );
+      // UI 업데이트
+      fetchData(); // 변경된 데이터를 다시 로드
 
-      alert("복구 성공");
+      alert("상태 복구 완료!");
     } catch (error) {
       console.error("복구 실패:", error.message);
     }
   };
 
-   // 전체 수량 증감 처리
-   const handleStockAdjustment = async (productId, adjustmentValue) => {
+  // 상태 변경 로그 조회
+  const loadLogsForStatus = async (statusId) => {
+    try {
+      const logs = await fetchLogsByStatusId(statusId);
+      setStatusLogs((prevLogs) => ({
+        ...prevLogs,
+        [statusId]: logs,
+      }));
+    } catch (error) {
+      console.error("로그 조회 실패:", error.message);
+    }
+  };
+
+  // 전체 수량 증감 처리
+  const handleStockAdjustment = async (productId, adjustmentValue) => {
     const product = data.find((item) => item.product_id === productId);
 
     if (!product) {
@@ -189,102 +206,72 @@ const handleRowClick = (params, event) => {
     }
   };
 
-// 개별 저장
-const handleSaveRow = async (statusId) => {
-  const changes = modifiedData[statusId] || {}; // 수정된 데이터 가져오기
-  const product = data.find((item) => item.status_id === statusId); // 대상 상품 찾기
-
-  if (!product) {
-    console.error("상품을 찾을 수 없습니다.");
-    return;
-  }
-
-  try {
-    // 상태 변경 저장
-    if (changes.product_status) {
-      // 상태 변경 시 필요한 데이터 전달
-      const changedStatus = changes.product_status;
-      const quantity = changes.quantity || 0; // 수량이 없으면 기본값 0
-
-      await updateProductStatus(statusId, changedStatus, quantity);
-    }
-
-    // 총량 수정 저장
-    if (changes.stock !== undefined) {
-      await updateProductStock(product.product_id, changes.stock);
-    }
-
-    // 성공 메시지 표시
-    alert("저장되었습니다.");
-
-    // 데이터 초기화 및 UI 업데이트
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.status_id === statusId
-          ? {
-              ...item,
-              ...changes,
-              availableStock:
-                item.stock - (changes.change_quantity || 0), // 대여 가능 수량 업데이트
-            }
-          : item
-      )
-    );
-    // 수정된 데이터 초기화
-    setModifiedData((prev) => {
-      const updated = { ...prev };
-      delete updated[statusId];
-      return updated;
-    });
-  } catch (error) {
-    console.error("저장 실패:", error.message);
-    alert("저장 중 오류가 발생했습니다.");
-  }
-  };
-  
-      // 일괄 저장
-const handleBulkSaveChanges = async () => {
-  if (selectedRowKeys.length === 0) {
-    alert("저장할 항목을 선택해주세요.");
-    return;
-  }
-
-  const promises = selectedRowKeys.map((statusId) => {
-    const changes = modifiedData[statusId] || {};
+  // 상태 변경 및 로그 반영
+  const handleStatusAdjustment = async (statusId, changedStatus, changeQuantity) => {
     const product = data.find((item) => item.status_id === statusId);
 
     if (!product) {
-      console.error(`상품을 찾을 수 없습니다: ${statusId}`);
-      return Promise.resolve(); // 상품이 없으면 무시하고 진행
+      console.error("상품을 찾을 수 없습니다.");
+      return;
     }
 
-    const updates = [];
+    try {
+      // 상태 변경 요청
+      await updateProductStatus(statusId, changedStatus, changeQuantity);
 
-    // 상태 변경 저장
-    if (changes.changed_status) {
-      updates.push(
-        updateProductStatus(statusId, changes.changed_status, changes.change_quantity)
-      );
+      // UI 업데이트
+      fetchData(); // 변경된 데이터를 다시 로드
+
+      alert("상태 변경 및 로그 기록 완료!");
+    } catch (error) {
+      console.error("상태 변경 실패:", error.message);
+      alert("상태 변경 중 오류가 발생했습니다.");
+    }
+  };
+
+  // 일괄 저장
+  const handleBulkSaveChanges = async () => {
+    if (selectedRowKeys.length === 0) {
+      alert("저장할 항목을 선택해주세요.");
+      return;
     }
 
-    // 총량 수정 저장
-    if (changes.stock !== undefined) {
-      updates.push(updateProductStock(product.product_id, changes.stock));
+    const promises = selectedRowKeys.map((statusId) => {
+      const changes = modifiedData[statusId] || {};
+      const product = data.find((item) => item.status_id === statusId);
+
+      if (!product) {
+        console.error(`상품을 찾을 수 없습니다: ${statusId}`);
+        return Promise.resolve(); // 상품이 없으면 무시하고 진행
+      }
+
+      const updates = [];
+
+      // 상태 변경 저장
+      if (changes.changed_status) {
+        updates.push(
+          updateProductStatus(statusId, changes.changed_status, changes.change_quantity)
+        );
+      }
+
+      // 총량 수정 저장
+      if (changes.stock !== undefined) {
+        updates.push(updateProductStock(product.product_id, changes.stock));
+      }
+
+      return Promise.all(updates);
+    });
+
+    try {
+      await Promise.all(promises);
+      alert("선택된 항목이 저장되었습니다.");
+      fetchData(); // 데이터를 다시 로드
+      setModifiedData({}); // 수정된 데이터 초기화
+    } catch (error) {
+      console.error("일괄 저장 실패:", error.message);
+      alert("일괄 저장 중 오류가 발생했습니다.");
     }
-
-    return Promise.all(updates);
-  });
-
-  try {
-    await Promise.all(promises);
-    alert("선택된 항목이 저장되었습니다.");
-    fetchData(); // 데이터를 다시 로드
-    setModifiedData({}); // 수정된 데이터 초기화
-  } catch (error) {
-    console.error("일괄 저장 실패:", error.message);
-    alert("일괄 저장 중 오류가 발생했습니다.");
-  }
-};
+  };
 
   // 엑셀 내보내기
   const exportToExcel = () => {
@@ -296,7 +283,6 @@ const handleBulkSaveChanges = async () => {
   };
 
   const toggleProductModal = () => setProductModalOpen((prev) => !prev);
-
   const columns = [
     { field: "status_id", headerName: "상태 ID", width: 150 },
     { field: "product_name", headerName: "상품명", width: 150 },
@@ -313,7 +299,7 @@ const handleBulkSaveChanges = async () => {
       headerName: "총량 증감",
       width: 200,
       renderCell: (params) => (
-        <div>
+        <div className="stockAdjustmentCell">
           <input
             type="number"
             className="quantityInput"
@@ -326,6 +312,7 @@ const handleBulkSaveChanges = async () => {
             variant="contained"
             size="small"
             onClick={() => handleStockAdjustment(params.row.product_id, 0)}
+            className="applyButton"
           >
             적용
           </Button>
@@ -335,16 +322,15 @@ const handleBulkSaveChanges = async () => {
     {
       field: "product_status",
       headerName: "상태 변경 / 수량 입력",
-      width: 250,
+      width: 300,
       renderCell: (params) => {
         const currentStatus =
           modifiedData[params.row.status_id]?.changed_status ||
           params.row.changed_status ||
           "";
-    
+
         return (
           <div className="statusChangeCell">
-            {/* 상태 변경 셀렉트 박스 */}
             <select
               className="statusSelect"
               value={currentStatus}
@@ -359,20 +345,42 @@ const handleBulkSaveChanges = async () => {
                 </option>
               ))}
             </select>
-    
-            {/* 수량 입력란 */}
+
             <input
               type="number"
               className="quantityInput"
-              min="1"
+              min="0"
               placeholder="수량 입력"
               onChange={(e) => {
                 const quantity = Number(e.target.value);
-                if (quantity > 0) {
-                  handleQuantityChange(params.row.status_id, quantity);
-                }
+                handleQuantityChange(params.row.status_id, quantity);
               }}
             />
+
+            <button
+              onClick={() => {
+                const changedStatus =
+                  modifiedData[params.row.status_id]?.changed_status ||
+                  params.row.changed_status;
+                const changeQuantity =
+                  modifiedData[params.row.status_id]?.change_quantity ||
+                  params.row.change_quantity;
+
+                if (!changedStatus) {
+                  alert("상태를 선택해주세요.");
+                  return;
+                }
+
+                handleStatusAdjustment(
+                  params.row.status_id,
+                  changedStatus,
+                  changeQuantity
+                );
+              }}
+              className="saveButton"
+            >
+              저장
+            </button>
           </div>
         );
       },
@@ -380,17 +388,17 @@ const handleBulkSaveChanges = async () => {
     {
       field: "logs",
       headerName: "상태 변경 로그",
-      width: 300,
+      width: 200,
       renderCell: (params) => {
         const logs = params.row.logs || [];
+
         return (
-          <div>
+          <div className="logContainer">
             {logs.length > 0 ? (
               logs.map((log, index) => (
                 <div key={index} className="logItem">
                   <span className="logText">
-                    {log.status} - {log.quantity}개 (
-                    {new Date(log.created_at).toLocaleString()})
+                    {log.changed_status} - {log.change_quantity}개
                   </span>
                   <button
                     onClick={() => handleRecovery(params.row.status_id)}
@@ -401,7 +409,7 @@ const handleBulkSaveChanges = async () => {
                 </div>
               ))
             ) : (
-              "로그 없음"
+              <span className="noLogs">로그 없음</span>
             )}
           </div>
         );
@@ -425,17 +433,11 @@ const handleBulkSaveChanges = async () => {
           <Link to={`/admin/products/${facility_id}/read/${params.row.product_id}`}>
             <button className="productListEdit">상품 조회</button>
           </Link>
-          <button
-            onClick={() => handleSaveRow(params.row.status_id)}
-            className="productListEdit"
-          >
-            저장
-          </button>
         </div>
       ),
     },
-  
   ];
+
 
   return (
     <div className="productList">

@@ -34,6 +34,8 @@ const ProductDetail = ({ product }) => {
             user_id: user.user_id,
             product_id: product.product_id,
             quantity: quantity,
+
+            
         }
     }
 

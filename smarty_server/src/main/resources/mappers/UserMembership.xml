@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.smarty.mapper.UserMembershipMapper">
+
+    <select id="getPaymentDetailsByUserId" parameterType="String" resultType="com.green.smarty.dto.TotalMembershipDTO">
+        SELECT
+        u.user_id,
+        e.enrollment_id,
+        r.reservation_id,
+        ren.rental_id,
+        p.amount
+        FROM payment p
+        LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
+        LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
+        LEFT JOIN rental ren ON p.rental_id = ren.rental_id
+        JOIN user u ON u.user_id = #{userId}
+    </select>
+
+</mapper>

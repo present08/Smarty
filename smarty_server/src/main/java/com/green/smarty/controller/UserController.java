@@ -4,6 +4,7 @@ import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
+import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.service.UserService;
 import com.green.smarty.dto.ReservationUserDTO;
@@ -42,6 +43,9 @@ public class UserController {
     @Autowired
     private UserReservationService reservationService;
 
+    @Autowired
+    private SendEmailService sendEmailService; // 영준 추가 코드
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -61,6 +65,14 @@ public class UserController {
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
+
+                // 영준 추가 이메일 발송 코드
+                String emailStatus = sendEmailService.sendWelcomeEmail(userVO.getEmail(),  userVO.getUser_name(), userVO.getUser_id());
+                if("FAILURE".equals(emailStatus)){
+                    System.out.println("회원가입 성공, 하지만 이메일 전송 중 오류 발생");
+                    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
+                }
+                // 만약 qr이랑 이메일 발송 전부 성공한다면..
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
             } catch (Exception e) {
                 System.out.println("QR 코드 생성 중 오류 발생: " + e.getMessage());

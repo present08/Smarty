@@ -45,6 +45,7 @@ const SignUp = () => {
                 console.log('회원가입 성공:', e); // 성공 로그 출력
                 alert('회원가입이 완료되었습니다. 로그인 해주세요.'); // 성공 메시지 알림
 
+
                 // 바이트 배열을 base64로 변환
                 const base64String = btoa(
                     new Uint8Array(e)
@@ -109,7 +110,8 @@ const SignUp = () => {
                                 <select onChange={(e) => setSelectEmail(e.target.value)}>
                                     <option value='' >직접입력</option>
                                     <option value="naver.com">naver.com</option>
-                                    <option value="google.com">google.com</option>
+                                    <option value="gmail.com">gmail.com</option>
+                                    {/* 위 부분 google.com 이 아니라 gmail.com 이 맞는거라서 김영준이 수정함 */}
                                     <option value="daum.net">daum.net</option>
                                     <option value="nate.com">nate.com</option>
                                 </select>

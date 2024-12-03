@@ -11,7 +11,6 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
     const [cookie, setCookie, removeCookie] = useCookies(['rememberUserId']);
     const [isRemember, setIsRemember] = useState(false);
 

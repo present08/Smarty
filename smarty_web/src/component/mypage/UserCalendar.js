@@ -1,13 +1,13 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import '../../css/userCalendar.css';
 import { getReservationInfo, getUserClassApplication } from '../../api/userApi';
-import moment from 'moment';
+import '../../css/userCalendar.css';
 import CalendarModal from './CalendarModal';
-import EventModal from './EventModal';
 import ClassCalendarModal from './ClassCalendarModal';
 import ClassEventModal from './ClassEventModal';
+import EventModal from './EventModal';
 
 const UserCalendar = (props) => {
 
@@ -42,7 +42,10 @@ const UserCalendar = (props) => {
         setMainModalOpen(false);
         setEventModalOpen(false);
     }
-    const closeClassModal = () => setClassModalOpen(false);
+    const closeClassModal = () => {
+        setClassModalOpen(false)
+        setClassEventModalOpen(false)
+    };
     const closeClassEventModal = () => setClassEventModalOpen(false);
     const closeEventModal = () => setEventModalOpen(false);
 
@@ -55,7 +58,6 @@ const UserCalendar = (props) => {
     const handleClassEventClick = (info) => {
         const selectedEventId = info.event.id;
         const classItem = classSchedules.find(item => item.id === selectedEventId);
-
         if (classItem) {
             const generatedEventId = generateEventId(classItem);
             setClassSelectedEvent(generatedEventId);
@@ -68,12 +70,14 @@ const UserCalendar = (props) => {
 
     // 이벤트 ID 생성
     const generateEventId = (classItem) => {
+        console.log("generateID", classItem)
         if (!classItem || !classItem.start) {
             console.error("클래스 아이템이 유효하지 않거나 start가 없습니다.", classItem);
             return "InvalidEventId"; // 기본값 반환
         }
-
-        const eventId = `${props.user.user_id}${classItem.start}`;
+        const startData = classItem.start.split("T")
+        // const eventId = props.user.user_id + startData[0] + startData[1].split('.')[0]
+        const eventId = classItem.id;
         console.log("생성된 이벤트 ID:", eventId);
         return eventId;
     };
@@ -102,7 +106,7 @@ const UserCalendar = (props) => {
         }
     }, [props.user]);
 
-    
+
     // 수강신청 정보 가져오기
     useEffect(() => {
         if (props.user) {
@@ -114,10 +118,10 @@ const UserCalendar = (props) => {
                     const classSchedules = classData
                         .filter(classItem => classItem.start_date && classItem.end_date) // 유효성 검증
                         .map(classItem => ({
-                            id: classItem.user_id + moment(classItem.start_date).format('YYYY-MM-DD'),
+                            id: classItem.enrollment_id,
                             title: classItem.class_name || "Untitled Class",
-                            start: moment(`${classItem.start_date}T${classItem.start_time}`).toISOString(),
-                            end: moment(`${classItem.end_date}T${classItem.end_time}`).toISOString(),
+                            start: classItem.start_date + "T" + classItem.start_time,
+                            end: classItem.end_date + "T" + classItem.end_time,
                             allDay: false,
                         }));
                     setClassSchedules(classSchedules);
@@ -173,6 +177,13 @@ const UserCalendar = (props) => {
                 currentUser={currentUser}
                 handleEventClick={handleClassEventClick}
             />
+            {classselectedEvent && classEventModalOpen && (
+                <ClassEventModal
+                    classEvent={classInfo.find(item => (item.enrollment_id) == classselectedEvent)}
+                    currentUser={currentUser}
+                    closeModal={closeClassEventModal}
+                />
+            )}
         </div>
     );
 };

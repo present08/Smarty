@@ -1,4 +1,3 @@
-
 .signup_background {
     display: flex;
     justify-content: center;
@@ -42,9 +41,9 @@
 .signup-container>form>button {
     width: 195px;
     height: 40px;
-    background-color:#9db6cf ;
+    background-color: #9db6cf;
     border-radius: 10px;
-    margin-top:20px ;
+    margin-top: 20px;
     border: none;
     color: white;
     font-size: 18px;
@@ -74,7 +73,7 @@
     text-align: left;
 }
 
-.email_box>label{
+.email_box>label {
     font-size: 15px;
     color: gray;
     display: block;
@@ -96,7 +95,7 @@
     height: 40px;
     margin-left: 10px;
     border-radius: 10px;
-    background-color:#f2f3f4 ;
+    background-color: #f2f3f4;
     border: none;
 }
 
@@ -105,11 +104,11 @@
     height: 40px;
     margin-left: 10px;
     border-radius: 10px;
-    background-color:#f2f3f4 ;
+    background-color: #f2f3f4;
     border: none;
 }
 
-.qr_box{
+.qr_box {
     position: fixed;
     top: 0;
     left: 0;
@@ -117,6 +116,7 @@
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.8);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -127,9 +127,9 @@
     height: 80%;
     max-width: 400px;
     max-height: 400px;
-} 
+}
 
-.signup_submenu_box{
+.signup_submenu_box {
     width: 50%;
     display: flex;
     justify-content: space-between;
@@ -153,5 +153,3 @@
     justify-content: center;
     align-items: center;
 }
-
-

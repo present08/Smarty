@@ -5,6 +5,7 @@ import axios from 'axios';
 import { getPaymentDetailsByUserId } from '../../api/membershipApi';
 
 const UserGrade = (props) => {
+
     const [total, setTotal] = useState(0); // 금액 초기화
 
     const membershipBenefits = [
@@ -62,11 +63,9 @@ const UserGrade = (props) => {
         }
     }, [props.user]);
 
-
-    // total이 업데이트될 때마다 실행되는 로그
-    useEffect(() => {
-        console.log('Updated total:', total);
-    }, [total]);
+    // useEffect(() => {
+    //     console.log('Updated total:', total);
+    // }, [total]);
 
     let grade = '';
     let nextGrade = '';

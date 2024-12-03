@@ -34,7 +34,6 @@ export default function FacilityRead() {
     useEffect(() => {
         getOneFacility(facility_id).then(res => {
             setCurrentFacility(res)
-            getListCourt(facility_id)
         }).catch((error) => console.error("ERROR!", error))
     }, [facility_id, newCourt])
 

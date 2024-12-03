@@ -2,16 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.smarty.mapper.AdminStatusMapper">
 
-    <select id="getReservation">
-        select * from reservation where court_id=#{court_id} order by court_id
+    <select id="getReservation" parameterType="java.util.Map">
+        select
+        r.reservation_id, c.court_id, c.court_name,
+        r.user_id, r.reservation_start, r.reservation_end,
+        a.attendance_status
+        from court c
+        join reservation r
+        on c.court_id=r.court_id and c.facility_id=#{facility_id}
+<!--        where r.reservation_start > #{current} and r.reservation_end < #{end}-->
+        left join attendance a on r.reservation_id=a.reservation_id;
     </select>
-    <select id="getEnrollment">
-        select * from enrollment where class_id=#{class_id} order by class_id
-    </select>
-    <select id="getResAttendance">
-        select * from attendance where reservation_id=#{reservation_id}
-    </select>
-    <select id="getEnrAttendance">
-        select * from attendance where enrollment_id=#{enrollment_id}
+    <select id="getEnrollment" parameterType="java.util.Map">
+        select e.enrollment_id, c.class_id, c.class_name,
+        c.start_date, c.end_date, c.start_time, c.end_time,
+        c.class_size, count(e.user_id) register, count(a.attendance_status="Present") attendance
+        from class c join enrollment e on c.class_id=e.class_id
+        and c.facility_id=#{facility_id} and e.enrollment_status="승인완료"
+        left join attendance a on e.enrollment_id=a.enrollment_id
+        group by c.class_id;
     </select>
 </mapper>

@@ -1,21 +1,39 @@
 .facilityStatus {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .facilityStatusContainer {
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.reservationSetting {
+    display: flex;
+    gap: 10px;
 }
 
 .reservation,
 .enrollment {
-    flex: 1;
+    width: 720px;
+    height: 600px;
+    opacity: auto;
     border: none;
     border-radius: 10px;
-    margin: 0 40px 0px 0;
     box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
     -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+.facilityStatusTitle {
+    font-size: 24px;
+    font-weight: 300;
+    color: #011B2F;
 }

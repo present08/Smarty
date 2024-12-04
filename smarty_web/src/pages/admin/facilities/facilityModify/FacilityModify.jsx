@@ -6,7 +6,7 @@ import Modal from "../../../../component/admin/modal/Modal"
 import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import { useNavigate, useParams } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
-import CourtModify from "../CourtModify/CourtModify";
+import CourtModify from "../courtModify/CourtModify";
 
 const initFacility = {
     facility_name: '',

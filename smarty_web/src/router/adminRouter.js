@@ -6,6 +6,7 @@ const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/F
 const FacilityAdd = lazy(() => import("../pages/admin/facilities/newFacility/NewFacility"))
 const FacilityRead = lazy(() => import("../pages/admin/facilities/facilityRead/FacilityRead"))
 const FacilityModify = lazy(() => import("../pages/admin/facilities/facilityModify/FacilityModify"))
+const FacilityStatus = lazy(() => import("../pages/admin/facilities/facilityStatus/FacilityStatus"))
 
 const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"))
 const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
@@ -15,7 +16,6 @@ const ClassModify = lazy(() => import("../pages/admin/classes/classModify/ClassM
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
 
-const FacilityStatus = lazy(() => import("../component/admin/facilityStatus/FacilityStatus"))
 const adminRouter = () => {
 
     return [

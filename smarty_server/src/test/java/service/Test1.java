@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cglib.core.Local;
 
 import com.green.smarty.SmartyApplication;
 import com.green.smarty.mapper.UserClassMapper;
@@ -216,5 +218,11 @@ public class Test1 {
             System.out.println(nowStart);
             System.out.println(now.compareTo(nowStart.minusHours((long) default_time + 1)));
         }
+    }
+
+    @Test
+    public void test213() {
+        LocalDate now = LocalDate.now();
+        System.out.println(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
     }
 }

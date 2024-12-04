@@ -64,7 +64,8 @@ public class PaymentController {
             }
         }
 
-        String id = "P_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
+        String id = "P_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
         System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()
@@ -199,6 +200,7 @@ public class PaymentController {
         reservationMapper.insertReservation(dto);
         System.out.println("payment" + dto);
         LocalDateTime now = LocalDateTime.now();
+
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
         for (PaymentVO i : paymentVO) {
@@ -207,8 +209,10 @@ public class PaymentController {
                 paymentList.add(i);
             }
         }
+        System.out.println("payment List : " + paymentList);
         String id = "P_" + now.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 + String.format("%03d", paymentList.size() + 1);
+        System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()
                 .reservation_id(dto.getReservation_id())
                 .enrollment_id(null)

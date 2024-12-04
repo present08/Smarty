@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.green.smarty.dto.FacilityStatusDTO;
 import com.green.smarty.dto.PermissionDTO;
+import com.green.smarty.dto.WidgetDTO;
 import com.green.smarty.service.AdminStatusService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,22 @@ public class AdminStatusController {
 
     @PostMapping("/permissionPost")
     public List<PermissionDTO> permissionData(@RequestBody String enrollment_id) {
-        System.out.println(enrollment_id);
         adminStatusService.update_enrollment(enrollment_id);
         List<PermissionDTO> dto = adminStatusService.getPermission();
         return dto;
+    }
+
+    @PostMapping("/arrpermissionpost")
+    public List<PermissionDTO> arrPermission(@RequestBody List<String> enrollment_id) {
+        adminStatusService.update_enrollment_array(enrollment_id);
+        List<PermissionDTO> dto = adminStatusService.getPermission();
+        return dto;
+    }
+
+    @GetMapping("/paymentall")
+    public List<WidgetDTO> getPaymentData() {
+        List<WidgetDTO> vo = adminStatusService.getPaymentData();
+        return vo;
     }
 
 }

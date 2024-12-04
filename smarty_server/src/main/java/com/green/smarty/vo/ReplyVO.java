@@ -17,5 +17,4 @@ public class ReplyVO {
     private String user_id;
     private String content;
     private LocalDateTime send_date;
-    private Integer parent_id;  // 대댓글을 위한 필드
 }

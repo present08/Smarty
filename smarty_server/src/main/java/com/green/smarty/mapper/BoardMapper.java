@@ -24,13 +24,10 @@ public interface BoardMapper {
     List<BoardDTO> getVisibleBoards();
     // 조건부 검색
     List<BoardDTO> searchBoard (@Param("type") String type , @Param("keyword") String keyword);
-
     // 좋아요 증가
     int updateGood(@Param("board_id") int board_id);
-
     // 싫어요 증가
     int updateBad(@Param("board_id") int board_id);
-
     // board_id를 매개변수로 int 반환
     int deletedDate(@Param("board_id") int board_id);
 }

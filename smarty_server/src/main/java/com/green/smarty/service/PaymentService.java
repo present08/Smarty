@@ -24,12 +24,16 @@ import com.green.smarty.vo.RentalVO;
 @Service
 
 public class PaymentService {
+
     @Autowired
     private PaymentMapper paymentMapper;
     @Autowired
     private UserRentalMapper userRentalMapper;
     @Autowired
     private PublicMapper publicMapper;
+    // (영준) 이메일 발송
+    @Autowired
+    private SendEmailService sendEmailService;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
@@ -38,16 +42,13 @@ public class PaymentService {
         for (RentalVO item : rentalVO) {
             String itemDate = item.getRental_id().substring(2, 10);
             System.out.println(itemDate);
-            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
-                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+            if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
                 rentalList.add(item);
             }
         }
 
-        String id = "R_" + date.getYear() + date.getMonthValue()
-                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
-                + String.format("%03d", rentalList.size() + 1);
-        System.out.println("rental ID : " + id);
+        String id = "R_"+ date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) + String.format("%03d",rentalList.size()+1);
+        System.out.println("rental ID : "+ id);
 
         RentalVO vo = RentalVO.builder()
                 .rental_id(id)
@@ -59,6 +60,7 @@ public class PaymentService {
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
+
         return vo;
     }
 

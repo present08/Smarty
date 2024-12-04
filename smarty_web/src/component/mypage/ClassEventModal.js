@@ -8,7 +8,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
         enrollment_id: classEvent.enrollment_id, amount: classEvent.price
     }
     const [enrollData, setEnrollData] = useState(init);
-    // classEventModal Data UPdate
+
     useEffect(() => {
         setEnrollData({ enrollment_id: classEvent.enrollment_id, amount: classEvent.price })
     }, [classEvent])
@@ -45,19 +45,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
     return (
         <div
             style={{
-                width: '23%',
-                height: '70%',
-                backgroundColor: 'white',
-                position: 'absolute',
-                top: '20%',
-                zIndex: '999',
-                right: '9%',
-                borderRadius: '20px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+                width: '23%', height: '70%', backgroundColor: 'white', position: 'absolute', top: '20%', zIndex: '999', right: '9%', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             }}
         >
             <div onClick={closeModal} style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }} >
@@ -76,15 +64,15 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
                     <p style={{ fontSize: '23px' }}>{currentUser?.user_name}님</p>
                 </div>
                 <hr style={{ border: '1px solid gray', marginBottom: '2rem', width: '80%', }} />
-                <div style={{ width: '80%', height: '7%', display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: '80%', height: '10%', display: 'flex', justifyContent: 'space-between' }}>
                     <p style={{ fontSize: '21px', color: 'gray' }}>강의 시설명</p>
                     <p style={{ fontSize: '21px' }}>{classEvent.class_name}</p>
                 </div>
-                <div style={{ width: '80%', height: '7%', display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: '80%', height: '10%', display: 'flex', justifyContent: 'space-between' }}>
                     <p style={{ fontSize: '21px', color: 'gray' }}>강의 시작</p>
                     <p style={{ fontSize: '21px' }}>{moment(classEvent.start_date).format('YYYY-MM-DD')} {classEvent.start_time.substring(0, 5)}</p>
                 </div>
-                <div style={{ width: '80%', height: '7%', display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: '80%', height: '10%', display: 'flex', justifyContent: 'space-between' }}>
                     <p style={{ fontSize: '21px', color: 'gray' }}>강의 종료</p>
                     <p style={{ fontSize: '21px' }}>{moment(classEvent.end_date).format('YYYY-MM-DD')} {classEvent.end_time.substring(0, 5)}</p>
                 </div>

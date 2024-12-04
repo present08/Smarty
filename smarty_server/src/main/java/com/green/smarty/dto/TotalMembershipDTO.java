@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReplyDTO {
-    private int reply_id;
-    private int board_id;
+@Builder
+@Data
+
+public class TotalMembershipDTO {
     private String user_id;
-    private String content;
-    private LocalDateTime send_date;
+    private String enrollment_id;
+    private String reservation_id;
+    private String rental_id;
+    private float amount;
 }

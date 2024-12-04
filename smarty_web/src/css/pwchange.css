@@ -1,4 +1,3 @@
-
 .pwchange-background {
     display: flex;
     justify-content: center;
@@ -62,7 +61,7 @@
     text-align: left;
 }
 
-.pwchange-container>form>div>label{
+.pwchange-container>form>div>label {
     font-size: 15px;
     color: gray;
     display: block;
@@ -99,7 +98,7 @@
     flex-direction: column;
 }
 
-.pwchange-submenu-box>div{
+.pwchange-submenu-box>div {
     height: 10%;
 }
 
@@ -110,5 +109,32 @@
     padding: 10px 0px;
 }
 
+.pwchange-img-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
+@media (max-width: 768px) {
+
+    .pwchange-container {
+        width: 100%;
+    }
+
+    .pwchange-container>h1 {
+        font-size: 28px;
+    }
+
+    .pwchange-container>form>div>input {
+        max-width: 100%;
+    }
+
+    .pwchange-container>form>button {
+        width: 80%;
+    }
+
+    .pwchange-submenu-box {
+        display: none;
+    }
+}

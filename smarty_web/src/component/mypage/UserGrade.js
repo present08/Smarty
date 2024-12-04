@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/userGrade.css';
 import { AiOutlineClose, AiOutlineRuby } from 'react-icons/ai';
-import axios from 'axios';
 import { getPaymentDetailsByUserId } from '../../api/membershipApi';
 
 const UserGrade = (props) => {
 
-    const [total, setTotal] = useState(0); // 금액 초기화
+    const [total, setTotal] = useState(0);
+    const [membershipLevel, setMembershipLevel] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
+    const [modal, setModal] = useState(false);
 
     const membershipBenefits = [
+        { benefits: '아직 받을 수 있는 할인이 없습니다.' },
+        { benefits: '입장권 3% 할인' },
         { benefits: '입장권 5% 할인' },
         { benefits: '입장권 7% 할인' },
-        { benefits: '입장권 10% 할인' },
-        { benefits: '입장권 15% 할인' }
+        { benefits: '입장권 10% 할인' }
     ];
 
     const membershipCriteria = [
+        { criteria: '아직 결제 금액이 없습니다 ㅠㅠ.' },
         { criteria: '총 결제금액 - 300,000원 달성시' },
         { criteria: '총 결제금액 - 500,000원 달성시' },
         { criteria: '총 결제금액 - 1,000,000원 달성시' },
@@ -29,9 +33,6 @@ const UserGrade = (props) => {
         '/img/diamond.jpg'
     ];
 
-    const [currentUser, setCurrentUser] = useState(null);
-    const [modal, setModal] = useState(false);
-
     const openModal = () => {
         setModal(true);
     };
@@ -41,20 +42,12 @@ const UserGrade = (props) => {
     };
 
     useEffect(() => {
-        console.log(props.user);
-        setCurrentUser(props.user);
-
         if (props.user) {
+            setCurrentUser(props.user);
             getPaymentDetailsByUserId(props.user.user_id)
                 .then((data) => {
-                    console.log(data);
-
-                    const totalAmount = data.reduce((total, item) => {
-                        return total + (item.amount || 0);
-                    }, 0);
-
-                    console.log('Total Amount:', totalAmount);
-                    setTotal(totalAmount);
+                    console.log("Payment details:", data);
+                    setTotal(data);
                 })
                 .catch((error) => {
                     console.error("Failed to fetch payment details:", error);
@@ -63,44 +56,51 @@ const UserGrade = (props) => {
         }
     }, [props.user]);
 
-    // useEffect(() => {
-    //     console.log('Updated total:', total);
-    // }, [total]);
 
-    let grade = '';
-    let nextGrade = '';
-    let remainingAmount = '';
-    let imageSrc = '';
-    let benefits = '';
-    let criteria = '';
+    let grade = '';     //등급
+    let nextGrade = '';            //다음등급
+    let remainingAmount = '';           //다음 등급 도달 금액
+    let imageSrc = '';              // 로고이미지
+    let benefits = '';              // 할인혜택
+    let criteria = '';              // 달성까지 남은 금액
 
-    if (total <= 200) {
-        grade = '실버';
-        nextGrade = '골드';
-        remainingAmount = 300 - total;
-        imageSrc = images[0];
-        benefits = membershipBenefits[0];
-        criteria = membershipCriteria[0];
-    } else if (total <= 500) {
-        grade = '골드';
-        nextGrade = '플레티넘';
-        remainingAmount = 8000 - total;
-        imageSrc = images[1];
-        benefits = membershipBenefits[1];
-        criteria = membershipCriteria[1];
-    } else if (total <= 8000) {
-        grade = '플레티넘';
-        nextGrade = '다이아';
-        remainingAmount = 9000 - total;
-        imageSrc = images[2];
-        benefits = membershipBenefits[2];
-        criteria = membershipCriteria[2];
-    } else {
+
+    // 멤버십 레벨에 따라 등급 및 혜택 설정
+    if (total >= 1000) {
         grade = '다이아';
         nextGrade = '최고 등급입니다.';
+        remainingAmount = 0;
         imageSrc = images[3];
         benefits = membershipBenefits[3];
         criteria = membershipCriteria[3];
+    } else if (total >= 700) {
+        grade = '플래티넘';
+        nextGrade = '다이아';
+        remainingAmount = 1000 - total;
+        imageSrc = images[2];
+        benefits = membershipBenefits[2];
+        criteria = membershipCriteria[2];
+    } else if (total >= 500) {
+        grade = '골드';
+        nextGrade = '플래티넘';
+        remainingAmount = 700 - total;
+        imageSrc = images[1];
+        benefits = membershipBenefits[1];
+        criteria = membershipCriteria[1];
+    } else if (total >= 200) {
+        grade = '실버';
+        nextGrade = '골드';
+        remainingAmount = 500 - total;
+        imageSrc = images[0];
+        benefits = membershipBenefits[0];
+        criteria = membershipCriteria[0];
+    } else {
+        grade = '브론즈';
+        nextGrade = '실버';
+        remainingAmount = 200 - total;
+        imageSrc = images[0];
+        benefits = membershipBenefits[0];
+        criteria = membershipCriteria[0];
     }
 
 

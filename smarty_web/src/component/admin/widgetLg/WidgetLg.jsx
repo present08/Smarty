@@ -1,82 +1,56 @@
+import { useEffect, useState } from "react"
+import { getPaymentAll } from "../../../api/admin/statusApi"
 import "./widgetLg.css"
 
 export default function WidgetLg() {
+    const [itemList, setItemList] = useState([])
 
-    const Button = ({type}) => {
+    const Button = ({ type }) => {
         return <button className={"widgetLgButton " + type}>{type}</button>
     }
 
-  return (
-    <div className="widgetLg">
-        <h3 className="widgetLgTitle">Latest transactions</h3>
-        <table className="widgetLgTable">
-            <tr className="widgetLgTr">
-                <th className="widgetLgTh">Customer</th>
-                <th className="widgetLgTh">Date</th>
-                <th className="widgetLgTh">Amount</th>
-                <th className="widgetLgTh">Status</th>
-            </tr>
-            <tr className="widgetLgTr">
-                <td className="widgetLgUser">
-                    <img 
+    useEffect(() => {
+        getPaymentAll().then(e => {
+            console.log(e)
+            setItemList(e)
+        })
+    }, [])
+
+
+    return (
+        <div className="widgetLg">
+            <h3 className="widgetLgTitle">최근 결제 내역</h3>
+            <table className="widgetLgTable">
+                <thead>
+                    <tr className="widgetLgTr">
+                        <th className="widgetLgTh">결제내역</th>
+                        <th className="widgetLgTh">사용자</th>
+                        <th className="widgetLgTh">결제일</th>
+                        <th className="widgetLgTh">결제금액</th>
+                        {/* <th className="widgetLgTh">Status</th> */}
+                    </tr>
+                </thead>
+                <tbody style={{tableLayout: 'fixed'}}>
+                    {itemList.map(item => (
+                        <tr className="widgetLgTr">
+                            <td className="widgetLgUser">
+                                {/* <img 
                         src="https://cdn.pixabay.com/photo/2022/01/18/07/38/cat-6946505_640.jpg" 
                         alt="" 
                         className="widgetLgImg" 
-                    />
-                    <span className="widgetLgName">Susan Carol</span>
-                </td>
-                <td className="widgetLgDate">2 Jun 2021</td>
-                <td className="widgetLgAmount">$122.00</td>
-                <td className="widgetLgStatus">
+                        /> */}
+                                <span className="widgetLgName">{item.reservation_id ? item.facility_name : item.enrollment_id ? item.class_name : item.product_name}</span>
+                            </td>
+                            <td className="widgetLgTr">{item.user_id}</td>
+                            <td className="widgetLgDate">{item.payment_date}</td>
+                            <td className="widgetLgAmount">{item.amount}</td>
+                            {/* <td className="widgetLgStatus">
                     <Button type="Approved"/>
-                </td>
-            </tr>
-            <tr className="widgetLgTr">
-                <td className="widgetLgUser">
-                    <img 
-                        src="https://cdn.pixabay.com/photo/2022/01/18/07/38/cat-6946505_640.jpg" 
-                        alt="" 
-                        className="widgetLgImg" 
-                    />
-                    <span className="widgetLgName">Susan Carol</span>
-                </td>
-                <td className="widgetLgDate">2 Jun 2021</td>
-                <td className="widgetLgAmount">$122.00</td>
-                <td className="widgetLgStatus">
-                    <Button type="Declined"/>
-                </td>
-            </tr>
-            <tr className="widgetLgTr">
-                <td className="widgetLgUser">
-                    <img 
-                        src="https://cdn.pixabay.com/photo/2022/01/18/07/38/cat-6946505_640.jpg" 
-                        alt="" 
-                        className="widgetLgImg" 
-                    />
-                    <span className="widgetLgName">Susan Carol</span>
-                </td>
-                <td className="widgetLgDate">2 Jun 2021</td>
-                <td className="widgetLgAmount">$122.00</td>
-                <td className="widgetLgStatus">
-                    <Button type="Pending"/>
-                </td>
-            </tr>
-            <tr className="widgetLgTr">
-                <td className="widgetLgUser">
-                    <img 
-                        src="https://cdn.pixabay.com/photo/2022/01/18/07/38/cat-6946505_640.jpg" 
-                        alt="" 
-                        className="widgetLgImg" 
-                    />
-                    <span className="widgetLgName">Susan Carol</span>
-                </td>
-                <td className="widgetLgDate">2 Jun 2021</td>
-                <td className="widgetLgAmount">$122.00</td>
-                <td className="widgetLgStatus">
-                    <Button type="Approved"/>
-                </td>
-            </tr>
-        </table>
-    </div>
-  )
+                    </td> */}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
 }

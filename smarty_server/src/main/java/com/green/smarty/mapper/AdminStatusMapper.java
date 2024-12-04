@@ -1,10 +1,12 @@
 package com.green.smarty.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.green.smarty.dto.PermissionDTO;
+import com.green.smarty.dto.WidgetDTO;
 import com.green.smarty.vo.AttendanceVO;
 import com.green.smarty.vo.EnrollmentVO;
 import com.green.smarty.vo.ReservationVO;
@@ -17,4 +19,5 @@ public interface AdminStatusMapper {
     List<AttendanceVO> getEnrAttendance(String enrollment_id);
     List<PermissionDTO> getPermission();
     void enrollment_update(String enrollment_id);
+    List<WidgetDTO> getPaymentData(Map<String,String> dateData);
 }

@@ -40,8 +40,8 @@ public class UserClassController {
     }
 
     @PostMapping("/enroll")
-    public String postMethodName(@RequestBody Map<String, String> enrollData) {
-        System.out.println(enrollData);
+    public String postenollment(@RequestBody Map<String, String> enrollData) {
+        System.out.println("enrollController : " + enrollData);
         String result = userClassService.classEnrollment(enrollData);
         System.out.println(result);
         sendEmailService.sendClassReservarion()

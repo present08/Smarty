@@ -101,9 +101,6 @@ export default function CourtModify({ courtPass, passedCourt }) {
                             name={`court_name${i}`}
                             value={court.court_name || ""}
                             placeholder={`코트명 ${i + 1}`}
-                            // 옵셔널 체이닝 '?.'
-                            // result[i]가 존재하는 경우 속성을 가져오고 그렇지 않으면 undefined 반환
-                            // undefined를 반환하면 경우 ""빈 문자열을 대신 사용
                             onChange={(e) => handleInputChange(i, 'court_name', e.target.value)}
                         />
                         <label>개방 여부</label>
@@ -135,8 +132,7 @@ export default function CourtModify({ courtPass, passedCourt }) {
                     <button className="saveCourtButton" onClick={handleModify}>수정</button>
                     <button className="resetCourtButton" onClick={() => setRemoveToggle(true)}>삭제</button>
                 </div>}
-            </div> 
-
+            </div>
         </div>
     );
 }

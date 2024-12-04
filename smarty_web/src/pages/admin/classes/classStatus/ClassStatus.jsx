@@ -6,7 +6,8 @@ import { DataGrid } from '@mui/x-data-grid'
 export default function ClassStatus({ class_id, class_name, today, date }) {
     const [selectedDate, setSelectedDate] = useState()
     const [currentAttendance, setCurrentAttendance] = useState([])
-    
+
+    //================================조회일 설정==================================// 
     useEffect(() => {
         if(date) {
             getData(date)
@@ -16,20 +17,26 @@ export default function ClassStatus({ class_id, class_name, today, date }) {
             setSelectedDate(today)     
         }
     }, [class_id])
+    //============================================================================//
 
+    //==================================GET 요청==================================//
     const getData = (condition) => {
         getListAttendance(class_id, condition).then(res => {
             setCurrentAttendance(res)
             console.log(res)
         }).catch((error) => console.error("ERROR!", error))    
     }
-
+    //============================================================================//
+    
+    //================================DataGrid===================================//
     const enrollmentColumns = [
-        { field: 'user_id', headerName: '사용자 ID', width: 130 },
-        { field: 'attendance_status', headerName: '출석', width: 100 },
-        { field: 'checkin_date', headerName: '출석시간', width: 180 },
-      ];
+      { field: 'user_id', headerName: '사용자 ID', width: 130 },
+      { field: 'attendance_status', headerName: '출석', width: 100 },
+      { field: 'checkin_date', headerName: '출석시간', width: 180 },
+    ];
     const paginationModel = { page: 0, pageSize: 5 };
+    //===========================================================================//
+
   return (
     <div className="classStatus">
           <div className="classStatusTitle">{class_name} : {selectedDate}</div>

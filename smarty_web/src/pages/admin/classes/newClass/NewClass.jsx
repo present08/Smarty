@@ -1,30 +1,29 @@
 import './newClass.css'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from "react"
 import { postAddClass } from '../../../../api/admin/classApi'
 import { Add, Remove } from '@mui/icons-material';
 
 export default function NewClass({ classPass, passedClass, passedFacility }) {
-  console.log("HERE!", passedClass)
-  const navigate = useNavigate()
   const [currentFacility, setCurrentFacility] = useState(null)
   const [addClassToggle, setAddClassTogle] = useState(false) // 강의 추가등록 여부 확인값
   const [maxClassIdx, setMaxClassIdx] = useState()
   const [classList, setClassList] = useState([])        // ClassVO 리스트
   const [weekdayList, setWeekdayList] = useState([])    // 각 ClassVO의 classDetailVO
 
-  
+  //================================추가 등록 설정==================================//
   useEffect(() => {
+    // 추가 등록 시 사용할 최종 등록 class_id 추출
     setCurrentFacility(passedFacility)
     if(passedClass.length > 0) {
       setAddClassTogle(true)
       setMaxClassIdx(Number(passedClass[passedClass.length-1].class_id.slice(6)))
     }
   }, [])
-  console.log(currentFacility && currentFacility.facility_id.slice(12))
-  
-  // 강의 등록폼 추가
+  //===============================================================================//
+
+  //===================================강의 추가====================================//
   const handleAddClass = () => {
+    // 강의 등록폼 추가
     const initClass = {
       key: Date.now(),
       facility_id: currentFacility.facility_id,
@@ -39,15 +38,18 @@ export default function NewClass({ classPass, passedClass, passedFacility }) {
       weekday: []
     }
     setClassList(prevClass => [...prevClass, initClass])
-
     setWeekdayList(prevWeek => [...prevWeek, []])
-    console.log("classList : ", classList)
-    console.log("weekdayList : ", weekdayList)
   }
-  // 사용자 입력값 classList에 저장
+
   const handleInput = (i, key, value) => {
+    // 사용자 입력값 classList에 저장
+    setClassList((prevList) => {
+      const updateList = [...prevList]
+      updateList[i] = {...updateList[i], [key]: value}
+      return updateList
+    }) 
+    // 신규 강의가 아닌 경우 class_id 생성하여 부여
     if(addClassToggle) {
-      // 신규 강의가 아닌 경우 class_id 생성
       let idx = "";
       if( (maxClassIdx+i+1)-10 < 0 ) idx = "0" + (maxClassIdx+i+1);
       else idx = (maxClassIdx+i+1) + "";
@@ -58,15 +60,10 @@ export default function NewClass({ classPass, passedClass, passedFacility }) {
         return updateList
       })
     }
-    setClassList((prevList) => {
-      const updateList = [...prevList]
-      updateList[i] = {...updateList[i], [key]: value}
-      return updateList
-    }) 
   }
 
-  // 선택 요일 weekdayList에 저장
   const handleClickWeekday = (i, e) => {
+    // 선택 요일 weekdayList에 저장
     if(e.target.checked) {
       setWeekdayList((prevWeek) => {
         const updateWeek = [...prevWeek]
@@ -78,16 +75,17 @@ export default function NewClass({ classPass, passedClass, passedFacility }) {
     }
   }
 
-  // weekdayList 업데이트시 classList.weekday 업데이트
   useEffect(() => {
+    // weekdayList 업데이트시 classList.weekday 업데이트
     const newClassList = classList.map((item, i) => {
       return {...item, weekday: weekdayList[i]}
     })
     setClassList(newClassList)
   }, [weekdayList])
 
+  //===============================================================================//
   
-  // 선택 항목 classList, weekdayList에서 삭제
+  //===============================항목 삭제 & 등록 취소============================//
   const handleDelete = (item, i) => {    
     setWeekdayList((prevWeek) => {
       const updateWeek = [...prevWeek]
@@ -97,25 +95,20 @@ export default function NewClass({ classPass, passedClass, passedFacility }) {
     })
     setClassList(classList.filter(one => one.key != item.key))
   }
+  
+  const handleCancel = () => {
+    classPass.classPass(classList)
+  }
+  //===============================================================================//
 
-  useEffect(() => {
-    console.log("최종 class : ", classList)
-    console.log("최종 week : ", weekdayList)
-  }, [classList, weekdayList])
-
-  // 서버로 전송
+  //==================================POST 요청====================================//
   const handleSubmit = () => {
-
     postAddClass(classList).then(res => {
-      console.log(res)
       alert("신규 강의가 등록되었습니다.")
       classPass(classList)
     }).catch((error) => console.error("ERROR!", error))
   }
-
-  const handleCancel = () => {
-    classPass.classPass(classList)
-  }
+  //===============================================================================//
 
   return (
     <div className="newClass">

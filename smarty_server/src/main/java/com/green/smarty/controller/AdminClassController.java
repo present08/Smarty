@@ -54,6 +54,7 @@ public class AdminClassController {
     public String modify(
             @PathVariable(name = "class_id") String class_id,
             @RequestBody ClassAdminDTO classAdminDTO) {
+        System.out.println("클래스 수정! class_id = " + class_id);
         System.out.println("클래스 수정! classAdminDTO = " + classAdminDTO);
         adminClassService.modify(class_id, classAdminDTO);
         return "클래스 수정 성공";

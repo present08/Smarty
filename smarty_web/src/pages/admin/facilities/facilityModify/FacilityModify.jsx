@@ -25,7 +25,6 @@ const initFacility = {
     facility_images: '',
     file_name: []
 }
-
 const initPrice = {
     basic_fee: '',
     rate_adjustment : '',
@@ -47,7 +46,7 @@ export default function FacilityModify() {
     const [updateFile, setUpdateFile] = useState([])
     const [imageUpdate, setImageUpdate] = useState(false)
 
-//=============================GetApi===============================// 
+//=============================GET 요청===============================// 
 
     useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -155,7 +154,7 @@ export default function FacilityModify() {
     
 //====================================================================//
 
-//===============================PutApi===============================//
+//==============================PUT 요청==============================//
 
     const handleInput = (e) => {
         // 수정사항 반영

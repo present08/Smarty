@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
 import './facilityStatus.css'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getListStatus } from '../../../../api/admin/statusApi'
+import { getOneFacility } from '../../../../api/admin/facilityApi';
 import { DataGrid } from '@mui/x-data-grid'
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
-import { getOneFacility } from '../../../../api/admin/facilityApi';
 import Modal from '../../../../component/admin/modal/Modal'
 import ClassStatus from '../../classes/classStatus/ClassStatus'
 
@@ -18,12 +18,15 @@ export default function FacilityStatus() {
     const [class_name, setClass_name] = useState()
     const [selectedDate, setSelectedDate] = useState()
 
+    //===============================오늘 날짜 설정=============================//
     const today = new Date()
     const year = today.getFullYear()
     const month = ("0"+ (today.getMonth() + 1)).slice(-2)
     const day = ("0"+ today.getDate()).slice(-2)
     const formattedDate = `${year}-${month}-${day}`
+    //=========================================================================//
 
+    //=================================GET 요청================================//
     useEffect(() => {
       getOneFacility(facility_id).then(res => {
         setCurrentFacility(res)
@@ -41,7 +44,9 @@ export default function FacilityStatus() {
         setEnrollmentList(res.enrollmentDTOList)
       }).catch((error) => console.error("ERROR! : ", error)) 
     }
+    //=========================================================================//
 
+    //================================출석 조회=================================//
     const handleReadButton = (class_id, class_name) => {
       setStatusModal(true)
       setClass_id(class_id)
@@ -51,7 +56,9 @@ export default function FacilityStatus() {
     const closeModal = () => {
       setStatusModal(false)
     }
-
+    //=========================================================================//
+    
+    //=================================DataGrid================================//
     const reservationColumns = [
       { field: 'court_name', headerName: '코트명', width: 160 },
       { field: 'user_id', headerName: '회원 ID', width: 130 },
@@ -92,6 +99,7 @@ export default function FacilityStatus() {
       }
     ];
     const paginationModel = { page: 0, pageSize: 10 };
+    //=========================================================================//
 
   return (
     <div className='facilityStatus'>

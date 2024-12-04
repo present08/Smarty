@@ -2,11 +2,9 @@ import './classRead.css'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getListClassDetail, getOneClass, putOneClass } from '../../../../api/admin/classApi'
-import { getOneFacility } from '../../../../api/admin/facilityApi'
-import { HorizontalRule, WindowSharp } from '@mui/icons-material';
+import { HorizontalRule } from '@mui/icons-material';
 
 const initClass = {
-  key: Date.now(),
   facility_id: '',
   class_name: '',
   start_date: '',
@@ -18,20 +16,21 @@ const initClass = {
   weekday: []
 }
 
-export default function ClassRead(class_id) {
+export default function ClassRead({ class_id, modifyPass }) {
   const navigate = useNavigate()
+  const {facility_id} = useParams()
   const [currentClass, setCurrentClass] = useState(initClass)
   const [classDetail, setClassDetail] = useState([])
   const [weekday, setWeekday] = useState([])
   const [modifyToggle, setModifyToggle] = useState(true)
-  const {facility_id} = useParams()
   const weekSet = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
 
+  //===================================GET 요청=======================================//
   useEffect(() => {
-    getOneClass(class_id.class_id).then(res => {
+    getOneClass(class_id).then(res => {
       setCurrentClass(res)
     }).catch((error) => console.error("ERROR! : ", error))
-    getListClassDetail(class_id.class_id).then(res => {
+    getListClassDetail(class_id).then(res => {
       setClassDetail(res)
     }).catch((error) => console.error("ERROR! : ", error))
   }, [class_id])
@@ -39,41 +38,37 @@ export default function ClassRead(class_id) {
   useEffect(() => {
     classDetail.map(item => setWeekday(prev => [...prev, item.weekday]))
   }, [classDetail])
+   //================================================================================//
   
 
-  // 사용자 입력값 classList에 저장
+  //===============================수정내용 반영======================================//
   const handleInput = (e) => {
     currentClass[e.target.name] = e.target.value
     setCurrentClass({...currentClass})
   }
 
-  // 선택 요일 weekdayList에 저장
   const handleClickWeekday = (e) => {
-    if(e.target.checked) {
-      setWeekday((prev) => [...prev, e.target.value])
-    } else {
-      setWeekday(weekday.filter(day => day != e.target.value)) 
-    }
+    // 선택 요일 weekday에 저장
+    if(e.target.checked) setWeekday((prev) => [...prev, e.target.value])
+    else setWeekday(weekday.filter(day => day != e.target.value)) 
   }
 
-  // weekdayList 업데이트시 classList.weekday 업데이트
   useEffect(() => {
+    // weekday 업데이트시 currentClass.weekday 업데이트
     currentClass.weekday = weekday
     setCurrentClass({...currentClass})
   }, [weekday])
-  
-  useEffect(() => {
-    console.log("최종 class : ", currentClass)
-    console.log("최종 detail : ", classDetail)
-  }, [currentClass])
+  //================================================================================//
 
+  //===================================PUT 요청=====================================//
   const handleSubmit = () => {
     if(window.confirm("수정하시겠습니까?")) {
-      putOneClass(class_id.class_id, currentClass).then(res => {
-        console.log(res)
-      }).catch((error) => console.error("ERROR!", error))  
+      putOneClass(class_id, currentClass)
+      .then(modifyPass(currentClass))
+      .catch((error) => console.error("ERROR!", error))  
     } else navigate({pathname: `/admin/classes/${facility_id}`})
   }
+  //================================================================================//
   
   return (
     <div className="classRead">
@@ -154,7 +149,6 @@ export default function ClassRead(class_id) {
               type='time'
               name={`start_time`}
               onChange={(e) => handleInput(e)}
-              // onChange={(e) => console.log(e.target.value)}
               defaultValue={currentClass.start_time || ''}
               disabled={modifyToggle}
             />
@@ -165,7 +159,6 @@ export default function ClassRead(class_id) {
               type='time'
               name={`end_time`}
               onChange={(e) => handleInput(e)}
-              // onChange={(e) => console.log(e.target.value)}
               defaultValue={currentClass.end_time || ''}
               disabled={modifyToggle}
             />

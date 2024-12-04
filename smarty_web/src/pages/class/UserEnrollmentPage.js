@@ -8,10 +8,9 @@ const UserEnrollmentPage = () => {
     const location = useLocation();
     const { classData, user, e } = location.state
     const init = {
-        enrollment_id: e, amount: classData.price
+        enrollment_id: e, amount: classData.price, user_id: user.user_id
     }
     const [enrollData, setEnrollData] = useState(init)
-    console.log(location.state)
     const navigate = useNavigate()
     const closed = (page) => {
         if (page == "mypage") {

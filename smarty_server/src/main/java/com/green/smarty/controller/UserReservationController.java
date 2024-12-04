@@ -3,16 +3,12 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.service.SendEmailService;
-import com.green.smarty.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,7 +29,9 @@ import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.PublicMapper;
+import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserReservationMapper;
+import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.AttendanceVO;
 import com.green.smarty.vo.PaymentVO;
@@ -60,7 +58,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("/Users/hyesoo/Desktop/TF33_smarty/Smarty/smarty_server/upload")
+        Path filePath = Paths.get("C:\\Users\\Administrator\\Desktop\\Green_Project\\Smarty\\smarty_server\\upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -89,7 +87,6 @@ public class UserReservationController {
         return btnData;
     }
 
-
     // 예약 완료 시 호출
     @PostMapping("/{facility_id}")
     public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
@@ -104,11 +101,10 @@ public class UserReservationController {
         LocalDateTime reservationStart = dto.getReservation_start();
         LocalDateTime reservationEnd = dto.getReservation_end();
         String court_id = dto.getCourt_id();
-        sendEmailService.sendClassReservation(email,user_name,formattedStart,formattedEnd,court_id);
+        sendEmailService.sendClassReservation(email, user_name, formattedStart, formattedEnd, court_id);
 
         return result;
     }
-
 
     // 예약 데이터 삭제
     @DeleteMapping("/{reservation_id}")

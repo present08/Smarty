@@ -26,7 +26,9 @@ public class UserFacilityService {
         return userProductMapper.getProductsByFacilityId(facility_id);
     }
 
+    // (영준)
     public String getFacilityNameById(String facility_id){
         return userFacilityMapper.getFacilityNameById(facility_id);
     }
+
 }

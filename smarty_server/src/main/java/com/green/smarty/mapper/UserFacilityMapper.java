@@ -12,4 +12,5 @@ public interface UserFacilityMapper {
     List<FacilityDTO> getFacilityById(String facility_id);
     //(영준)
     String getFacilityNameById(String facility_id);
+    String getClassNameByUserId(String user_id);
 }

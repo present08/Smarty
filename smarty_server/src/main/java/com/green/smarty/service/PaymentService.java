@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.green.smarty.dto.PaymentDetailDTO;
-import com.green.smarty.mapper.PaymentMapper;
-import com.green.smarty.mapper.PublicMapper;
-import com.green.smarty.mapper.UserRentalMapper;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 

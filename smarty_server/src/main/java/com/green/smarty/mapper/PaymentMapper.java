@@ -17,4 +17,9 @@ public interface PaymentMapper {
     // enrollment
     List<EnrollmentClassDTO> getEnrollmentClass();
     void updateEnroll(String enrollment_id);
+
+    // (영준)
+    String getUserIdByPaymentId(String payment_id);
+    String getClassNameByPaymentId(String payment_id);
+    String getEmailByPaymentId(String payment_id);
 }

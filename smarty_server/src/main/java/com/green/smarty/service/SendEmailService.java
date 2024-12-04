@@ -106,13 +106,13 @@ public class SendEmailService {
     public String sendClassReservation(String email, String user_name, String formattedStart, String formattedEnd, String facility_name, String court_id)
         {
             SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setText("안녕하세요" + user_name + "님!\uD83D\uDE03 \n" + formattedStart + "부터 " + formattedEnd + "까지 " + facility_name +" 코트번호 : " + court_id + "예약을 신청해 주셨습니다!\n" +
-                    "결제가 완료되면 즉시 예약이 완료 됩니다!");
+            msg.setText("안녕하세요" + user_name + "님!\uD83D\uDE03 \n" + formattedStart + "부터 " + formattedEnd + "까지 " + facility_name +" 코트번호 : " + court_id + "예약이 완료되었습니다!\n" +
+                    "마이페이지를 통해 결제 내역 확인 부탁드립니다!");
             try {
                 String userId = userMapper.getIdByEmail(email);
                 msg.setFrom("smartytf33@gmail.com");
                 msg.setTo(email);
-                msg.setSubject("일일 예약 안내");
+                msg.setSubject("일일 예약 결제 완료 안내");
                 javaMailSender.send(msg);
 
                 NotificationDTO notificationDTO = new NotificationDTO();
@@ -130,7 +130,7 @@ public class SendEmailService {
                 notificationDTO.setResponse_detail(e.getMessage());
                 notificationDTO.setMessage(msg.getText());
                 notificationDTO.setStatus("FAILURE");
-                notificationDTO.setMessage_type("일일 예약 안내");
+                notificationDTO.setMessage_type("일일 예약 결제 완료 안내");
                 notificationDTO.setUser_name(user_name);
                 notificationDTO.setUser_id(notificationDTO.getUser_id());
                 notificationMapper.insertByNotificationId(notificationDTO);
@@ -147,11 +147,12 @@ public class SendEmailService {
             simpleMailMessage.setTo(email);
             simpleMailMessage.setSubject("Class 수강 신청");
             javaMailSender.send(simpleMailMessage);
+
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setResponse_detail("Success sent message to " + email);
             notificationDTO.setMessage(simpleMailMessage.getText());
             notificationDTO.setStatus("SUCCESS");
-            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setMessage_type("수강신청 결제 완료 안내");
             notificationDTO.setUser_name(user_name);
             notificationDTO.setUser_id(notificationDTO.getUser_id());
             notificationMapper.insertByNotificationId(notificationDTO);
@@ -162,7 +163,7 @@ public class SendEmailService {
             notificationDTO.setResponse_detail(e.getMessage());
             notificationDTO.setMessage(simpleMailMessage.getText());
             notificationDTO.setStatus("FAILURE");
-            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setMessage_type("수강신청 결제 완료 안내");
             notificationDTO.setUser_name(user_name);
             notificationDTO.setUser_id(notificationDTO.getUser_id());
             notificationMapper.insertByNotificationId(notificationDTO);
@@ -171,3 +172,4 @@ public class SendEmailService {
 
     }
 }
+

@@ -54,4 +54,16 @@
         FROM facility
         WHERE facility_id = #{facility_id}
     </select>
+    <select id="getClassNameByReservationId" parameterType="String">
+        SELECT
+        c.class_name
+        FROM
+        reservation r
+        JOIN
+        class c
+        ON
+        r.court_id = c.facility_id
+        WHERE
+        r.reservation_id = #{reservation_id}
+    </select>
 </mapper>

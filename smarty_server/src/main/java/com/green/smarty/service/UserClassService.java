@@ -21,6 +21,7 @@ public class UserClassService {
     @Autowired
     private UserClassMapper userClassMapper;
 
+
     public Map<String, List<String>> getClassWeekday() {
         List<ClassDetailVO> detail = userClassMapper.getClassDetail();
         // 데이터를 받아서 중복제거 후

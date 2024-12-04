@@ -51,11 +51,7 @@ public class UserReservationController {
     @Autowired
     private PublicMapper publicMapper;
 
-    @Autowired
-    private SendEmailService sendEmailService;
 
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private UserFacilityService userFacilityService;
@@ -98,19 +94,6 @@ public class UserReservationController {
     @PostMapping("/{facility_id}")
     public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
         UserReservationDTO result = reservationService.insertReservation(dto);
-        // (영준) 이메일 발송 관련 코드
-        System.out.println(dto.getUser_id());
-        String email = userMapper.getUserEmailById(dto.getUser_id());
-        String user_name = userMapper.getUserNameById(dto.getUser_id());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedStart = dto.getReservation_start().format(formatter);
-        String formattedEnd = dto.getReservation_end().format(formatter);
-        LocalDateTime reservationStart = dto.getReservation_start();
-        LocalDateTime reservationEnd = dto.getReservation_end();
-        String court_id = dto.getCourt_id();
-        String facility_name = userFacilityService.getFacilityNameById(dto.getFacility_id());
-        sendEmailService.sendClassReservation(email,user_name,formattedStart,formattedEnd,facility_name,court_id);
-
         return result;
     }
 

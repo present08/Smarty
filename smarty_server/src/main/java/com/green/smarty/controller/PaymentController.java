@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.green.smarty.mapper.*;
 import com.green.smarty.service.SendEmailService;
+import com.green.smarty.service.UserFacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,7 @@ public class PaymentController {
     @Autowired
     private SendEmailService sendEmailService;
     @Autowired
-    private UserProductMapper userProductMapper;
+    private UserFacilityService facilityService;
 
 
     // 결제 생성
@@ -200,8 +201,24 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
+        System.out.println(vo.getReservation_id());
+        System.out.println(vo);
+
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
+
+        String user_id = paymentMapper.getUserIdByPaymentId(vo.getPayment_id());
+        System.out.println(vo);
+        System.out.println(user_id);
+        String user_name = userMapper.getUserNameById(user_id);
+        String email = userMapper.getUserEmailById(user_id);
+        String class_name = paymentMapper.getClassNameByPaymentId(vo.getPayment_id());
+        System.out.println("User Name: " + user_name);
+        System.out.println("Class Name: " + class_name);
+        System.out.println("Email: " + email);
+        sendEmailService.sendClassReservarion(user_name, class_name ,email);
+
+        System.out.println("예약이 완료 됨");
         return "예약 완료";
     }
 
@@ -211,6 +228,10 @@ public class PaymentController {
         // 결제 승인시 reservation Table insert
         reservationMapper.insertReservation(dto);
         System.out.println("payment" + dto);
+//        String user_name = userMapper.getUserNameById(dto.getUser_id());
+//        String class_name =
+//        sendEmailService.sendClassReservarion(user_name, dto.get)
+
         LocalDateTime now = LocalDateTime.now();
 
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
@@ -238,6 +259,18 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
 
         UserReservationDTO result = reservationService.insertReservation(dto);
+
+        // (영준) 이메일 발송 관련 코드
+        String email = userMapper.getUserEmailById(dto.getUser_id());
+        String user_name = userMapper.getUserNameById(dto.getUser_id());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedStart = dto.getReservation_start().format(formatter);
+        String formattedEnd = dto.getReservation_end().format(formatter);
+        LocalDateTime reservationStart = dto.getReservation_start();
+        LocalDateTime reservationEnd = dto.getReservation_end();
+        String court_id = dto.getCourt_id();
+        String facility_name = facilityService.getFacilityNameById(dto.getFacility_id());
+        sendEmailService.sendClassReservation(email,user_name,formattedStart,formattedEnd,facility_name,court_id);
 
         return result;
     }

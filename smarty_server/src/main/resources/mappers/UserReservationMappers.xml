@@ -77,4 +77,5 @@
         AND r.reservation_start &gt; NOW();
     </select>
 
+
 </mapper>

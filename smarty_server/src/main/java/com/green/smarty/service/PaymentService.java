@@ -25,7 +25,7 @@ public class PaymentService {
     @Autowired
     private PaymentMapper paymentMapper;
     @Autowired
-    private UserRentalMapper userRentalMapper;
+    private UserRentalService userRentalService;
     @Autowired
     private PublicMapper publicMapper;
 
@@ -56,73 +56,16 @@ public class PaymentService {
                 .rental_status(true)
                 .payment_id(payment_id)
                 .build();
-        userRentalMapper.insertRental(vo);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("product_id", dto.getProduct_id());
-        map.put("count", dto.getCount());
-        System.out.println("product_id 확인: " + map.get("product_id"));
-        System.out.println("count 확인: "+map.get("count"));
-        int stockDown = userRentalMapper.productStockDown(map);
+        userRentalService.insertRental(vo, dto.getCount());
 
-        if (stockDown > 0) {
-            System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
-        } else {
-            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
-        }
         return vo;
     }
-
-    // 결제 생성
-    // public String createPayment(PaymentVO paymentVO) {
-    //     try {
-//            String rentalIdString = String.valueOf(paymentVO.getRental_id());
-//            paymentVO.setRental_id(rentalIdString);
-//
-//            System.out.println("결제 요청 시 rental_id: ");
-//
-//            RentalDTO rental = userRentalMapper.getRentalById(rentalIdString);
-//            if (rental == null) {
-//                throw new IllegalArgumentException("rental_id가 존재하지 않습니다: " + rentalIdString);
-//            }
-
-//             String payment_id = generatePaymentId();
-//             paymentVO.setPayment_id(payment_id);
-// //            paymentVO.setPayment_date(LocalDate.now());
-
-//             // 필수 데이터 검증
-//             if (paymentVO.getAmount() <= 0) {
-//                 throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
-//             }
-//             if (paymentVO.getRental_id() == null) {
-//                 throw new IllegalArgumentException("렌탈 ID가 누락되었습니다.");
-//             }
-
-//             paymentMapper.insertPayment(paymentVO); // 데이터 삽입
-//             return payment_id;
-//         } catch (Exception e) {
-//             System.out.println("결제 생성중 오류 발생: " + e.getMessage());
-//             throw new RuntimeException("결제 생성 실패: " + e.getMessage(), e);
-//         }
-//     }
 
     //고유 결제 ID 생성
     private String generatePaymentId() {
         return "P_" + System.currentTimeMillis();
     }
-
-//    //결제 승인
-//    public boolean approvePayment(String payment_id) {
-//        try {
-//            int updateRows = paymentMapper.updatePaymentStatus(payment_id, "승인되었습니다");
-//            if (updateRows == 0) {
-//                throw new RuntimeException("결제를 찾을 수 없거나 이미 승인되었습니다.");
-//            }
-//            return true;
-//        } catch (Exception e) {
-//            throw new RuntimeException("결제 승인 실패: " + e.getMessage(), e);
-//        }
-//    }
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

@@ -13,6 +13,8 @@ import {
 } from "../../../../api/admin/productApi";
 import Modal from "../../../../component/admin/modal/Modal";
 import NewProduct from "../../products/newProduct/NewProduct";
+import ProductStatusLog from "../prodcutStatusLog/ProductStatusLog";
+
 
 export default function ProductList() {
   const { facility_id } = useParams();
@@ -21,6 +23,8 @@ export default function ProductList() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [statusLogs, setStatusLogs] = useState({});
+  const [logModalOpen, setLogModalOpen] = useState(false);
+  const [selectedLogs, setSelectedLogs] = useState([]);
 
 
   // 데이터 로드
@@ -147,8 +151,9 @@ export default function ProductList() {
       // 상태 복구 요청
       await restoreToAvailable(statusId);
 
-      // UI 업데이트
-      fetchData(); // 변경된 데이터를 다시 로드
+      // 복구 후 로그 데이터 갱신
+      const updatedLogs = await fetchLogsByStatusId(statusId);
+      setSelectedLogs(updatedLogs); // 모달에 최신 로그 데이터 반영
 
       alert("상태 복구 완료!");
     } catch (error) {
@@ -273,6 +278,21 @@ export default function ProductList() {
     }
   };
 
+  const handleLogView = async (statusId) => {
+    try {
+      const logs = await fetchLogsByStatusId(statusId); // API 호출
+      setSelectedLogs(logs); // 가져온 로그 데이터 저장
+      setLogModalOpen(true); // 모달 열기
+    } catch (error) {
+      console.error("로그 조회 실패:", error.message);
+    }
+  };
+
+  const closeLogModal = () => {
+    setSelectedLogs([]);
+    setLogModalOpen(false); // 모달 닫기
+  };
+
   // 엑셀 내보내기
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -283,21 +303,44 @@ export default function ProductList() {
   };
 
   const toggleProductModal = () => setProductModalOpen((prev) => !prev);
+
   const columns = [
-    { field: "status_id", headerName: "상태 ID", width: 150 },
-    { field: "product_name", headerName: "상품명", width: 150 },
-    { field: "size", headerName: "사이즈", width: 80 },
+    {
+      field: "status_id",
+      headerName: "상태 ID",
+      width: 180,
+      headerAlign: "center", // 헤더 중앙 정렬
+      align: "center", // 데이터 중앙 정렬
+    },
+    {
+      field: "product_name",
+      headerName: "상품명",
+      width: 120,
+      headerAlign: "center",
+      align: "left", // 텍스트 왼쪽 정렬
+    },
+    {
+      field: "size",
+      headerName: "사이즈",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "stock",
-      headerName: "총량",
+      headerName: "총량 (재고량)",
       width: 180,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) =>
-        `${params.row.stock} (대여 가능 : ${params.row.availableStock})`,
+        `${params.row.stock} (재고량: ${params.row.availableStock})`,
     },
     {
       field: "stock_adjustment",
       headerName: "총량 증감",
-      width: 200,
+      width: 190,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => (
         <div className="stockAdjustmentCell">
           <input
@@ -311,7 +354,6 @@ export default function ProductList() {
           <Button
             variant="contained"
             size="small"
-            onClick={() => handleStockAdjustment(params.row.product_id, 0)}
             className="applyButton"
           >
             적용
@@ -321,8 +363,10 @@ export default function ProductList() {
     },
     {
       field: "product_status",
-      headerName: "상태 변경 / 수량 입력",
+      headerName: "상태 변경",
       width: 300,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => {
         const currentStatus =
           modifiedData[params.row.status_id]?.changed_status ||
@@ -386,39 +430,11 @@ export default function ProductList() {
       },
     },
     {
-      field: "logs",
-      headerName: "상태 변경 로그",
-      width: 200,
-      renderCell: (params) => {
-        const logs = params.row.logs || [];
-
-        return (
-          <div className="logContainer">
-            {logs.length > 0 ? (
-              logs.map((log, index) => (
-                <div key={index} className="logItem">
-                  <span className="logText">
-                    {log.changed_status} - {log.change_quantity}개
-                  </span>
-                  <button
-                    onClick={() => handleRecovery(params.row.status_id)}
-                    className="recoveryButton"
-                  >
-                    복구
-                  </button>
-                </div>
-              ))
-            ) : (
-              <span className="noLogs">로그 없음</span>
-            )}
-          </div>
-        );
-      },
-    },
-    {
       field: "updated_at",
       headerName: "마지막 수정일",
-      width: 230,
+      width: 220,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) =>
         params.row.updated_at
           ? new Date(params.row.updated_at).toLocaleString()
@@ -427,17 +443,27 @@ export default function ProductList() {
     {
       field: "action",
       headerName: "작업",
-      width: 200,
+      width: 250,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => (
         <div className="productAction">
+
           <Link to={`/admin/products/${facility_id}/read/${params.row.product_id}`}>
             <button className="productListEdit">상품 조회</button>
           </Link>
+
+          <button
+            className="logViewButton"
+            onClick={() => handleLogView(params.row.status_id)}
+          >
+            로그 조회
+          </button>
+
         </div>
       ),
     },
   ];
-
 
   return (
     <div className="productList">
@@ -478,6 +504,7 @@ export default function ProductList() {
         onCellClick={handleRowClick} // 추가
         getRowId={(row) => row.id}
         className="productTable"
+        rowHeight={60} // 모든 행의 높이를 60px로 통일
         onSelectionModelChange={(selection) => setSelectedRowKeys(selection)}
       />
       {productModalOpen && (
@@ -490,6 +517,12 @@ export default function ProductList() {
             />
           }
           callbackFn={toggleProductModal}
+        />
+      )}
+      {logModalOpen && (
+        <Modal
+          content={<ProductStatusLog logs={selectedLogs} onRestore={handleRecovery} />}
+          callbackFn={closeLogModal}
         />
       )}
     </div>

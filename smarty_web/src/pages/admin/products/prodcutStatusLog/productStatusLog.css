@@ -1,0 +1,54 @@
+.logDetailsContainer {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  .logDetailsContainer h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;  
+    margin-bottom: 20px;
+  }
+
+  .logItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .logItem p {
+    margin: 5px 0;
+    padding: 0 10px;
+  }
+  
+  .logViewButton {
+    background-color: #195e8e;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logViewButton:hover {
+    background-color: #154a6c;
+  }
+
+  .restoreButton {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 8px 12px; 
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .restoreButton:hover {
+    background-color: #d94c47;
+  }
+  

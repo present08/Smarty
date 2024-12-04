@@ -21,13 +21,8 @@ export default function ProductRead() {
         fetchProductDetails();
         fetchFiles();
         fetchRentals();
+        fetchStatusLogs();
     }, [product_id]);
-
-    useEffect(() => {
-        if (productData) {
-            fetchStatusLogs(); // 상태 로그를 항상 호출
-        }
-    }, [productData]);
 
     // 상품 상세 정보 가져오기
     const fetchProductDetails = async () => {
@@ -37,7 +32,6 @@ export default function ProductRead() {
             setProductData(data);
         } catch (error) {
             console.error("상품 조회 실패:", error.response?.data || error.message);
-            alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
         }
     };
 
@@ -101,28 +95,21 @@ export default function ProductRead() {
 
     // 재고량 및 상태 계산
     const totalStock = productData.stock || 0;
-    const rentedQuantity = rentals.reduce((sum, rental) => sum + rental.count, 0);
-
-    // 상태 로그를 통해 상태별 대여 제한 수량 반영
-    const totalChangedQuantity = statusLogs.reduce(
-        (sum, log) => sum + (log.change_quantity || 0),
-        0
-    );
-
-    // 대여 가능 수량 계산
-    const availableStock = totalStock - rentedQuantity - totalChangedQuantity;
 
     // 상태별 수량 요약
     const statusSummary = statusLogs.reduce((acc, log) => {
-        const status = log.changed_status || "대여 가능";
+        const status = log.changed_status; // 로그의 상태 ('대여 중', '손상', '수리 필요', 등)
         const quantity = log.change_quantity || 0;
 
         if (!acc[status]) {
             acc[status] = 0;
         }
-        acc[status] += quantity;
+        acc[status] += quantity; // 상태별 수량 합산
         return acc;
     }, {});
+
+    // 대여 가능 수량: 총량 - 로그에서 감소된 총 수량
+    const availableStock = totalStock - Object.values(statusSummary).reduce((sum, qty) => sum + qty, 0);
 
     return (
         <div className="productRead">
@@ -139,8 +126,7 @@ export default function ProductRead() {
                     <p><strong>가격:</strong> {productData.price} ₩</p>
                     <p>
                         <strong>총량:</strong> {totalStock} (
-                        <span>대여 가능: {availableStock}</span>,{" "}
-                        <span>대여 중: {rentedQuantity}</span>
+                        <span>대여 가능: {availableStock}</span>
                         {Object.entries(statusSummary).map(([status, quantity]) => (
                             <span key={status}>, {status}: {quantity}개</span>
                         ))}

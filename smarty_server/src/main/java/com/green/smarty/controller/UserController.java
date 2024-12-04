@@ -1,5 +1,23 @@
 package com.green.smarty.controller;
 
+import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.UserClassApplicationDTO;
+import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.service.QRCodeService;
+import com.green.smarty.service.SendEmailService;
+import com.green.smarty.service.UserReservationService;
+import com.green.smarty.service.UserService;
+import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +68,9 @@ public class UserController {
     @Autowired
     private UserReservationService reservationService;
 
+    @Autowired
+    private SendEmailService sendEmailService; // 영준 추가 코드
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -58,7 +79,6 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
-        System.out.println(userVO.getFcm_token());
 
         boolean isSuccess = userservice.signup(userVO);
 
@@ -69,7 +89,15 @@ public class UserController {
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode); // QR 코드 이미지를 반환
+
+                // 영준 추가 이메일 발송 코드
+                String emailStatus = sendEmailService.sendWelcomeEmail(userVO.getEmail(),  userVO.getUser_name(), userVO.getUser_id());
+                if("FAILURE".equals(emailStatus)){
+                    System.out.println("회원가입 성공, 하지만 이메일 전송 중 오류 발생");
+                    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
+                }
+                // 만약 qr이랑 이메일 발송 전부 성공한다면..
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
             } catch (Exception e) {
                 System.out.println("QR 코드 생성 중 오류 발생: " + e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

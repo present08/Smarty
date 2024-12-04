@@ -7,6 +7,7 @@ const NoticeBoard = lazy(() => import("../component/announcement/NoticeBoard"));
 const JobList = lazy(() => import("../pages/announcement/JobListPage"));
 const NoticeModifyPage = lazy(() => import("../component/announcement/NoticeModifyPage"));
 const Community = lazy(() => import("../component/announcement/Community"));
+const AnnounceModifyPage = lazy(() => import("../component/announcement/AnnounceModifyPage"))
 
 
 
@@ -35,6 +36,10 @@ const newNoticeRouter = () => {
         {
             path: "board/modify/:board_id",
             element: <Suspense fallback={Loading}><NoticeModifyPage /></Suspense>
+        },
+        {
+            path: "announce/modify/:announce_id",
+            element: <Suspense fallback={Loading}><AnnounceModifyPage /></Suspense>
         },
     ];
 }

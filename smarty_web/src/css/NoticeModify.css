@@ -31,12 +31,13 @@
 .notice-modify input,
 .notice-modify select,
 .notice-modify textarea {
-  width: 100%;
+  width: calc(100% - 24px);
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 15px;
   background-color: #fafafa;
+  box-sizing: border-box;
 }
 
 .notice-modify input:focus,

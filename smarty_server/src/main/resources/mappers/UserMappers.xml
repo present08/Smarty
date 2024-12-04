@@ -14,10 +14,8 @@
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday,
-        join_date, login_date, user_status, level, qr_Code, fcm_token)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday},
-        #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode}, #{fcm_token})
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
     </insert>
 
     <!-- 아이디 찾기-->
@@ -25,12 +23,6 @@
         SELECT user_id FROM user
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
-    </select>
-
-<!--fcm_token용 아이디 찾기-->
-    <select id="finByIdFcm">
-        SELECT fcm_token FROM user
-        WHERE user_id = #{user_id}
     </select>
 
     <!-- 비밀번호 찾기 -->
@@ -130,6 +122,21 @@
         ON f.facility_id = p.facility_id
         WHERE
         u.user_id = #{user_id};
+    </select>
+
+    <select id="getUserEmailById" parameterType="String">
+        SELECT email FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getUserNameById" parameterType="String">
+        SELECT user_name FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getIdByEmail" parameterType="String">
+        SELECT user_id FROM user
+        WHERE email = #{email}
     </select>
 
 </mapper>

@@ -196,6 +196,10 @@ public class PaymentController {
                 .build();
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
+
+        // 멤버십 업데이트
+        userMembershipService.updateMembershipLevel(enrollData.get("user_id"), enrollData.get("amount"));
+
         return "예약 완료";
     }
 
@@ -232,6 +236,9 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
 
         UserReservationDTO result = reservationService.insertReservation(dto);
+
+        // 멤버십 업데이트
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return result;
     }

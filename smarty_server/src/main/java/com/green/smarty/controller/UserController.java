@@ -96,7 +96,7 @@ public class UserController {
 
         if (user != null) {
             // 로그인 성공 시 로그인 날짜 업데이트
-            userservice.updateLoginDate(user.getUserId()); // 로그인 날짜 업데이트 호출
+            userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트 호출
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
@@ -226,7 +226,7 @@ public class UserController {
     public ResponseEntity<UserVO> updateUserInfo(@RequestBody UserVO userVO) {
         System.out.println(userVO);
             String resultMessage = userservice.updateUserProfile(userVO);
-            UserVO user = userMapper.getById(userVO.getUserId());
+            UserVO user = userMapper.getById(userVO.getUser_id());
         System.out.println("업데이트 완료 :" + user);
             return ResponseEntity.ok(user);
     }

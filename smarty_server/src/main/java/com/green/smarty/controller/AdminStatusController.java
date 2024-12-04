@@ -4,6 +4,7 @@ import com.green.smarty.dto.AdminAttendanceDTO;
 import com.green.smarty.dto.AdminReservationDTO;
 import com.green.smarty.dto.AdminStatusDTO;
 import com.green.smarty.service.AdminStatusService;
+import com.green.smarty.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +22,6 @@ public class AdminStatusController {
     @Autowired
     private AdminStatusService adminStatusService;
 
-    // Read
     // 선택한 시설의 예약, 수강 신청 현황
     @GetMapping("/{facility_id}")
     public AdminStatusDTO getStatus(
@@ -30,6 +30,7 @@ public class AdminStatusController {
         System.out.println("시설 이용 현황 조회! date = " + date);
         return adminStatusService.getStatus(facility_id, date);
     }
+
     // 클래스 출결 현황
     @GetMapping("/attendance/{class_id}")
     public List<AdminAttendanceDTO> getAttendance(
@@ -37,5 +38,13 @@ public class AdminStatusController {
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         System.out.println("클래스 출결 조회! date = " + date);
         return adminStatusService.getAttendance(class_id, date);
+    }
+
+    // 최근 3일 가입한 회원
+    @GetMapping("/user")
+    public List<UserVO> getNewUser(
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        System.out.println("새로운 회원 조회! date = " + date);
+        return adminStatusService.getNewUser(date);
     }
 }

@@ -19,15 +19,17 @@ const initClass = {
 }
 
 export default function ClassRead(class_id) {
+  const navigate = useNavigate()
   const [currentClass, setCurrentClass] = useState(initClass)
   const [classDetail, setClassDetail] = useState([])
   const [weekday, setWeekday] = useState([])
   const [modifyToggle, setModifyToggle] = useState(true)
+  const {facility_id} = useParams()
+  const weekSet = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
 
   useEffect(() => {
     getOneClass(class_id.class_id).then(res => {
       setCurrentClass(res)
-      console.log(res)
     }).catch((error) => console.error("ERROR! : ", error))
     getListClassDetail(class_id.class_id).then(res => {
       setClassDetail(res)
@@ -35,29 +37,8 @@ export default function ClassRead(class_id) {
   }, [class_id])
 
   useEffect(() => {
-    console.log(currentClass)
-  }, [currentClass])
-
-  useEffect(() => {
     classDetail.map(item => setWeekday(prev => [...prev, item.weekday]))
-    console.log(weekday)
   }, [classDetail])
-  
-
-  const navigate = useNavigate()
-  const {facility_id} = useParams()
-  const [currentFacility, setCurrentFacility] = useState(null)
-  
-  const [classList, setClassList] = useState([])  // 강의 정보 객체들의 리스트
-  const [weekdayList, setWeekdayList] = useState([]) // 각각의 강의 정보
-
-  
-  useEffect(() => {
-    getOneFacility(facility_id).then(res => {
-      setCurrentFacility(res)
-      console.log("facility :", res)
-    }).catch((error) => console.error("ERROR!", error))
-  }, [])
   
 
   // 사용자 입력값 classList에 저장
@@ -67,39 +48,23 @@ export default function ClassRead(class_id) {
   }
 
   // 선택 요일 weekdayList에 저장
-  const handleClickWeekday = (i, e) => {
+  const handleClickWeekday = (e) => {
     if(e.target.checked) {
-      setWeekdayList((prevWeek) => {
-        const updateWeek = [...prevWeek]
-        updateWeek[i] = [...updateWeek[i], e.target.value]
-        return updateWeek
-      })
+      setWeekday((prev) => [...prev, e.target.value])
     } else {
-      weekdayList[i] = weekdayList[i].filter(day => day != e.target.value) 
+      setWeekday(weekday.filter(day => day != e.target.value)) 
     }
   }
 
   // weekdayList 업데이트시 classList.weekday 업데이트
   useEffect(() => {
-    const newClassList = classList.map((item, i) => {
-      return {...item, weekday: weekdayList[i]}
-    })
-    setClassList(newClassList)
-  }, [weekdayList])
+    currentClass.weekday = weekday
+    setCurrentClass({...currentClass})
+  }, [weekday])
   
-  // 선택 항목 classList, weekdayList에서 삭제
-  const handleDelete = (item, i) => {    
-    setWeekdayList((prevWeek) => {
-      const updateWeek = [...prevWeek]
-      const deleteWeek = updateWeek.splice(i, 1)
-      console.log("삭제한 week : ", deleteWeek)
-      return updateWeek
-    })
-    setClassList(classList.filter(one => one.key != item.key))
-  }
-
   useEffect(() => {
     console.log("최종 class : ", currentClass)
+    console.log("최종 detail : ", classDetail)
   }, [currentClass])
 
   const handleSubmit = () => {
@@ -168,9 +133,8 @@ export default function ClassRead(class_id) {
           </div>
           <div className="classReadItem">
             <div className="classReadItemTitle">수강일</div>
-            {weekday &&
-            ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map((day, index) => (
-              <div key={index}>
+            {weekday && weekSet.map((day, i) => (
+              <div key={i}>
                 <input
                   id={day}
                   name="weekday"

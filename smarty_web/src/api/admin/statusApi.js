@@ -14,10 +14,19 @@ export const getListStatus = async(facility_id, date) => {
 }
 
 export const getListAttendance = async(class_id, date) => {
-    console.log("보내는 값 확인 : ", date)
     try {
         const res = await axios.get(`${prefix}/attendance/${class_id}`, {params: {date}})
         console.log("getListAttendance : ", res.data)
+        return res.data
+    } catch(error) {
+        console.error("ERROR! : ", error)
+    }
+}
+
+export const getListUser = async(date) => {
+    try {
+        const res = await axios.get(`${prefix}/user`, {params: {date}})
+        console.log("getListUser : ", res.data)
         return res.data
     } catch(error) {
         console.error("ERROR! : ", error)

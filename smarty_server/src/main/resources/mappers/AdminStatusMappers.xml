@@ -32,4 +32,9 @@
         join attendance a on a.enrollment_id=e.enrollment_id
         where e.class_id=#{class_id} and DATE(a.checkin_date)=#{date};
     </select>
+    <select id="getNewUser" resultType="com.green.smarty.vo.UserVO">
+        select * from user
+        where join_date BETWEEN #{start} and #{date}
+        order by join_date desc;
+    </select>
 </mapper>

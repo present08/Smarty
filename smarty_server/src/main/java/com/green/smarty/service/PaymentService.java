@@ -27,6 +27,9 @@ public class PaymentService {
     private UserRentalMapper userRentalMapper;
     @Autowired
     private PublicMapper publicMapper;
+    // (영준) 이메일 발송
+    @Autowired
+    private SendEmailService sendEmailService;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id){
         LocalDateTime date = LocalDateTime.now();
@@ -53,6 +56,7 @@ public class PaymentService {
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
+
         return vo;
     }
 

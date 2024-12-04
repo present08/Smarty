@@ -63,8 +63,6 @@ public class EmailScheduler {
 
             javaMailsender.send(message);
         }
-//        @Scheduled(cron = "* */1 * * * *")
-//        public void oneDayEnter()
 
     }
 

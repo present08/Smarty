@@ -79,7 +79,6 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
-        System.out.println(userVO.getFcm_token());
 
         boolean isSuccess = userservice.signup(userVO);
 

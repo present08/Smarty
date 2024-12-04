@@ -1,11 +1,13 @@
 package com.green.smarty.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,9 @@ public class PaymentController {
 
     @Autowired
     private UserReservationService reservationService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     // 결제 생성
     @PostMapping("/create")

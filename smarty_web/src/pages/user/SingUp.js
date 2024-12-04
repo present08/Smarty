@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getFCMToken } from '../../firebase';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp } from '../../api/userApi';
 import '../../css/signup.css';
+
 
 const SignUp = () => {
     const [userId, setUserId] = useState('');
@@ -16,18 +16,7 @@ const SignUp = () => {
     const [error, setError] = useState('');
     const [qrCodeUrl, setQrCodeUrl] = useState('');
     const [selectEmail, setSelectEmail] = useState('');
-    const [fcmToken, setFCMToken] = useState('');
-    const userData = { user_id: userId, user_name: userName, email: email, password: password, phone: phone, address: address, birthday: birthday, fcm_token: fcmToken };
     const navigate = useNavigate();
-
-
-    useEffect(() => {
-        const func = async () => {
-            const tk = await getFCMToken();
-            setFCMToken(tk);
-        };
-        func();
-    }, []);
 
     // 이메일 유효성 검사
     const isEmailValid = (email) => {
@@ -56,7 +45,6 @@ const SignUp = () => {
             phone: phone,
             address: address,
             birthday: birthday,
-            fcmToken: fcmToken,
         };
 
         if (window.confirm("회원가입 하시겠습니까?")) {

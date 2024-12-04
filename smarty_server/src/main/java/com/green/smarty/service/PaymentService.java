@@ -2,9 +2,7 @@ package com.green.smarty.service;
 
 import com.green.smarty.dto.PaymentDetailDTO;
 
-import com.green.smarty.mapper.PaymentMapper;
-import com.green.smarty.mapper.PublicMapper;
-import com.green.smarty.mapper.UserRentalMapper;
+import com.green.smarty.mapper.*;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,10 @@ public class PaymentService {
     // (영준) 이메일 발송
     @Autowired
     private SendEmailService sendEmailService;
+    @Autowired
+    private UserProductMapper userProductMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id){
         LocalDateTime date = LocalDateTime.now();
@@ -45,6 +47,18 @@ public class PaymentService {
 
         String id = "R_"+ date.getYear() + date.getMonthValue() + date.getDayOfMonth() + String.format("%03d",rentalList.size()+1);
         System.out.println("rental ID : "+ id);
+
+        //            (영준)
+        String user_id = dto.getUser_id();
+        String product_id = dto.getProduct_id();
+        String userName = userMapper.getUserNameById(user_id);
+        String userEmail = userMapper.getUserEmailById(user_id);
+        String productName = userProductMapper.getProductNameByProductId(product_id);
+        if (userName == null || userEmail == null || productName == null) {
+            System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
+            throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
+        }
+        sendEmailService.rentalProduct(userEmail, userName, productName);
 
         RentalVO vo = RentalVO.builder()
                 .rental_id(id)

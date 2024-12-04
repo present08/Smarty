@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserFacilityMapper {
     List<FacilityDTO> getAllFacilities();
     List<FacilityDTO> getFacilityById(String facility_id);
+    //(영준)
+    String getFacilityNameById(String facility_id);
 }

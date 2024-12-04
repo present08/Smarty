@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.mapper.*;
+import com.green.smarty.service.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,6 @@ import com.green.smarty.dto.PaymentDetailDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.UserActivityDTO;
 import com.green.smarty.dto.UserReservationDTO;
-import com.green.smarty.mapper.PaymentMapper;
-import com.green.smarty.mapper.PublicMapper;
-import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.PaymentService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.PaymentVO;
@@ -53,6 +51,13 @@ public class PaymentController {
 
     @Autowired
     private UserMapper userMapper;
+
+    // (영준)
+    @Autowired
+    private SendEmailService sendEmailService;
+    @Autowired
+    private UserProductMapper userProductMapper;
+
 
     // 결제 생성
     @PostMapping("/create")
@@ -192,6 +197,7 @@ public class PaymentController {
                 .payment_date(now)
                 .payment_status(true)
                 .build();
+
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
         return "예약 완료";

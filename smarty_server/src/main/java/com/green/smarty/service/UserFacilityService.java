@@ -25,4 +25,8 @@ public class UserFacilityService {
     public List<ProductDTO> getProductsByFacilityId(String facility_id) {
         return userProductMapper.getProductsByFacilityId(facility_id);
     }
+
+    public String getFacilityNameById(String facility_id){
+        return userFacilityMapper.getFacilityNameById(facility_id);
+    }
 }

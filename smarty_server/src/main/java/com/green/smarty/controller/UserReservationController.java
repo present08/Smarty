@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.SendEmailService;
+import com.green.smarty.service.UserFacilityService;
 import com.green.smarty.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -55,6 +56,9 @@ public class UserReservationController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserFacilityService userFacilityService;
 
     // 시설 이미지 불러오기
     @GetMapping("/uploads/{fileName}")
@@ -104,7 +108,8 @@ public class UserReservationController {
         LocalDateTime reservationStart = dto.getReservation_start();
         LocalDateTime reservationEnd = dto.getReservation_end();
         String court_id = dto.getCourt_id();
-        sendEmailService.sendClassReservation(email,user_name,formattedStart,formattedEnd,court_id);
+        String facility_name = userFacilityService.getFacilityNameById(dto.getFacility_id());
+        sendEmailService.sendClassReservation(email,user_name,formattedStart,formattedEnd,facility_name,court_id);
 
         return result;
     }

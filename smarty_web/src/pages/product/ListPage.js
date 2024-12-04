@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { getFailityData, getProduct } from '../../api/productAPI';
+import { getFailityData, getProduct } from '../../api/productApi';
 import Footer from '../../component/Footer';
 import MainNav from '../../component/MainNav';
 import Wrapper from '../../component/Wrapper';

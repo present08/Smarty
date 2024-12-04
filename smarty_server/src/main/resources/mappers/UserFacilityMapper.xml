@@ -47,4 +47,11 @@
         WHERE
             facility_id = #{facility_Id}
     </select>
+
+<!--    (영준) facility_id 로 facility_name 조회-->
+    <select id="getFacilityNameById" parameterType="String">
+        SELECT facility_name
+        FROM facility
+        WHERE facility_id = #{facility_id}
+    </select>
 </mapper>

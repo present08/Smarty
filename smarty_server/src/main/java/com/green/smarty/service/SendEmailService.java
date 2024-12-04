@@ -5,6 +5,7 @@ import com.green.smarty.dto.NotificationDTO;
 import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.mapper.NotificationMapper;
 import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.mapper.UserProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.N;
@@ -27,9 +28,12 @@ public class SendEmailService {
     @Autowired
     private NotificationMapper notificationMapper;
 
-    // (영준) 메일 전송
+    // (영준)
     @Autowired
     private UserMapper userMapper;
+    // (영준)
+    @Autowired
+    private UserProductMapper userProductMapper;
 
     public String sendWelcomeEmail(String email, String user_name, String user_id) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -66,10 +70,43 @@ public class SendEmailService {
         }
     }
 
-    public String sendClassReservation(String email, String user_name, String formattedStart, String formattedEnd, String court_id)
+    public String rentalProduct(String email, String user_name, String product_name ){
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setText("안녕하세요!" + user_name + "님! \n SMARTY에서 " + product_name + "을 대여 해주셔서 감사합니다!");
+        try{
+            simpleMailMessage.setFrom("smartytf33@gmail.com"); // 발신자
+            simpleMailMessage.setTo(email); // 수신자
+            simpleMailMessage.setSubject("물품을 대여 해주셔서 감사합니다!"); // 이메일 제목
+            javaMailSender.send(simpleMailMessage);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail("Seccess sent message : {}" + email );
+            notificationDTO.setMessage(simpleMailMessage.getText());
+            notificationDTO.setStatus("SUCCESS");
+            notificationDTO.setMessage_type("물품 대여 안내");
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setUser_id(notificationDTO.getUser_id());
+            notificationMapper.insertByNotificationId(notificationDTO);
+            return "SUCCESS";
+        } catch(Exception e) {
+            System.out.println("메세지 발송 실패" + e);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail("발송 실패 : {} " + e );
+            notificationDTO.setMessage(simpleMailMessage.getText());
+            notificationDTO.setStatus("FAILURE");
+            notificationDTO.setMessage_type("물품 대여 안내");
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setUser_id(notificationDTO.getUser_id());
+            notificationMapper.insertByNotificationId(notificationDTO);
+            return "FAILURE";
+        }
+    }
+
+    public String sendClassReservation(String email, String user_name, String formattedStart, String formattedEnd, String facility_name, String court_id)
         {
             SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setText("안녕하세요!" + user_name + "님! \n" + formattedStart + "부터" + formattedEnd + "까지 코트번호 : " + court_id + "예약을 신청해 주셨습니다!\n" +
+            msg.setText("안녕하세요" + user_name + "님!\uD83D\uDE03 \n" + formattedStart + "부터 " + formattedEnd + "까지 " + facility_name +" 코트번호 : " + court_id + "예약을 신청해 주셨습니다!\n" +
                     "결제가 완료되면 즉시 예약이 완료 됩니다!");
             try {
                 String userId = userMapper.getIdByEmail(email);
@@ -77,14 +114,16 @@ public class SendEmailService {
                 msg.setTo(email);
                 msg.setSubject("일일 예약 안내");
                 javaMailSender.send(msg);
+
                 NotificationDTO notificationDTO = new NotificationDTO();
-                notificationDTO.setUser_id(userId);
+                notificationDTO.setResponse_detail("Seccess sent message : {}" + email );
                 notificationDTO.setMessage(msg.getText());
-                notificationDTO.setStatus("SUCCESS");
-                notificationDTO.setUser_name(user_name);
+                notificationDTO.setStatus("FAILURE");
                 notificationDTO.setMessage_type("일일 예약 안내");
-                notificationDTO.setResponse_detail("Email sent successfully to " + email);
+                notificationDTO.setUser_name(user_name);
+                notificationDTO.setUser_id(notificationDTO.getUser_id());
                 notificationMapper.insertByNotificationId(notificationDTO);
+
                 return "SUCCESS";
             } catch (Exception e) {
                 NotificationDTO notificationDTO = new NotificationDTO();
@@ -97,5 +136,38 @@ public class SendEmailService {
                 notificationMapper.insertByNotificationId(notificationDTO);
                 return "FAILURE";
             }
+    }
+
+    public String sendClassReservarion(String user_name, String class_name, String email){
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setText("안녕하세요! " + user_name + "님 \n" + "강의명 : " + class_name + "을 신청 해주셔서 감사합니다!");
+
+        try{
+            simpleMailMessage.setFrom("smartytf33@gmail.com");
+            simpleMailMessage.setTo(email);
+            simpleMailMessage.setSubject("Class 수강 신청");
+            javaMailSender.send(simpleMailMessage);
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail("Success sent message to " + email);
+            notificationDTO.setMessage(simpleMailMessage.getText());
+            notificationDTO.setStatus("SUCCESS");
+            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setUser_id(notificationDTO.getUser_id());
+            notificationMapper.insertByNotificationId(notificationDTO);
+
+            return "SUCCESS";
+        } catch (Exception e){
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail(e.getMessage());
+            notificationDTO.setMessage(simpleMailMessage.getText());
+            notificationDTO.setStatus("FAILURE");
+            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setUser_id(notificationDTO.getUser_id());
+            notificationMapper.insertByNotificationId(notificationDTO);
+            return "FAILURE";
+        }
+
     }
 }

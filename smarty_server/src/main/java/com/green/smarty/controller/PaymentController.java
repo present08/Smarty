@@ -59,7 +59,8 @@ public class PaymentController {
         for (PaymentVO item : paymentVO) {
             String itemDate = item.getPayment_id().substring(2, 10);
             System.out.println(itemDate);
-            if (itemDate.equals("" + date.getYear() + date.getMonthValue() + date.getDayOfMonth())) {
+            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
+                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
                 paymentList.add(item);
             }
         }

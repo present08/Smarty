@@ -16,6 +16,9 @@
     <select id="getClassAll" resultType="com.green.smarty.vo.ClassVO">
         select * from class
     </select>
+    <select id="getClassVO" parameterType="string" resultType="com.green.smarty.vo.ClassVO">
+        select * from class where class_id = #{class_id}
+    </select>
     <select id="getClassDTO" resultType="com.green.smarty.dto.UserClassDTO">
         select c.*, f.facility_name from class c join facility f on c.facility_id = f.facility_id
     </select>
@@ -24,5 +27,11 @@
     </select>
     <select id="getEnrollment" resultType="com.green.smarty.vo.EnrollmentVO">
         select * from enrollment
+    </select>
+    <select id="getEnrollSize" parameterType="string" resultType="com.green.smarty.vo.EnrollmentVO">
+        select * from enrollment where class_id = #{class_id}
+    </select>
+    <select id="enrollCheck" parameterType="map" resultType="com.green.smarty.vo.EnrollmentVO">
+        select * from enrollment where user_id = #{user_id} and class_id = #{class_id}
     </select>
 </mapper>

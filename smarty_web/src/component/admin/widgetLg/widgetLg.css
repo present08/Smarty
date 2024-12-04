@@ -1,9 +1,10 @@
 .widgetLg {
     flex: 2;
-    box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -webkit-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    -moz-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
+    box-shadow: 2px 2px 5px -1px rgba(185, 185, 185, 0.75);
+    -webkit-box-shadow: 2px 2px 5px -1px rgba(185, 185, 185, 0.75);
+    -moz-box-shadow: 2px 2px 5px -1px rgba(185, 185, 185, 0.75);
     padding: 20px;
+    height: 400px;
 }
 
 .widgetLgTitle {
@@ -14,6 +15,21 @@
 .widgetLgTable {
     width: 100%;
     border-spacing: 20px;
+}
+
+.widgetLgTable tbody {
+    display: block;
+    height: 250px;
+    overflow-y: scroll;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.widgetLgTable tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
 }
 
 .widgetLgTh {
@@ -34,7 +50,8 @@
     margin-right: 10px;
 }
 
-.widgetLgDate, .widgetLgAmount {
+.widgetLgDate,
+.widgetLgAmount {
     font-weight: 300;
 }
 
@@ -48,10 +65,12 @@
     background-color: #e5faf2;
     color: #3bb077;
 }
+
 .widgetLgButton.Declined {
     background-color: #fff0f1;
     color: #d95087;
 }
+
 .widgetLgButton.Pending {
     background-color: #ebf1fe;
     color: #2a7ade;

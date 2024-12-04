@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import '../../css/classPage.css';
 import { classEnroll } from '../../api/classAPI';
+import '../../css/classPage.css';
 
 
 
@@ -22,8 +22,14 @@ const ClassPage = (props) => {
 
     const enrollClass = () => {
         classEnroll(enrollData).then(e => {
-            alert("수강신청이 완료되었습니다. \n수강번호 : " + e)
-            navigate(`/enrollment/${classData.class_id}`, { state: { classData, user, e } })
+            if (e == "해당 강의의 정원 초과 되었습니다.") {
+                alert(e)
+            } else if (e == "중복 수강할 수 없습니다.") {
+                alert(e)
+            } else {
+                alert("수강신청이 완료되었습니다. \n수강번호 : " + e)
+                navigate(`/enrollment/${classData.class_id}`, { state: { classData, user, e } })
+            }
         })
     }
 

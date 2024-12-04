@@ -1,6 +1,5 @@
 package com.green.smarty.controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.UserActivityDTO;
 import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.service.PaymentService;
+import com.green.smarty.service.UserMembershipService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
@@ -90,6 +90,10 @@ public class PaymentController {
 
         paymentMapper.insertPayment(vo);
         RentalVO rentalID = paymentService.insertRental(dto, id);
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+        // 멤버십 업데이트
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return id;
     }
@@ -179,7 +183,6 @@ public class PaymentController {
     @PostMapping("/enrollment")
     public String enrollPayment(@RequestBody Map<String, String> enrollData) {
 
-        System.out.println(enrollData);
         LocalDateTime now = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();

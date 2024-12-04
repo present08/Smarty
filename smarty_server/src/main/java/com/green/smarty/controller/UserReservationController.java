@@ -3,17 +3,12 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.service.SendEmailService;
-import com.green.smarty.service.UserFacilityService;
-import com.green.smarty.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,7 +29,9 @@ import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.PublicMapper;
+import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserReservationMapper;
+import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.AttendanceVO;
 import com.green.smarty.vo.PaymentVO;
@@ -89,14 +86,24 @@ public class UserReservationController {
         return btnData;
     }
 
-
     // 예약 완료 시 호출
     @PostMapping("/{facility_id}")
     public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
         UserReservationDTO result = reservationService.insertReservation(dto);
+        // (영준) 이메일 발송 관련 코드
+        System.out.println(dto.getUser_id());
+        String email = userMapper.getUserEmailById(dto.getUser_id());
+        String user_name = userMapper.getUserNameById(dto.getUser_id());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedStart = dto.getReservation_start().format(formatter);
+        String formattedEnd = dto.getReservation_end().format(formatter);
+        LocalDateTime reservationStart = dto.getReservation_start();
+        LocalDateTime reservationEnd = dto.getReservation_end();
+        String court_id = dto.getCourt_id();
+        sendEmailService.sendClassReservation(email, user_name, formattedStart, formattedEnd, court_id);
+
         return result;
     }
-
 
     // 예약 데이터 삭제
     @DeleteMapping("/{reservation_id}")

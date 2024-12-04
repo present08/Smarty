@@ -82,11 +82,8 @@ const Pwchange = () => {
 
                         </nav>
                     </div>
-                    <div style={{
+                    <div className='pwchange-img-box' style={{
                         height: '90%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
                     }}>
                         <img className='img-move' src="/football-team-20.png" alt="이미지" />
                     </div>

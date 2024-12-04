@@ -22,6 +22,7 @@ import com.green.smarty.vo.RentalVO;
 @Service
 
 public class PaymentService {
+
     @Autowired
     private PaymentMapper paymentMapper;
     @Autowired
@@ -43,16 +44,13 @@ public class PaymentService {
         for (RentalVO item : rentalVO) {
             String itemDate = item.getRental_id().substring(2, 10);
             System.out.println(itemDate);
-            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
-                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+            if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
                 rentalList.add(item);
             }
         }
 
-        String id = "R_" + date.getYear() + date.getMonthValue()
-                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
-                + String.format("%03d", rentalList.size() + 1);
-        System.out.println("rental ID : " + id);
+        String id = "R_"+ date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) + String.format("%03d",rentalList.size()+1);
+        System.out.println("rental ID : "+ id);
 
         //            (영준)
         String user_id = dto.getUser_id();

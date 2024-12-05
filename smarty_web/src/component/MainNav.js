@@ -36,6 +36,10 @@ const MainNav = () => {
         navigate("/mypage", { state: { user } });
     };
 
+    const cartPage = () => {
+        navigate("/cart")
+    }
+
     const handleLogout = () => {
         logout().then(() => {
             alert("로그아웃 성공");
@@ -116,8 +120,7 @@ const MainNav = () => {
                     <div className='toggleIcon'>
                         <AiOutlineMenu onClick={toggleMenu} style={{ width: '50px', height: '50px', }} />
                     </div>
-                    <div className='iconbox'>
-                        {/* 현재오빠 카트 아이콘 추가  */}
+                    <div className='iconbox' onClick = { cartPage }>
                         <IoCartOutline className='modal-open-bt' />
                         <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
                         <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />

@@ -139,4 +139,17 @@
         WHERE email = #{email}
     </select>
 
+    <select id="getUserHuman" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user
+        WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+        AND user_status = 1;
+    </select>
+
+    <select id="getUserHumanBerforeSevendays" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user u
+        INNER JOIN notification n
+        ON u.user_id = n.user_id
+        WHERE n.sent_human_message = 1
+    </select>
+
 </mapper>

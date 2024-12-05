@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/mainProductList.css';
-import { getProduct } from '../../api/productApi';
+import { getProduct } from '../../api/productAPI';
 import { useNavigate, } from 'react-router-dom';
 
 const MainProductList = () => {

@@ -45,6 +45,9 @@ public class UserController {
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
 
+    @Autowired
+    private UserLoginHistoryService userLoginHistoryService;
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -99,24 +102,33 @@ public class UserController {
         }
     }
 
-    //로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session, HttpServletRequest request) {
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
 
+        // IP 주소와 User-Agent 가져오기
+        String ipAddress = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+
         if (user != null) {
-            // 로그인 성공 시 로그인 날짜 업데이트
+            // 로그인 성공 시
             userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트 호출
+
+            // 로그인 히스토리 테이블에 기록
+            loginHistoryService.insertLoginHistory(user.getUser_id(), ipAddress, "SUCCESS", userAgent);
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {
-            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
+            // 로그인 실패 시
+            loginHistoryService.insertLoginHistory(loginRequest.getUser_id(), ipAddress, "FAILURE", userAgent);
+
             System.out.println("로그인 실패");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
         }
     }
+
 
 
     //사용자 정보 가져오기

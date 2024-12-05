@@ -47,6 +47,4 @@ public interface UserMapper {
     String getIdByEmail(String email);
     // (영준) 로그인한지 3개월이 지난 유저 찾기
     List<UserVO> getUserHuman();
-    // (영준) 휴먼회원 전환되기 일주일 전
-    List<UserVO> getUserHumanBerforeSevendays();
 }

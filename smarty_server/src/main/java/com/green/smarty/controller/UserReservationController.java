@@ -51,7 +51,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("C:\\Users\\Administrator\\Desktop\\Green_Project\\Smarty\\smarty_server\\upload")
+        Path filePath = Paths.get("C:\\TF33\\Smarty\\smarty_server\\upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 

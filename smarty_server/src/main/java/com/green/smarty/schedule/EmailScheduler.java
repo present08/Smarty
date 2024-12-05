@@ -222,11 +222,20 @@ public class EmailScheduler {
 //                notificationDTO.setUser_name(user_name);
 //                notificationDTO.setMessage_type("휴먼 회원 전환 일주일 전 알림");
 //                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
-//                notifica
-//
+//                notificationMapper.insertByNotificationId(notificationDTO);
+//                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 완료" + email);
 //
 //            }catch (Exception e){
 //
+//                NotificationDTO notificationDTO = new NotificationDTO();
+//                notificationDTO.setUser_id(user_id);
+//                notificationDTO.setMessage(email_content);
+//                notificationDTO.setStatus("FAILURE");
+//                notificationDTO.setUser_name(user_name);
+//                notificationDTO.setMessage_type("휴면 회원 전환 일주일 전 알림");
+//                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
+//                notificationMapper.insertByNotificationId(notificationDTO);
+//                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 실패 : " + email);
 //            }
 //        }
 //    }

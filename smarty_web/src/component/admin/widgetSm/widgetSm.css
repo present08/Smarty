@@ -1,11 +1,11 @@
 .widgetSm {
     flex: 1;
-    height: 360px;
+    height: 400px;
     box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
     -webkit-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
     -moz-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
-    padding: 20px;
     margin-right: 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;

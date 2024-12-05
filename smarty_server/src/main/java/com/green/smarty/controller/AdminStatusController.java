@@ -1,7 +1,6 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.dto.AdminAttendanceDTO;
-import com.green.smarty.dto.AdminReservationDTO;
 import com.green.smarty.dto.AdminStatusDTO;
 import com.green.smarty.service.AdminStatusService;
 import com.green.smarty.vo.UserVO;
@@ -11,12 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.green.smarty.dto.FacilityStatusDTO;
 import com.green.smarty.dto.PermissionDTO;
 import com.green.smarty.dto.WidgetDTO;
-import com.green.smarty.service.AdminStatusService;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor

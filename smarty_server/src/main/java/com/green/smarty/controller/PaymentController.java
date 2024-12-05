@@ -64,41 +64,86 @@ public class PaymentController {
     private UserFacilityService facilityService;
 
 
-    // 결제 생성
+//    // 결제 생성
+//    @PostMapping("/create")
+//    public String createPayment(@RequestBody PaymentDetailDTO dto) {
+//        System.out.println("paymentDetailDTO : "+dto);
+//        System.out.println("Items 데이터 : "+dto.getItems());
+//        LocalDateTime date = LocalDateTime.now();
+//        List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
+//        List<PaymentVO> paymentList = new ArrayList<>();
+//        for(PaymentVO item : paymentVO){
+//            String itemDate = item.getPayment_id().substring(2,10);
+//            System.out.println(itemDate);
+//            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
+//                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+//                paymentList.add(item);
+//            }
+//        }
+//
+//        String id = "P_" + date.getYear() + date.getMonthValue()
+//                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+//                + String.format("%03d", paymentList.size() + 1);
+//        System.out.println("payment ID : "+ id);
+//        PaymentVO vo = PaymentVO.builder()
+//                    .payment_id(id)
+//                    .reservation_id(dto.getReservation_id())
+//                    .enrollment_id(dto.getEnrollment_id())
+//                    .amount(dto.getAmount())
+//                    .payment_date(date)
+//                    .payment_status(true)
+//                    .build();
+//
+//        paymentMapper.insertPayment(vo);
+//        RentalVO rentalID = paymentService.insertRental(dto, id);
+//        System.out.println(rentalID);
+//
+//        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+//        // 멤버십 업데이트
+//        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
+//
+//        return id;
+//    }
+
     @PostMapping("/create")
     public String createPayment(@RequestBody PaymentDetailDTO dto) {
-        System.out.println("paymentDetailDTO : "+dto);
-        System.out.println("Items 데이터 : "+dto.getItems());
+        System.out.println("paymentDetailDTO : " + dto);
+        System.out.println("Items 데이터 : " + dto.getItems());
         LocalDateTime date = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
-        for(PaymentVO item : paymentVO){
-            String itemDate = item.getPayment_id().substring(2,10);
-            System.out.println(itemDate);
+
+        for (PaymentVO item : paymentVO) {
+            String itemDate = item.getPayment_id().substring(2, 10);
             if (itemDate.equals("" + date.getYear() + date.getMonthValue()
                     + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
                 paymentList.add(item);
             }
         }
 
+        // 결제 ID 생성
         String id = "P_" + date.getYear() + date.getMonthValue()
                 + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
-        System.out.println("payment ID : "+ id);
+        System.out.println("payment ID : " + id);
+
+        // 결제 데이터 저장
         PaymentVO vo = PaymentVO.builder()
-                    .payment_id(id)
-                    .reservation_id(dto.getReservation_id())
-                    .enrollment_id(dto.getEnrollment_id())
-                    .amount(dto.getAmount())
-                    .payment_date(date)
-                    .payment_status(true)
-                    .build();
-
+                .payment_id(id)
+                .reservation_id(dto.getReservation_id())
+                .enrollment_id(dto.getEnrollment_id())
+                .amount(dto.getAmount())
+                .payment_date(date)
+                .payment_status(true)
+                .build();
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto, id);
-        System.out.println(rentalID);
 
-        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+        // 장바구니의 모든 항목에 대해 대여 데이터 생성
+        for (CartItemDTO item : dto.getItems()) {
+            RentalVO rentalVO = paymentService.insertRental(item, id);
+            System.out.println("생성된 RentalVO : " + rentalVO);
+        }
+
         // 멤버십 업데이트
         userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 

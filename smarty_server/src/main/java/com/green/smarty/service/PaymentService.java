@@ -1,5 +1,6 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.CartItemDTO;
 import com.green.smarty.dto.PaymentDetailDTO;
 import com.green.smarty.mapper.*;
 import com.green.smarty.vo.PaymentVO;
@@ -50,24 +51,83 @@ public class PaymentService {
     @Autowired
     private UserMapper userMapper;
 
-    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
+//    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
+//        LocalDateTime date = LocalDateTime.now();
+//        List<RentalVO> rentalVO = publicMapper.getRentalAll();
+//        List<RentalVO> rentalList = new ArrayList<>();
+//        for (RentalVO item : rentalVO) {
+//            String itemDate = item.getRental_id().substring(2, 10);
+//            System.out.println(itemDate);
+//            if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
+//                rentalList.add(item);
+//            }
+//        }
+//
+//        String id = "R_" + date.getYear() + date.getMonthValue()
+//                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+//                + String.format("%03d", rentalList.size() + 1);
+//        System.out.println("rental ID : "+ id);
+//
+//        //            (영준)
+//        String user_id = dto.getUser_id();
+//        String product_id = dto.getProduct_id();
+//        String userName = userMapper.getUserNameById(user_id);
+//        String userEmail = userMapper.getUserEmailById(user_id);
+//        String productName = userProductMapper.getProductNameByProductId(product_id);
+//
+//        if (userName == null || userEmail == null || productName == null) {
+//            System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
+//            throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
+//        }
+//        sendEmailService.rentalProduct(userEmail, userName, productName);
+//
+//        RentalVO vo = RentalVO.builder()
+//                .rental_id(id)
+//                .count(dto.getCount())
+//                .rental_date(date)
+//                .product_id(dto.getProduct_id())
+//                .user_id(dto.getUser_id())
+//                .rental_status(true)
+//                .payment_id(payment_id)
+//                .build();
+//        userRentalMapper.insertRental(vo);
+//        System.out.println("insert rental : "+vo);
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("product_id", dto.getProduct_id());
+//        map.put("count", dto.getCount());
+//        System.out.println("product_id 확인: " + map.get("product_id"));
+//        System.out.println("count 확인: "+map.get("count"));
+//        int stockDown = userRentalMapper.productStockDown(map);
+//
+//        if (stockDown > 0) {
+//        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+//        } else {
+//            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+//        }
+//        return vo;
+//    }
+
+    public RentalVO insertRental(CartItemDTO cartItem, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
+
         for (RentalVO item : rentalVO) {
             String itemDate = item.getRental_id().substring(2, 10);
-            System.out.println(itemDate);
-            if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
+            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
+                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
                 rentalList.add(item);
             }
         }
 
+        // 대여 ID 생성
         String id = "R_" + date.getYear() + date.getMonthValue()
                 + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", rentalList.size() + 1);
-        System.out.println("rental ID : "+ id);
+        System.out.println("rental ID : " + id);
 
-        //            (영준)
+//                    (영준)
         String user_id = dto.getUser_id();
         String product_id = dto.getProduct_id();
         String userName = userMapper.getUserNameById(user_id);
@@ -80,30 +140,33 @@ public class PaymentService {
         }
         sendEmailService.rentalProduct(userEmail, userName, productName);
 
+        // Rental 데이터 생성 및 저장
         RentalVO vo = RentalVO.builder()
                 .rental_id(id)
-                .count(dto.getCount())
+                .count(cartItem.getQuantity())
                 .rental_date(date)
-                .product_id(dto.getProduct_id())
-                .user_id(dto.getUser_id())
+                .product_id(cartItem.getProduct_id())
+                .user_id(cartItem.getUser_id())
                 .rental_status(true)
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
-        System.out.println("insert rental : "+vo);
+        System.out.println("insert rental : " + vo);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("product_id", dto.getProduct_id());
-        map.put("count", dto.getCount());
-        System.out.println("product_id 확인: " + map.get("product_id"));
-        System.out.println("count 확인: "+map.get("count"));
-        int stockDown = userRentalMapper.productStockDown(map);
+        // 재고 감소 처리
+        Map<String, Object> stockUpdateMap = new HashMap<>();
+        stockUpdateMap.put("product_id", cartItem.getProduct_id());
+        stockUpdateMap.put("count", cartItem.getQuantity());
+        System.out.println("product_id 확인: " + stockUpdateMap.get("product_id"));
+        System.out.println("count 확인: " + stockUpdateMap.get("count"));
+        int stockDown = userRentalMapper.productStockDown(stockUpdateMap);
 
         if (stockDown > 0) {
-        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+            System.out.println("재고 감소 성공 product_id: " + cartItem.getProduct_id() + ", 요청 수량: " + cartItem.getQuantity());
         } else {
-            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+            throw new RuntimeException("재고 감소 실패: " + cartItem.getProduct_id());
         }
+
         return vo;
     }
 

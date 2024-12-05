@@ -3,9 +3,10 @@ package com.green.smarty.controller;
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.service.*;
+import com.green.smarty.service.QRCodeService;
+import com.green.smarty.service.UserReservationService;
+import com.green.smarty.service.UserService;
 import com.green.smarty.dto.ReservationUserDTO;
-import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -41,12 +42,6 @@ public class UserController {
     @Autowired
     private UserReservationService reservationService;
 
-    @Autowired
-    private UserMembershipService userMembershipService;
-
-    @Autowired
-    private SendEmailService sendEmailService; // 영준 추가 코드
-
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -55,6 +50,7 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
+        System.out.println(userVO.getFcm_token());
 
         boolean isSuccess = userservice.signup(userVO);
 
@@ -62,35 +58,10 @@ public class UserController {
             System.out.println("회원가입 성공 : " + userVO);
 
             try {
-
-                // 멤버십 아이디 발급 및 초기 데이터 저장
-                String membershipId = "M_" + userVO.getUser_id(); // 예: "M_user123"
-
-                MembershipVO membership = new MembershipVO();
-                membership.setMembership_id(membershipId);
-                membership.setMembership_level("bronze");
-                membership.setUser_id(userVO.getUser_id());
-
-                boolean isMembershipSaved = userMembershipService.saveMembership(membership);
-
-                if (!isMembershipSaved) {
-                    throw new Exception("멤버십 생성 실패");
-                }
-
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
-
-                // 영준 추가 이메일 발송 코드
-                String emailStatus = sendEmailService.sendWelcomeEmail(userVO.getEmail(),  userVO.getUser_name(), userVO.getUser_id());
-                if("FAILURE".equals(emailStatus)){
-                    System.out.println("회원가입 성공, 하지만 이메일 전송 중 오류 발생");
-                    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
-                }
-
-                // 만약 qr이랑 이메일 발송 전부 성공한다면..
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
-
             } catch (Exception e) {
                 System.out.println("QR 코드 생성 중 오류 발생: " + e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 성공, 하지만 QR 코드 생성 중 오류가 발생했습니다.");
@@ -101,7 +72,24 @@ public class UserController {
         }
     }
 
-    //로그인
+
+//    //로그인 처리
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
+//        // 사용자 ID와 비밀번호를 기반으로 로그인 시도
+//        UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
+//        if (user != null) {
+//            // 로그인 성공 시 사용자 정보를 JSON으로 반환
+//            System.out.println("로그인 성공: " + user);
+//            session.setAttribute("user" , user); //세션에 사용자 정보 저장
+//            return ResponseEntity.ok(user) ;  // 로그인 성공 시 사용자 정보 반환
+//        } else {
+//            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
+//            System.out.println("로그인 실패");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
+//        }
+//    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
@@ -237,10 +225,10 @@ public class UserController {
     @PutMapping("/info")
     public ResponseEntity<UserVO> updateUserInfo(@RequestBody UserVO userVO) {
         System.out.println(userVO);
-        String resultMessage = userservice.updateUserProfile(userVO);
-        UserVO user = userMapper.getById(userVO.getUser_id());
+            String resultMessage = userservice.updateUserProfile(userVO);
+            UserVO user = userMapper.getById(userVO.getUser_id());
         System.out.println("업데이트 완료 :" + user);
-        return ResponseEntity.ok(user);
+            return ResponseEntity.ok(user);
     }
 
     // 예약정보
@@ -257,7 +245,7 @@ public class UserController {
         System.out.println(user.getLevel());
     }
 
-    // 수강 리스트 불러오기
+     // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
         System.out.println("유저아이디 확인 : "+user_id);
@@ -270,7 +258,7 @@ public class UserController {
     public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
         List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
         return result;
-    }
+    }   
 
     // 로그인 세션 체크
     @GetMapping("/check-session")

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import cartApi from "../../api/cartApi";
 import CartList from "../../component/cart/CartList";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
 import "../../css/cart.css";
 import axios from "axios";
@@ -12,6 +12,7 @@ const CartPage = () => {
     const userStr = localStorage.getItem("user");
     const user_id = userStr ? JSON.parse(userStr).user_id : null;
     const navigate = useNavigate();
+    const location = useLocation()
 
     useEffect(() => {
         if (!user_id) {
@@ -84,34 +85,75 @@ const CartPage = () => {
     };
 
     // 결제 완료 처리
+    // 수정
+    // const handlePaymentComplete = async (paymentData) => {
+    //     console.log("payment 데이터 : ", paymentData)
+    //     try {
+    //         setIsPaymentModal(false); // 모달 닫기
+    //         const response = await axios.post(
+    //             "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
+    //             paymentData
+    //         );
+    //         console.log("결제 데이터 확인 : ", response.data)
+    //         const paymentId = response.data; // 서버에서 반환된 결제 ID
+
+    //         // 결제 성공 시 페이지로 이동하면서 데이터 전달
+    //         navigate("/payment/success", {
+    //             state: {
+    //                 paymentId: paymentId,
+    //                 items: cartItems.map((item) => ({
+    //                     product_name: item.product_name,
+    //                     count: item.quantity,
+    //                     price: item.price,
+    //                 })),
+    //                 totalAmount: totalPrice,
+    //             },
+    //         });
+
+    //         handleClearCart(); // 장바구니 초기화
+    //     } catch (error) {
+    //         console.error("결제 실패: ", error);
+    //         alert("결제 중 문제가 발생했습니다.");
+    //     }
+    // };
+
+    //수정 1차
     const handlePaymentComplete = async (paymentData) => {
-        console.log("payment 데이터 : ", paymentData)
+        console.log("결제 데이터 확인: ", paymentData);
+
         try {
-            setIsPaymentModal(false); // 모달 닫기
-            const response = await axios.post(
+            // 1. 결제 데이터 생성 API 호출
+            const paymentResponse = await axios.post(
                 "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
                 paymentData
             );
-            console.log("결제 데이터 확인 : ", response.data)
-            const paymentId = response.data; // 서버에서 반환된 결제 ID
 
-            // 결제 성공 시 페이지로 이동하면서 데이터 전달
-            navigate("/payment/success", {
+            console.log("결제 생성 완료: ", paymentResponse.data);
+
+            // 2. 대여 데이터 생성 API 호출
+            const rentalResponse = await axios.post(
+                "http://localhost:8080/api/rental/create", // 대여 데이터 생성 엔드포인트
+                {
+                    rental_id: paymentData.rental_id, // 결제와 연결된 Rental ID
+                    product_id: paymentData.product_id,
+                    count: paymentData.count,
+                }
+            );
+
+            console.log("대여 데이터 생성 완료: ", rentalResponse.data);
+
+            alert("결제가 완료되고 대여가 생성되었습니다!");
+
+            // 페이지 이동
+            navigate("/rental/success", {
                 state: {
-                    paymentId: paymentId,
-                    items: cartItems.map((item) => ({
-                        product_name: item.product_name,
-                        count: item.quantity,
-                        price: item.price,
-                    })),
-                    totalAmount: totalPrice,
+                    rentalId: rentalResponse.data,
+                    paymentId: paymentResponse.data,
                 },
             });
-
-            handleClearCart(); // 장바구니 초기화
         } catch (error) {
-            console.error("결제 실패: ", error);
-            alert("결제 중 문제가 발생했습니다.");
+            console.error("결제 또는 대여 데이터 생성 중 오류: ", error);
+            alert("결제 중 문제가 발생했습니다. 다시 시도해주세요.");
         }
     };
 

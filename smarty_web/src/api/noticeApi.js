@@ -81,8 +81,13 @@ export const noticeApi = {
         },
 
         // 댓글 삭제
-        deleteCommnet : async (commentId) => {
+        deleteCommnet: async (commentId) => {
             return await axios.delete(`${BASE_URL}/notice/board/comments/delete/${commentId}`);
+        },
+
+        // 댓글 수정
+        modifyComment: async (reply_id, replyData) => {
+            return await axios.put(`${BASE_URL}/notice/board/comments/modify/${reply_id}`, replyData);
         }
     },
 
@@ -118,6 +123,19 @@ export const noticeApi = {
             });
             return response.data;
         },
+
+        // 공지사항 삭제
+        deleteNotice: async (announce_id) => {
+            const response = await axios.delete(`${BASE_URL}/notice/announce/user/delete/${announce_id}`, announce_id);
+            return response.data;
+        },
+
+        // 공지사항 수정
+        // 여기서 announceData를 넣으니까 갑자기 오류 안남
+        modifyNotice: async (announce_id, announceData) => {
+            const response = await axios.put(`${BASE_URL}/notice/announce/user/modify/${announce_id}`, announceData);
+            return response.data;
+        }
     },
 
     // 게시글 작성
@@ -155,7 +173,7 @@ export const noticeApi = {
     },
 
     community: {
-        getCommunity : async () => {
+        getCommunity: async () => {
             const response = await axios.get(`${BASE_URL}/notice/allList`);
             return response.data;
         }

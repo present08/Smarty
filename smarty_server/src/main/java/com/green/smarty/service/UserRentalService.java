@@ -1,6 +1,5 @@
 package com.green.smarty.service;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.PublicMapper;
@@ -159,5 +158,15 @@ public class UserRentalService{
     public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
         List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
         return result;
+    }
+
+//    (영준) user_id가 아니라 이메일을 가져오기 위한 코드
+    public String getEmailByUserId(String user_id){
+        return userRentalMapper.getEmailByUserId(user_id);
+    }
+
+    //    (영준) 기간 지난 rental 목록들 전부가져옴
+    public List<RentalDTO> getOverdueRentals(){
+        return userRentalMapper.getOverdueRentals();
     }
 }

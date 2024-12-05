@@ -61,4 +61,15 @@
         delete from reservation where reservation_id = #{reservation_id}
     </delete>
 
+    <select id="getUserMembership" resultType="String" parameterType="string">
+        select membership_level from membership where user_id = #{user_id}
+    </select>
+
+    <!--    (영준) user_id가 아니라 이메일을 가져오기 위한 코드-->
+    <select id="getEmailByUserId" resultType="String" parameterType="String">
+        SELECT email
+        FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
 </mapper>

@@ -45,8 +45,8 @@ const MainProductList = () => {
                     <p>체육 시설에서 필요한 다양한 대여 물품을 한곳에서 만나보세요! 우리의 서비스로 편리하게 운동을 즐기고, 필요한 장비를 손쉽게 빌려가세요.</p>
                 </div>
                 <div className='mainProductList_body'>
-                    {products.slice(0, visibleCount).map((product) => (
-                        <div key={product.id} className='mainProductList_cont'>
+                    {products.slice(0, visibleCount).map((product, index) => (
+                        <div key={product.id || index} className='mainProductList_cont'>
                             <div className='mainProductImg'>
                                 <img src={product.product_images} alt={product.product_name} />
                             </div>

@@ -18,6 +18,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import com.green.smarty.dto.FacilityStatusDTO;
+import com.green.smarty.dto.PermissionDTO;
+import com.green.smarty.dto.WidgetDTO;
+import com.green.smarty.mapper.AdminClassMapper;
+import com.green.smarty.mapper.AdminCourtMapper;
+import com.green.smarty.mapper.AdminStatusMapper;
+import com.green.smarty.mapper.PublicMapper;
+import com.green.smarty.vo.AttendanceVO;
+import com.green.smarty.vo.ClassVO;
+import com.green.smarty.vo.CourtVO;
+import com.green.smarty.vo.EnrollmentVO;
+import com.green.smarty.vo.ReservationVO;
+
 @Service
 @Transactional
 public class AdminStatusService {
@@ -25,6 +44,8 @@ public class AdminStatusService {
     private AdminStatusMapper adminStatusMapper;
     @Autowired
     private QRCodeService qrCodeService;
+    @Autowired
+    private PublicMapper publicMapper;
 
     // Read
     // 선택한 시설의 예약, 수강 신청 현황
@@ -41,7 +62,7 @@ public class AdminStatusService {
         AdminStatusDTO adminStatusDTO = AdminStatusDTO.builder()
                 .reservationDTOList(reservationList)
                 .enrollmentDTOList(enrollmentList)
-                .build();
+                .build();       
         return adminStatusDTO;
     }
 
@@ -72,5 +93,42 @@ public class AdminStatusService {
         }
         System.out.println("가입 : " + userList);
         return userList;
+    }
+
+    // muam i 77ㅓ
+    public List<PermissionDTO> getPermission() {
+        List<PermissionDTO> dto = adminStatusMapper.getPermission();
+        return dto;
+    }
+
+    public void update_enrollment(String enrollment_id) {
+        adminStatusMapper.enrollment_update(enrollment_id);
+    }
+
+    public void update_enrollment_array(List<String> enrollment_id) {
+        List<EnrollmentVO> enrollList = publicMapper.getEnrollmentAll();
+        for (EnrollmentVO i : enrollList) {
+            for (String j : enrollment_id) {
+                if (i.getEnrollment_id().equals(j)) {
+                    if (i.getEnrollment_status().equals("승인대기")) {
+                        adminStatusMapper.enrollment_update(j);
+                    }
+                }
+            }
+        }
+    }
+
+    public List<WidgetDTO> getPaymentData() {
+        LocalDate today = LocalDate.now();
+        Map<String, String> dateData = new HashMap<>();
+        String frist_date = today.minusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString();
+        String second_date = today.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString();
+        System.out.println(frist_date);
+        System.out.println(second_date);
+        dateData.put("frist_date", frist_date);
+        dateData.put("second_date", second_date);
+        List<WidgetDTO> voList = adminStatusMapper.getPaymentData(dateData);
+
+        return voList;
     }
 }

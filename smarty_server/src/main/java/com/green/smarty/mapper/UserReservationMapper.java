@@ -41,4 +41,6 @@ public interface UserReservationMapper {
     void deleteReservationID(Map paramsMap);
 
     void deleteReservation(String reservation_id);
+
+    String getUserMembership(String user_id);
 }

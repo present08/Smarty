@@ -1,11 +1,18 @@
 package com.green.smarty.vo;
 
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,5 +29,4 @@ public class UserVO {
     private boolean user_status;
     private byte[] qrCode;
     private String level;
-    private String fcm_token;
 }

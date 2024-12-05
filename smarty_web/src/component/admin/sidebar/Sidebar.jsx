@@ -1,7 +1,7 @@
-import "./sidebar.css"
+import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
-import { useEffect, useState } from "react";
+import "./sidebar.css";
 
 export default function Sidebar() {
     const {facility_id} = useParams()
@@ -12,7 +12,7 @@ export default function Sidebar() {
             setFacility(res)
         }).catch((error) => console.log("ERROR! : ", error))
     }, [facility_id])
-    
+
     return (
         <div className="sidebar">
             <div className="sidebarWrapper">
@@ -36,8 +36,8 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li className="sidebarListItem">
-                            <Link to="/admin" className="link">
-                                MUAM
+                            <Link to="/admin/permission" className="link">
+                                결제/승인
                             </Link>
                         </li>
                     </ul>

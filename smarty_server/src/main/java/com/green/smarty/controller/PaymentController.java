@@ -23,8 +23,10 @@ import com.green.smarty.dto.UserActivityDTO;
 import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.mapper.PaymentMapper;
 import com.green.smarty.mapper.PublicMapper;
+import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.service.PaymentService;
+import com.green.smarty.service.UserMembershipService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
@@ -49,6 +51,12 @@ public class PaymentController {
     @Autowired
     private UserReservationService reservationService;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserMembershipService userMembershipService;
+
     // 결제 생성
     @PostMapping("/create")
     public String createPayment(@RequestBody PaymentDetailDTO dto) {
@@ -59,12 +67,14 @@ public class PaymentController {
         for (PaymentVO item : paymentVO) {
             String itemDate = item.getPayment_id().substring(2, 10);
             System.out.println(itemDate);
-            if (itemDate.equals("" + date.getYear() + date.getMonthValue() + date.getDayOfMonth())) {
+            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
+                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
                 paymentList.add(item);
             }
         }
 
-        String id = "P_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
+        String id = "P_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
         System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()
@@ -77,6 +87,12 @@ public class PaymentController {
 
         paymentMapper.insertPayment(vo);
         RentalVO rentalID = paymentService.insertRental(dto, id);
+
+
+        // 멤버십 업데이트(혜수코드)
+        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return id;
     }
@@ -166,7 +182,6 @@ public class PaymentController {
     @PostMapping("/enrollment")
     public String enrollPayment(@RequestBody Map<String, String> enrollData) {
 
-        System.out.println(enrollData);
         LocalDateTime now = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
@@ -189,6 +204,13 @@ public class PaymentController {
                 .build();
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
+
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(
+                enrollData.get("user_id"),
+                Float.parseFloat(enrollData.get("amount"))
+        );
+
         return "예약 완료";
     }
 
@@ -197,8 +219,8 @@ public class PaymentController {
     public UserReservationDTO reserPayment(@RequestBody ReservationDTO dto) {
         // 결제 승인시 reservation Table insert
         reservationMapper.insertReservation(dto);
-        System.out.println("payment" + dto);
         LocalDateTime now = LocalDateTime.now();
+
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
         for (PaymentVO i : paymentVO) {
@@ -207,8 +229,10 @@ public class PaymentController {
                 paymentList.add(i);
             }
         }
+        System.out.println("payment List : " + paymentList);
         String id = "P_" + now.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 + String.format("%03d", paymentList.size() + 1);
+        System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()
                 .reservation_id(dto.getReservation_id())
                 .enrollment_id(null)
@@ -222,6 +246,9 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
 
         UserReservationDTO result = reservationService.insertReservation(dto);
+
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return result;
     }

@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -19,8 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.green.smarty.SmartyApplication;
 import com.green.smarty.mapper.UserClassMapper;
 import com.green.smarty.mapper.UserReservationMapper;
+import com.green.smarty.service.UserClassService;
 import com.green.smarty.vo.ClassDetailVO;
 import com.green.smarty.vo.ClassVO;
+import com.green.smarty.vo.EnrollmentVO;
 import com.green.smarty.vo.FacilityVO;
 
 @SpringBootTest(classes = SmartyApplication.class)
@@ -30,6 +33,8 @@ public class Test1 {
     private UserClassMapper userClassMapper;
     @Autowired
     private UserReservationMapper userReservationMapper;
+    @Autowired
+    private UserClassService userClassService;
 
     @Test
     public void dateTest() {
@@ -216,5 +221,18 @@ public class Test1 {
             System.out.println(nowStart);
             System.out.println(now.compareTo(nowStart.minusHours((long) default_time + 1)));
         }
+    }
+
+    @Test
+    public void test213() {
+        LocalDate now = LocalDate.now();
+        System.out.println(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+    }
+
+    @Test
+    public void classEnrollment() {
+        Map<String, String> enrollData = Map.of("user_id","qwe", "class_id","C_642801");
+        EnrollmentVO enrollCheck = userClassMapper.enrollCheck(enrollData);
+        System.out.println("enrollCheck ==== " + enrollCheck);
     }
 }

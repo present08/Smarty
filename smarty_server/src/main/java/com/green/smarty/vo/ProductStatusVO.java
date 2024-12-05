@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 public class ProductStatusVO {
     private String status_id;
     private String product_id;
-    private boolean current_status; // 대여 가능, 손상 등
+    private boolean current_status;
     private LocalDateTime updated_at;
 }

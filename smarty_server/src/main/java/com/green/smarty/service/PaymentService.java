@@ -49,6 +49,8 @@ public class PaymentService {
     private UserProductMapper userProductMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRentalMapper userRentalMapper;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
@@ -90,19 +92,6 @@ public class PaymentService {
                 .build();
         userRentalMapper.insertRental(vo);
         System.out.println("insert rental : "+vo);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("product_id", dto.getProduct_id());
-        map.put("count", dto.getCount());
-        System.out.println("product_id 확인: " + map.get("product_id"));
-        System.out.println("count 확인: "+map.get("count"));
-        int stockDown = userRentalMapper.productStockDown(map);
-
-        if (stockDown > 0) {
-            System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
-        } else {
-            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
-        }
 
         return vo;
     }

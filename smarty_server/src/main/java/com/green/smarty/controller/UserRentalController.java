@@ -1,6 +1,8 @@
 package com.green.smarty.controller;
 
-import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.mapper.UserProductMapper;
+import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserRentalService;
 
 import com.green.smarty.dto.RentalDTO;
@@ -23,8 +25,6 @@ import java.util.Map;
 public class UserRentalController {
     @Autowired
     private UserRentalService userRentalService;
-
-    // (영준)
     @Autowired
     private SendEmailService sendEmailService;
     @Autowired

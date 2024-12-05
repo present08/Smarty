@@ -61,6 +61,7 @@ public class UserRentalService{
         vo.setRental_status(true);
         vo.setCount(count);
 
+        // 6. 대여 정보 저장
         int rentalId = userRentalMapper.insertRental(vo);
         log.info("렌탈 데이터 저장 완료: Rental ID={}", rentalId);
 
@@ -88,12 +89,7 @@ public class UserRentalService{
     }
 
 
-    public List<RentalDTO> getAllRentals() {
-        List<RentalDTO> rentalList = userRentalMapper.getAllRentals();
-        return rentalList;
-    }
-
-
+    //반납
     public int returnRental(String rental_id, int count) {
         System.out.println("반납할 렌탈 ID: " + rental_id + ", count: " + count);
 
@@ -114,34 +110,8 @@ public class UserRentalService{
         rentalVO.setReturn_date(LocalDateTime.now());
         int result = userRentalMapper.returnRental(rentalVO);
 
-        if (result > 0) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("product_id", rental.getProduct_id());
-            map.put("count", count);
-            System.out.println("재고 증가 처리 데이터: "+map);
-            userRentalMapper.productStockUp(map);
-            System.out.println("상품 재고 증가 상품ID: " +  rental.getProduct_id() + ", 증가 수량: " + count);
-
-//            int paymentUpdateResult = updatePaymentStatus(rental_id, false);
-//
-//            if (paymentUpdateResult > 0) {
-//                System.out.println("결제 상태 업데이트 성공: " + rental_id);
-//            } else {
-//                throw new RuntimeException("결제 상태 업데이트 실패" + rental_id);
-//            }
-
-        }
-        return result;
-    }
-
-    public int updatePaymentStatus(String rental_id, boolean payment_status) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("rental_id", rental_id);
-        map.put("payment_status", payment_status);
-
-        int result = userRentalMapper.updatePaymentStatus(map);
-        if (result == 0) {
-            throw new RuntimeException("Payment status 업데이트 실패 : ");
+        if (result <= 0) {
+            throw new RuntimeException("반납 처리 중 오류가 발생했습니다. Rental ID: " + rental_id);
         }
 
         log.info("반납 데이터 업데이트 완료: Rental ID={}", rental_id);
@@ -165,6 +135,18 @@ public class UserRentalService{
 
         log.info("반납 처리 완료: Rental ID={}, Count={}", rental_id, count);
 
+        return result;
+    }
+
+    public int updatePaymentStatus(String rental_id, boolean payment_status) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("rental_id", rental_id);
+        map.put("payment_status", payment_status);
+
+        int result = userRentalMapper.updatePaymentStatus(map);
+        if (result == 0) {
+            throw new RuntimeException("Payment status 업데이트 실패 : ");
+        }
         return result;
     }
 

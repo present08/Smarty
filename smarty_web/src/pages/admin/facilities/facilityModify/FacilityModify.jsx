@@ -157,7 +157,6 @@ export default function FacilityModify() {
 //==============================PUT 요청==============================//
 
     const handleInput = (e) => {
-        // 수정사항 반영
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
     }
@@ -165,7 +164,6 @@ export default function FacilityModify() {
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
         setFacilityStatus(!facilityStatus)
-        // setFacilityStatus(e.target.value)
     }
     useEffect(() => {
       console.log(facility)

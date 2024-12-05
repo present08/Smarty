@@ -106,14 +106,12 @@ export default function NewFacility() {
         facility.court = courtFlag
         setFacility({ ...facility })
         setCourtModal(true)
-        console.log("시설 : ", courtFlag)
     }
     const handleProductButton = (e) => {
         setProductFlag(true)
         facility.product = productFlag
         setFacility({ ...facility })
         setProductModal(true)
-        console.log("물품 : ", productFlag)
     }
 
     // 모달창 닫기 함수

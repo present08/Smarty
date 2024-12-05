@@ -20,6 +20,14 @@ export default function ClassList() {
   const [removeToggle, setRemoveToggle] = useState(false)
   const [modifyToggle, setModifyToggle] = useState(false)
 
+  //===============================오늘 날짜 설정=============================//
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = ("0"+ (today.getMonth() + 1)).slice(-2)
+  const day = ("0"+ today.getDate()).slice(-2)
+  const formattedDate = `${year}-${month}-${day}`
+  //=========================================================================//
+
   //===================================GET 요청=================================//
   useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -68,15 +76,25 @@ export default function ClassList() {
 
   //================================DataGrid==================================//
   const columns = [
-    { field: 'class_name', headerName: '강의명', width: 200 },
-    { field: 'start_date', headerName: '개강일', width: 130 },
-    { field: 'end_date', headerName: '종강일', width: 130 },
-    { field: 'price', headerName: '가격', width: 130 },
-    { field: 'class_size', headerName: '정원', width: 80 },
+    { field: 'class_name', headerName: '강의명', width: 220, headerAlign: 'center' },
+    { field: 'start_date', headerName: '개강일', width: 130, headerAlign: 'center' },
+    { field: 'end_date', headerName: '종강일', width: 130, headerAlign: 'center' },
+    { field: 'price', headerName: '가격', width: 130, headerAlign: 'center' },
+    { field: 'class_size', headerName: '정원', width: 80, headerAlign: 'center' },
+    { field: 'status', headerName: '상태', width: 130, headerAlign: 'center',
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.start_date < formattedDate && formattedDate < params.row.end_date?
+              '진행중' : 
+              formattedDate > params.row.end_date?
+              '종료' : '개강전'}
+          </div>
+        )
+      }
+     },
     {
-      field: 'action',
-      headerName: 'Action',
-      width: 150,
+      field: 'action', headerName: 'Action', width: 150, headerAlign: 'center',
       renderCell: (params) => {
         return (
           <div className="classAction">
@@ -109,7 +127,15 @@ export default function ClassList() {
             getRowId={(row) => row.class_id}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
-            sx={{ border: 0 }}
+            sx={{ border: 0,
+              '& .MuiDataGrid-columnHeaderTitle' : {
+                fontWeight: 'bold',
+                
+              },
+              '& .MuiDataGrid-cell' : {
+                textAlign: 'center',
+              }
+             }}
           />
           {classAddModal?
           <Modal content={<NewClass classPass={classPass} passedClass={currentClass} passedFacility={currentFacility} />} callbackFn={closeModal}/>

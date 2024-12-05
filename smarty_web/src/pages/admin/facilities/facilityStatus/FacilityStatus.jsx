@@ -60,14 +60,14 @@ export default function FacilityStatus() {
     
     //=================================DataGrid================================//
     const reservationColumns = [
-      { field: 'court_name', headerName: '코트명', width: 160 },
-      { field: 'user_id', headerName: '회원 ID', width: 130 },
-      { field: 'reservation_start', headerName: '시작시간', width: 180 },
-      { field: 'reservation_end', headerName: '종료시간', width: 180 },
-      { field: 'attendance_status', headerName: '이용', width: 50,
+      { field: 'court_name', headerName: '코트명', width: 160, headerAlign: 'center' },
+      { field: 'user_id', headerName: '회원 ID', width: 130, headerAlign: 'center' },
+      { field: 'reservation_start', headerName: '시작시간', width: 180, headerAlign: 'center' },
+      { field: 'reservation_end', headerName: '종료시간', width: 180, headerAlign: 'center' },
+      { field: 'attendance_status', headerName: '출석', width: 70, headerAlign: 'center',
         renderCell: (row) => {
           return (
-            <div>
+            <div className='statusCheckbox'>
               {row.row.attendance_status?
                 <CheckBox className='checkbox'/>
                  : <CheckBoxOutlineBlank className='checkbox'/>}
@@ -78,15 +78,13 @@ export default function FacilityStatus() {
     ];
 
     const enrollmentColumns = [
-      { field: 'class_name', headerName: '강의명', width: 160 },
-      { field: 'start_date', headerName: '시작일', width: 120 },
-      { field: 'end_date', headerName: '종료일', width: 120 },
-      { field: 'class_size', headerName: '정원', width: 70 },
-      { field: 'register', headerName: '등록', width: 70 },
+      { field: 'class_name', headerName: '강의명', width: 220, headerAlign: 'center' },
+      { field: 'start_date', headerName: '시작일', width: 130, headerAlign: 'center' },
+      { field: 'end_date', headerName: '종료일', width: 130, headerAlign: 'center' },
+      { field: 'class_size', headerName: '정원', width: 70, headerAlign: 'center' },
+      { field: 'register', headerName: '등록', width: 70, headerAlign: 'center' },
       {
-        field: 'action',
-        headerName: 'Action',
-        width: 100,
+        field: 'action', headerName: 'Action', width: 100, headerAlign: 'center',
         renderCell: (params) => {
           return (
             <div className="statusAction">
@@ -121,7 +119,18 @@ export default function FacilityStatus() {
             getRowId={(row) => row.user_id}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
-            sx={{ border: 0 }}
+            sx={{ border: 0,
+              '& .MuiDataGrid-columnHeaderTitle' : {
+                fontWeight: 'bold',
+                
+              },
+              '& .MuiDataGrid-cell' : {
+                display: 'flex',
+                textAlign: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }
+             }}
           />
         </div>
         <div className="enrollment">
@@ -134,7 +143,18 @@ export default function FacilityStatus() {
               getRowId={(row) => row.class_name}
               initialState={{ pagination: { paginationModel } }}
               pageSizeOptions={[5, 10]}
-              sx={{ border: 0 }}
+              sx={{ border: 0,
+                '& .MuiDataGrid-columnHeaderTitle' : {
+                  fontWeight: 'bold',
+                  
+                },
+                '& .MuiDataGrid-cell' : {
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  verticalAlign: 'middle',
+                }
+               }}
             />
         </div>
         {statusModal? 

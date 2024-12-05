@@ -14,10 +14,9 @@ export default function WidgetSm() {
     useEffect(() => {
         getListUser(formattedDate).then(res => {
             setUserList(res)
-            console.log(res)
           }).catch((error) => console.error("ERROR!", error))
     }, [])
-    
+  
   return (
     <div className="widgetSm">
         <span className="widgetSmTitle">최근 가입 회원</span>
@@ -29,7 +28,7 @@ export default function WidgetSm() {
                         <span className="widgetSmUserTitle">{user.email}</span>
                     </div>
                     <div className="widgetSmUser">
-                        <span className="widgetSmUserTitle">{user.join_date}</span>
+                        <span className="widgetSmUserTitle">{user.join_date.substring(0, 10)}</span>
                     </div>
                     <div className="widgetSmUser">
                         {user.qr_code?

@@ -66,6 +66,11 @@
     margin-right: 10px;
 }
 
+.statusCheckbox {
+    height: 24px;
+    line-height: 0 !important;
+}
+
 .checkbox {
     color: #555;
 }

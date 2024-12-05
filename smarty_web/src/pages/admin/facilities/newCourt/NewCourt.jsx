@@ -56,6 +56,7 @@ export default function NewCourt({ courtPass, passedCourt }) {
         }).catch((error) => console.error("ERROR! : ", error))
     }   
     //============================================================================//
+    
     return (
         <div className="newCourt">
             <div className="addCourtFormTop">

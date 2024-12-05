@@ -65,8 +65,10 @@ public class UserController {
 
             try {
                 // 멤버십 아이디 발급 및 초기 데이터 저장
-                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-                String membershipId = "m_" + userVO.getUser_id()+ "_" + timestamp ;
+                // userId의 앞 두 자리 추출
+                String userIdPrefix = userVO.getUser_id().substring(0, Math.min(userVO.getUser_id().length(), 2));
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                String membershipId = "M_" + userIdPrefix + timestamp ;
 
                 MembershipVO membership = new MembershipVO();
                 membership.setMembership_id(membershipId);

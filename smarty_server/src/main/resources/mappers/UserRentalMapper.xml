@@ -7,39 +7,21 @@
 <!--    대여 등록-->
     <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
         <!-- 오늘 날짜의 마지막 rental_id 조회 -->
-        <selectKey resultType="String" keyProperty="rental_id" order="BEFORE">
-            SELECT CASE WHEN MAX(rental_id) IS NULL THEN
-            CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '001')
-            ELSE CONCAT(
-                'r_',
-                DATE_FORMAT(NOW(), '%Y%m%d'),
-                LPAD( CAST(
-                    CAST(SUBSTRING(MAX(rental_id), -3) AS UNSIGNED) + 1
-                    AS CHAR ), 3, '0'
-                )
-            )
-            END AS
-                new_rental_id
-            FROM
-                rental
-            WHERE
-                rental_id LIKE CONCAT('r_', DATE_FORMAT(NOW(), '%Y%m%d'), '%')
-        </selectKey>
         INSERT INTO rental (
             rental_id,
             user_id,
             product_id,
+            payment_id,
             rental_status,
             rental_date,
-            return_date,
             count
         ) VALUES (
             #{rental_id},
             #{user_id},
             #{product_id},
-            true,
+            #{payment_id},
+            #{rental_status},
             #{rental_date},
-            #{return_date},
             #{count}
         )
     </insert>
@@ -123,17 +105,41 @@
             rental_id = #{rental_id}
     </select>
 
-    <update id="updateRental" parameterType="com.green.smarty.dto.RentalDTO">
-        UPDATE rental
-        SET rental_status = #{rental_status}
-        WHERE rental_id = #{rental_id}
-    </update>
-
     <!-- 반납 처리 -->
-    <update id="returnRental" parameterType="String">
+    <update id="returnRental" parameterType="com.green.smarty.vo.RentalVO">
         UPDATE rental
-        SET rental_status = false
+        SET rental_status = #{rental_status},
+            return_date = #{return_date}
         WHERE rental_id = #{rental_id}
     </update>
 
+    <resultMap id="RentalVOMap" type="com.green.smarty.vo.RentalVO">
+        <result property="rental_id" column="rental_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
+        UPDATE payment
+        SET payment_status = #{payment_status}
+        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id})
+    </update>
+
+    <select id="getMaxRentalIdForDate" parameterType="string" resultType="string">
+        SELECT MAX(rental_id)
+        FROM rental
+        WHERE rental_id LIKE CONCAT('R_', #{datePrefix}, '%')
+    </select>
+
+<!--    (영준) 알림을 위해서 추가한 코드-->
+    <select id="getOverdueRentals" resultType="com.green.smarty.dto.RentalDTO">
+        SELECT * FROM rental
+        WHERE rental_date &lt; NOW() - INTERVAL 10 DAY
+        AND rental_status = 1;
+    </select>
+
+<!--    (영준) user_id가 아니라 이메일을 가져오기 위한 코드-->
+    <select id="getEmailByUserId" resultType="String" parameterType="String">
+        SELECT email
+        FROM user
+        WHERE user_id = #{user_id}
+    </select>
 </mapper>

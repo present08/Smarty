@@ -6,15 +6,19 @@ const FacilityList = lazy(() => import("../pages/admin/facilities/facilityList/F
 const FacilityAdd = lazy(() => import("../pages/admin/facilities/newFacility/NewFacility"))
 const FacilityRead = lazy(() => import("../pages/admin/facilities/facilityRead/FacilityRead"))
 const FacilityModify = lazy(() => import("../pages/admin/facilities/facilityModify/FacilityModify"))
+const FacilityStatus = lazy(() => import("../pages/admin/facilities/facilityStatus/FacilityStatus"))
 
 const ClassList = lazy(() => import("../pages/admin/classes/classList/ClassList"))
 const ClassAdd = lazy(() => import("../pages/admin/classes/newClass/NewClass"))
 const ClassRead = lazy(() => import("../pages/admin/classes/classRead/ClassRead"))
-const ClassModify = lazy(() => import("../pages/admin/classes/classModify/ClassModify"))
 
 const ProductList = lazy(() => import("../pages/admin/products/productList/ProductList"))
 const ProductRead = lazy(() => import("../pages/admin/products/productRead/ProductRead"))
+
+const Permission = lazy(() => import("../component/admin/permission/Permission"))
+
 const adminRouter = () => {
+
     return [
         {
             path: "",
@@ -49,16 +53,20 @@ const adminRouter = () => {
             element: <Suspense fallback={<SyncLoader />}><ClassRead /></Suspense>,
         },
         {
-            path: "classes/:facility_id/modify/:class_id",
-            element: <Suspense fallback={<SyncLoader />}><ClassModify /></Suspense>,
-        },
-        {
             path: "products/:facility_id",
-            element: <Suspense fallback={<SyncLoader />}><ProductList/></Suspense>,
+            element: <Suspense fallback={<SyncLoader />}><ProductList /></Suspense>,
         },
         {
             path: "products/:facility_id/read/:product_id",
             element: <Suspense fallback={<SyncLoader />}><ProductRead /></Suspense>,
+        },
+        {
+            path: "status/:facility_id",
+            element: <Suspense fallback={<SyncLoader />}><FacilityStatus /></Suspense>,
+        },
+        {// muam i 77ㅓ
+            path: "permission",
+            element: <Suspense fallback={<SyncLoader />}><Permission /></Suspense>,
         }
     ]
 }

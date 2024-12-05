@@ -65,19 +65,21 @@ public class Test1 {
     @Test
     public void classTest() {
         List<FacilityVO> facility = userReservationMapper.getFacilityAll();
-        String facility_id = facility.get(3).getFacility_id();
+        String facility_id = facility.get(1).getFacility_id();
 
-        LocalDate start_date = LocalDate.of(2024, 10, 16);
-        LocalDate end_date = LocalDate.of(2024, 12, 31);
+        LocalDate start_date = LocalDate.of(2024, 12, 23);
+        LocalDate end_date = LocalDate.of(2024, 12, 29);
 
         LocalTime start_time = LocalTime.of(12, 00, 00);
         LocalTime end_time = LocalTime.of(16, 00, 00);
 
         // 시작일~종료일 사이의 월, 수, 금에 해당하는 요일, 날짜 맵에 담기
         List<String> weeekday = new ArrayList<>();
-        weeekday.add("화요일");
+        weeekday.add("월요일");
+//        weeekday.add("화요일");
+//        weeekday.add("수요일");
         weeekday.add("목요일");
-        // weeekday.add("금요일");
+         weeekday.add("금요일");
 
         List<String> weekdays = new ArrayList<>();
         List<LocalDate> weekDates = new ArrayList<>();
@@ -106,15 +108,15 @@ public class Test1 {
         System.out.println(weekdays);
         System.out.println(weekDates);
         ClassVO classVO = ClassVO.builder()
-                .class_id("C_" + facility_id.substring(12) + "01")
+                .class_id("C_" + facility_id.substring(12) + "05")
                 .facility_id(facility_id)
-                .class_name("수영교실")
+                .class_name("오늘은 내가 박태환")
                 .start_date(start_date)
                 .end_date(end_date)
                 .start_time(start_time)
                 .end_time(end_time)
-                .price(3000)
-                .class_size(50)
+                .price(8000)
+                .class_size(20)
                 .build();
 
         userClassMapper.insertClass(classVO);

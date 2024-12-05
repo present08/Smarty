@@ -47,7 +47,7 @@ const Facility_list = () => {
                     <p style={{ fontSize: '21px', color: '#5700f8' }}>{i.basic_fee}</p>
                     <p style={{ color: 'gray', textIndent: '0px', fontSize: '20px', }}>원</p>
                   </div>
-                  <p style={{ fontSize: '19px', color: 'gray', marginLeft: '120px' }}>오픈시간:{i.open_time}</p>
+                  <p style={{ fontSize: '17px', color: 'gray', marginLeft: '120px' }}>오픈시간:{i.open_time}</p>
                 </div>
               </div>
             </div>

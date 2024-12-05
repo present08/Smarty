@@ -6,7 +6,7 @@ import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
 import NewProduct from '../../products/newProduct/NewProduct';
 import { postAddCourt } from "../../../../api/admin/courtApi"
-import { postAddProduct, postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
+import { postProductData, uploadProductFiles } from "../../../../api/admin/productApi"
 import { useNavigate } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
 
@@ -25,31 +25,28 @@ const initFacility = {
     product: false,
     facility_status: false,
 }
+const initPrice = {
+    basic_fee: 0,
+    rate_adjustment: 0,
+    hot_time: 0
+}
 
 export default function NewFacility() {
     const navigate = useNavigate()
-
-    // FacilityDTO 구성
-    const [facility, setFacility] = useState({ ...initFacility })
-
-    // FacilityDTO boolean 필드값 상태관리
+    const [facility, setFacility] = useState(initFacility)
+    const [price, setPrice] = useState(initPrice)           // facility 가격 항목
     const [courtFlag, setCourtFlag] = useState(false)
-    const [productFlag, setProductFlag] = useState(false)
+    const [productFlag, setProductFlag] = useState(false)   // facility boolean값 상태관리
+    const facilityImages = useRef()                         // facility 첨부파일 저장 변수
+    const [court, setCourt] = useState([])
+    const [product, setProduct] = useState([])     
+    const [priceModal, setPriceModal] = useState(false)
+    const [courtModal, setCourtModal] = useState(false)
+    const [productModal, setProductModal] = useState(false) // 모달창 상태관리       
+    const [imageSrc, setImageSrc] = useState([])
+    const [updateFile, setUpdateFile] = useState([])        // 첨부파일 미리보기
 
-    // FacilityDTO 첨부파일 저장 변수
-    const facilityImages = useRef()
-
-    // 자식 컴포넌트에서 부모 컴포넌트로 props 전달 방법
-    // 전달받은 값을 저장할 useState, 값 전달 역할을 할 함수를 선언
-    // 자식 컴포넌트로 함수 전달
-    // 자식 컴포넌트에서 함수를 실행하면 부모 컴포넌트의 함수가 실행되면서 인자값을 전달받음
-
-    // facility 가격 항목 구성(basic_fee, rate_adjustment, hot_time)
-    const [price, setPrice] = useState({
-        basic_fee: 0,
-        rate_adjustment: 0,
-        hot_time: 0
-    })
+    //==================================컴포넌트간 객체 전달 함수================================//    
     const pricePass = (price) => {
         setPrice(price)
         setPriceModal(false)
@@ -60,37 +57,19 @@ export default function NewFacility() {
       facility.hot_time = price.hot_time
       setFacility({ ...facility })
     }, [price])
-    
 
-    // CourtDTO 구성
-    const [court, setCourt] = useState(Array.from({ length: 0 }, (_, i) => ({
-        facility_id: '',
-        court_name: '',
-        court_status: ''
-    })))
     const courtPass = (court) => {
         setCourt(court)
         setCourtModal(false)
     }
-
-    // ProductDTO 구성
-    const [product, setProduct] = useState(Array.from({ length: 0 }, (_, i) => ({
-        product_id: '',
-        facility_id: '',
-        product_name: '',
-        stock: '',
-        price: '',
-        files: []
-    })))
+   
     const productPass = (productList) => {
         setProduct(productList)
         setProductModal(false)
     }
+    //=========================================================================================//
 
-    // 첨부파일 미리보기
-    const [imageSrc, setImageSrc] = useState([])
-    const [updateFile, setUpdateFile] = useState([])
-    
+    //==================================이미지 미리보기=========================================//
     const onUpload = (e) => {
         // 이미지 등록 버튼 누를때마다 새로운 이미지 배열 생성, 최종 파일만 저장
         const imageList = Array.from(e.target.files)
@@ -105,28 +84,20 @@ export default function NewFacility() {
     }
 
     const handleDeleteImage = (id) => {
+        // 이미지 항목 삭제 반영
         setImageSrc(imageSrc.filter((_, index) => index !== id))
         setUpdateFile(updateFile.filter((_, index) => index !== id))
     }
+    //============================================================================================//
 
-    useEffect(() => {
-        console.log(updateFile)
-        console.log(imageSrc)
-    }, [onUpload, handleDeleteImage])
-    
-
-    // 가격변동률, 코트, 물품등록시 모달창 상태관리
-    const [priceModal, setPriceModal] = useState(false)
-    const [courtModal, setCourtModal] = useState(false)
-    const [productModal, setProductModal] = useState(false)
-
-    // 시설등록 input value 업데이트 함수
+    //===================================시설 Input Update========================================//
     const handleInput = (e) => {
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
     }
+    //============================================================================================//
 
-    // 코트 등록 버튼 클릭 시 실행 함수
+    //==========================================MODAL=============================================//
     const handlePriceButton = (e) => {
         setPriceModal(true)
     }
@@ -135,15 +106,12 @@ export default function NewFacility() {
         facility.court = courtFlag
         setFacility({ ...facility })
         setCourtModal(true)
-        console.log("시설 : ", courtFlag)
     }
-    // 물품 등록 버튼 클릭 시 실행 함수
     const handleProductButton = (e) => {
         setProductFlag(true)
         facility.product = productFlag
         setFacility({ ...facility })
         setProductModal(true)
-        console.log("물품 : ", productFlag)
     }
 
     // 모달창 닫기 함수
@@ -153,18 +121,16 @@ export default function NewFacility() {
         else setPriceModal(false)
     }
 
-     // 모달창 닫기 함수 (수정)
+    // 모달창 닫기 함수 (수정)
     //  const closeModal = (modalType) => {
     //     if (modalType === 'court') setCourtModal(false)
     //     else if (modalType === 'product') setProductModal(false)
     //     else if (modalType === 'price') setPriceModal(false)
     // }
-
+    //============================================================================================//
     
-    
-    // 입력된 데이터로 API 호출
+    //=========================================API 호출===========================================//
     const handleFacilityAdd = () => {
-        // const facilityFiles = facilityImages.current.files
         const facilityForm = new FormData()
 
         for (let i = 0; i < updateFile.length; i++) {
@@ -193,60 +159,60 @@ export default function NewFacility() {
             facilityForm.append("product", true)
         } else facilityForm.append("product", false)
 
-        postAddFacility(facilityForm).then(id => {
-            console.log(id)
-            // 시설 등록에 성공하고 나면 facility_id를 반환받음
-            // 이후 코트, 물품등록 여부에 따라 아래 코드 실행
-            if (court.length > 0) {
-                court.map(court => {
-                    court.facility_id = id
-                    setCourt({ ...court })
-                })
-                postAddCourt(court)
-            } else {
-                const defaultCourt = {
-                    facility_id: id,
-                    court_name: facility.facility_name,
-                    court_status: facility.facility_status
-                }
-                const courtArray = [defaultCourt]
-                console.log("전송하는코트 : ", courtArray)
-                postAddCourt(courtArray)
-            }
-
-            if (product.length > 0) {
-                const productArray = product.map((product) => ({
-                    facility_id: id,
-                    product_name: product.product_name,
-                    stock: product.stock,
-                    price: product.price,
-                    management_type: product.management_type,
-                    size: product.size,
-                }));    
-    
-                // 상품 등록
-                postProductData(productArray).then((productIds) => {
-                    console.log("등록된 상품 IDs:", productIds);
-
-                    // 각 상품에 파일 업로드 처리
-                    product.forEach((prod, index) => {
-                        if (prod.files && prod.files.length > 0) {
-                            uploadProductFiles(productIds[index], prod.files);
-                        } else {
-                            console.log(`상품 ID ${productIds[index]}에 파일 없음. 기본 이미지 처리`);
-                            uploadProductFiles(productIds[index], []); // 기본 이미지 처리
-                        }
-                    });
-                }).catch((error) => {
-                    console.error("상품 등록 또는 파일 업로드 실패:", error);
-                    alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
-                });
-            }
-
-            alert("등록된 시설 ID는 " + id + " 입니다.")
-            navigate({pathname: `/admin/facilities/read/${id}`})
-        })
+        postAddFacility(facilityForm).then(res => handleSubAdd(res)).catch((error) => console.error("ERROR! : ", error))
     }
+
+    const handleSubAdd = (facilityID) => {
+        console.log("시설id : ", facilityID)
+        if (court.length > 0) {
+            court.map(court => {
+                court.facility_id = facilityID
+                setCourt({ ...court })
+            })
+            postAddCourt(court)
+        } else {
+            const defaultCourt = {
+                facility_id: facilityID,
+                court_name: facility.facility_name,
+                court_status: facility.facility_status
+            }
+            const courtArray = [defaultCourt]
+            console.log("전송하는코트 : ", courtArray)
+            postAddCourt(courtArray)
+        }
+
+        if (product.length > 0) {
+            const productArray = product.map((product) => ({
+                facility_id: facilityID,
+                product_name: product.product_name,
+                stock: product.stock,
+                price: product.price,
+                management_type: product.management_type,
+                size: product.size,
+            }));    
+
+            // 상품 등록
+            postProductData(productArray).then((productIds) => {
+                console.log("등록된 상품 IDs:", productIds);
+
+                // 각 상품에 파일 업로드 처리
+                product.forEach((prod, index) => {
+                    if (prod.files && prod.files.length > 0) {
+                        uploadProductFiles(productIds[index], prod.files);
+                    } else {
+                        console.log(`상품 ID ${productIds[index]}에 파일 없음. 기본 이미지 처리`);
+                        uploadProductFiles(productIds[index], []); // 기본 이미지 처리
+                    }
+                });
+            }).catch((error) => {
+                console.error("상품 등록 또는 파일 업로드 실패:", error);
+                alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
+            });
+        }
+        alert(`등록된 시설 ID는 ${facilityID} 입니다.`)
+        navigate({pathname: `/admin/facilities/read/${facilityID}`})
+    }    
+    //============================================================================================//
 
     return (
         <div className="newFacility">
@@ -280,7 +246,7 @@ export default function NewFacility() {
                             <input
                                 name="open_time"
                                 id="open_time"
-                                type={"number"}
+                                type={"time"}
                                 min={5}
                                 max={23}
                                 value={facility.open_time}
@@ -290,7 +256,7 @@ export default function NewFacility() {
                             <input
                                 name="close_time"
                                 id="close_time"
-                                type={"number"}
+                                type={"time"}
                                 min={5}
                                 max={23}
                                 value={facility.close_time}
@@ -429,7 +395,7 @@ export default function NewFacility() {
                     </div>
                     <div className="facilityButtons">
                         <button className="addFacilityButton" onClick={handleFacilityAdd}>등록</button>
-                        <button className="cancelFacilityButton" onClick={() => navigate({pathname: "/admin/facilities"})}>취소</button>
+                        <button className="cancelFacilityButton" onClick={() => navigate({pathname: "/admin"})}>취소</button>
                     </div>
                  </div>
             </div>

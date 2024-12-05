@@ -1,0 +1,72 @@
+.centro_container {
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+/* ------------- 서브메뉴*/
+
+.submu {
+    margin: 0 auto;
+    width: 70%;
+    height: 30px;
+}
+
+.submu nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+/* ------------- */
+
+.centro_cont {
+    display: flex;
+    width: 70%;
+    height: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center
+}
+
+.centro_cont h4 {
+    font-size: 34px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
+.imgBox {
+    margin-top: 1rem;
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgBox img {
+    width: 70%;
+    filter: brightness(70%);
+    position: relative;
+    z-index: -1;
+
+}
+
+.centro_text {
+    display: flex;
+    justify-content: center;
+}
+
+.centro_text p,
+.centro_cont p {
+    font-size: 18px;
+    line-height: 23px;
+    color: gray;
+    margin-top: 1.5rem;
+}
+
+/* ------------- */

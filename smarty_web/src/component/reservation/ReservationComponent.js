@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { LuAlarmClock } from 'react-icons/lu';
-import CustomCalender from './CustomCalender.tsx';
-import { FaRegCheckSquare } from 'react-icons/fa';
-import { updatePlan } from '../../api/reservaionApi.js';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { FaRegCheckSquare } from 'react-icons/fa';
+import { LuAlarmClock } from 'react-icons/lu';
+import { MembershipUser, updatePlan } from './../../api/reservaionApi';
+import CustomCalender from './CustomCalender.tsx';
 import ReservationComplete from './ReservationComplete.js';
+
 
 const ReservationComponent = (props) => {
     const { facilityData, reserved, newDate, user } = props;
     const [date, setDate] = useState('')
     const [timeLine, setTimeLine] = useState([])
+    const [timeList, setTimeList] = useState([])
+    const [resTimeLine, setResTimeLine] = useState([])
     const [fristNum, setFristNum] = useState(0)
     const [lastNum, setLastNum] = useState(0)
     const [complete, setComplete] = useState(false)
     const [price, setPrice] = useState(facilityData.basic_fee)
+    const [Dprice, setDPrice] = useState(facilityData.basic_fee)
+    const [membership, setMembership] = useState("")
     const initData = {
         reservation_id: null,
         user_id: "",
@@ -34,6 +39,56 @@ const ReservationComponent = (props) => {
         setTimeLine(reserved)
     }, [reserved])
 
+    useEffect(() => {
+        // 3 / 5 / 7 / 10
+        MembershipUser(user.user_id).then(e => {
+            setMembership(e);
+            switch (e) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.1)) / 10) * 10); break;
+            }
+        })
+    }, [])
+
+
+    // 첫타임/막타임 할인/할증요금 계산
+    const extra_price = (id) => {
+        const frist_time = timeLine.find(item => item.id === id)?.start || ''
+        const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
+        if (frist_time == timeLine[0].start) {
+            const minusPrice = facilityData.basic_fee - (facilityData.basic_fee * facilityData.rate_adjustment);
+            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
+            // 복리계산
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((minusPrice - (minusPrice * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((minusPrice - (minusPrice * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((minusPrice - (minusPrice * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((minusPrice - (minusPrice * 0.1)) / 10) * 10); break;
+            }
+        } else if (id == Math.floor(timeLine.length / facilityData.default_time) - 1) {
+            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
+            const plusPrice = facilityData.basic_fee + (facilityData.basic_fee * facilityData.rate_adjustment);
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((plusPrice - (plusPrice * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((plusPrice - (plusPrice * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((plusPrice - (plusPrice * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((plusPrice - (plusPrice * 0.1)) / 10) * 10); break;
+            }
+        } else {
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.1)) / 10) * 10); break;
+            }
+        }
+    }
     // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
@@ -45,31 +100,18 @@ const ReservationComponent = (props) => {
         setTimeLine(newTimeLine)
         setPrice(facilityData.basic_fee)
         extra_price(tl.id)
+
     };
 
-    // 첫타임/막타임 할인/할증요금 계산
-    const extra_price = (id) => {
-        const frist_time = timeLine.find(item => item.id === id)?.start || ''
-        const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
-        if (frist_time == timeLine[0].start) {
-            setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
-        } else if (last_time == timeLine[timeLine.length - 1].end) {
-            setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
-        }
-    }
 
-    // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
     useEffect(() => {
+        // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
         const frist = timeLine.find(item => item.active == 1)?.start || ''
         const last = timeLine.filter(item => item.active).slice(-1)[0]?.end || ''
         frist < 10 ? setFristNum('0' + frist) : setFristNum(frist)
         last < 10 ? setLastNum('0' + last) : setLastNum(last)
-    }, [handleClick])
 
-    // Server에 전송할 데이터 저장
-    useEffect(() => {
-        const start_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), fristNum);
-        const end_date = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), lastNum);
+        // Server에 전송할 데이터 저장
         setPostData({
             reservation_id: null,
             court_id: facilityData.court_id,
@@ -77,29 +119,58 @@ const ReservationComponent = (props) => {
             court_status: true,
             facility_id: facilityData.facility_id,
             user_id: user.user_id,
-            reservation_start: moment(start_date).format("YYYY-MM-DD HH:mm:ss"),
-            reservation_end: moment(end_date).format("YYYY-MM-DD HH:mm:ss"),
+            reservation_start: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), frist < 10 ? '0' + frist : frist)).format("YYYY-MM-DD HH:mm:ss"),
+            reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
+            amount: (membership != "브론즈" ? Dprice : price)
         })
 
-        // console.log(moment(start_date).format("YYYY-MM-DD HH:mm:ss"))
-        // console.log(moment(end_date).format("YYYY-MM-DD HH:mm:ss"))
-    }, [lastNum])
+    }, [timeLine])
 
     // server 전송
     const insertReservation = () => {
         updatePlan(postData, facilityData.facility_id)
             .then(e => {
-                if (e.iterable == 0) {
-                    setTimeLine(e.btnData)
-                    setComplete(!complete)
-                } else {
+                console.log("reservationID : ", e)
+                if (e.iterable != 0) {
                     alert("연속적으로 예약할수 없습니다.")
+                } else {
+                    setPostData(prevData => ({
+                        ...prevData,
+                        reservation_id: e.reservation_id
+                    }));
+                    reservationPayment()
                 }
             })
     }
 
-    const closeModal = (e) => {
+    const closeModal = (e, btnData) => {
         setComplete(e)
+        setTimeLine(btnData)
+    }
+
+    const reservationPayment = () => {
+        // iamport Payment System
+        const { IMP } = window
+        IMP.init("imp57034437");
+
+        const data = {
+            pg: 'html5_inicis',                           // PG사
+            pay_method: 'card',                           // 결제수단
+            merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
+            amount: (membership != "브론즈" ? Dprice : price),          // 결제금액
+            name: facilityData.facility_name,                  // 주문명
+            buyer_name: user.user_id,                           // 구매자 이름
+        };
+
+        IMP.request_pay(data, function nextFunc(success) {
+            if (success.success) {
+                setComplete(!complete)
+                setResTimeLine(timeList)
+            } else {
+                alert(success.error_msg)
+            }
+        })
+
     }
 
     return (
@@ -138,11 +209,13 @@ const ReservationComponent = (props) => {
                             <td data-content="시설명">{facilityData.facility_name}</td>
                             <td data-content="예약일자">{date}</td>
                             <td data-content="예약시간">{fristNum + ':00 ~ '}{lastNum + ':00'}</td>
-                            <td data-content="이용요금">{price}</td>
+                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color:'gray', fontSize:'15px', marginRight:"5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
                         </tr>
                     </tbody>
                 </table>
                 <button onClick={insertReservation} className='reservation_btn'>선택완료</button>
+                <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+                <script src="/main.js"></script>
             </div>
             {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
         </div>

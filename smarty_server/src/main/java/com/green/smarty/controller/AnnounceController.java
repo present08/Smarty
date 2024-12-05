@@ -1,6 +1,7 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.dto.AnnounceDTO;
+import com.green.smarty.dto.BoardDTO;
 import com.green.smarty.service.AnnounceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,7 @@ public class AnnounceController {
         }
     }
 
+    // 조건부 검색
     @GetMapping("/search")
     public ResponseEntity<List<AnnounceDTO>> searchAnnounce(
             @RequestParam("type") String type,
@@ -74,6 +76,20 @@ public class AnnounceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    // 공지사항 삭제 로직
+    @DeleteMapping("/delete/{announce_id}")
+    public void removeAnnounce(@PathVariable int announce_id){
+        announceService.removeAnnounce(announce_id);
+    }
+
+    // 공지사항 수정 로직
+    @PutMapping("/modify/{announce_id}")
+    public void modifyAnnounce(@PathVariable int announce_id , @RequestBody AnnounceDTO announceDTO){
+        announceDTO.setAnnounce_id(announce_id);
+        announceService.modifyAnnounce(announceDTO);
+    }
+
 
     @GetMapping("/get-ip")
     public String getIpAddress(HttpServletRequest request) {

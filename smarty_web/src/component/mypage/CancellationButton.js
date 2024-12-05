@@ -7,7 +7,7 @@ import { deleteReservation } from '../../api/reservaionApi';
 import "../../css/cancellButton.css"
 
 
-const SituationButton = (props) => {
+const CancellationButton = (props) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [schedules, setSchedules] = useState([]);
@@ -49,18 +49,21 @@ const SituationButton = (props) => {
                     </div>
                     {isModalOpen && (
                         <div style={{
-                            width: '100%', height: '100%', position: 'fixed', top: '0', left: '0', display: 'flex', justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)',
+                            width: '100%', height: '100%', position: 'fixed', top: '0', left: '0', display: 'flex', justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', zIndex: '999'
                         }}>
-                            <div style={{ width: '50%', height: '100%', position: 'fixed', right: '0', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', borderBottomLeftRadius: '30px', borderTopLeftRadius: '30px' }}>
+                            <div style={{ width: '50%', height: '100%', position: 'fixed', right: '0', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
                                 <div style={{ width: '90%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <div style={{ width: '100%', height: '5%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                                         <IoCloseSharp style={{ width: '30px', height: '30px' }} onClick={closeModal} />
                                     </div>
                                     <div style={{ marginTop: '2rem', width: '90%', height: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                        <h3 style={{ fontSize: '30px', marginBottom: '1rem' }}>
-                                            {currentUser.user_name} 님 예약 현황
+                                        <h3 style={{
+                                            fontSize: '28px',
+                                        }}>
+                                            {currentUser.user_name} 님 <span style={{ color: '#f4d160' }}>일일입장</span> 예약 현황
                                         </h3>
-                                        <ul style={{ overflowY: 'scroll', height: '90%' }}>
+                                        <p style={{ color: 'gray', fontSize: '20px' }}>예약취소는 신중하게 부탁드립니다.</p>
+                                        <ul style={{ overflowY: 'scroll', height: '90%', marginTop: '2rem' }}>
                                             {schedules.map((item, idx) => (
                                                 <li className='cancellBtnTap' key={idx}>
                                                     <div>
@@ -82,9 +85,6 @@ const SituationButton = (props) => {
                                             ))
                                             }
                                         </ul>
-                                        {/* <button onClick={handleSubmit} style={{ width: '100%', height: '40px', marginTop: '3rem', padding: '10px', backgroundColor: '#28527a', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 'bold' }}>
-                                                수정
-                                            </button> */}
                                     </div>
                                 </div>
                             </div>
@@ -96,4 +96,4 @@ const SituationButton = (props) => {
     )
 }
 
-export default SituationButton;
+export default CancellationButton;

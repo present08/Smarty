@@ -50,6 +50,13 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 로그인시 login_date 로그인 한 날짜로 업데이트-->
+    <update id="updateLoginDate" parameterType="String">
+        UPDATE user
+        SET login_date = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
     <!-- 상태 업데이트 -->
     <update id="updateUserStatus">
         UPDATE user
@@ -64,13 +71,85 @@
         WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
     </update>
 
-    <!-- 회원 등급 업데이트 -->
-    <update id="updateUserLevel">
-        UPDATE user
-        SET level = #{level}
-        WHERE user_id = #{userId}
-    </update>
-</mapper>
+    <!-- 회원 레벨 업데이트 -->
+<!--    <update id="updateUserLevel">-->
+<!--        UPDATE user-->
+<!--        SET level = #{level}-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </update>-->
 
-        <!-- resultType 지정이 없을 경우 parameterType 으로 지정을 해야 함 -->
-        <!-- 우선 순위는 resultType-->
+    <!-- 유저 수강신청 불러오기-->
+    <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        e.enrollment_id,
+        e.enrollment_status,
+        e.class_id,
+        c.class_name,
+        c.start_date,
+        c.end_date,
+        c.start_time,
+        c.end_time,
+        c.price
+        FROM
+        enrollment e
+        INNER JOIN user u ON u.user_id = #{user_id}
+        INNER JOIN class c ON e.class_id = c.class_id
+        WHERE e.user_id = #{user_id}
+
+    </select>
+
+    <!-- 상품 대여 리스트 불러오기-->
+    <select id="getUserMyPageRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalMyPageUserDTO">
+        SELECT
+        u.user_id,
+        u.user_name,
+        f.facility_name,
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.size,
+        r.rental_date,
+        r.return_date
+        FROM
+        rental r
+        INNER JOIN user u
+        ON u.user_id = r.user_id
+        INNER JOIN product p
+        ON p.product_id = r.product_id
+        INNER JOIN facility f
+        ON f.facility_id = p.facility_id
+        WHERE
+        u.user_id = #{user_id};
+    </select>
+
+    <select id="getUserEmailById" parameterType="String">
+        SELECT email FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getUserNameById" parameterType="String">
+        SELECT user_name FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getIdByEmail" parameterType="String">
+        SELECT user_id FROM user
+        WHERE email = #{email}
+    </select>
+
+    <select id="getUserHuman" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user
+        WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+        AND user_status = 1;
+    </select>
+
+    <select id="getUserHumanBerforeSevendays" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user u
+        INNER JOIN notification n
+        ON u.user_id = n.user_id
+        WHERE n.sent_human_message = 1
+    </select>
+
+</mapper>

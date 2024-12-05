@@ -1,0 +1,127 @@
+.findID_background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+    height: 100vh;
+    width: 100vw;
+}
+
+.findID_box {
+    display: flex;
+    width: 80%;
+    height: 90%;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.findId-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding-top: 10%;
+    padding-left: 5%;
+    padding-bottom: 10%;
+}
+
+.findId-container>h1 {
+    color: #9db6cf;
+    font-size: 40px;
+    padding-bottom: 20px;
+}
+
+.findId-container>form>div {
+    text-align: left;
+}
+
+.findId-container>form>div>label {
+    font-size: 15px;
+    color: gray;
+    display: flex;
+}
+
+.findId-container>form>div>input {
+    width: 400px;
+    height: 55px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: #f2f3f4;
+    border-radius: 10px;
+    padding-left: 10px;
+}
+
+.findId-container>form>button {
+    width: 195px;
+    height: 45px;
+    background-color: #9db6cf;
+    border-radius: 10px;
+    margin-top: 20px;
+    border: none;
+    color: white;
+    font-size: 18px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.findID_submenu_box {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.findID_submenu_box>div {
+    height: 10%;
+}
+
+.findID_submenu_box>div>nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.findID_image_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media (max-width: 768px) {
+
+    .findID_box {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+    }
+
+    .findId-container {
+        width: 100%;
+        height: 90%;
+    }
+
+    .findId-container>h1 {
+        font-size: 28px;
+    }
+
+    .findId-container>form>div>input {
+        max-width: 100%;
+    }
+
+    .findId-container>form>button {
+        margin-bottom: 10px;
+    }
+
+    .findID_submenu_box {
+        width: 80%;
+        height: 10%;
+    }
+
+    .findID_image_box {
+        display: none;
+    }
+}

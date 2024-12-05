@@ -1,11 +1,12 @@
-import { RouterProvider } from 'react-router-dom';  // BrowserRouter, Route, Routes 제거
+import { RouterProvider } from 'react-router-dom';
 import './App.css';
 import root from './router/root';
 
 
 function App() {
+
   return (
-    <div className="App main-content">
+    <div className="App main-content" style={{ overflowX: 'hidden' }}>
       <RouterProvider router={root}></RouterProvider>
     </div>
   );

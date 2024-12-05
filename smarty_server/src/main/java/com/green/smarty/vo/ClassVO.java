@@ -23,12 +23,20 @@ public class ClassVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate end_date;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime start_time;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime end_time;
 
     private int price;
-
     private int class_size;
+
+    public void changeName(String class_name) {this.class_name = class_name;}
+    public void changeStartDate(LocalDate start_date) {this.start_date = start_date;}
+    public void changeEndDate(LocalDate end_date) {this.end_date = end_date;}
+    public void changeStartTime(LocalTime start_time) {this.start_time = start_time;}
+    public void changeEndTime(LocalTime end_time) {this.end_time = end_time;}
+    public void changePrice(int price) {this.price = price;}
+    public void changeSize(int class_size) {this.class_size = class_size;}
+
 }

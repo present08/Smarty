@@ -1,0 +1,161 @@
+.jobList_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    position: relative;
+}
+
+.showNotificBut {
+    position: fixed;
+    top: 30%;
+    right: 10%;
+    width: 230px;
+    color: white;
+    height: 30px;
+    border-radius: 10px;
+    background-color: rgb(3, 207, 27);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+
+.jobList_box {
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.jobList_box>div:first-child {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 20vh;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgb(248, 249, 250); */
+    margin-bottom: 3rem;
+}
+
+.jobList_box>div:first-child>.jobList_header {
+    width: 100%;
+    height: 30%;
+    margin-bottom: 3rem;
+}
+
+.jobList_box>div:first-child>.jobList_header>h2 {
+    font-size: 35px;
+}
+
+.jobList_box>div:first-child>.jobList_header>p {
+    font-size: 19px;
+    color: gray;
+    margin-top: 5px;
+}
+
+.jobList_box>div:first-child>.jobList_search {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    border-radius: 10px;
+    height: 50%;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.jobList_box>div:first-child>.jobList_search>input {
+    width: 60%;
+    height: 60%;
+    border-radius: 20px;
+    border: 2px solid gainsboro;
+    padding-left: 20px;
+}
+
+.jobList_box>div:first-child>.jobList_search>select {
+    width: 20%;
+    height: 60%;
+    border-radius: 20px;
+    border: 2px solid gainsboro;
+    padding-left: 20px;
+}
+
+.jobList_box>div:last-child {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.jobCont {
+    width: 70%;
+    height: 200px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.jobCont>div {
+    width: 80%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.jobCont>div>div {
+    width: 70%;
+    height: 80%;
+    flex-direction: column;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.jobCont>div>div>h5 {
+    font-size: 19px;
+    color: gray;
+}
+
+.jobCont>div>div>p {
+    font-size: 19px;
+}
+
+.jobCont>div>div>div {
+    margin-top: 10px;
+}
+
+.jobCont>div>div>div>span {
+    padding: 10px;
+    background-color: skyblue;
+    color: blue;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.jobCont>div>button {
+    width: 15%;
+    height: 25%;
+    background-color: blue;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}

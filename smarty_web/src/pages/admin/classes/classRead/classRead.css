@@ -1,0 +1,58 @@
+.classRead {
+    width: 100%;
+    height: 100%;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.classReadContainer {
+    width: 80%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.classReadItem {
+    display: flex;
+    align-items: center;
+}
+
+.classReadItemTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #105066;
+    margin-right: 30px;
+    width: 80px;
+}
+
+.classReadItem>input {
+    border: none;
+    height: 29px;
+    border-bottom: 1px solid #b1b1b1;
+    font-size: 16px;
+}
+.checkboxLabel {
+    margin-right: 10px;
+    font-size: 16.5px;
+}
+
+.dashIcon {
+    color: #666666;
+    font-size: 15px !important;
+    margin: 0 5px;
+}
+
+.classModifyButton {
+    width: 60px;
+    height: 30px;
+    border: none;
+    background-color: #195E8E;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}

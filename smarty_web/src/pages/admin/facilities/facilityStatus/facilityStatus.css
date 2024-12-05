@@ -1,0 +1,76 @@
+.facilityStatus {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.facilityStatusSetting {
+    display: flex;
+    height: 10%;
+}
+.settingTitle {
+    font-size: 23px;
+    font-weight: 300;
+    color: #011B2F;
+    margin-right: 1rem;
+}
+.facilityStatusSetting>input {
+    height: 30px;
+    width: 120px;
+    border: none;
+    font-size: 18px;
+    color: #011B2F;
+}
+
+.facilityStatusContainer {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    gap: 50px;
+}
+
+.reservationSetting {
+    display: flex;
+    gap: 10px;
+}
+
+.reservation,
+.enrollment {
+    width: 720px;
+    height: 500px;
+    opacity: auto;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.facilityStatusTitle {
+    font-size: 22px;
+    font-weight: 300;
+    color: #011B2F;
+}
+
+.statusReadButton {
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: #58A3BC;
+    color: aliceblue;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.statusCheckbox {
+    height: 24px;
+    line-height: 0 !important;
+}
+
+.checkbox {
+    color: #555;
+}

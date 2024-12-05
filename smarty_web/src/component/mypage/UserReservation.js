@@ -1,22 +1,64 @@
 import React, { useEffect, useState } from 'react';
+import { getProductRentalUser } from '../../api/userApi';
+import '../../css/userReservation.css';
+import { Link } from 'react-router-dom';
 
 const UserReservation = (props) => {
 
     const [currentUser, setCurrentUser] = useState(null);
-    const [priceTotal, setPriceTotal] = useState(0); // 총 결제 금액 상태 추가
+    const [rentalData, setRentalData] = useState([]);
+    const [priceTotal, setPriceTotal] = useState(0);
+    const [modal, setModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const modalOpen = (product) => {
+        setSelectedProduct(product);
+        setModal(true);
+    };
+
+    const modalClose = () => {
+        setModal(false);
+        setSelectedProduct(null);
+    };
 
     useEffect(() => {
-        setCurrentUser(props.user);
-    }, [props]);
+        if (props.user) {
+            setCurrentUser(props.user);
+            const fetchRentalData = async () => {
+                try {
+                    const userId = props.user.user_id;
+                    const response = await getProductRentalUser(userId);
 
-    const data = [
-        { productNumber: 1, productName: '수영모', facilityName: '수영장', price: 8000 },
-    ];
+                    if (Array.isArray(response)) {
+                        const formattedData = response.map(item => ({
+                            productNum: item.product_id,
+                            productName: item.product_name,
+                            productPrice: item.price,
+                            productSize: item.size,
+                            facilityName: item.facility_name,
+                            rentalDate: item.rental_date,
+                            returnDate: item.return_date,
+                            userName: item.user_name,
+                            userId: item.user_id
+                        }));
 
-    useEffect(() => {
-        const total = data.reduce((sum, item) => sum + item.price, 0);
-        setPriceTotal(total);
-    }, [data]);
+                        // 상태 초기화
+                        setRentalData(formattedData);
+                        const total = formattedData.reduce((sum, item) => sum + item.productPrice, 0);
+                        setPriceTotal(total);
+                    } else {
+                        console.error('Response is not an array:', response);
+                    }
+                } catch (error) {
+                    console.error('Error in fetchRentalData:', error);
+                }
+            };
+
+            fetchRentalData();
+        } else {
+            console.log('No user data available:', currentUser);
+        }
+    }, [props.user]);
 
     return (
         <div style={{
@@ -39,39 +81,95 @@ const UserReservation = (props) => {
                 width: '100%',
                 height: '300px',
                 borderRadius: '10px',
-                backgroundColor: 'white',
+                backgroundColor: '#f7f7f7',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'flex-start',
+                overflowY: 'auto',
             }}>
-                <div style={{ width: '90%', height: '90%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <div style={{ overflowY: 'auto', flex: 1, borderRadius: '1opx', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', }}>
-                        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                            <thead>
-                                <tr style={{ height: '50px', backgroundColor: '#d5deef' }}>
-                                    <th style={{ width: '15%' }}>상품번호</th>
-                                    <th style={{ width: '30%' }}>상품명</th>
-                                    <th style={{ width: '30%' }}>시설명</th>
-                                    <th style={{ width: '25%' }}>가격</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <div style={{ maxHeight: '180px', overflowY: 'auto', width: '100%' }}>
-                            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                                <tbody>
-                                    {data.map((item) => (
-                                        <tr style={{ height: '50px', color: 'gray' }} key={item.productNumber}>
-                                            <td style={{ width: '15%' }}>{item.productNumber}</td>
-                                            <td style={{ width: '30%' }}>{item.productName}</td>
-                                            <td style={{ width: '30%' }}>{item.facilityName}</td>
-                                            <td style={{ width: '25%' }}>{item.price}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                <div style={{
+                    width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'
+                }}>
+                    <ul className='listHeader'>
+                        <li><h3>Number</h3></li>
+                        <li><h3>Name</h3></li>
+                        <li><h3>Facility</h3></li>
+                        <li><h3>Size</h3></li>
+                        <li><h3>Price</h3></li>
+                        <li><h3>Options</h3></li>
+                    </ul>
+                    {rentalData.map((item, index) => (
+                        <ul className='listBody' key={index}>
+                            <li>{item.productNum}</li>
+                            <li>{item.productName}</li>
+                            <li>{item.facilityName}</li>
+                            <li>{item.productSize}</li>
+                            <li>{item.productPrice}원</li>
+                            <li onClick={() => modalOpen(item)}>더보기</li>
+                        </ul>
+                    ))}
+                </div>
+                {modal && (
+                    <div className="reservationModalOverlay">
+                        <div className="reservationModalContainer">
+                            <div>
+                                <div className="reservationModalHeader">
+                                    <h3>대여 상품 상세 정보</h3>
+                                </div>
+                                <div className="reservationModalContent">
+                                    {selectedProduct ? (
+                                        <div>
+                                            <div>
+                                                <div>
+                                                    대여중
+                                                </div>
+                                                <div>
+                                                    <h5>{selectedProduct.productName}</h5>
+                                                    <p>{selectedProduct.productNum}</p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5>대여자</h5>
+                                                <p>{selectedProduct.userName}({selectedProduct.userId})님</p>
+                                            </div>
+                                            <div>
+                                                <h5>시설명</h5>
+                                                <p>{selectedProduct.facilityName}</p>
+                                            </div>
+                                            <div>
+                                                <h5>가격</h5>
+                                                <p>{new Intl.NumberFormat().format(selectedProduct.productPrice)} 원</p>
+
+                                            </div>
+                                            <div>
+                                                <h5>상품사이즈</h5>
+                                                <p>{selectedProduct.productSize}</p>
+                                            </div>
+                                            <div>
+                                                <h5>대여일</h5>
+                                                <p>{selectedProduct.rentalDate}</p>
+                                            </div>
+                                            <div>
+                                                <h5>반납일</h5>
+                                                <p>{selectedProduct.returnDate}</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p>선택된 상품이 없습니다.</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="reservationModalFooter">
+                                {/* <Link to={"/"} className="refundButton">
+                                    환불하기
+                                </Link> */}
+                                <button onClick={modalClose} className="primaryButton">
+                                    닫기
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

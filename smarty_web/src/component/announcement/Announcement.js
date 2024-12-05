@@ -5,8 +5,12 @@ import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
 import Footer from '../Footer';
+import { noticeApi } from '../../api/noticeApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const NoticeBoard = () => {
+    const { announce_id } = useParams();
+    const navigate = useNavigate();
     const [activeItem, setActiveItem] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [notices, setNotices] = useState([]);
@@ -24,33 +28,20 @@ const NoticeBoard = () => {
     // 초기 로딩 시 백엔드에서 공지사항 데이터를 가져오는 함수
     useEffect(() => {
         const fetchNotices = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/notice/announce/user/list');
-                setNotices(response.data); // 가져온 데이터를 notices 상태에 업데이트
-            } catch (error) {
-                console.error('공지사항을 가져오는 중 오류가 발생했습니다:', error);
-            }
+            const data = await noticeApi.announcement.getNotices();
+            setNotices(data);
         };
-
         fetchNotices();
-    }, []); // 빈 배열로 설정하여 컴포넌트가 처음 더링될 때만 호출
+    }, []);
 
     const toggleItem = async (id) => {
-        if (activeItem !== id) {  // 새로운 항목을 열 때만 조회수 증가
-            try {
-                console.log('조회수 증가 API 호출:', id);
-                const response = await axios.post(`http://localhost:8080/notice/announce/user/view/${id}`);
-                console.log('API 응답:', response.data);
-
-                // 로컬 상태 업데이트
-                setNotices(notices.map(notice =>
-                    notice.announce_id === id
-                        ? { ...notice, view_count: notice.view_count + 1 }
-                        : notice
-                ));
-            } catch (error) {
-                console.error('조회수 업데이트 중 오류 상세:', error.response || error);
-            }
+        if (activeItem !== id) {
+            await noticeApi.announcement.increaseViewCount(id);
+            setNotices(notices.map(notice =>
+                notice.announce_id === id
+                    ? { ...notice, view_count: notice.view_count + 1 }
+                    : notice
+            ));
         }
         setActiveItem(activeItem === id ? null : id);
     };
@@ -73,9 +64,9 @@ const NoticeBoard = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/notice/announce/user/write', newNoticeItem);
-            if (response.data) {
-                setNotices(prev => [response.data, ...prev]);
+            const data = await noticeApi.announcement.createNotice(newNoticeItem);
+            if (data) {
+                setNotices(prev => [data, ...prev]);
                 setNewNotice({
                     title: '',
                     content: '',
@@ -94,12 +85,20 @@ const NoticeBoard = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/notice/announce/user/search`, {
-                params: { type: searchType, keyword: keyword }
-            });
-            setNotices(response.data);
+            const data = await noticeApi.announcement.searchNotices(searchType, keyword);
+            setNotices(data);
         } catch (error) {
             console.error('검색 중 오류가 발생했습니다:', error);
+        }
+    };
+
+    const handleDeleteNotice = async (announce_id) => {
+
+        if (window.confirm('공지사항을 삭제하시겠습니까?')) {
+            const data = await noticeApi.announcement.deleteNotice(announce_id);
+            setNotices(notices.filter(notice => notice.announce_id !== announce_id));
+        } else {
+            return;
         }
     };
 
@@ -139,52 +138,57 @@ const NoticeBoard = () => {
         }
     };
 
-
-
     return (
         <>
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div className="notice-board">
-                <div className="header">
-                    <h1 className="header-title">공지사항</h1>
-                    <p className="header-subtitle">SMARTY의 새로운 소식을 확인하세요</p>
+            <div className="ann-notice-board">
+                <div className="ann-header">
+                    <div className="ann-header-content">
+                        <h1 className="ann-header-title">공지사항</h1>
+                        <p className="ann-header-subtitle">공지사항을 확인해주세요</p>
+                    </div>
                 </div>
 
-                <div className="content-wrapper">
+                <div className="ann-content-wrapper">
                     {/* 검색창과 글쓰기 버튼을 포함하는 상단 섹션 */}
-                    <div className="top-section">
-                        <div className="search-container">
+                    <div className="ann-top-section">
+                        <div className="ann-search-container">
                             <input
                                 type="text"
                                 placeholder="검색어를 입력하세요"
                                 value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
-                                className="search-input"
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleSearch();
+                                    }
+                                }}
+                                className="ann-search-input"
                             />
-                            <button onClick={handleSearch} className="search-button">
+                            <button onClick={handleSearch} className="ann-search-button">
                                 검색
                             </button>
                         </div>
 
                         {/* 글쓰기 버튼을 별도로 분리 */}
                         <div className="write-button-container">
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="write-button"
-                            >
-                                글쓰기
-                            </button>
                         </div>
                     </div>
-
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="ann-write-button"
+                    >
+                        글쓰기
+                    </button>
                     {/* 컬럼 헤더 추가 */}
                     <div className="notice-header-columns">
                         <div className="column type">공지유형</div>
                         <div className="column title">제목</div>
                         <div className="column date">작성일</div>
                         <div className="column views">조회수</div>
+
                     </div>
 
                     <div className="notice-list">
@@ -217,20 +221,34 @@ const NoticeBoard = () => {
                                                 {notice.view_count}
                                             </span>
                                         </div>
+
                                     </div>
                                     {activeItem === notice.announce_id && (
-                                        <div
-                                            className="announcement-content"
-                                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-                                        >
-                                            {notice.content}
+                                        <div className="announcement-content">
+                                            <div className="content-text">
+                                                {notice.content}
+                                            </div>
+                                            <div className="notice-actions" style={{ marginTop: '20px', textAlign: 'right' }}>
+                                                <button
+                                                    onClick={() => handleDeleteNotice(notice.announce_id)}
+                                                    className="ann-delete-button"
+                                                    style={{ marginRight: '10px' }}
+                                                >
+                                                    삭제
+                                                </button>
+                                                <button
+                                                    className="ann-notice-modify"
+                                                    onClick={() => navigate(`/notice/announce/modify/${notice.announce_id}`)}
+                                                >
+                                                    수정
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
                             );
                         })}
                     </div>
-
                     {/* 페이지네이션 컨트롤 추가 */}
                     <div className="pagination">
                         <button
@@ -264,20 +282,20 @@ const NoticeBoard = () => {
                 </div>
 
                 {isModalOpen && (
-                    <div className="modal">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h2 className="modal-title">공지사항 작성</h2>
+                    <div className="ann-modal">
+                        <div className="ann-modal-content">
+                            <div className="ann-modal-header">
+                                <h2 className="ann-modal-title">공지사항 작성</h2>
                                 <button
-                                    className="modal-close-button"
+                                    className="ann-modal-close-button"
                                     onClick={handleCloseModal}
                                 >
                                     ×
                                 </button>
                             </div>
                             <form className="form" onSubmit={handleSubmit}>
-                                <div className="form-group">
-                                    <label className="form-label">공지 유형</label>
+                                <div className="ann-form-group">
+                                    <label className="ann-form-label">공지유형</label>
                                     <select
                                         name="isImportant"
                                         value={newNotice.isImportant}
@@ -289,36 +307,36 @@ const NoticeBoard = () => {
                                     </select>
                                 </div>
 
-                                <div className="form-group">
-                                    <label className="form-label">제목</label>
+                                <div className="ann-form-group">
+                                    <label className="ann-form-label">제목</label>
                                     <input
                                         type="text"
                                         name="title"
                                         value={newNotice.title}
                                         onChange={handleInputChange}
-                                        className="form-input"
+                                        className="ann-form-input"
                                         required
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label className="form-label">내용</label>
+                                <div className="ann-form-group">
+                                    <label className="ann-form-label">내용</label>
                                     <textarea
                                         name="content"
                                         value={newNotice.content}
                                         onChange={handleInputChange}
-                                        className="form-textarea"
+                                        className="ann-form-textarea"
                                         required
                                     />
                                 </div>
 
                                 <div className="form-buttons">
-                                    <button type="submit" className="submit-button">
+                                    <button type="submit" className="ann-submit-button">
                                         등록
                                     </button>
                                     <button
                                         type="button"
-                                        className="cancel-button"
+                                        className="ann-cancel-button"
                                         onClick={handleCloseModal}
                                     >
                                         취소

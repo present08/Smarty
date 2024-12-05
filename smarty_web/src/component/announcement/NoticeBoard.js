@@ -6,6 +6,7 @@ import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
 import Footer from '../Footer';
+import { noticeApi } from '../../api/noticeApi';
 
 function Announcement() {
     const navigate = useNavigate();
@@ -22,6 +23,29 @@ function Announcement() {
     });
 
     const [isModalState, setIsModalState] = useState(false);
+
+    // 페이지네이션을 위한 상태 추가
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(10);
+
+    // 검색을 위한 상태 추가
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchType, setSearchType] = useState('all');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+
+    // 현재 페이지의 게시글 계산
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = boards.slice(indexOfFirstPost, indexOfLastPost);
+
+    // 전체 페이지 수 계산
+    const pageNumbers = Math.ceil(boards.length / postsPerPage);
+
+    // 페이지 변경 핸들러
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -48,42 +72,69 @@ function Announcement() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const currentDate = new Date().toISOString().replace('Z', '');
-        const newNoticeItem = {
-            ...announcements,
-            send_date: currentDate
-        };
-        try {
-            const response = await axios.post("http://localhost:8080/notice/board/user/write", newNoticeItem);
-            if (response.data) {
-                const updatedResponse = await axios.get("http://localhost:8080/notice/board/user/list");
-                setBoards(updatedResponse.data);
 
+        const user = localStorage.getItem('user');
+        const userId = JSON.parse(user).userId;
+
+        if (!userId) {
+            try {
+                const sessionCheck = await noticeApi.checkSession();
+                if (sessionCheck.userId) {
+                    localStorage.setItem('userId', sessionCheck.userId);
+                } else {
+                    alert('로그인이 필요한 서비스입니다.');
+                    return;
+                }
+            } catch (error) {
+                console.error('세션 확인 실패:', error);
+                alert('로그인이 필요한 서비스입니다.');
+                return;
+            }
+        }
+
+        if (!announcements.title.trim() || !announcements.content.trim() || !announcements.content_type) {
+            alert('제목, 내용, 카테고리를 모두 입력해주세요.');
+            return;
+        }
+
+        const newNoticeItem = {
+            title: announcements.title.trim(),
+            content: announcements.content.trim(),
+            content_type: announcements.content_type,
+            user_id: userId,
+            view_count: 0,
+            good_btn: 0,
+            bad_btn: 0,
+            is_deleted: 0
+        };
+
+        try {
+            const response = await noticeApi.createNotice(newNoticeItem);
+            if (response >= 0) {
+                const updatedBoards = await noticeApi.getNoticeList();
+                setBoards(updatedBoards);
                 setAnnouncements({
                     title: '',
                     content: '',
-                    send_date: '',
                     content_type: '',
                     view_count: 0,
                     good_btn: 0,
                     bad_btn: 0
                 });
                 alert('게시글이 등록되었습니다.');
+                setIsModalState(false);
             }
         } catch (error) {
             console.error('게시글 작성 실패:', error);
             alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
-        } finally {
-            setIsModalState(false);
         }
     }
 
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/notice/board/user/list");
-                console.log('서버 응답 데이터:', response.data);
-                setBoards(response.data);
+                const data = await noticeApi.getNoticeList();
+                setBoards(data);
             } catch (error) {
                 console.error('게시글 불러오기 실패:', error);
             }
@@ -93,59 +144,133 @@ function Announcement() {
 
     const toggleItem = async (board_id) => {
         try {
-            await axios.post(`http://localhost:8080/notice/board/user/view/${board_id}`);
+            await noticeApi.updateViewCount(board_id);
             navigate(`/notice/board/${board_id}`)
         } catch (error) {
             console.error('조회수 업데이트 실패:', error);
         }
     }
 
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!searchKeyword.trim()) {
+            alert('검색어를 입력해주세요.');
+            return;
+        }
+
+        setIsSearching(true);
+        try {
+            const searchData = await noticeApi.searchNotices(searchKeyword, searchType);
+            if (searchData.length === 0) {
+                alert('검색 결과가 없습니다.');
+            }
+            setBoards(searchData);
+            setCurrentPage(1);
+        } catch (error) {
+            console.error('검색 실패:', error);
+            alert('검색 중 오류가 발생했습니다.');
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    const handleResetSearch = async () => {
+        setSearchKeyword('');
+        setSearchType('all');
+        setIsSearching(false);
+        try {
+            const data = await noticeApi.getNoticeList();
+            setBoards(data);
+            setCurrentPage(1);
+        } catch (error) {
+            console.error('게시글 목록 불러오기 실패:', error);
+        }
+    };
+
     return (
         <>
             <MainNav />
             <Wrapper />
             <BackToTopButton />
-            <div className="notice-board">
-                <div className="header">
-                    <div className="header-content">
-                        <h1 className="header-title">커뮤니티</h1>
-                        <p className="header-subtitle">회원들과 자유롭게 소통해보세요</p>
+            <div className="bd-notice-board">
+                <div className="bd-header">
+                    <div className="bd-header-content">
+                        <h1 className="bd-header-title">자유 게시판</h1>
+                        <p className="bd-header-subtitle">회원들과 자유롭게 소통해보세요</p>
                     </div>
                 </div>
 
                 <div className="container">
-                    <div className="button-container">
-                        <div>
-                            <h2 className="page-title">전체 게시글</h2>
-                        </div>
+                    {/* 검색 폼 추가 */}
+                    <form
+                        className='bd-search-form'
+                        onSubmit={handleSearch}>
+                        <select
+                            value={searchType}
+                            className='bd-search-select'
+                            onChange={(e) => setSearchType(e.target.value)}
+                        >
+                            <option value="all">전체</option>
+                            <option value="user_id">아이디</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                        </select>
+
+                        <input
+                            type="text"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                            placeholder="검색어를 입력하세요"
+                            className='bd-serach-input'
+                        />
+
                         <button
-                            className="write-button"
+                            type="submit"
+                            disabled={isSearching}
+                            className='bd-serach-button'
+                        >
+                            {isSearching ? '검색 중...' : '검색'}
+                        </button>
+                    </form>
+
+                    {/* 검색 결과가 없을 때 메시지 표시 */}
+                    {boards.length === 0 && (
+                        <div
+                            className='bd-search-result-message'>
+                            검색 결과가 없습니다.
+                        </div>
+                    )}
+
+                    <div className="bd-button-container">
+                        <h2 className="bd-page-title">전체 게시글</h2>
+                        <button
+                            className="bd-write-button"
                             onClick={() => setIsModalState(true)}
                         >
                             글쓰기
                         </button>
                     </div>
 
-                    <div className="table-container">
-                        <table className="table">
+                    <div className="bd-table-container">
+                        <table className="bd-table">
                             <thead>
                                 <tr>
                                     <th className="th" style={{ width: '8%' }}>번호</th>
                                     <th className="th" style={{ width: '15%' }}>카테고리</th>
-                                    <th className="th" style={{ width: '45%' }}>제목</th>
-                                    <th className="th" style={{ width: '15%' }}>작성자</th>
-                                    <th className="th" style={{ width: '17%' }}>작성일</th>
-                                    <th className="th" style={{ width: '15%' }}>조회수</th>
+                                    <th className="th" style={{ width: '40%' }}>제목</th>
+                                    <th className="th" style={{ width: '12%' }}>작성자</th>
+                                    <th className="th" style={{ width: '15%' }}>작성일</th>
+                                    <th className="th" style={{ width: '10%' }}>조회수</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {boards.map((item) => (
+                                {currentPosts.map((item, index) => (
                                     <tr
-                                        key={item.id}
-                                        className="table-row"
+                                        key={item.board_id}
+                                        className="bd-table-row"
                                         onClick={() => toggleItem(item.board_id)}
                                     >
-                                        <td className="td">{item.board_id}</td>
+                                        <td className="td">{boards.length - ((currentPage - 1) * postsPerPage + index)}</td>
                                         <td className="td">{item.content_type}</td>
                                         <td className="td title">{item.title}</td>
                                         <td className="td author">{item.user_id}</td>
@@ -155,62 +280,103 @@ function Announcement() {
                                         <td className="td">{item.view_count}</td>
                                     </tr>
                                 ))}
-                                {isModalState && (
-                                    <div className='modal'>
-                                        <div className='modal-content'>
-                                            <div className='modal-header'>
-                                                <h2 className='modal-title'>게시글 작성</h2>
-                                                <button className='modal-close-button' onClick={handleModalState}>
-                                                    ×
-                                                </button>
-                                            </div>
-                                            <form className='form' onSubmit={handleSubmit}>
-                                                <div className='form-group'>
-                                                    <label className='form-label'>제목</label>
-                                                    <input type='text' name='title'
-                                                        value={announcements.title}
-                                                        onChange={handleInputChange}
-                                                        className='form-input'
-                                                        required />
-                                                </div>
-                                                <div className='form-group'>
-                                                    <label className='form-label'>내용</label>
-                                                    <textarea name='content'
-                                                        value={announcements.content}
-                                                        onChange={handleInputChange}
-                                                        className='form-textarea'
-                                                        required />
-                                                </div>
-                                                <div className='form-group' q>
-                                                    <label className='form-label'>카테고리</label>
-                                                    <select name='content_type'
-                                                        value={announcements.content_type}
-                                                        onChange={handleInputChange}
-                                                        className='form-select'
-                                                        required>
-                                                        <option value="">카테고리 선택</option>
-                                                        <option value="일반">일반</option>
-                                                        <option value="질문">질문</option>
-                                                        <option value="수다">수다</option>
-                                                    </select>
-                                                </div>
-                                                <div className="form-buttons">
-                                                    <button type="submit" className="submit-button">
-                                                        등록
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="cancel-button"
-                                                        onClick={handleModalState}>
-                                                        취소
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                )}
                             </tbody>
                         </table>
+
+                        {/* 페이지네이션 UI 추가 */}
+                        <div className="bd-pagination">
+                            {/* 이전 페이지 버튼 */}
+                            <button
+                                className='bd-pagination-button'
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                이전
+                            </button>
+
+                            {/* 페이지 번호 버튼들 */}
+                            {Array.from({ length: pageNumbers }, (_, i) => i + 1).map(number => (
+                                <button
+                                    className='bd-pagenation-button2'
+                                    key={number}
+                                    onClick={() => handlePageChange(number)}
+                                >
+                                    {number}
+                                </button>
+                            ))}
+
+                            {/* 다음 페이지 버튼 */}
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === pageNumbers}
+                                className='bd-pagenation-button3'
+                            >
+                                다음
+                            </button>
+                        </div>
+
+                        {isModalState && (
+                            <div className='bd-modal'>
+                                <div className='bd-modal-content'>
+                                    <div className='modal-header'>
+                                        <h2 className='modal-title'>게시글 작성</h2>
+                                        <button className='modal-close-button' onClick={handleModalState}>
+                                            ×
+                                        </button>
+                                    </div>
+                                    <form className='form' onSubmit={handleSubmit} style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '20px'
+                                    }}>
+                                        <div className='bd-form-group'>
+                                            <label className='form-label'>제목</label>
+                                            <input type='text' name='title'
+                                                value={announcements.title}
+                                                onChange={handleInputChange}
+                                                className='form-input'
+                                                required />
+                                        </div>
+                                        <div className='form-group'>
+                                            <label className='form-label'>내용</label>
+                                            <textarea name='content'
+                                                value={announcements.content}
+                                                onChange={handleInputChange}
+                                                className='form-textarea'
+                                                required />
+                                        </div>
+                                        <div className='form-group'>
+                                            <label className='form-label'>카테고리</label>
+                                            <select name='content_type'
+                                                value={announcements.content_type}
+                                                onChange={handleInputChange}
+                                                className='form-select'
+                                                required>
+                                                <option value="">카테고리 선택</option>
+                                                <option value="가입인사">가입인사</option>
+                                                <option value="질문">질문</option>
+                                                <option value="수다">수다</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-buttons" style={{
+                                            display: 'flex',
+                                            gap: '10px',
+                                            justifyContent: 'flex-end'
+                                        }}>
+                                            <button type="submit" className="bd-submit-button">
+                                                등록
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="bd-cancel-button"
+                                                onClick={handleModalState}>
+                                                취소
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

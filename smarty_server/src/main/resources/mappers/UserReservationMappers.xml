@@ -61,4 +61,25 @@
         delete from reservation where reservation_id = #{reservation_id}
     </delete>
 
+    <select id="getUserMembership" resultType="String" parameterType="string">
+        select membership_level from membership where user_id = #{user_id}
+    </select>
+
+    <!--    (영준) user_id가 아니라 이메일을 가져오기 위한 코드-->
+    <select id="getEmailByUserId" resultType="String" parameterType="String">
+        SELECT email
+        FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+<!--        (영준) reservation_start 가 일주일 앞으로 다가오면 select 하는 코드-->
+    <select id="getStartBeforeSevendays" resultType="com.green.smarty.dto.ReservationDTO">
+        SELECT r.reservation_id, r.user_id, r.court_id, r.reservation_start, r.reservation_end, c.facility_id
+        FROM reservation r
+        JOIN court c ON r.court_id = c.court_id
+        WHERE r.reservation_start &lt;= NOW() + INTERVAL 7 DAY
+        AND r.reservation_start &gt; NOW();
+    </select>
+
+
 </mapper>

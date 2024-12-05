@@ -5,14 +5,11 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserVO {
-
     private String user_id;
     private String user_name;
     private String email;
@@ -25,29 +22,4 @@ public class UserVO {
     private boolean user_status;
     private byte[] qrCode;
     private String level;
-
-    // 사용자 ID에 대한 getter
-    public String getUserId() {
-        return user_id; // user_id에 대한 getter
-    }
-
-    // 사용자 이름에 대한 getter
-    public String getUserName() {
-        return user_name; // user_name에 대한 getter
-    }
-
-    // 가입 날짜에 대한 getter
-    public LocalDateTime getJoinDate() {
-        return join_date; // join_date에 대한 getter
-    }
-
-    // 로그인 날짜에 대한 getter
-    public LocalDate getLoginDate() {
-        return login_date; // login_date에 대한 getter
-    }
-
-    // 사용자 상태에 대한 getter
-    public boolean isUserStatus() {
-        return user_status; // user_status에 대한 getter
-    }
 }

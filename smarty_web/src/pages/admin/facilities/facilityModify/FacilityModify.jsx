@@ -3,11 +3,10 @@ import { DeleteOutline } from '@mui/icons-material';
 import { useEffect, useRef, useState } from "react"
 import { API_SERVER_HOST, getOneFacility, putOneFacility } from "../../../../api/admin/facilityApi"
 import Modal from "../../../../component/admin/modal/Modal"
-import NewCourt from "../newCourt/NewCourt"
 import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import { useNavigate, useParams } from "react-router-dom"
 import Price from "../../../../component/admin/price/Price"
-import CourtModify from "../CourtModify/CourtModify";
+import CourtModify from "../courtModify/CourtModify";
 
 const initFacility = {
     facility_name: '',
@@ -26,7 +25,6 @@ const initFacility = {
     facility_images: '',
     file_name: []
 }
-
 const initPrice = {
     basic_fee: '',
     rate_adjustment : '',
@@ -38,6 +36,7 @@ export default function FacilityModify() {
     const {facility_id} = useParams()
     const [currentFacility, setCurrentFacility] = useState(initFacility)    // 시설 기본값
     const [facility, setFacility] = useState(initFacility)                  // 변경값 반영, 무한 렌더링 방지
+    const [facilityStatus, setFacilityStatus] = useState()
     const [price, setPrice] = useState(initPrice)
     const [currentCourt, setCurrentCourt] = useState([])
     const [priceModal, setPriceModal] = useState(false)
@@ -47,7 +46,7 @@ export default function FacilityModify() {
     const [updateFile, setUpdateFile] = useState([])
     const [imageUpdate, setImageUpdate] = useState(false)
 
-//=============================GetApi===============================// 
+//=============================GET 요청===============================// 
 
     useEffect(() => {
     getOneFacility(facility_id).then(res => {
@@ -62,12 +61,14 @@ export default function FacilityModify() {
 //==============================Price=================================//
 
     useEffect(() => {
-    // 기본값 저장되면 priceModal로 전달할 price 객체 생성
+    // 시설 기본값 저장되면 priceModal로 전달할 price 객체 생성
     setPrice({
         basic_fee: currentFacility.basic_fee,
         rate_adjustment : currentFacility.rate_adjustment,
         hot_time : currentFacility.hot_time
     })
+    // facility_status 값 추출하여 저장
+    setFacilityStatus(currentFacility.facility_status)
     }, [currentFacility])
 
     const pricePass = (price) => {
@@ -112,7 +113,6 @@ export default function FacilityModify() {
         setPriceModal(true)
     }
     const handleCourtButton = () => {
-        console.log("여기")
         setCourtModal(true)
     }  
     const closeModal = () => {
@@ -154,13 +154,21 @@ export default function FacilityModify() {
     
 //====================================================================//
 
-//===============================PutApi===============================//
+//==============================PUT 요청==============================//
 
     const handleInput = (e) => {
-        // 수정사항 반영
         facility[e.target.name] = e.target.value
         setFacility({ ...facility })
     }
+    const handleCheck = (e) => {
+        facility[e.target.name] = e.target.value
+        setFacility({ ...facility })
+        setFacilityStatus(!facilityStatus)
+    }
+    useEffect(() => {
+      console.log(facility)
+    }, [facility])
+    
 
     const handleFacilityModify = () => {
         if(imageUpdate && updateFile.length > 0) {
@@ -195,18 +203,6 @@ export default function FacilityModify() {
             // 이미지 수정 없음
             putOneFacility(facility_id, facility).then(res => console.log(res)).catch((error) => console.error("ERROR! : ", error))
         }
-
-        // if(currentCourt.length > 0) {
-        //     putOneCourt(facility_id, currentCourt).then(res => console.log(res)).catch((error) => console.error("ERROR! : ", error))
-        // } else {
-        //     const defaultCourt = {
-        //         facility_id: facility_id,
-        //         court_name: facility.facility_name,
-        //         court_status: facility.facility_status
-        //     }
-        //     const courtArray = [defaultCourt]
-        //     putOneCourt(facility_id, courtArray)
-        // }
         putOneCourt(facility_id, currentCourt).then(res => console.log(res)).catch((error) => console.error("ERROR! : ", error))
         navigate({pathname: `/admin/facilities/read/${facility_id}`})
     }
@@ -297,45 +293,26 @@ export default function FacilityModify() {
                         </div>
                         <div className="leftItem">
                             <label>시설 개방</label>
-                            {facility.facility_status?
-                            <>
                                 <input
-                                    name="facility_status"
-                                    id="true"
-                                    type={"radio"}
-                                    defaultValue={true}
-                                    checked
-                                    onClick={(e) => handleInput(e)}
-                                />
-                                <label htmlFor="true"> 가능</label>
-                                <input
-                                    name="facility_status"
-                                    id="false"
-                                    type={"radio"}
-                                    defaultValue={false}
-                                    onClick={(e) => handleInput(e)}
-                                />
-                                <label htmlFor="false"> 불가</label>
-                            </>:
-                            <>
-                                <input
+                                    className="radio"
                                     name="facility_status"
                                     id="true"
                                     type={"radio"}
                                     value={true}
-                                    onClick={(e) => handleInput(e)}
+                                    checked={facilityStatus? true : false}
+                                    onChange={(e) => handleCheck(e)}
                                 />
                                 <label htmlFor="true"> 가능</label>
                                 <input
+                                    className="radio"
                                     name="facility_status"
                                     id="false"
                                     type={"radio"}
                                     value={false}
-                                    checked
-                                    onClick={(e) => handleInput(e)}
+                                    checked={facilityStatus? false : true}
+                                    onChange={(e) => handleCheck(e)}
                                 />
                                 <label htmlFor="false"> 불가</label>
-                            </>}
                         </div>
                         <div className="leftItem">
                             <span className="facilityReadText">  * 코트가 존재하는 경우 시설 개방은 코트 개방 여부에 따라 자동으로 설정됩니다.</span>

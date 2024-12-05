@@ -18,7 +18,6 @@ public interface UserProductMapper {
     ProductVO getProductById(String product_id);
 
     List<ProductDTO> getProductsByFacilityId(String facility_id);
-    String getProductNameByProductId(String product_id);
 
     //영준이 추가 코드
     String getProductNameByProductId(String product_id);

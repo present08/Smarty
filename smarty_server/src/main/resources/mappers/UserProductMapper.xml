@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -7,10 +6,9 @@
     <!--sql 구문을 써서 db에서 불러온다-->
 
     <insert id="insertProduct" parameterType="com.green.smarty.vo.ProductVO">
-        INSERT INTO product ( product_id, facility_id, product_name, stock, price, product_images, size )
-        VALUES (#{product_id}, #{facility_id}, #{product_name}, #{stock}, #{price}, #{product_images}, #{size} )
+        INSERT INTO product ( product_id, facility_id, product_name, management_type, stock, price, product_images, size )
+        VALUES (#{product_id}, #{facility_id}, #{product_name}, #{management_type}, #{stock}, #{price}, #{product_images}, #{size} )
     </insert>
-
 
     <select  id="getAllProducts" resultType="com.green.smarty.vo.ProductVO">
         SELECT
@@ -31,7 +29,6 @@
         ORDER BY
         p.product_id DESC
     </select>
-
 
     <delete id="deleteProduct">
         DELETE FROM product WHERE product_id = #{product_id}

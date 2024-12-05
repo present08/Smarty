@@ -91,7 +91,7 @@ public class UserController {
 
                 MembershipVO membership = new MembershipVO();
                 membership.setMembership_id(membershipId);
-                membership.setMembership_level("bronze");
+                membership.setMembership_level("브론즈");
                 membership.setUser_id(userVO.getUser_id());
 
                 boolean isMembershipSaved = userMembershipService.saveMembership(membership);

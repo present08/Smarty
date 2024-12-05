@@ -52,7 +52,9 @@ public class UserController {
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
+
         System.out.println(userVO);
+
         // 가입 날짜와 로그인 날짜 자동 설정
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());

@@ -45,23 +45,21 @@
         OR last_reset_date IS NULL;
     </update>
 
-    <!-- 6개월 또는 12개월마다 잔여 금액을 리셋 -->
-<!--    <update id="resetRemainingAmountEvery6Months">-->
-<!--        UPDATE payment p-->
-<!--        LEFT JOIN reservation r ON p.reservation_id = r.reservation_id-->
-<!--        LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id-->
-<!--        LEFT JOIN rental ren ON p.rental_id = ren.rental_id-->
-<!--        LEFT JOIN membership m ON r.user_id = m.user_id OR e.user_id = m.user_id OR ren.user_id = m.user_id-->
-<!--        SET p.amount = 0-->
-<!--        WHERE (-->
-<!--        TIMESTAMPDIFF(MONTH, m.last_reset_date, CURRENT_TIMESTAMP) >= 6-->
-<!--        OR m.last_reset_date IS NULL-->
-<!--        )-->
-<!--        AND (MONTH(CURRENT_TIMESTAMP) = 6 OR MONTH(CURRENT_TIMESTAMP) = 12)-->
-<!--        AND (r.user_id IS NOT NULL OR e.user_id IS NOT NULL OR ren.user_id IS NOT NULL);-->
-<!--    </update>-->
-
-
-
+    <!--     6개월 또는 12개월마다 잔여 금액을 리셋-->
+    <update id="resetRemainingAmountEvery6Months">
+        UPDATE payment p
+        LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
+        LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
+        LEFT JOIN rental ren ON p.rental_id = ren.rental_id
+        LEFT JOIN membership m ON r.user_id = m.user_id OR e.user_id = m.user_id OR ren.user_id = m.user_id
+        SET p.amount = 0
+        WHERE (
+        TIMESTAMPDIFF(MONTH, m.last_reset_date, CURRENT_TIMESTAMP) >= 6
+        OR m.last_reset_date IS NULL
+        )
+        AND (MONTH(CURRENT_TIMESTAMP) = 6 OR MONTH(CURRENT_TIMESTAMP) = 12)
+        AND (r.user_id IS NOT NULL OR e.user_id IS NOT NULL OR ren.user_id IS NOT NULL);
+    </update>
 
 </mapper>
+

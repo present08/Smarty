@@ -1,29 +1,41 @@
-.classContainerTop {
-    display: flex;
-    gap: 30px;
-    align-items: center;
+.classList {
+    width: 100%;
+    height: 100%;
 }
 
+.classContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.classListHead {
+    display: flex;
+    align-items: center;
+}
 .classTitle {
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
+    margin-right: 1rem;
 }
 
 .classAddButton {
-    width: 80px;
-    height: 25px;
-    border: none;
-    background-color: #003f66;
-    color: aliceblue;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
+    color: #919191;
+    font-size: 30px !important;
     cursor: pointer;
 }
 
-.classReadButton,
-.classDeleteButton {
+.classListTable {
+    width: 1000px;
+    height: 600px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(191, 189, 189, 0.7);
+}
+
+.classListButton {
     border: none;
     border-radius: 10px;
     padding: 5px 10px;
@@ -31,4 +43,9 @@
     color: aliceblue;
     cursor: pointer;
     margin-right: 10px;
+}
+
+
+.classListButton:disabled{
+    background-color: #919191;
 }

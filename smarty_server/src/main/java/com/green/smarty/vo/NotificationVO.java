@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -16,7 +17,12 @@ public class NotificationVO {
     private String notification_id;
     private String user_id;
     private String message;
+    private String status;              // 전송 상태 (SUCCESS or FAILURE)
+    private String response_detail;      // 응답 메시지나 실패 이유
+    private String user_name;
+    private String message_type;
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate send_date;
+    private LocalDateTime send_date;
 }

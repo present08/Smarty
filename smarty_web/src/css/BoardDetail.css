@@ -34,7 +34,7 @@
   padding: 1rem 0;
 }
 
-.board-actions {
+.bdd-board-actions {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
@@ -42,7 +42,7 @@
   border-top: 1px solid #e0e0e0;
 }
 
-.board-actions button {
+.bdd-board-actions button {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
@@ -53,20 +53,40 @@
   color: #333;
 }
 
-.board-actions button:hover {
+.bdd-board-actions button:hover {
   background-color: #e0e0e0;
 }
 
 /* 좋아요/싫어요 버튼 특별 스타일 */
-.board-actions button:nth-child(1),
-.board-actions button:nth-child(2) {
+.bdd-board-actions button:nth-child(1) {
   background-color: #4a90e2;
   color: white;
 }
 
-.board-actions button:nth-child(1):hover,
-.board-actions button:nth-child(2):hover {
+.bdd-board-actions button:nth-child(2) {
+  background-color: #e02929;
+  color: white;
+}
+
+.bdd-board-actions button:nth-child(2):hover,
+.bdd-board-actions button:nth-child(4):hover {
+  background-color: #c02020;
+}
+
+.bdd-board-actions button:nth-child(1):hover,
+.bdd-board-actions button:nth-child(5):hover {
   background-color: #357abd;
+}
+
+.bdd-board-actions button:nth-child(4) {
+  margin-left: auto;
+  background-color: #e02929;
+  color: white;
+}
+
+.bdd-board-actions button:nth-child(5) {
+  background-color: #4a90e2;
+  color: white;
 }
 
 /* 댓글 섹션 스타일 */
@@ -115,9 +135,54 @@
 }
 
 .comment {
-  padding: 1rem;
-  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
   border-radius: 4px;
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.comment-actions {
+  margin-left: auto;
+}
+
+.comment-actions button {
+  margin-left: 8px;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment-edit-form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.comment-edit-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.comment-edit-buttons button {
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .comment-content {

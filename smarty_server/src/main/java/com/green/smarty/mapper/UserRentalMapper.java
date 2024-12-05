@@ -5,6 +5,7 @@ import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.vo.RentalVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
@@ -33,6 +34,16 @@ public interface UserRentalMapper {
     //대여 반납 처리
     int returnRental(RentalVO vo);
 
+    int updatePaymentStatus(Map<String, Object> map);
+
     //특정 사용자 대여 목록 조회
     List<ProductRentalUserDTO> getUserRentalListData(String user_id);
+
+    String getMaxRentalIdForDate(@Param("datePrefix") String datePrefix);
+    //  (영준) 기간 지난 사람 색출해서 알림을 보내기 위한 코드
+    List<RentalDTO> getOverdueRentals();
+
+    //  (영준) user_id가 아니라 이메일을 가져오기 위한 코드
+    String getEmailByUserId(String user_id);
+
 }

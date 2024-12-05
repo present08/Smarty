@@ -35,7 +35,7 @@
 }
 .modalBoxContent {
     flex: 10;
-    width: 80%;
+    width: 90%;
     overflow-y: auto;
 }
 

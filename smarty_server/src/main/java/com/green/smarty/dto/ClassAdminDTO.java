@@ -17,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassAdminDTO {
-    private String class_id;
     private String facility_id;
+    private String class_id;
     private String class_name;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -32,7 +32,6 @@ public class ClassAdminDTO {
     private LocalTime end_time;
 
     private int price;
-
     private int class_size;
 
     @Builder.Default
@@ -40,6 +39,4 @@ public class ClassAdminDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate class_date;
-
-    private String facility_name;
 }

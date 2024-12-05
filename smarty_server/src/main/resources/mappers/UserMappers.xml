@@ -14,8 +14,8 @@
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code, fcmToken)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode}, #{fcmToken})
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
     </insert>
 
     <!-- 아이디 찾기-->
@@ -23,11 +23,6 @@
         SELECT user_id FROM user
         WHERE email = LOWER(#{email})
         AND user_name = LOWER(#{user_name})
-    </select>
-<!--    fcm_token용 아이디 찾기-->
-    <select id="finByIdFcm">
-        SELECT fcmToken FROM user
-        WHERE user_id = #{user_id}
     </select>
 
     <!-- 비밀번호 찾기 -->
@@ -77,11 +72,11 @@
     </update>
 
     <!-- 회원 레벨 업데이트 -->
-    <update id="updateUserLevel">
-        UPDATE user
-        SET level = #{level}
-        WHERE user_id = #{userId}
-    </update>
+<!--    <update id="updateUserLevel">-->
+<!--        UPDATE user-->
+<!--        SET level = #{level}-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </update>-->
 
     <!-- 유저 수강신청 불러오기-->
     <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
@@ -89,6 +84,7 @@
         u.user_id,
         u.user_name,
         e.enrollment_id,
+        e.enrollment_status,
         e.class_id,
         c.class_name,
         c.start_date,
@@ -126,6 +122,34 @@
         ON f.facility_id = p.facility_id
         WHERE
         u.user_id = #{user_id};
+    </select>
+
+    <select id="getUserEmailById" parameterType="String">
+        SELECT email FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getUserNameById" parameterType="String">
+        SELECT user_name FROM user
+        WHERE user_id = #{user_id}
+    </select>
+
+    <select id="getIdByEmail" parameterType="String">
+        SELECT user_id FROM user
+        WHERE email = #{email}
+    </select>
+
+    <select id="getUserHuman" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user
+        WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+        AND user_status = 1;
+    </select>
+
+    <select id="getUserHumanBerforeSevendays" parameterType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user u
+        INNER JOIN notification n
+        ON u.user_id = n.user_id
+        WHERE n.sent_human_message = 1
     </select>
 
 </mapper>

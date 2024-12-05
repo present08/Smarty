@@ -4,26 +4,10 @@
 <!--    게시글 작성-->
     <insert id="insertBoard" parameterType="com.green.smarty.dto.BoardDTO" useGeneratedKeys="true" keyProperty="board_id">
         INSERT INTO board (
-        title,
-        content,
-        send_date,
-        content_type,
-        view_count,
-        good_btn,
-        bad_btn,
-        is_deleted,
-        user_id
+        title, content, send_date, content_type, view_count, good_btn, bad_btn, is_deleted, user_id
         )
         VALUES (
-        #{title},
-        #{content},
-        NOW(),
-        #{content_type},
-        #{view_count},
-        #{good_btn},
-        #{bad_btn},
-        #{is_deleted},
-        #{user_id}
+        #{title}, #{content}, NOW(), #{content_type}, #{view_count}, #{good_btn}, #{bad_btn}, #{is_deleted}, #{user_id}
         )
     </insert>
 <!--    board_id로 게시글 조회-->
@@ -105,11 +89,6 @@
     <update id="updateBad" parameterType="int">
         UPDATE board SET bad_btn = bad_btn + 1 WHERE board_id = #{board_id}
     </update>
-
-<!--    댓글 작성-->
-    <insert id="insertReply" parameterType="com.green.smarty.dto.BoardDTO">
-        INSERT INTO board ()
-    </insert>
 
 <!--    삭제된 날짜-->
     <update id="deletedDate">

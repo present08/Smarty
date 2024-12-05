@@ -16,7 +16,7 @@ public class AdminCourtController {
     @Autowired
     private AdminCourtService adminCourtService;
 
-    // 코트 등록
+    // Create
     @PostMapping("/")
     public List<String> register(@RequestBody List<CourtVO> courtList) {
         System.out.println("코트 등록 리스트! courtList = " + courtList);
@@ -24,6 +24,7 @@ public class AdminCourtController {
         return courtIdList;
     }
 
+    // Read
     // 선택 시설의 코트 전체 조회
     @GetMapping("/list/{facility_id}")
     public List<CourtVO> getList(@PathVariable (name = "facility_id") String facility_id) {
@@ -39,7 +40,7 @@ public class AdminCourtController {
         return adminCourtService.read(court_id);
     }
 
-    // Update (코트 수정)
+    // Update
     @PutMapping("/{facility_id}")
     public String modify(
             @PathVariable(name = "facility_id") String facility_id,
@@ -48,7 +49,7 @@ public class AdminCourtController {
         return "코트 수정 성공";
     }
 
-    // Delete (코트 삭제)
+    // Delete
     @DeleteMapping("/{court_id}")
     public String remove(@PathVariable(name = "court_id") String court_id) {
         System.out.println("코트 삭제! court_id = " + court_id);

@@ -4,8 +4,8 @@ import { getListFacility } from "../../../api/admin/facilityApi";
 import "./sidebar.css";
 
 export default function Sidebar() {
-    const { facility_id } = useParams()
-    const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
+    const {facility_id} = useParams()
+    const [facility, setFacility] = useState([])
 
     useEffect(() => {
         getListFacility().then(res => {
@@ -49,7 +49,7 @@ export default function Sidebar() {
                         {facility && facility.map((facility, i) => (
                             <li
                                 key={i}
-                                className="sidebarListItem collapse"
+                                className="sidebarListItem"
                                 id={`sidebarListItem${i}`}
                             >
                                 {facility.facility_name}

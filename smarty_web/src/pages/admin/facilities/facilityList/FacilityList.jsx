@@ -1,18 +1,21 @@
 import "./facilityList.css"
 import { useEffect, useState } from "react"
 import { DataGrid } from '@mui/x-data-grid';
-import { Add } from '@mui/icons-material';
 import { getListFacility } from "../../../../api/admin/facilityApi"
 import { Link } from "react-router-dom"
 
 export default function FacilityList() {
   const [facilityList, setFailityList] = useState([])
 
+  //=================================GET 요청=================================//
   useEffect(() => {
     getListFacility().then(res => {
       setFailityList(res)
     }).catch((error) => console.error('에러 발생 : ', error))
   }, [])
+  //==========================================================================//
+  
+  //=================================DataGrid=================================//
 
   const columns = [
     { field: 'facility_id', headerName: '시설 ID', width: 180 },
@@ -35,8 +38,8 @@ export default function FacilityList() {
       }
     }
   ];
-
   const paginationModel = { page: 0, pageSize: 10 };
+  //==========================================================================//
 
   return (
     <div className="facilityList">
@@ -47,7 +50,6 @@ export default function FacilityList() {
             <button className="facilityAddButton">시설추가</button>
           </Link>
         </div>
-
         <DataGrid
           className="facilityTable"
           rows={facilityList}

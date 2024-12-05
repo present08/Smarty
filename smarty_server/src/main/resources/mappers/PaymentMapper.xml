@@ -37,49 +37,13 @@
     </update>
 
 <!--    (영준) -->
-    <select id="getUserIdByPaymentId" parameterType="String" resultType="String">
-        SELECT
-        r.user_id
-        FROM
-        payment p
-        JOIN
-        rental r
-        ON
-        p.rental_id = r.rental_id
-        WHERE
-        p.payment_id = #{payment_id}
+    <select id="selectScatter" parameterType="String" resultType="com.green.smarty.dto.ScatterDTO">
+        select e.user_id, c.class_name
+        from payment p
+        join enrollment e
+        on p.enrollment_id=e.enrollment_id
+        join class c
+        on e.class_id=c.class_id
+        where payment_id = #{payment_id}
     </select>
-    <select id="getClassNameByPaymentId" parameterType="String" resultType="String">
-        SELECT
-        c.class_name
-        FROM
-        payment p
-        JOIN
-        reservation r
-        ON
-        p.reservation_id = r.reservation_id
-        JOIN
-        class c
-        ON
-        r.court_id = c.facility_id
-        WHERE
-        p.payment_id = #{payment_id}
-    </select>
-    <select id="getEmailByPaymentId" parameterType="String" resultType="String">
-        SELECT
-        u.email
-        FROM
-        payment p
-        JOIN
-        rental r
-        ON
-        p.rental_id = r.rental_id
-        JOIN
-        user u
-        ON
-        r.user_id = u.user_id
-        WHERE
-        p.payment_id = #{payment_id}
-    </select>
-
 </mapper>

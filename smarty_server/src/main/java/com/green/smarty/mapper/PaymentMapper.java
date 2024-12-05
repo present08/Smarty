@@ -1,6 +1,7 @@
 package com.green.smarty.mapper;
 
 import com.green.smarty.dto.EnrollmentClassDTO;
+import com.green.smarty.dto.ScatterDTO;
 import com.green.smarty.vo.PaymentVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,5 @@ public interface PaymentMapper {
     void updateEnroll(String enrollment_id);
 
     // (영준)
-    String getUserIdByPaymentId(String payment_id);
-    String getClassNameByPaymentId(String payment_id);
-    String getEmailByPaymentId(String payment_id);
+    ScatterDTO selectScatter(String payment_id);
 }

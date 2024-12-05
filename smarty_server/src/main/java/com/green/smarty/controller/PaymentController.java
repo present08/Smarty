@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.dto.*;
 import com.green.smarty.mapper.*;
 import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserFacilityService;
@@ -19,11 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.green.smarty.dto.EnrollmentClassDTO;
-import com.green.smarty.dto.PaymentDetailDTO;
-import com.green.smarty.dto.ReservationDTO;
-import com.green.smarty.dto.UserActivityDTO;
-import com.green.smarty.dto.UserReservationDTO;
 import com.green.smarty.service.PaymentService;
 import com.green.smarty.service.UserMembershipService;
 import com.green.smarty.service.UserReservationService;
@@ -52,6 +48,10 @@ public class PaymentController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserMembershipService userMembershipService;
+
 
     // (영준)
     @Autowired
@@ -210,16 +210,15 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
-        String user_id = paymentMapper.getUserIdByPaymentId(vo.getPayment_id());
-        System.out.println(vo);
-        System.out.println(user_id);
-        String user_name = userMapper.getUserNameById(user_id);
-        String email = userMapper.getUserEmailById(user_id);
-        String class_name = paymentMapper.getClassNameByPaymentId(vo.getPayment_id());
+//        (영준) 이메일 발송 코드
+        ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());
+        String user_name = userMapper.getUserNameById(scatterDTO.getUser_id());
+        String email = userMapper.getUserEmailById(scatterDTO.getUser_id());
+        String class_name = scatterDTO.getClass_name();
         System.out.println("User Name: " + user_name);
         System.out.println("Class Name: " + class_name);
         System.out.println("Email: " + email);
-        sendEmailService.sendClassReservarion(user_name, class_name ,email);
+        sendEmailService.sendClassReservation(user_name, class_name ,email);
 
         System.out.println("예약이 완료 됨");
         return "예약 완료";

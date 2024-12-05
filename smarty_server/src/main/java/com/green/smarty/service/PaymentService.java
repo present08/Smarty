@@ -58,6 +58,7 @@ public class PaymentService {
         String userName = userMapper.getUserNameById(user_id);
         String userEmail = userMapper.getUserEmailById(user_id);
         String productName = userProductMapper.getProductNameByProductId(product_id);
+
         if (userName == null || userEmail == null || productName == null) {
             System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
             throw new IllegalArgumentException("유효하지 않은 데이터입니다.");

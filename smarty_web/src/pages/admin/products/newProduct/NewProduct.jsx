@@ -82,6 +82,8 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
         alert("상품 등록 성공!");
         setProductList([]); // 리스트 초기화
         onClose(); // 모델창 닫기
+        window.location.reload(); // 강력하고 간단한 해결
+
       } catch (error) {
         console.error("상품 등록 실패:", error);
         alert("상품 등록 중 오류가 발생했습니다.");

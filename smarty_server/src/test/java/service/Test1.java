@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -17,11 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.green.smarty.SmartyApplication;
-import com.green.smarty.dto.ReservationDTO;
 import com.green.smarty.mapper.UserClassMapper;
 import com.green.smarty.mapper.UserReservationMapper;
+import com.green.smarty.service.UserClassService;
 import com.green.smarty.vo.ClassDetailVO;
 import com.green.smarty.vo.ClassVO;
+import com.green.smarty.vo.EnrollmentVO;
 import com.green.smarty.vo.FacilityVO;
 
 @SpringBootTest(classes = SmartyApplication.class)
@@ -31,6 +33,8 @@ public class Test1 {
     private UserClassMapper userClassMapper;
     @Autowired
     private UserReservationMapper userReservationMapper;
+    @Autowired
+    private UserClassService userClassService;
 
     @Test
     public void dateTest() {
@@ -202,17 +206,33 @@ public class Test1 {
 
         LocalDateTime date3 = LocalDateTime.of(2021, 6, 19, 4, 15, 0);
         LocalDateTime date4 = LocalDateTime.of(2021, 6, 19, 6, 20, 30);
-        compareHour(date3, date4);
     }
 
-    public static int compareHour(LocalDateTime date1, LocalDateTime date2) {
-        LocalDateTime dayDate1 = date1.truncatedTo(ChronoUnit.HOURS);
-        LocalDateTime dayDate2 = date1.truncatedTo(ChronoUnit.HOURS);
-        int compareResult = dayDate1.compareTo(dayDate2);
-        System.out.println("=== 시간 단위 비교 ===");
-        System.out.println("date1.truncatedTo(ChronoUnit.HOURS) : " + dayDate1);
-        System.out.println("date2.truncatedTo(ChronoUnit.HOURS) : " + dayDate2);
-        System.out.println("결과 : " + compareResult);
-        return compareResult;
+    @Test
+    public void compareHour() {
+        String date = "2024-11-28";
+        int default_time = 2;
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS);
+
+        String[] dateList = date.split("-");
+        for (int i = 0; i < 10; i++) {
+            LocalDateTime nowStart = LocalDateTime.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),
+                    Integer.parseInt(dateList[2]), 5 + i, 0).truncatedTo(ChronoUnit.HOURS);
+            System.out.println(nowStart);
+            System.out.println(now.compareTo(nowStart.minusHours((long) default_time + 1)));
+        }
+    }
+
+    @Test
+    public void test213() {
+        LocalDate now = LocalDate.now();
+        System.out.println(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+    }
+
+    @Test
+    public void classEnrollment() {
+        Map<String, String> enrollData = Map.of("user_id","qwe", "class_id","C_642801");
+        EnrollmentVO enrollCheck = userClassMapper.enrollCheck(enrollData);
+        System.out.println("enrollCheck ==== " + enrollCheck);
     }
 }

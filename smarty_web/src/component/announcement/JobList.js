@@ -75,6 +75,7 @@ const JobList = () => {
         },
     ]
 
+    // 지원완료 알림창
     const handleApply = (job) => {
         if (appliedJobs.some(appliedJob => appliedJob.id === job.id)) {
             alert('이미 지원한 직무입니다.');
@@ -87,6 +88,7 @@ const JobList = () => {
         }, 3000);
     };
 
+    // 필터링 
     const filteredJobs = jobList.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedCategory === '' || job.tags.includes(selectedCategory))
@@ -97,7 +99,7 @@ const JobList = () => {
             {showNotification && (
                 <div className='showNotificBut' >
                     지원이 완료되었습니다!
-                    <button ><AiOutlineClose style={{ width: '50px', height: '50px' }} /></button>
+                    <AiOutlineClose style={{ width: '30px', height: '30px' }} />
                 </div>
             )}
             <div className='jobList_box'>
@@ -124,7 +126,7 @@ const JobList = () => {
                             <option value="Adobe XD">Adobe XD</option>
                             <option value="Figma">Figma</option>
                             <option value="HTML">HTML</option>
-                            <option value="Css">Css</option>
+                            <option value="CSS">CSS</option>
                             <option value="jQuery">jQuery</option>
                             <option value="Node.js">Node.js</option>
                             <option value="Express">Express</option>

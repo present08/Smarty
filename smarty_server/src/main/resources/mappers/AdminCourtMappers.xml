@@ -14,7 +14,7 @@
         select * from court where court_id=#{court_id}
     </select>
 
-    <select id="maxClassId">
+    <select id="maxCourtIdx">
         select max(court_id) from court where facility_id=#{facility_id}
     </select>
 

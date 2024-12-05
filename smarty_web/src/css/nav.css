@@ -106,6 +106,11 @@
     font-weight: bold;
 }
 
+.toggleIcon {
+    display: none;
+}
+
+
 
 /* 모달  */
 
@@ -178,79 +183,6 @@
     margin-right: 10px;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 1024px) {
-    .navbox {
-        width: 100%;
-    }
-
-    .listbox ul {
-        flex-direction: column;
-        align-items: center;
-        display: none;
-    }
-
-    .listbox ul.active {
-        display: flex;
-    }
-
-    .iconbox {
-        justify-content: flex-end;
-    }
-}
-
-@media (max-width: 768px) {
-    .mainnav {
-        flex-direction: column;
-    }
-
-    .logo h1 {
-        font-size: 30px;
-    }
-
-    .listbox ul li {
-        padding: 10px 0;
-    }
-
-    .searchModal-content {
-        width: 90%;
-    }
-
-    .searchBox input {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    nav {
-        height: auto;
-    }
-
-    .mainnav {
-        flex-direction: column;
-    }
-
-    .iconbox a {
-        margin-right: 10px;
-    }
-
-    .listbox ul {
-        flex-direction: column;
-        display: none;
-    }
-
-    .listbox ul.active {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .searchBox input {
-        width: 60%;
-    }
-}
-
 .sub-nav {
     display: flex;
     justify-content: center;
@@ -262,6 +194,44 @@
 }
 
 .sub-nav.active {
-    max-height: 200px; 
+    max-height: 200px;
     opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+
+    .mainnav {
+        flex-direction: column;
+    }
+
+    .logo h1 {
+        font-size: 30px;
+    }
+
+    .searchModal-content {
+        width: 90%;
+    }
+
+    .searchBox input {
+        width: 100%;
+    }
+
+    .toggleIcon {
+        display: block;
+    }
+
+    .listbox ul {
+        flex-direction: column;
+    }
+
+
+    .subnav.active,
+    .mainnav.active {
+        display: block;
+        flex-direction: column;
+        max-height: 500px;
+        transition: max-height 0.3s ease-in-out;
+    }
+
 }

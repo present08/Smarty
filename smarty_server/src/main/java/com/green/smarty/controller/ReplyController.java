@@ -52,8 +52,15 @@ public class ReplyController {
         }
     }
 
-    @DeleteMapping("/delete/{board_id}")
-    public void replyMapper(@PathVariable int board_id){
-        replyMapper.deleteById(board_id);
+    @DeleteMapping("/delete/{reply_id}")
+    public void deleteById(@PathVariable int reply_id){
+        replyMapper.deleteById(reply_id);
+    }
+
+    @PutMapping("/modify/{reply_id}")
+    public int updateById(@PathVariable("reply_id") int reply_id , @RequestBody ReplyDTO replyDTO){
+        replyDTO.setReply_id(reply_id);
+        int update = replyService.updateById(replyDTO);
+        return update;
     }
 }

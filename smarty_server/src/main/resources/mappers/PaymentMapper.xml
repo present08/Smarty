@@ -8,14 +8,16 @@
             reservation_id,
             enrollment_id,
             amount,
-            payment_date
+            payment_date,
+            payment_status
         )
         VALUES (
             #{payment_id},
             #{reservation_id},
             #{enrollment_id},
             #{amount},
-            #{payment_date}
+            #{payment_date},
+            #{payment_status}
         )
     </insert>
 
@@ -25,9 +27,29 @@
         WHERE
             payment_id = #{payment_id}
     </select>
+
+    <select id="getMaxPaymentIdForDate" parameterType="string" resultType="string">
+        SELECT MAX(payment_id)
+        FROM payment
+        WHERE payment_id LIKE CONCAT('P_', #{datePrefix}, '%')
+    </select>
+
+    <!-- enrollment -->
     <select id="getEnrollmentClass" resultType="com.green.smarty.dto.EnrollmentClassDTO">
         select * from enrollment e join class c using(class_id)
     </select>
+    <update id="updateEnroll" parameterType="string">
+        update enrollment set enrollment_status ='승인대기' where enrollment_id = #{enrollment_id}
+    </update>
 
-
+<!--    (영준) -->
+    <select id="selectScatter" parameterType="String" resultType="com.green.smarty.dto.ScatterDTO">
+        select e.user_id, c.class_name
+        from payment p
+        join enrollment e
+        on p.enrollment_id=e.enrollment_id
+        join class c
+        on e.class_id=c.class_id
+        where payment_id = #{payment_id}
+    </select>
 </mapper>

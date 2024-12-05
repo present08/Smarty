@@ -4,12 +4,29 @@
     align-items: flex-start;
     height: 100%;
 }
+.facilityReadHead {
+    height: 10%;
+    display: flex;
+    align-items: flex-start;
+}
 
 .facilityReadTitle {
-    height: 10%;
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
+    margin-right: 1rem;
+}
+
+.facilityModifyButton {
+    width: 60px;
+    height: 30px;
+    border: none;
+    background-color: #195E8E;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 .facilityReadForm {
@@ -35,13 +52,16 @@
 .leftItemTitle,
 .rightItemTitle {
     flex: 1;
-    font-size: 16px;
+    font-size: 20px;
     color: #555;
     display: flex;
 }
 .leftItemContent,
 .rightItemContent {
     flex: 9;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .leftItem,
@@ -49,14 +69,13 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 label,
 .courtItemTitle,
 .imageItemTitle {
     font-weight: 300;
-    font-size: 16px;
+    font-size: 17px;
     color: #555;
 }
 
@@ -64,7 +83,10 @@ label,
 .rightItem>input {
     border: none;
     height: 30px;
+    font-size: 16px;
+    color: #555;
 }
+.leftItem:nth-child(2)>input:last-child,
 .rightItem>input {
     width: 100px;
 }
@@ -157,17 +179,4 @@ label,
 img {
     width: 300px;
     height: 180px;
-}
-
-.facilityModifyButton {
-    width: 80px;
-    height: 25px;
-    border: none;
-    background-color: #195E8E;
-    color: aliceblue;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 30px;
 }

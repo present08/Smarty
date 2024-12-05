@@ -1,18 +1,18 @@
-import "./sidebar.css"
+import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
-import { useEffect, useState } from "react";
+import "./sidebar.css";
 
 export default function Sidebar() {
     const {facility_id} = useParams()
-    const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
+    const [facility, setFacility] = useState([])
 
     useEffect(() => {
         getListFacility().then(res => {
             setFacility(res)
         }).catch((error) => console.log("ERROR! : ", error))
     }, [facility_id])
-    
+
     return (
         <div className="sidebar">
             <div className="sidebarWrapper">
@@ -35,6 +35,11 @@ export default function Sidebar() {
                                 시설추가
                             </Link>
                         </li>
+                        <li className="sidebarListItem">
+                            <Link to="/admin/permission" className="link">
+                                결제/승인
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 
@@ -44,27 +49,23 @@ export default function Sidebar() {
                         {facility && facility.map((facility, i) => (
                             <li
                                 key={i}
-                                className="sidebarListItem collapse"
+                                className="sidebarListItem"
                                 id={`sidebarListItem${i}`}
                             >
                                 {facility.facility_name}
                                 <ul className="sidebarSubListItem">
-                                    <Link to={`/admin/facilities/read/${facility.facility_id}`}
-                                        className="link"
-                                    >
+                                    <Link to={`/admin/facilities/read/${facility.facility_id}`} className="link">
                                         <li className="sidebarSublistItem">시설</li>
                                     </Link>
-                                    <Link to={`/admin/classes/${facility.facility_id}`}
-                                        className="link"
-                                    >
+                                    <Link to={`/admin/classes/${facility.facility_id}`} className="link">
                                         <li className="sidebarSublistItem">강의</li>
                                     </Link>
-                                    <Link to={`/admin/products/${facility.facility_id}`}
-                                    className="link"
-                                    >
-                                    <li className="sidebarSublistItem">물품</li>
+                                    <Link to={`/admin/products/${facility.facility_id}`} className="link">
+                                        <li className="sidebarSublistItem">물품</li>
                                     </Link>
-                                    <li className="sidebarSublistItem">이용현황</li>
+                                    <Link to={`/admin/status/${facility.facility_id}`} className="link">
+                                        <li className="sidebarSublistItem">이용현황</li>
+                                    </Link>
                                 </ul>
                             </li>
                         ))}

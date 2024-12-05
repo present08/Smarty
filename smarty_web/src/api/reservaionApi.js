@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const host = "http://localhost:8080/api/user/reservation"
 
@@ -24,4 +24,9 @@ export const deleteReservation = async (reservation_id, user_id) => {
     console.log(reservation_id, user_id)
     const response = await axios.delete(`${host}/${reservation_id}`, { params: { user_id } })
     return response.data
+}
+
+export const MembershipUser = async (user_id) => {
+    const response = await axios.get(`${host}/membership/${user_id}`)
+    return response.data;
 }

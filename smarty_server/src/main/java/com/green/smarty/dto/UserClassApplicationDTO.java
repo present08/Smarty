@@ -1,10 +1,16 @@
 package com.green.smarty.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -20,6 +26,8 @@ public class UserClassApplicationDTO {
     private String user_name;
 
     private String enrollment_id;
+
+    private String enrollment_status;
 
     private String class_id;
 

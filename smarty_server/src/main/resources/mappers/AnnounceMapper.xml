@@ -20,8 +20,8 @@
 
 <!--게시글 수정-->
     <update id="modifyAnnounce" parameterType="com.green.smarty.dto.AnnounceDTO">
-        update announce set message = #{message} , send_date=#{send_date}
-        where announce_id=#{announce_id}s
+        UPDATE announce SET title = #{title} , content = #{content}
+        WHERE announce_id = #{announce_id}
     </update>
 
     <!-- 조회수 증가 -->

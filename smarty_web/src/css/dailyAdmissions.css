@@ -6,6 +6,7 @@
     align-items: flex-end;
     justify-content: center;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 .dailyAdmissions_box {
@@ -18,26 +19,27 @@
 
 .dailyAdmissions_box>div:first-child {
     width: 20%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    padding: 10px;
 }
 
 .dailyAdmissions_box>div:last-child {
     width: 75%;
-    height: 90%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .dailyAdmissions_box>div:last-child>div {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: auto;
     gap: 20px;
     padding: 10px;
     box-sizing: border-box;
@@ -48,19 +50,19 @@
 .dailyslider {
     display: flex;
     width: 100%;
+    padding: none;
 }
 
 .dailyAdmissions_box>div>h2 {
-    font-size: 35px;
-    display: flex;
-    margin-bottom: 50px;
+    font-size: 30px;
+    margin: 0 0 20px 0;
 }
 
 .dailyAdmissions_box>div>p {
     color: gray;
     text-align: left;
-    font-size: 19px;
-    margin-bottom: 30px;
+    font-size: 18px;
+    margin: 0 0 20px 0;
 }
 
 .dailyAdmissions_box>div>button {
@@ -85,7 +87,3 @@
 .dailyAdmissions_box>div>button:hover a {
     color: #011b2f;
 }
-/* 
-div{
-    background-color: #a3bac6;
-} */

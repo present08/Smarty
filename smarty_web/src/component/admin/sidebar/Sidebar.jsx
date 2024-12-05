@@ -37,7 +37,7 @@ export default function Sidebar() {
                         </li>
                         <li className="sidebarListItem">
                             <Link to="/admin/permission" className="link">
-                                MUAM
+                                결제/승인
                             </Link>
                         </li>
                     </ul>

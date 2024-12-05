@@ -12,11 +12,17 @@ const Permission = () => {
     }, [])
 
     const checkPermission = (id) => {
-        permission(id).then(e => setPermissionList(e))
+        permission(id).then(e => {
+            setPermissionList(e)
+            window.location.reload();
+    })
     }
 
     const checkArrPermission = () => {
-        ArrayPermission(selectedIds).then(e => setPermissionList(e))
+        ArrayPermission(selectedIds).then(e => {
+            setPermissionList(e)
+            window.location.reload();
+        })
     }
 
     const columns = [

@@ -47,6 +47,7 @@ dependencies {
 	implementation 'com.google.zxing:core:3.4.1'
 	implementation 'com.google.zxing:javase:3.4.1'
 
+
 	// 스프링 시큐리티 관련 모듈
 //	 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
 //	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.4'

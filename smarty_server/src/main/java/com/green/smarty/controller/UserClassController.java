@@ -3,6 +3,8 @@ package com.green.smarty.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.service.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,12 @@ public class UserClassController {
     private UserClassService userClassService;
     @Autowired
     private UserReservationMapper reservationMapper;
+    // (영준)
+    @Autowired
+    private SendEmailService sendEmailService;
+    @Autowired
+    private UserMapper userMapper;
+
 
     @GetMapping("/")
     public ClassResponseDTO getClassAll() {
@@ -41,6 +49,8 @@ public class UserClassController {
     @PostMapping("/enroll")
     public String postenollment(@RequestBody Map<String, String> enrollData) {
         String result = userClassService.classEnrollment(enrollData);
+        System.out.println(result);
+
         return result;
     }
 

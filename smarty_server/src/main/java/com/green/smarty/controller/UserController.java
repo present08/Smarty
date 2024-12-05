@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -58,6 +56,21 @@ public class UserController {
             System.out.println("회원가입 성공 : " + userVO);
 
             try {
+                // 멤버십 아이디 발급 및 초기 데이터 저장
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+                String membershipId = "m_" + userVO.getUser_id()+ "_" + timestamp ;
+
+                MembershipVO membership = new MembershipVO();
+                membership.setMembership_id(membershipId);
+                membership.setMembership_level("브론즈");
+                membership.setUser_id(userVO.getUser_id());
+
+                boolean isMembershipSaved = userMembershipService.saveMembership(membership);
+
+                if (!isMembershipSaved) {
+                    throw new Exception("멤버십 생성 실패");
+                }
+
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력

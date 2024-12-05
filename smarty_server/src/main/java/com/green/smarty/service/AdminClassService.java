@@ -114,59 +114,48 @@ public class AdminClassService {
         System.out.println("클래스 수정! originClassVO : " + originClassVO);
         adminClassMapper.modify(originClassVO);
 
-        // 수업일 수정 여부 확인
-        // 기존의 요일 리스트와 새로운 요일 리스트를 비교하여 중복되지 않은 값 추출
-        // updateWeekday 길이가 0보다 크면 수정된 것
-        List<String> updateWeekday = classAdminDTO.getWeekday().stream()
-                .filter(update ->
-                        originClassDetailVO.stream().map(origin -> origin.getWeekday()).toList().
-                                stream().noneMatch(Predicate.isEqual(update)))
-                .collect(Collectors.toList());
-        System.out.println("클래스 요일 변경! updateWeekday : " + updateWeekday);
+        adminClassMapper.removeDetail(class_id);    // 기존의 detail 모두 삭제
+        // 처리2-1) weekday, class_data 생성
+        List<String> weekdaySet = classAdminDTO.getWeekday();
+        System.out.println("서비스 처리2-1) weekdaySet : " + weekdaySet);
 
-        if(!updateWeekday.isEmpty()) {
-            adminClassMapper.removeDetail(class_id);    // 기존의 detail 모두 삭제
-            // 처리2-1) weekday, class_data 생성
-            List<String> weekdaySet = classAdminDTO.getWeekday();
-            System.out.println("서비스 처리2-1) weekdaySet : " + weekdaySet);
+        LocalDate start_date = classAdminDTO.getStart_date();
+        LocalDate end_date = classAdminDTO.getEnd_date();
+        LocalDate current_date = start_date;
 
-            LocalDate start_date = classAdminDTO.getStart_date();
-            LocalDate end_date = classAdminDTO.getEnd_date();
-            LocalDate current_date = start_date;
+        List<LocalDate> class_date = new ArrayList<>();
+        List<String> weekday = new ArrayList<>();
 
-            List<LocalDate> class_date = new ArrayList<>();
-            List<String> weekday = new ArrayList<>();
+        while (current_date.compareTo(end_date) <= 0) {
 
-            while (current_date.compareTo(end_date) <= 0) {
+            // step1) current_date 의 DayOfWeek 객체 생성 및 요일 추출
+            DayOfWeek current = current_date.getDayOfWeek();
+            String currentS = current.getDisplayName(TextStyle.FULL, Locale.getDefault());
 
-                // step1) current_date 의 DayOfWeek 객체 생성 및 요일 추출
-                DayOfWeek current = current_date.getDayOfWeek();
-                String currentS = current.getDisplayName(TextStyle.FULL, Locale.getDefault());
-
-                // step2) 지정된 요일과 일치하는 경우 schedule 맵에 담기
-                // key: 수업 날짜, value: 수업 요일
-                for (String day : weekdaySet) {
-                    if (currentS.equals(day)) {
-                        class_date.add(current_date);
-                        weekday.add(day);
-                    }
+            // step2) 지정된 요일과 일치하는 경우 schedule 맵에 담기
+            // key: 수업 날짜, value: 수업 요일
+            for (String day : weekdaySet) {
+                if (currentS.equals(day)) {
+                    class_date.add(current_date);
+                    weekday.add(day);
                 }
-                // step3) 날짜 하루 증가시키기
-                current_date = current_date.plusDays(1);
             }
-            System.out.println("서비스 처리 2-2) 생성된 class_date : " + class_date);
-            System.out.println("서비스 처리 2-2) 생성된 weekday : " + weekday);
-
-            // 처리2-2) class_detail 등록
-            for(int j = 0; j < class_date.size(); j++) {
-                ClassDetailVO classDetailVO = ClassDetailVO.builder()
-                        .class_id(classAdminDTO.getClass_id())
-                        .weekday(weekday.get(j))
-                        .class_date(class_date.get(j))
-                        .build();
-                adminClassMapper.registerDetail(classDetailVO);
-            }
+            // step3) 날짜 하루 증가시키기
+            current_date = current_date.plusDays(1);
         }
+        System.out.println("서비스 처리 2-2) 생성된 class_date : " + class_date);
+        System.out.println("서비스 처리 2-2) 생성된 weekday : " + weekday);
+
+        // 처리2-2) class_detail 등록
+        for(int j = 0; j < class_date.size(); j++) {
+            ClassDetailVO classDetailVO = ClassDetailVO.builder()
+                    .class_id(classAdminDTO.getClass_id())
+                    .weekday(weekday.get(j))
+                    .class_date(class_date.get(j))
+                    .build();
+            adminClassMapper.registerDetail(classDetailVO);
+        }
+
     }
 
     public void remove(String class_id) {

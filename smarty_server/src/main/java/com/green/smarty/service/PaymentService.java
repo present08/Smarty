@@ -133,7 +133,6 @@ public class PaymentService {
         String userName = userMapper.getUserNameById(user_id);
         String userEmail = userMapper.getUserEmailById(user_id);
         String productName = userProductMapper.getProductNameByProductId(product_id);
-
         if (userName == null || userEmail == null || productName == null) {
             System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
             throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
@@ -162,7 +161,7 @@ public class PaymentService {
         int stockDown = userRentalMapper.productStockDown(stockUpdateMap);
 
         if (stockDown > 0) {
-            System.out.println("재고 감소 성공 product_id: " + cartItem.getProduct_id() + ", 요청 수량: " + cartItem.getQuantity());
+            System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
         } else {
             throw new RuntimeException("재고 감소 실패: " + cartItem.getProduct_id());
         }

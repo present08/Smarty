@@ -56,10 +56,10 @@ public class PaymentController {
     @Autowired
     private UserMembershipService userMembershipService;
 
-
     // (영준)
     @Autowired
     private SendEmailService sendEmailService;
+
     @Autowired
     private UserFacilityService facilityService;
 
@@ -145,6 +145,10 @@ public class PaymentController {
         }
 
         // 멤버십 업데이트
+
+        // 멤버십 업데이트(혜수코드)
+        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+
         userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return id;
@@ -221,7 +225,13 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
-//        (영준) 이메일 발송 코드
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(
+                enrollData.get("user_id"),
+                Float.parseFloat(enrollData.get("amount"))
+        );
+
+          // (영준) 이메일 발송 코드
         ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());
         String user_name = userMapper.getUserNameById(scatterDTO.getUser_id());
         String email = userMapper.getUserEmailById(scatterDTO.getUser_id());
@@ -230,6 +240,7 @@ public class PaymentController {
         System.out.println("Class Name: " + class_name);
         System.out.println("Email: " + email);
         sendEmailService.sendClassReservation(user_name, class_name ,email);
+
 
         System.out.println("예약이 완료 됨");
         return "예약 완료";
@@ -272,6 +283,9 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
 
         UserReservationDTO result = reservationService.insertReservation(dto);
+
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         // (영준) 이메일 발송 관련 코드
         String email = userMapper.getUserEmailById(dto.getUser_id());

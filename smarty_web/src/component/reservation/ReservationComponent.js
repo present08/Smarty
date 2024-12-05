@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FaRegCheckSquare } from 'react-icons/fa';
 import { LuAlarmClock } from 'react-icons/lu';
-import { updatePlan } from './../../api/reservaionApi';
+import { MembershipUser, updatePlan } from './../../api/reservaionApi';
 import CustomCalender from './CustomCalender.tsx';
 import ReservationComplete from './ReservationComplete.js';
 
@@ -17,6 +17,8 @@ const ReservationComponent = (props) => {
     const [lastNum, setLastNum] = useState(0)
     const [complete, setComplete] = useState(false)
     const [price, setPrice] = useState(facilityData.basic_fee)
+    const [Dprice, setDPrice] = useState(facilityData.basic_fee)
+    const [membership, setMembership] = useState("")
     const initData = {
         reservation_id: null,
         user_id: "",
@@ -37,14 +39,54 @@ const ReservationComponent = (props) => {
         setTimeLine(reserved)
     }, [reserved])
 
+    useEffect(() => {
+        // 3 / 5 / 7 / 10
+        MembershipUser(user.user_id).then(e => {
+            setMembership(e);
+            switch (e) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.1)) / 10) * 10); break;
+            }
+        })
+    }, [])
+
+
     // 첫타임/막타임 할인/할증요금 계산
     const extra_price = (id) => {
         const frist_time = timeLine.find(item => item.id === id)?.start || ''
         const last_time = timeLine.find(item => item.id === id)?.end + 1 || ''
         if (frist_time == timeLine[0].start) {
+            const minusPrice = facilityData.basic_fee - (facilityData.basic_fee * facilityData.rate_adjustment);
             setPrice(facilityData.basic_fee - facilityData.basic_fee * facilityData.rate_adjustment)
-        } else if (last_time == timeLine[timeLine.length - 1].end) {
+            // 복리계산
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((minusPrice - (minusPrice * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((minusPrice - (minusPrice * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((minusPrice - (minusPrice * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((minusPrice - (minusPrice * 0.1)) / 10) * 10); break;
+            }
+        } else if (id == Math.floor(timeLine.length / facilityData.default_time) - 1) {
             setPrice(facilityData.basic_fee + facilityData.basic_fee * facilityData.rate_adjustment)
+            const plusPrice = facilityData.basic_fee + (facilityData.basic_fee * facilityData.rate_adjustment);
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((plusPrice - (plusPrice * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((plusPrice - (plusPrice * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((plusPrice - (plusPrice * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((plusPrice - (plusPrice * 0.1)) / 10) * 10); break;
+            }
+        } else {
+            switch (membership) {
+                case "브론즈": setDPrice(facilityData.basic_fee); break;
+                case "실버": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((facilityData.basic_fee - (facilityData.basic_fee * 0.1)) / 10) * 10); break;
+            }
         }
     }
     // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
@@ -58,6 +100,7 @@ const ReservationComponent = (props) => {
         setTimeLine(newTimeLine)
         setPrice(facilityData.basic_fee)
         extra_price(tl.id)
+
     };
 
 
@@ -78,7 +121,7 @@ const ReservationComponent = (props) => {
             user_id: user.user_id,
             reservation_start: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), frist < 10 ? '0' + frist : frist)).format("YYYY-MM-DD HH:mm:ss"),
             reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
-            amount: price
+            amount: (membership != "브론즈" ? Dprice : price)
         })
 
     }, [timeLine])
@@ -114,7 +157,7 @@ const ReservationComponent = (props) => {
             pg: 'html5_inicis',                           // PG사
             pay_method: 'card',                           // 결제수단
             merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
-            amount: price,                                 // 결제금액
+            amount: (membership != "브론즈" ? Dprice : price),          // 결제금액
             name: facilityData.facility_name,                  // 주문명
             buyer_name: user.user_id,                           // 구매자 이름
         };
@@ -166,7 +209,7 @@ const ReservationComponent = (props) => {
                             <td data-content="시설명">{facilityData.facility_name}</td>
                             <td data-content="예약일자">{date}</td>
                             <td data-content="예약시간">{fristNum + ':00 ~ '}{lastNum + ':00'}</td>
-                            <td data-content="이용요금">{price}</td>
+                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color:'gray', fontSize:'15px', marginRight:"5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
                         </tr>
                     </tbody>
                 </table>

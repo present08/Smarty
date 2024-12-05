@@ -40,4 +40,10 @@ public interface UserRentalMapper {
     List<ProductRentalUserDTO> getUserRentalListData(String user_id);
 
     String getMaxRentalIdForDate(@Param("datePrefix") String datePrefix);
+    //  (영준) 기간 지난 사람 색출해서 알림을 보내기 위한 코드
+    List<RentalDTO> getOverdueRentals();
+
+    //  (영준) user_id가 아니라 이메일을 가져오기 위한 코드
+    String getEmailByUserId(String user_id);
+
 }

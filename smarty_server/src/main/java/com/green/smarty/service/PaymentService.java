@@ -16,9 +16,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.vo.PaymentVO;
+import com.green.smarty.vo.RentalVO;
+
 @Service
 
 public class PaymentService {
+
     @Autowired
     private PaymentMapper paymentMapper;
     @Autowired
@@ -27,16 +42,20 @@ public class PaymentService {
     private PublicMapper publicMapper;
     @Autowired
     private CartMapper cartMapper;
+    // (영준) 이메일 발송
+    @Autowired
+    private SendEmailService sendEmailService;
     @Autowired
     private UserProductMapper userProductMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id){
+    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
-
-        for(RentalVO item : rentalVO){
-            String itemDate = item.getRental_id().substring(2,10);
+        for (RentalVO item : rentalVO) {
+            String itemDate = item.getRental_id().substring(2, 10);
             System.out.println(itemDate);
             if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
                 rentalList.add(item);
@@ -47,6 +66,19 @@ public class PaymentService {
                 + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", rentalList.size() + 1);
         System.out.println("rental ID : "+ id);
+
+        //            (영준)
+        String user_id = dto.getUser_id();
+        String product_id = dto.getProduct_id();
+        String userName = userMapper.getUserNameById(user_id);
+        String userEmail = userMapper.getUserEmailById(user_id);
+        String productName = userProductMapper.getProductNameByProductId(product_id);
+
+        if (userName == null || userEmail == null || productName == null) {
+            System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
+            throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
+        }
+        sendEmailService.rentalProduct(userEmail, userName, productName);
 
         RentalVO vo = RentalVO.builder()
                 .rental_id(id)
@@ -91,8 +123,7 @@ public class PaymentService {
                 "merchant_uid", vo.getPayment_id(),
                 "amount", vo.getAmount(),
                 "name", "상품명",
-                "buyer_name", "구매자 이름"
-        );
+                "buyer_name", "구매자 이름");
 
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
@@ -101,7 +132,7 @@ public class PaymentService {
 
         // 요청 보내기
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(iportApiUrl, requestEntity,String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(iportApiUrl, requestEntity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return "결제 요청 성공";
@@ -117,8 +148,7 @@ public class PaymentService {
 
             Map<String, String> requestBody = Map.of(
                     "imp_key", System.getenv("I_PORT_API_KEY"),
-                    "imp_secret", System.getenv("I_PORT_API_SECRET")
-            );
+                    "imp_secret", System.getenv("I_PORT_API_SECRET"));
 
             HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody);
             ResponseEntity<Map> response = restTemplate.postForEntity(tokenApiUrl, requestEntity, Map.class);

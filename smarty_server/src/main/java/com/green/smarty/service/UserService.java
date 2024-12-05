@@ -22,9 +22,6 @@ public class UserService {
     @Autowired
     private QRCodeService qrCodeService;
 
-    @Autowired
-    private FCMService fcmService;
-
     // 회원가입
     public boolean signup(UserVO user) {
         try {

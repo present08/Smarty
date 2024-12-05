@@ -3,10 +3,13 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -81,7 +84,6 @@ public class UserReservationController {
     @PostMapping("/{facility_id}")
     public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
         UserReservationDTO result = reservationService.insertReservation(dto);
-        System.out.println(dto);
         return result;
     }
 
@@ -112,5 +114,4 @@ public class UserReservationController {
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
     }
-
 }

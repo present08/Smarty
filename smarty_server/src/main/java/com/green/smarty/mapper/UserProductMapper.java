@@ -14,6 +14,7 @@ public interface UserProductMapper {
     String updateProduct(ProductVO vo);
     ProductVO getProductById(String product_id);
     List<ProductDTO> getProductsByFacilityId(String facility_id);
+    String getProductNameByProductId(String product_id);
 
     void deleteProduct(String product_id);
 }

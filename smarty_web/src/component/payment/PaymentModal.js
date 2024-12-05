@@ -26,61 +26,84 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
             setReservationList(e.reservationList)
             setEnrollmentList(e.enrollmentList)
         })
-        console.log(rentalInfo)
     }, [])
 
+    useEffect(() => {
+        console.log("PaymentModal에서 전달받은 rentalInfo: ", rentalInfo);
+    }, [rentalInfo]);
 
     const handlePayment = () => {
-        const { IMP } = window //아임포트 초기화
-        IMP.init('imp43324543')
+        console.log("최종 PostData: ", postData);
+
+        if (!postData.product_id || !postData.count) {
+            alert("상품 정보가 누락되었습니다. 다시 시도해주세요.");
+            return;
+        }
+
+        const { IMP } = window; // 아임포트 초기화
+        IMP.init('imp43324543');
 
         const data = {
             pg: 'html5_inicis',
             pay_method: 'card',
-            name: rentalInfo.product_name,
-            amount: amount,
+            name: rentalInfo[0]?.product_name || "상품명",
+            amount: postData.amount,
             merchant_uid: `order_${new Date().getTime()}`,
-
-        }
+        };
 
         IMP.request_pay(data, (response) => {
             if (response.success) {
-                console.log('결제 성공: ', response)
-                onPaymentComplete(postData)
-                console.log("---------------", postData)
+                console.log("결제 성공: ", response);
+                onPaymentComplete(postData);
             } else {
-                console.log('결제 실패', response)
-                console.log("---------------", postData)
-                onPaymentComplete(false)
+                console.error("결제 실패: ", response);
+                onPaymentComplete(false);
             }
-        })
+        });
     };
 
-    const enableBtn = (item) => {
+    useEffect(() => {
+        console.log("PostData 변경 감지: ", postData)
 
-        if (item.reservation_id && postData.reservation_id != item.reservation_id) {
+        if (postData.amount > 0) {
+            setBtnState(false)
+        } else {
+            setBtnState(true)
+        }
+    }, [postData])
+
+    const enableBtn = (item) => {
+        console.log("선택된 아이템: ", item);
+
+        // rentalInfo 배열에서 올바른 product_id를 찾아 설정
+        const selectedProduct = rentalInfo.find(
+            (product) => product.product_id === item.product_id || product.product_id === rentalInfo[0]?.product_id
+        );
+
+        if (item.reservation_id && postData.reservation_id !== item.reservation_id) {
             setPostData({
                 reservation_id: item.reservation_id,
                 enrollment_id: null,
                 amount: amount,
                 user_id: user_id,
-                product_id: rentalInfo.product_id,
-                count: rentalInfo.count
-            })
-        } else if (item.enrollment_id && postData.enrollment_id != item.enrollment_id) {
+                product_id: selectedProduct?.product_id || "",
+                count: selectedProduct?.count || 1,
+            });
+        } else if (item.enrollment_id && postData.enrollment_id !== item.enrollment_id) {
             setPostData({
                 reservation_id: null,
                 enrollment_id: item.enrollment_id,
                 amount: amount,
                 user_id: user_id,
-                product_id: rentalInfo.product_id,
-                count: rentalInfo.count
-            })
+                product_id: selectedProduct?.product_id || "",
+                count: selectedProduct?.count || 1,
+            });
         } else {
-            setPostData(init)
+            setPostData(init);
         }
 
-    }
+        console.log("PostData 변경 결과: ", postData);
+    };
 
     useEffect(() => {
         if (postData.amount > 0) {

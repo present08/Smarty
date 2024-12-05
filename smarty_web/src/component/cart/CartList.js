@@ -1,17 +1,20 @@
-import React from 'react'
-import CartItem from './CartItem'
+import React from "react";
+import CartItem from "./CartItem";
+import "../../css/cart.css"
 
 const CartList = ({ items, onUpdate, onRemove }) => {
     if (items.length === 0) {
-        return <p> 장바구니가 비어 있습니다 </p>
+        return <p>장바구니가 비어 있습니다</p>;
     }
     return (
-        <table>
+        <table className="cart-table">
             <thead>
                 <tr>
-                    <th>상품</th>
+                    <th>이미지</th>
+                    <th>상품 이름</th>
                     <th>수량</th>
-                    <th>행위?</th>
+                    <th>가격</th>
+                    <th>삭제</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +28,7 @@ const CartList = ({ items, onUpdate, onRemove }) => {
                 ))}
             </tbody>
         </table>
-    )
-}
+    );
+};
 
-export default CartList
+export default CartList;

@@ -1,68 +1,373 @@
 import React, { useEffect, useState } from "react";
 import cartApi from "../../api/cartApi";
 import CartList from "../../component/cart/CartList";
+import { useNavigate } from "react-router-dom";
+import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
+import "../../css/cart.css";
+import axios from "axios";
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
-    const userId = "user123"; // 로그인된 사용자 ID
+    const [isPaymentModal, setIsPaymentModal] = useState(false); // 결제 모달 상태
+    const userStr = localStorage.getItem("user");
+    const user_id = userStr ? JSON.parse(userStr).user_id : null;
+    const navigate = useNavigate();
 
-    // 장바구니 데이터 로드
+    useEffect(() => {
+        if (!user_id) {
+            alert("로그인이 필요한 서비스입니다.");
+            navigate("/user/login");
+        } else {
+            loadCartItems();
+        }
+    }, [user_id]);
+
+
+
     const loadCartItems = async () => {
         try {
-            const response = await cartApi.getCartItems(userId);
+            const response = await cartApi.getCartItems(user_id);
+            console.log("불러온 장바구니 데이터", response.data)
             setCartItems(response.data);
         } catch (error) {
             console.error("Failed to load cart items:", error);
         }
     };
 
-    // 수량 업데이트
-    const handleUpdateCart = async (cartId, quantity) => {
+    const handleUpdateCart = async (cart_id, quantity) => {
         try {
-            await cartApi.updateCartItem({ cartId, quantity });
+            await cartApi.updateCartItem({ cart_id, quantity });
             loadCartItems();
         } catch (error) {
             console.error("Failed to update cart item:", error);
         }
     };
 
-    // 항목 삭제
-    const handleRemoveCartItem = async (cartId) => {
+    const handleRemoveCartItem = async (cart_id) => {
         try {
-            await cartApi.removeCartItem(cartId);
+            await cartApi.removeCartItem(cart_id);
             loadCartItems();
         } catch (error) {
             console.error("Failed to remove cart item:", error);
         }
     };
 
-    // 장바구니 비우기
     const handleClearCart = async () => {
         try {
-            await cartApi.clearCart(userId);
+            await cartApi.clearCart(user_id);
             loadCartItems();
         } catch (error) {
             console.error("Failed to clear cart:", error);
         }
     };
 
+    const handleBack = () => {
+        navigate("/product");
+    };
+
+    // 총 수량 계산
+    const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+    // 총 금액 계산
+    const totalPrice = cartItems.reduce(
+        (acc, item) => acc + item.quantity * item.price,
+        0
+    );
+
+    // 결제 버튼 클릭 시 모달 열기
+    const handlePaymentClick = () => {
+        if (cartItems.length === 0) {
+            alert("장바구니가 비어 있습니다.");
+            return;
+        }
+        setIsPaymentModal(true);
+    };
+
+    // 결제 완료 처리
+    const handlePaymentComplete = async (paymentData) => {
+        console.log("payment 데이터 : ", paymentData)
+        try {
+            setIsPaymentModal(false); // 모달 닫기
+            const response = await axios.post(
+                "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
+                paymentData
+            );
+            console.log("결제 데이터 확인 : ", response.data)
+            const paymentId = response.data; // 서버에서 반환된 결제 ID
+
+            // 결제 성공 시 페이지로 이동하면서 데이터 전달
+            navigate("/payment/success", {
+                state: {
+                    paymentId: paymentId,
+                    items: cartItems.map((item) => ({
+                        product_name: item.product_name,
+                        count: item.quantity,
+                        price: item.price,
+                    })),
+                    totalAmount: totalPrice,
+                },
+            });
+
+            handleClearCart(); // 장바구니 초기화
+        } catch (error) {
+            console.error("결제 실패: ", error);
+            alert("결제 중 문제가 발생했습니다.");
+        }
+    };
+
+    const rentalInfo = cartItems.map((item) => ({
+        product_id: item.product_id,
+        product_name: item.product_name,
+        count: item.quantity,
+        price: item.price,
+    }));
+
     useEffect(() => {
-        loadCartItems();
-    }, []);
+        console.log("CartPage에서 rentalInfo 데이터 확인: ", rentalInfo);
+    }, [cartItems]);
+
 
     return (
-        <div>
-            <h1>내 장바구니</h1>
-            <CartList
-                items={cartItems}
-                onUpdate={handleUpdateCart}
-                onRemove={handleRemoveCartItem}
-            />
-            <div>
-                <button onClick={handleClearCart}>장방구니 초기화</button>
+        <div className="cart-container">
+            <div className="cart-items">
+                <div className="cart-header">
+                    <h1>내 장바구니</h1>
+                    <div className="cart-buttons">
+                        <button className="clear-btn" onClick={handleClearCart}>
+                            장바구니 초기화
+                        </button>
+                        <button className="back-btn" onClick={handleBack}>
+                            이전
+                        </button>
+                    </div>
+                </div>
+                <CartList
+                    items={cartItems}
+                    onUpdate={handleUpdateCart}
+                    onRemove={handleRemoveCartItem}
+                />
             </div>
+            <div className="cart-summary">
+                <h2>주문 정보</h2>
+                <div className="summary-line">
+                    <span>총 수량</span>
+                    <span>{totalQuantity} 개</span>
+                </div>
+                <div className="summary-line">
+                    <span>총 금액</span>
+                    <span>{totalPrice.toLocaleString()} 원</span>
+                </div>
+                <button
+                    className="payment-btn"
+                    onClick={handlePaymentClick}
+                >
+                    결제하기
+                </button>
+            </div>
+
+            {/* 결제 모달 */}
+            <PaymentModal
+                isOpen={isPaymentModal}
+                onRequestClose={() => setIsPaymentModal(false)}
+                onPaymentComplete={handlePaymentComplete}
+                amount={totalPrice}
+                rentalInfo={cartItems.map((item) => ({ // 장바구니 정보를 가공
+                    product_id: item.product_id,
+                    product_name: item.product_name,
+                    count: item.quantity,
+                    price: item.price,
+                }))}
+                user_id={user_id}
+            />
+            
         </div>
     );
 };
 
 export default CartPage;
+
+// import React, { useEffect, useState } from "react";
+// import cartApi from "../../api/cartApi";
+// import CartList from "../../component/cart/CartList";
+// import { useNavigate } from "react-router-dom";
+// import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
+// import "../../css/cart.css";
+// import axios from "axios";
+
+// const CartPage = () => {
+//     const [cartItems, setCartItems] = useState([]); // 장바구니 아이템 상태
+//     const [isPaymentModal, setIsPaymentModal] = useState(false); // 결제 모달 상태
+//     const userStr = localStorage.getItem("user");
+//     const user_id = userStr ? JSON.parse(userStr).user_id : null;
+//     const navigate = useNavigate();
+
+//     // 사용자 로그인 여부 확인 및 장바구니 로드
+//     useEffect(() => {
+//         if (!user_id) {
+//             alert("로그인이 필요한 서비스입니다.");
+//             navigate("/user/login");
+//         } else {
+//             loadCartItems();
+//         }
+//     }, [user_id]);
+
+//     // 장바구니 데이터를 API로부터 로드
+//     const loadCartItems = async () => {
+//         try {
+//             const response = await cartApi.getCartItems(user_id);
+//             console.log("불러온 장바구니 데이터: ", response.data);
+//             setCartItems(response.data);
+//         } catch (error) {
+//             console.error("Failed to load cart items:", error);
+//         }
+//     };
+
+//     // 장바구니 아이템 수량 업데이트
+//     const handleUpdateCart = async (cart_id, quantity) => {
+//         try {
+//             await cartApi.updateCartItem({ cart_id, quantity });
+//             loadCartItems();
+//         } catch (error) {
+//             console.error("Failed to update cart item:", error);
+//         }
+//     };
+
+//     // 장바구니 아이템 삭제
+//     const handleRemoveCartItem = async (cart_id) => {
+//         try {
+//             await cartApi.removeCartItem(cart_id);
+//             loadCartItems();
+//         } catch (error) {
+//             console.error("Failed to remove cart item:", error);
+//         }
+//     };
+
+//     // 장바구니 초기화
+//     const handleClearCart = async () => {
+//         try {
+//             await cartApi.clearCart(user_id);
+//             loadCartItems();
+//         } catch (error) {
+//             console.error("Failed to clear cart:", error);
+//         }
+//     };
+
+//     const handleBack = () => {
+//         navigate("/product");
+//     };
+
+//     // 총 수량 계산
+//     const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+//     // 총 금액 계산
+//     const totalPrice = cartItems.reduce(
+//         (acc, item) => acc + item.quantity * item.price,
+//         0
+//     );
+
+//     // 결제 버튼 클릭 시 모달 열기
+//     const handlePaymentClick = () => {
+//         if (cartItems.length === 0) {
+//             alert("장바구니가 비어 있습니다.");
+//             return;
+//         }
+//         setIsPaymentModal(true);
+//     };
+
+//     // 결제 완료 처리
+//     const handlePaymentComplete = async (paymentData) => {
+//         console.log("결제 데이터 전송: ", paymentData);
+//         try {
+//             setIsPaymentModal(false); // 모달 닫기
+//             const response = await axios.post(
+//                 "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
+//                 paymentData
+//             );
+//             console.log("결제 성공 응답: ", response.data);
+
+//             // 결제 성공 시 사용자에게 결제 완료 메시지
+//             alert(`결제가 완료되었습니다! 결제번호: ${response.data}`);
+
+//             // 결제 성공 후 장바구니 초기화
+//             handleClearCart();
+
+//             // 결제 완료 후 결제 완료 페이지로 이동
+//             navigate("/payment/success", {
+//                 state: {
+//                     paymentId: response.data, // 결제 ID
+//                     items: cartItems.map((item) => ({
+//                         product_name: item.product_name,
+//                         count: item.quantity,
+//                         price: item.price,
+//                     })),
+//                     totalAmount: totalPrice,
+//                 },
+//             });
+//         } catch (error) {
+//             console.error("결제 실패: ", error);
+//             alert("결제 중 문제가 발생했습니다. 다시 시도해주세요.");
+//         }
+//     };
+
+//     // 렌탈 정보 생성
+//     const rentalInfo = cartItems.map((item) => ({
+//         product_id: item.product_id,
+//         product_name: item.product_name,
+//         count: item.quantity,
+//         price: item.price,
+//     }));
+
+//     console.log("렌탈 정보 확인: ", rentalInfo);
+
+//     return (
+//         <div className="cart-container">
+//             <div className="cart-items">
+//                 <div className="cart-header">
+//                     <h1>내 장바구니</h1>
+//                     <div className="cart-buttons">
+//                         <button className="clear-btn" onClick={handleClearCart}>
+//                             장바구니 초기화
+//                         </button>
+//                         <button className="back-btn" onClick={handleBack}>
+//                             이전
+//                         </button>
+//                     </div>
+//                 </div>
+//                 <CartList
+//                     items={cartItems}
+//                     onUpdate={handleUpdateCart}
+//                     onRemove={handleRemoveCartItem}
+//                 />
+//             </div>
+//             <div className="cart-summary">
+//                 <h2>주문 정보</h2>
+//                 <div className="summary-line">
+//                     <span>총 수량</span>
+//                     <span>{totalQuantity} 개</span>
+//                 </div>
+//                 <div className="summary-line">
+//                     <span>총 금액</span>
+//                     <span>{totalPrice.toLocaleString()} 원</span>
+//                 </div>
+//                 <button
+//                     className="payment-btn"
+//                     onClick={handlePaymentClick}
+//                 >
+//                     결제하기
+//                 </button>
+//             </div>
+
+//             {/* 결제 모달 */}
+//             <PaymentModal
+//                 isOpen={isPaymentModal}
+//                 onRequestClose={() => setIsPaymentModal(false)}
+//                 onPaymentComplete={handlePaymentComplete}
+//                 amount={totalPrice}
+//                 rentalInfo={rentalInfo}
+//                 user_id={user_id}
+//             />
+//         </div>
+//     );
+// };
+
+// export default CartPage;

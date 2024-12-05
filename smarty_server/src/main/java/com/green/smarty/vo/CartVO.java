@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 public class CartVO {
-    private Long cart_id;
+    private String cart_id;
     private String user_id;
     private String product_id;
     private int quantity;
-    private LocalDateTime create_at;
+    private LocalDateTime created_at;
     private LocalDateTime updated_at;
 }

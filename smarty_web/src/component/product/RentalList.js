@@ -145,6 +145,7 @@ const RentalList = () => {
                         <thead className="bg-gray-50">
                             <tr>
                                 <td className="px-6 py-3 border-b text-left">물품명</td>
+                                <td className="px-6 py-3 border-b text-left">사이즈</td>
                                 <td className="px-6 py-3 border-b text-left">대여일</td>
                                 <td className="px-6 py-3 border-b text-left">반납예정일</td>
                                 <td className="px-6 py-3 border-b text-left">수량</td>
@@ -154,6 +155,7 @@ const RentalList = () => {
                             {currentItems.map((rental) => (
                                 <tr key={rental.rental_id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 border-b">{rental.product_name}</td>
+                                    <td className="px-6 py-4 border-b">{rental.size}</td>
                                     <td className="px-6 py-4 border-b">
                                         {formatDateTime(rental.rental_date)}
                                     </td>

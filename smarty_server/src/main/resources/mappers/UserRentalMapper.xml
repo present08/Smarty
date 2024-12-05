@@ -14,7 +14,6 @@
             payment_id,
             rental_status,
             rental_date,
-            return_date,
             count
         ) VALUES (
             #{rental_id},
@@ -23,7 +22,6 @@
             #{payment_id},
             #{rental_status},
             #{rental_date},
-            #{return_date},
             #{count}
         )
     </insert>
@@ -124,6 +122,12 @@
         SET payment_status = #{payment_status}
         WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id})
     </update>
+
+    <select id="getMaxRentalIdForDate" parameterType="string" resultType="string">
+        SELECT MAX(rental_id)
+        FROM rental
+        WHERE rental_id LIKE CONCAT('R_', #{datePrefix}, '%')
+    </select>
 
 
 </mapper>

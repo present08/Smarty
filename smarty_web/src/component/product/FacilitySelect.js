@@ -33,7 +33,7 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
                 const user = JSON.parse(userStr);
                 try {
                     const reservedFacilities = await getUserReservationList(user.user_id);
-                    console.log("여기에 예약 한게 나와야함",reservedFacilities)
+                    // console.log("여기에 예약 한게 나와야함",reservedFacilities)
                     setFacility(reservedFacilities);
                 } catch (error) {
                     console.error('예약한 시설 목록 로드 실패:', error);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../css/productDetail.css'
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ProductDetail = ({ product }) => {
     const navigate = useNavigate()
@@ -33,9 +34,21 @@ const ProductDetail = ({ product }) => {
         const cartItem = {
             user_id: user.user_id,
             product_id: product.product_id,
+            product_name: product.product_name,
             quantity: quantity,
+        }
+        try {
+            await axios.post('http://localhost:8080/api/cart', cartItem)
+            alert("장바구니에 추가되었습니다")
+            console.log(cartItem)
 
-            
+            const confirmMovetoCart = window.confirm("장바구니로 이동 하시겠습니까?")
+            if (confirmMovetoCart) {
+                navigate("/cart")
+            }
+        } catch (error) {
+            console.log("장바구니 담기 실패: ", error)
+            alert("장바구니 담기 실패했습니다 ")
         }
     }
 
@@ -115,7 +128,10 @@ const ProductDetail = ({ product }) => {
                     </div>
 
                     <div className="action-buttons">
-                        <button className="wishlist-btn">
+                        <button
+                            className="wishlist-btn"
+                            onClick={handleAddCart}
+                        >
                             장바구니
                         </button>
                         <button

@@ -11,6 +11,6 @@ export const getList = async() => {
 
 export const getUserReservationList = async (user_id) => {
     const response = await axios.get(`${prefix}/reservation/${user_id}`)
-    console.log("여기에 데이터가 들오와야 함", response.data)
+    // console.log("여기에 데이터가 들오와야 함", response.data)
     return response.data
 }

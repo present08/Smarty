@@ -7,6 +7,8 @@ import guideRouter from "./guideRouter";
 import newNoticeRouter from "./newNoticeRouter";
 import productRouter from "./productRouter";
 import userRouter from "./userRouter";
+import PaymentPage from "../pages/payment/PaymentPage";
+
 
 const Loading = <div><SyncLoader /></div>;
 const Main = lazy(() => import("../pages/main/Main"));
@@ -25,6 +27,8 @@ const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
 const RentalList = lazy(() => import("../component/product/RentalList"));
 const UserEnrollmentPage = lazy(() => import("../pages/class/UserEnrollmentPage"));
+const CartPage = lazy(() => import("../pages/cart/CartPage"))
+const PaymentSuccessPage = lazy(() => ("../pages/payment/PaymentPage"))
 
 
 const root = createBrowserRouter([
@@ -97,6 +101,10 @@ const root = createBrowserRouter([
     {
         path: "cart",
         element: <Suspense fallback={Loading}> <CartPage /> </Suspense>
+    },
+    {
+        path: "payment/success",
+        element: <Suspense fallback={Loading}> <PaymentPage /> </Suspense>
     },
     {
         path: "notice",

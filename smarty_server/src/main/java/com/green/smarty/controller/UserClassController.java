@@ -40,9 +40,7 @@ public class UserClassController {
 
     @PostMapping("/enroll")
     public String postenollment(@RequestBody Map<String, String> enrollData) {
-        System.out.println("enrollController : " + enrollData);
         String result = userClassService.classEnrollment(enrollData);
-        System.out.println(result);
         return result;
     }
 

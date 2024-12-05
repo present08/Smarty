@@ -50,7 +50,7 @@ public class UserClassService {
         // 중복 수강등록 제한
         EnrollmentVO enrollCheck = userClassMapper.enrollCheck(enrollData);
         System.out.println("enrollCheck ==== " + enrollCheck);
-        if(enrollCheck != null){
+        if (enrollCheck != null) {
             return "중복 수강할 수 없습니다.";
         }
 
@@ -64,7 +64,7 @@ public class UserClassService {
         }
         String id = "E_" + date.getYear() + date.getMonthValue()
                 + (date.getDayOfMonth() > 10 ? date.getDayOfMonth() : "0" + date.getDayOfMonth())
-                + String.format("%03d", enroll.size() == 0 ? 1 : enroll.size() + 1);
+                + String.format("%03d", enrollList.size() == 0 ? 1 : enrollList.size() + 1);
         enrollData.put("enrollment_id", id);
         EnrollmentVO vo = EnrollmentVO.builder()
                 .class_id(enrollData.get("class_id"))

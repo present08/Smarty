@@ -5,6 +5,7 @@ import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.*;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.vo.LoginHistoryVO;
 import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,20 +103,31 @@ public class UserController {
         }
     }
 
-    //로그인
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session, HttpServletRequest request) {
+        // 로그인 요청을 처리
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
 
+        // 로그인 기록 VO 생성
+        LoginHistoryVO loginHistory = new LoginHistoryVO();
+        loginHistory.setUser_id(loginRequest.getUser_id());
+        loginHistory.setIp_address(request.getRemoteAddr());
+        loginHistory.setUser_agent(request.getHeader("User-Agent"));
+
         if (user != null) {
-            // 로그인 성공 시 로그인 날짜 업데이트
-            userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트 호출
+            // 로그인 성공
+            userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트
+            userLoginHistoryService.logLoginSuccess(loginHistory); // 로그인 성공 기록 추가
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {
-            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
+            // 로그인 실패
+            loginHistory.setLogin_status("FAILURE"); // 실패 상태 설정
+            userLoginHistoryService.logLoginFailure(loginHistory); // 로그인 실패 기록 추가
+
             System.out.println("로그인 실패");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
         }
@@ -200,11 +212,22 @@ public class UserController {
         }
     }
 
-    //로그아웃
+    // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
-        // 세션에서 사용자 정보 제거
-        session.invalidate(); //전체 세션 무효화
+        // 세션에서 사용자 정보 가져오기
+        UserVO user = (UserVO) session.getAttribute("user");
+
+        if (user != null) {
+            // 로그아웃 시간 기록
+            userLoginHistoryService.logLogoutTime(user.getUser_id());
+            System.out.println("로그아웃 기록 추가됨: " + user.getUser_id());
+        } else {
+            System.out.println("로그아웃 요청 시 세션에 사용자 정보가 없음");
+        }
+
+        // 세션 무효화
+        session.invalidate();
 
         System.out.println("로그아웃 성공");
         return ResponseEntity.ok("로그아웃 성공");

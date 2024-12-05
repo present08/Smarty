@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LuCalendarCheck } from 'react-icons/lu';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { MembershipUser } from '../../api/classAPI';
 import { enrollpayment } from '../../api/paymentAPI';
 import '../../css/reservationComplete.css';
 
 const UserEnrollmentPage = () => {
     const location = useLocation();
+
     const { classData, user, e } = location.state
     const init = {
         enrollment_id: e, amount: classData.price, user_id: user.user_id
     }
     const [enrollData, setEnrollData] = useState(init)
     const navigate = useNavigate()
+   
     const closed = (page) => {
         if (page == "mypage") {
             navigate('/mypage', { state: { user } })

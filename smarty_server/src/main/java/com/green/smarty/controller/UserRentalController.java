@@ -1,6 +1,7 @@
 package com.green.smarty.controller;
 
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.service.SendEmailService;
@@ -105,6 +106,21 @@ public class UserRentalController {
         }
     }
 
+    @PutMapping("/rentals/{rental_id}/payment_status")
+    public ResponseEntity<String> updatePaymentStatus(@PathVariable String rental_id, @RequestParam boolean payment_status) {
+        try {
+            int result = userRentalService.updatePaymentStatus(rental_id, payment_status);
+            if (result > 0) {
+                return ResponseEntity.ok("결제 상태가 성공적으로 업데이트");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("결제 상태 업데이트 실패");
+                }
+            } catch (Exception e) {
+                System.out.println("결제 상태 업데이트 오류" + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결제 상태 업데이트 오류");
+            }
+    }
+
     @GetMapping("/rentals/{rental_id}")
     public ResponseEntity<RentalDTO> getRentalById(@PathVariable String rental_id) {
         System.out.println("특정 대여 조회 렌탈ID: " + rental_id );  // 로그 추가
@@ -121,5 +137,11 @@ public class UserRentalController {
         }
     }
 
+    @GetMapping("/rentalUser")
+    public List<ProductRentalUserDTO> getUserRentalListData(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<ProductRentalUserDTO> result = userRentalService.getUserRentalListData(user_id);
+        return result;
+    }
 
 }

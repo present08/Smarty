@@ -114,4 +114,11 @@ public class UserReservationController {
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
     }
+
+    @GetMapping("/membership/{user_id}")
+    public String getMethodName(@PathVariable String user_id) {
+        String membership = reservationMapper.getUserMembership(user_id);
+        return membership;
+    }
+
 }

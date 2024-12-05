@@ -1,7 +1,18 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.mapper.*;
+import com.green.smarty.vo.PaymentVO;
+import com.green.smarty.vo.RentalVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +40,8 @@ public class PaymentService {
     private UserRentalMapper userRentalMapper;
     @Autowired
     private PublicMapper publicMapper;
+    @Autowired
+    private CartMapper cartMapper;
     // (영준) 이메일 발송
     @Autowired
     private SendEmailService sendEmailService;
@@ -49,7 +62,9 @@ public class PaymentService {
             }
         }
 
-        String id = "R_"+ date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) + String.format("%03d",rentalList.size()+1);
+        String id = "R_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+                + String.format("%03d", rentalList.size() + 1);
         System.out.println("rental ID : "+ id);
 
         //            (영준)
@@ -58,7 +73,6 @@ public class PaymentService {
         String userName = userMapper.getUserNameById(user_id);
         String userEmail = userMapper.getUserEmailById(user_id);
         String productName = userProductMapper.getProductNameByProductId(product_id);
-
         if (userName == null || userEmail == null || productName == null) {
             System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
             throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
@@ -75,61 +89,23 @@ public class PaymentService {
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
+        System.out.println("insert rental : "+vo);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("product_id", dto.getProduct_id());
+        map.put("count", dto.getCount());
+        System.out.println("product_id 확인: " + map.get("product_id"));
+        System.out.println("count 확인: "+map.get("count"));
+        int stockDown = userRentalMapper.productStockDown(map);
+
+        if (stockDown > 0) {
+            System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+        } else {
+            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+        }
 
         return vo;
     }
-
-    // 결제 생성
-    // public String createPayment(PaymentVO paymentVO) {
-    // try {
-    // String rentalIdString = String.valueOf(paymentVO.getRental_id());
-    // paymentVO.setRental_id(rentalIdString);
-    //
-    // System.out.println("결제 요청 시 rental_id: ");
-    //
-    // RentalDTO rental = userRentalMapper.getRentalById(rentalIdString);
-    // if (rental == null) {
-    // throw new IllegalArgumentException("rental_id가 존재하지 않습니다: " +
-    // rentalIdString);
-    // }
-
-    // String payment_id = generatePaymentId();
-    // paymentVO.setPayment_id(payment_id);
-    // // paymentVO.setPayment_date(LocalDate.now());
-
-    // // 필수 데이터 검증
-    // if (paymentVO.getAmount() <= 0) {
-    // throw new IllegalArgumentException("결제 금액이 올바르지 않습니다.");
-    // }
-    // if (paymentVO.getRental_id() == null) {
-    // throw new IllegalArgumentException("렌탈 ID가 누락되었습니다.");
-    // }
-
-    // paymentMapper.insertPayment(paymentVO); // 데이터 삽입
-    // return payment_id;
-    // } catch (Exception e) {
-    // System.out.println("결제 생성중 오류 발생: " + e.getMessage());
-    // throw new RuntimeException("결제 생성 실패: " + e.getMessage(), e);
-    // }
-    // }
-
-    // 고유 결제 ID 생성
-    private String generatePaymentId() {
-        return "P_" + System.currentTimeMillis();
-    }
-
-    // //결제 승인
-    // public boolean approvePayment(String payment_id) {
-    // try {
-    // int updateRows = paymentMapper.updatePaymentStatus(payment_id, "승인되었습니다");
-    // if (updateRows == 0) {
-    // throw new RuntimeException("결제를 찾을 수 없거나 이미 승인되었습니다.");
-    // }
-    // return true;
-    // } catch (Exception e) {
-    // throw new RuntimeException("결제 승인 실패: " + e.getMessage(), e);
-    // }
-    // }
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

@@ -12,6 +12,7 @@
         WHERE r.user_id =  #{userId} OR e.user_id =  #{userId} OR ren.user_id =  #{userId};
     </select>
 
+    <!-- 멤버십 등급 추가해주기 -->
     <insert id="insertMembership" parameterType="com.green.smarty.vo.MembershipVO">
         INSERT INTO membership (membership_id, membership_level, user_id)
         VALUES (#{membership_id}, #{membership_level}, #{user_id})
@@ -23,6 +24,26 @@
         SET membership_level = #{membership_level}
         WHERE user_id = #{user_id}
     </update>
- 
+
+    <!-- 회원 등급 불러오기 -->
+    <select id="getUserMembergrade" parameterType="String" resultType="com.green.smarty.vo.MembershipVO">
+        SELECT *
+        FROM membership
+        WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 6개월마다 멤버십 리셋 쿼리 -->
+    <update id="resetMembershipEvery6Months">
+        UPDATE membership
+        SET
+        membership_status = 'INACTIVE',
+        used_benefit_count = 0,
+        last_reset_date = CURRENT_TIMESTAMP,
+        membership_level = '브론즈'
+        WHERE
+        TIMESTAMPDIFF(MONTH, last_reset_date, CURRENT_TIMESTAMP) >= 6
+        OR last_reset_date IS NULL;
+    </update>
+
 
 </mapper>

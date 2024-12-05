@@ -32,10 +32,10 @@ export default function Topbar() {
                 {/* 알림, 언어, 설정 프로필 아이콘 */}
                 <div className="topRight">
                     <div className="topbarIconContainer" onClick={movetoPermission}>
-                        <NotificationsNone />
-                        <span className="topIconBadge">{newData.length}</span>
+                        <NotificationsNone className="dingdong" />
+                        {newData.length == 0 ? <></> : <span className="topIconBadge">{newData.length}</span>}
                     </div>
-                    <div className="topbarIconContainer">
+                    {/* <div className="topbarIconContainer">
                         <Language />
                         <span className="topIconBadge">2</span>
                     </div>
@@ -46,7 +46,7 @@ export default function Topbar() {
                         src="https://cdn.pixabay.com/photo/2020/07/03/13/48/cat-5366401_640.jpg"
                         alt=""
                         className="topAvatar"
-                    />
+                    /> */}
                 </div>
             </div>
         </div>

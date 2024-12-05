@@ -28,6 +28,12 @@
             payment_id = #{payment_id}
     </select>
 
+    <select id="getMaxPaymentIdForDate" parameterType="string" resultType="string">
+        SELECT MAX(payment_id)
+        FROM payment
+        WHERE payment_id LIKE CONCAT('P_', #{datePrefix}, '%')
+    </select>
+
     <!-- enrollment -->
     <select id="getEnrollmentClass" resultType="com.green.smarty.dto.EnrollmentClassDTO">
         select * from enrollment e join class c using(class_id)

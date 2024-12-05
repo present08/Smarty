@@ -5,16 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 
 public class PaymentDetailDTO {
-    String reservation_id;
-    String enrollment_id;
-    float amount;
-    String user_id;
-    String product_id;
-    int count;
+    private String reservation_id;
+    private String enrollment_id;
+    private float amount;
+    private String user_id;
+    private String product_id;
+    private int count;
+    private List<CartItemDTO> items;
 }

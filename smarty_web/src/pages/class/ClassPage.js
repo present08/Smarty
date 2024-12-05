@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import { classEnroll } from '../../api/classAPI';
+import { classEnroll, MembershipUser } from '../../api/classAPI';
 import '../../css/classPage.css';
 
 
@@ -10,15 +10,28 @@ const ClassPage = (props) => {
     const { classData, setModal } = props;
     const [enrollData, setEnrollData] = useState({ user_id: '', class_id: '' });
     const user = JSON.parse(localStorage.getItem("user"));
+    const [membership, setMembership] = useState("");
+    const [Dprice, setDPrice] = useState(classData.price)
     const closeModal = () => {
         setModal(null)
     }
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(classData)
         setEnrollData({ user_id: user.user_id, class_id: classData.class_id });
+        MembershipUser(user.user_id).then(e => {
+            setMembership(e)
+            switch (e) {
+                case "브론즈": setDPrice(classData.price); break;
+                case "실버": setDPrice(Math.floor((classData.price - (classData.price * 0.03)) / 10) * 10); break;
+                case "골드": setDPrice(Math.floor((classData.price - (classData.price * 0.05)) / 10) * 10); break;
+                case "플래티넘": setDPrice(Math.floor((classData.price - (classData.price * 0.07)) / 10) * 10); break;
+                case "다이아": setDPrice(Math.floor((classData.price - (classData.price * 0.1)) / 10) * 10); break;
+            }
+        })
+        console.log(membership)
     }, [])
-
 
     const enrollClass = () => {
         classEnroll(enrollData).then(e => {
@@ -49,6 +62,10 @@ const ClassPage = (props) => {
                         <div className='classText'>{classData.facility_name}</div>
                     </div>
                     <div className='classInfo'>
+                        <div className='classSubtitle'>수강 요금</div>
+                        <div className='classText'>{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color: 'gray', fontSize: '15px', marginRight: "5px" }}> {classData.price} </span> <span style={{ fontWeight: "bold" , color:'red' }}>{Dprice}</span></> : classData.price}</div>
+                    </div>
+                    <div className='classInfo'>
                         <div className='classSubtitle'>수강 시작일</div>
                         <div className='classText'>{classData.start_date}</div>
                     </div>
@@ -68,6 +85,7 @@ const ClassPage = (props) => {
                         <div className='classSubtitle'>수강 정원</div>
                         <div className='classText'>{classData.class_size} 명</div>
                     </div>
+                    <p style={{ display: 'block', width: '100%', textAlign: 'center' }}>* 맴버십 등급에 맞는 할인된 금액으로 결제 됩니다.</p>
                 </div>
                 <button onClick={enrollClass} className='enrollBtn'>등록하기</button>
             </div>

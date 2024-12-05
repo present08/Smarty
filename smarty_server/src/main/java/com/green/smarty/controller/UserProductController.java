@@ -39,50 +39,6 @@ public class UserProductController {
             return productList;
     }
 
-//    @PostMapping("/products")
-//    public ResponseEntity<String> postProduct(
-//            @RequestPart("product") ProductVO vo,
-//            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
-//        try {
-//            log.info("상품 등록 요청: {}", vo);
-//            log.info("첨부 파일: {}", files != null ? files.size() : 0);
-//
-//            Long productId = service.register(vo, files);
-//            return ResponseEntity.ok(productId + "번 등록 되었습니다");
-//        } catch (Exception e) {
-//            log.error("상품 등록 실패: ", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("상품 등록에 실패했습니다: " + e.getMessage());
-//        }
-//    }
-
-//    @DeleteMapping("/products/{product_id}")
-//    public ResponseEntity<String> deleteProduct(@PathVariable String product_id) {
-//        try {
-//            service.deleteProduct(product_id);
-//            return ResponseEntity.ok("상품이 삭제되었습니다.");
-//        } catch (Exception e) {
-//            log.error("상품 삭제 실패: ", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("상품 삭제에 실패했습니다: " + e.getMessage());
-//        }
-//    }
-
-//    @PutMapping("/products/{product_id}")
-//    public ResponseEntity<String> updateProduct(
-//            @PathVariable Long product_id,
-//            @RequestPart("product") ProductVO vo,
-//            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
-//        try {
-//            vo.setProduct_id(product_id);
-//            service.updateProduct(vo, files);
-//            return ResponseEntity.ok("상품이 수정되었습니다.");
-//        } catch (Exception e) {
-//            log.error("상품 수정 실패: ", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("상품 수정에 실패했습니다: " + e.getMessage());
-//        }
-//    }
 
     @GetMapping("/products/detail/{product_id}")
     public ResponseEntity<ProductVO> getProductById(@PathVariable String product_id) {

@@ -3,10 +3,13 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -48,7 +51,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("C:\\Users\\Administrator\\Desktop\\Green_Project\\Smarty\\smarty_server\\upload")
+        Path filePath = Paths.get("/Users/hyesoo/Desktop/TF33_smarty/Smarty/smarty_server/upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -81,7 +84,6 @@ public class UserReservationController {
     @PostMapping("/{facility_id}")
     public UserReservationDTO dateToTime(@RequestBody ReservationDTO dto) {
         UserReservationDTO result = reservationService.insertReservation(dto);
-        System.out.println(dto);
         return result;
     }
 
@@ -111,6 +113,12 @@ public class UserReservationController {
 
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
+    }
+
+    @GetMapping("/membership/{user_id}")
+    public String getMethodName(@PathVariable String user_id) {
+        String membership = reservationMapper.getUserMembership(user_id);
+        return membership;
     }
 
 }

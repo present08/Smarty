@@ -1,18 +1,18 @@
-import "./sidebar.css"
+import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { getListFacility } from "../../../api/admin/facilityApi";
-import { useEffect, useState } from "react";
+import "./sidebar.css";
 
 export default function Sidebar() {
     const {facility_id} = useParams()
-    const [facility, setFacility] = useState([])    // API에서 받은 시설 정보 저장
+    const [facility, setFacility] = useState([])
 
     useEffect(() => {
         getListFacility().then(res => {
             setFacility(res)
         }).catch((error) => console.log("ERROR! : ", error))
     }, [facility_id])
-    
+
     return (
         <div className="sidebar">
             <div className="sidebarWrapper">
@@ -36,8 +36,8 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li className="sidebarListItem">
-                            <Link to="/admin" className="link">
-                                MUAM
+                            <Link to="/admin/permission" className="link">
+                                결제/승인
                             </Link>
                         </li>
                     </ul>
@@ -49,7 +49,7 @@ export default function Sidebar() {
                         {facility && facility.map((facility, i) => (
                             <li
                                 key={i}
-                                className="sidebarListItem collapse"
+                                className="sidebarListItem"
                                 id={`sidebarListItem${i}`}
                             >
                                 {facility.facility_name}

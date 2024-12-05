@@ -1,10 +1,10 @@
 import "./facilityRead.css"
 import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { API_SERVER_HOST, getOneFacility } from "../../../../api/admin/facilityApi"
+import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
-import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
-import { useNavigate, useParams } from "react-router-dom"
 import { Add } from '@mui/icons-material';
 
 const initFacility = {
@@ -34,7 +34,6 @@ export default function FacilityRead() {
     useEffect(() => {
         getOneFacility(facility_id).then(res => {
             setCurrentFacility(res)
-            getListCourt(facility_id)
         }).catch((error) => console.error("ERROR!", error))
     }, [facility_id, newCourt])
 

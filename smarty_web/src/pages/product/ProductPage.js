@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { getFailityData, getProduct } from '../../api/productApi';
-import { getFaility } from '../../api/facilityApi';
 import Footer from '../../component/Footer';
 import MainNav from '../../component/MainNav';
 import Wrapper from '../../component/Wrapper';

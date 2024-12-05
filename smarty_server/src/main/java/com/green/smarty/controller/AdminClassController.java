@@ -4,7 +4,6 @@ import com.green.smarty.dto.ClassAdminDTO;
 import com.green.smarty.service.AdminClassService;
 import com.green.smarty.vo.ClassDetailVO;
 import com.green.smarty.vo.ClassVO;
-import com.green.smarty.vo.CourtVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +54,8 @@ public class AdminClassController {
     public String modify(
             @PathVariable(name = "class_id") String class_id,
             @RequestBody ClassAdminDTO classAdminDTO) {
+        System.out.println("클래스 수정! class_id = " + class_id);
+        System.out.println("클래스 수정! classAdminDTO = " + classAdminDTO);
         adminClassService.modify(class_id, classAdminDTO);
         return "클래스 수정 성공";
     }

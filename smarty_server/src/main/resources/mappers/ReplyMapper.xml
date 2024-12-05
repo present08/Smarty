@@ -7,13 +7,11 @@
         board_id,
         content,
         send_date,
-        parent_id,
         user_id
         ) VALUES (
         #{board_id},
         #{content},
         NOW(),
-        #{parent_id},
         #{user_id}
         )
     </insert>
@@ -25,15 +23,31 @@
         board_id,
         content,
         send_date,
-        parent_id
+        user_id
         FROM reply
         WHERE board_id = #{board_id}
         ORDER BY
-        COALESCE(parent_id, reply_id),
-        send_date ASC
+        send_date DESC
     </select>
 
+    <select id="selectByReplyId" resultType="com.green.smarty.dto.ReplyDTO">
+        SELECT reply_id, board_id, content, send_date, user_id
+        FROM reply
+        WHERE
+        reply_id = #{reply_id}
+    </select>
+
+<!-- 댓글 삭제-->
     <delete id="deleteById">
-        DELETE FROM board WHERE board_id = #{board_id}
+        DELETE FROM reply WHERE reply_id = #{reply_id}
     </delete>
+
+<!--    댓글 수정-->
+    <update id="updateById" parameterType="com.green.smarty.dto.ReplyDTO">
+        UPDATE
+        reply
+        SET
+        content = #{content}
+        WHERE reply_id = #{reply_id}
+    </update>
 </mapper>

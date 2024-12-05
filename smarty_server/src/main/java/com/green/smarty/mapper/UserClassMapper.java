@@ -18,11 +18,17 @@ public interface UserClassMapper {
 
     List<ClassVO> getClassAll();
 
+    ClassVO getClassVO(String class_id);
+
     List<UserClassDTO> getClassDTO();
 
     List<ClassDetailVO> getClassDetail();
 
     List<EnrollmentVO> getEnrollment();
+    
+    List<EnrollmentVO> getEnrollSize(String class_id);
+
+    EnrollmentVO enrollCheck(Map<String,String> enrollData);
 
     void classEnroll(EnrollmentVO vo);
 }

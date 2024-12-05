@@ -30,9 +30,9 @@ export default function WidgetLg() {
                         {/* <th className="widgetLgTh">Status</th> */}
                     </tr>
                 </thead>
-                <tbody style={{tableLayout: 'fixed'}}>
+                <tbody style={{ tableLayout: 'fixed' }}>
                     {itemList.map(item => (
-                        <tr className="widgetLgTr">
+                        <tr key={item.user_id} className="widgetLgTr">
                             <td className="widgetLgUser">
                                 {/* <img 
                         src="https://cdn.pixabay.com/photo/2022/01/18/07/38/cat-6946505_640.jpg" 

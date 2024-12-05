@@ -1,7 +1,18 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.mapper.*;
+import com.green.smarty.vo.PaymentVO;
+import com.green.smarty.vo.RentalVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +45,10 @@ public class PaymentService {
     // (영준) 이메일 발송
     @Autowired
     private SendEmailService sendEmailService;
+    @Autowired
+    private CartMapper cartMapper;
+    @Autowired
+    private UserProductMapper userProductMapper;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
@@ -41,6 +56,9 @@ public class PaymentService {
         List<RentalVO> rentalList = new ArrayList<>();
         for (RentalVO item : rentalVO) {
             String itemDate = item.getRental_id().substring(2, 10);
+
+        for(RentalVO item : rentalVO){
+            String itemDate = item.getRental_id().substring(2,10);
             System.out.println(itemDate);
             if(itemDate.equals("" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))){
                 rentalList.add(item);
@@ -48,6 +66,9 @@ public class PaymentService {
         }
 
         String id = "R_"+ date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) + String.format("%03d",rentalList.size()+1);
+        String id = "R_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+                + String.format("%03d", rentalList.size() + 1);
         System.out.println("rental ID : "+ id);
 
         RentalVO vo = RentalVO.builder()
@@ -115,6 +136,23 @@ public class PaymentService {
     // throw new RuntimeException("결제 승인 실패: " + e.getMessage(), e);
     // }
     // }
+
+        System.out.println("insert rental : "+vo);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("product_id", dto.getProduct_id());
+        map.put("count", dto.getCount());
+        System.out.println("product_id 확인: " + map.get("product_id"));
+        System.out.println("count 확인: "+map.get("count"));
+        int stockDown = userRentalMapper.productStockDown(map);
+
+        if (stockDown > 0) {
+        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+        } else {
+            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+        }
+        return vo;
+    }
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

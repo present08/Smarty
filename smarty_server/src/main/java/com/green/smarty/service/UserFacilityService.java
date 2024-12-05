@@ -2,6 +2,7 @@ package com.green.smarty.service;
 
 import com.green.smarty.dto.FacilityDTO;
 import com.green.smarty.dto.ProductDTO;
+import com.green.smarty.dto.UserReservationFacilityDTO;
 import com.green.smarty.mapper.UserFacilityMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.vo.FacilityVO;
@@ -24,5 +25,9 @@ public class UserFacilityService {
 
     public List<ProductDTO> getProductsByFacilityId(String facility_id) {
         return userProductMapper.getProductsByFacilityId(facility_id);
+    }
+
+    public List<UserReservationFacilityDTO> getUserReservationFacility(String user_id) {
+        return userFacilityMapper.getUserReservationFacility(user_id);
     }
 }

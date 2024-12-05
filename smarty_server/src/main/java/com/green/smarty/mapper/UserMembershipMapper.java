@@ -17,4 +17,8 @@ public interface UserMembershipMapper {
 
     void updateMembershipLevel (@Param("user_id") String user_id, @Param("membership_level") String membership_level);
 
+    List<MembershipVO>getUserMembergrade (String user_id);
+
+    int resetMembershipEvery6Months();
+
 }

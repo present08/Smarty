@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,9 +85,9 @@ public class UserController {
             System.out.println("회원가입 성공 : " + userVO);
 
             try {
-
                 // 멤버십 아이디 발급 및 초기 데이터 저장
-                String membershipId = "M_" + userVO.getUser_id(); // 예: "M_user123"
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+                String membershipId = "m_" + userVO.getUser_id()+ "_" + timestamp ;
 
                 MembershipVO membership = new MembershipVO();
                 membership.setMembership_id(membershipId);

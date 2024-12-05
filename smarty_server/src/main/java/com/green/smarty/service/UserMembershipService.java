@@ -1,12 +1,19 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.UserClassApplicationDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.mybatis.spring.SqlSessionTemplate;
 
 import com.green.smarty.mapper.UserMembershipMapper;
 import com.green.smarty.vo.MembershipVO;
 
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 
 public class UserMembershipService {
 
@@ -38,8 +45,22 @@ public class UserMembershipService {
         } else if (totalAmount >= 300) {
             newLevel = "실버";
         }
+        userMembershipMapper.updateMembershipLevel(user_id, newLevel);
+    }
 
-        // 여기에서 메서드 이름을 잘못 적은 것 같습니다.
-        userMembershipMapper.updateMembershipLevel(user_id, newLevel); // 수정된 부분
+    public List<MembershipVO> getUserMembergrade (String user_id) {
+        List<MembershipVO> result = userMembershipMapper.getUserMembergrade(user_id);
+        return result;
+    }
+
+    @Scheduled(cron = "0 0 0 1 6,12 ?") //6월 12월에 수정
+    //@Scheduled(cron = "0 */1 * * * ?") -> 테스트용 1분마다 변경
+    public void scheduledMembershipReset() {
+        int resetCount = userMembershipMapper.resetMembershipEvery6Months();
+        if (resetCount > 0) {
+            System.out.println("Memberships reset successfully: " + resetCount);
+        } else {
+            System.out.println("No memberships required resetting.");
+        }
     }
 }

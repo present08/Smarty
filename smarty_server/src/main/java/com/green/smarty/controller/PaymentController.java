@@ -88,8 +88,10 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         RentalVO rentalID = paymentService.insertRental(dto, id);
 
+
+        // 멤버십 업데이트(혜수코드)
         System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
-        // 멤버십 업데이트
+
         userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return id;
@@ -202,6 +204,13 @@ public class PaymentController {
                 .build();
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
+
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(
+                enrollData.get("user_id"),
+                Float.parseFloat(enrollData.get("amount"))
+        );
+
         return "예약 완료";
     }
 
@@ -237,6 +246,9 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
 
         UserReservationDTO result = reservationService.insertReservation(dto);
+
+        // 멤버십 업데이트(혜수코드)
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return result;
     }

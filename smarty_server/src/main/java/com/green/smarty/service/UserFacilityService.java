@@ -30,4 +30,9 @@ public class UserFacilityService {
     public List<UserReservationFacilityDTO> getUserReservationFacility(String user_id) {
         return userFacilityMapper.getUserReservationFacility(user_id);
     }
+    // (영준)
+    public String getFacilityNameById(String facility_id){
+        return userFacilityMapper.getFacilityNameById(facility_id);
+    }
+
 }

@@ -2,6 +2,9 @@ package com.green.smarty.controller;
 
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.ProductRentalUserDTO;
+import com.green.smarty.mapper.UserMapper;
+import com.green.smarty.mapper.UserProductMapper;
+import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserRentalService;
 
 import com.green.smarty.dto.RentalDTO;
@@ -24,6 +27,14 @@ import java.util.Map;
 public class UserRentalController {
     @Autowired
     private UserRentalService userRentalService;
+
+    // (영준)
+    @Autowired
+    private SendEmailService sendEmailService;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private UserProductMapper userProductMapper;
 
     @GetMapping("/rentals")
     public ResponseEntity<List<RentalDTO>> getRental() {
@@ -58,9 +69,12 @@ public class UserRentalController {
             vo.setRental_status(true);
             vo.setCount(count);
 
+
             //대여 생성 및 ID 반환
             int rentalId = userRentalService.insertRental(vo, count);
             System.out.println("rental_id 반환 확인: " + rentalId);
+
+
 
             //대여 ID 반환
             return ResponseEntity.ok(Map.of(

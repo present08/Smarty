@@ -1,5 +1,15 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.mapper.*;
+import com.green.smarty.vo.PaymentVO;
+import com.green.smarty.vo.RentalVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +40,8 @@ public class PaymentService {
     private UserRentalMapper userRentalMapper;
     @Autowired
     private PublicMapper publicMapper;
+    @Autowired
+    private CartMapper cartMapper;
     // (영준) 이메일 발송
     @Autowired
     private SendEmailService sendEmailService;
@@ -42,7 +54,6 @@ public class PaymentService {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
-
         for (RentalVO item : rentalVO) {
             String itemDate = item.getRental_id().substring(2, 10);
             System.out.println(itemDate);
@@ -51,10 +62,12 @@ public class PaymentService {
             }
         }
 
-        String id = "R_"+ date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) + String.format("%03d",rentalList.size()+1);
+        String id = "R_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+                + String.format("%03d", rentalList.size() + 1);
         System.out.println("rental ID : "+ id);
 
-        //(영준이 추가 코드)
+        //            (영준)
         String user_id = dto.getUser_id();
         String product_id = dto.getProduct_id();
         String userName = userMapper.getUserNameById(user_id);
@@ -66,7 +79,6 @@ public class PaymentService {
         }
         sendEmailService.rentalProduct(userEmail, userName, productName);
 
-
         RentalVO vo = RentalVO.builder()
                 .rental_id(id)
                 .count(dto.getCount())
@@ -77,6 +89,7 @@ public class PaymentService {
                 .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
+        System.out.println("insert rental : "+vo);
 
         Map<String, Object> map = new HashMap<>();
         map.put("product_id", dto.getProduct_id());
@@ -93,8 +106,6 @@ public class PaymentService {
 
         return vo;
     }
-
-
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

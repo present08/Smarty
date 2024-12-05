@@ -63,4 +63,23 @@
         WHERE
             r.user_id = #{user_id}
     </select>
+
+<!--    (영준) facility_id 로 facility_name 조회-->
+    <select id="getFacilityNameById" parameterType="String">
+        SELECT facility_name
+        FROM facility
+        WHERE facility_id = #{facility_id}
+    </select>
+    <select id="getClassNameByReservationId" parameterType="String">
+        SELECT
+        c.class_name
+        FROM
+        reservation r
+        JOIN
+        class c
+        ON
+        r.court_id = c.facility_id
+        WHERE
+        r.reservation_id = #{reservation_id}
+    </select>
 </mapper>

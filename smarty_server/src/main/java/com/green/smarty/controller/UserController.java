@@ -22,31 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.green.smarty.dto.ProductRentalMyPageUserDTO;
-import com.green.smarty.dto.ReservationUserDTO;
-import com.green.smarty.dto.UserClassApplicationDTO;
-import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.service.QRCodeService;
-import com.green.smarty.service.UserReservationService;
-import com.green.smarty.service.UserService;
-import com.green.smarty.vo.UserVO;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 @RequestMapping("/api/auth")
 
@@ -116,13 +91,11 @@ public class UserController {
 
             } catch (Exception e) {
                 System.out.println("QR 코드 생성 중 오류 발생: " + e.getMessage());
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("회원가입 성공, 하지만 QR 코드 생성 중 오류가 발생했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 성공, 하지만 QR 코드 생성 중 오류가 발생했습니다.");
             }
         } else {
             System.out.println("회원가입 실패");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("UserID or UserEmail already exists."); // 중복된 사용자 ID
-                                                                                                           // 또는 이메일
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("UserID or UserEmail already exists.");  // 중복된 사용자 ID 또는 이메일
         }
     }
 
@@ -145,33 +118,34 @@ public class UserController {
         }
     }
 
-    // 사용자 정보 가져오기
+
+    //사용자 정보 가져오기
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         UserVO userVO = (UserVO) session.getAttribute("user");
-        if (userVO != null) {
+        if (userVO != null){
             return ResponseEntity.ok(userVO);
-        } else {
+        }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No authenticated user.");
         }
     }
 
-    // 아이디 찾기
+    //아이디 찾기
     @PostMapping("/findID")
     public ResponseEntity<?> findID(@RequestBody UserVO vo) {
-        String userID = userservice.findByID(vo.getEmail(), vo.getUser_name());
+        String userID = userservice.findByID(vo.getEmail(),vo.getUser_name());
         System.out.println("controller: " + vo);
 
         if (userID != null) {
             System.out.println("등록된 ID가 있습니다: " + userID);
-            return ResponseEntity.ok(Collections.singletonMap("userID", userID)); // 성공 시 ID를 JSON으로 반환
+            return ResponseEntity.ok(Collections.singletonMap("userID", userID));  // 성공 시 ID를 JSON으로 반환
         } else {
             System.out.println("등록된 ID 없습니다");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 이메일로 등록된 아이디가 없습니다.");
         }
     }
 
-    // 비밀번호 찾기
+    //비밀번호 찾기
     @PostMapping("/find-password")
     public ResponseEntity<?> resetPassword(@RequestBody UserVO vo) {
         // 사용자 정보 확인
@@ -186,13 +160,14 @@ public class UserController {
         }
     }
 
+
     // 비밀번호 변경
     @PostMapping("/pwchange")
     public ResponseEntity<?> updatePassword(@RequestBody UserVO vo) {
         System.out.println(vo.getUser_id());
         System.out.println(vo.getPassword());
 
-        boolean isSuccess = userservice.updatePassword(vo.getUser_id(), vo.getPassword());
+        boolean isSuccess = userservice.updatePassword(vo.getUser_id(),vo.getPassword());
 
         if (isSuccess) {
             // 비밀번호 변경 성공 시 메시지 반환
@@ -208,33 +183,33 @@ public class UserController {
     public ResponseEntity<Map<String, Boolean>> checkLoginStatus(HttpServletRequest request) {
         // 세션에서 user 속성 가져오기
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if(session != null){
             Boolean isLoggedIn = session.getAttribute("user") != null;
-            System.out.println("session: " + session);// user이 있다면 로그인 상태로 간주
-            System.out.println("isLogin: " + isLoggedIn);
+            System.out.println("session: "+ session);// user이 있다면 로그인 상태로 간주
+            System.out.println("isLogin: "+ isLoggedIn);
             // 로그인 상태 응답
             Map<String, Boolean> response = new HashMap<>();
             response.put("isLoggedIn", isLoggedIn);
             return ResponseEntity.ok(response);
-        } else {
+        }else{
             System.out.println("세션없음");
             return null;
         }
     }
 
-    // 로그아웃
+    //로그아웃
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         // 세션에서 사용자 정보 제거
-        session.invalidate(); // 전체 세션 무효화
+        session.invalidate(); //전체 세션 무효화
 
         System.out.println("로그아웃 성공");
         return ResponseEntity.ok("로그아웃 성공");
     }
 
-    // 사용자 휴면 여부 확인
+    //사용자 휴면 여부 확인
     @GetMapping("/me/{userId}")
-    public String getUserStatus(@PathVariable("userId") String userId) {
+    public String getUserStatus(@PathVariable("userId") String userId){
         System.out.println();
         return userservice.checkUserStatus(userId);
     }
@@ -249,7 +224,7 @@ public class UserController {
             }
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_PNG)
-                    .body(qrCode); // QR 코드를 반환
+                    .body(qrCode);  // QR 코드를 반환
         } catch (Exception e) {
             System.out.println("QR 코드 가져오는 중 오류 발생: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -268,7 +243,7 @@ public class UserController {
 
     // 예약정보
     @GetMapping("/reservationUser")
-    public List<ReservationUserDTO> getReservationUserDate(@RequestParam String user_id) {
+    public List<ReservationUserDTO> getReservationUserDate(@RequestParam String user_id){
         System.out.println(user_id);
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
@@ -283,9 +258,9 @@ public class UserController {
     // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
-        System.out.println("유저아이디 확인 : " + user_id);
-        List<UserClassApplicationDTO> result = userservice.getClassUserApplication(user_id);
-        return result;
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
+        return  result;
     }
 
     // 대여물품 리스트
@@ -300,11 +275,11 @@ public class UserController {
     public ResponseEntity<UserVO> checkLogin(HttpServletRequest request) {
         // 세션에서 user 속성 가져오기
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if(session != null){
             UserVO userVO = (UserVO) session.getAttribute("user");
-            System.out.println("session: " + userVO);// user이 있다면 로그인 상태로 간주
+            System.out.println("session: "+ userVO);// user이 있다면 로그인 상태로 간주
             return ResponseEntity.ok(userVO);
-        } else {
+        }else{
             System.out.println("세션없음");
             return null;
         }

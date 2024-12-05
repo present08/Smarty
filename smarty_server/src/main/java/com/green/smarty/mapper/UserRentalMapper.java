@@ -39,6 +39,7 @@ public interface UserRentalMapper {
     //특정 사용자 대여 목록 조회
     List<ProductRentalUserDTO> getUserRentalListData(String user_id);
 
+    String getMaxRentalIdForDate(@Param("datePrefix") String datePrefix);
     //  (영준) 기간 지난 사람 색출해서 알림을 보내기 위한 코드
     List<RentalDTO> getOverdueRentals();
 

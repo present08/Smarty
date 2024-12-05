@@ -117,6 +117,18 @@
         <result property="rental_id" column="rental_id" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
+        UPDATE payment
+        SET payment_status = #{payment_status}
+        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id})
+    </update>
+
+    <select id="getMaxRentalIdForDate" parameterType="string" resultType="string">
+        SELECT MAX(rental_id)
+        FROM rental
+        WHERE rental_id LIKE CONCAT('R_', #{datePrefix}, '%')
+    </select>
+
 <!--    (영준) 알림을 위해서 추가한 코드-->
     <select id="getOverdueRentals" resultType="com.green.smarty.dto.RentalDTO">
         SELECT * FROM rental
@@ -130,17 +142,4 @@
         FROM user
         WHERE user_id = #{user_id}
     </select>
-    <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
-        UPDATE payment
-        SET payment_status = #{payment_status}
-        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id})
-    </update>
-
-    <select id="getMaxRentalIdForDate" parameterType="string" resultType="string">
-        SELECT MAX(rental_id)
-        FROM rental
-        WHERE rental_id LIKE CONCAT('R_', #{datePrefix}, '%')
-    </select>
-
-
 </mapper>

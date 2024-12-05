@@ -2,12 +2,15 @@ package com.green.smarty.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.UserMapper;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,15 @@ import com.green.smarty.vo.ReservationVO;
 public class UserReservationService {
     @Autowired
     private UserReservationMapper reservationMapper;
+
+    //    (영준)
+    @Autowired
+    private SendEmailService sendEmailService;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private UserFacilityService userFacilityService;
+
 
     public List<FacilityDTO> getFacility() {
         List<FacilityDTO> dto = reservationMapper.getFacilityOFCourt();
@@ -129,7 +141,7 @@ public class UserReservationService {
             // 마지막 예약번호 받아오기(배열에 데이터가 없을 경우 예외처리)
             String nowDate = "" + LocalDate.now().getYear() + LocalDate.now().getMonthValue()
                     + (LocalDate.now().getDayOfMonth() < 10 ? String.format("%02d", LocalDate.now().getDayOfMonth())
-                            : LocalDate.now().getDayOfMonth());
+                    : LocalDate.now().getDayOfMonth());
             int last_id = 0;
             System.out.println(nowDate);
 
@@ -159,5 +171,4 @@ public class UserReservationService {
         List<ReservationUserDTO> result = reservationMapper.getReservationUserDate(user_id);
         return result;
     }
-
 }

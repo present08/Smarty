@@ -54,7 +54,7 @@ public class UserMembershipService {
     }
 
     @Scheduled(cron = "0 0 0 1 6,12 ?") //6월 12월에 수정
-    //@Scheduled(cron = "0 */1 * * * ?") -> 테스트용 1분마다 변경
+//    @Scheduled(cron = "0 */1 * * * ?") // -> 테스트용 1분마다 변경
     public void scheduledMembershipReset() {
         int resetCount = userMembershipMapper.resetMembershipEvery6Months();
         if (resetCount > 0) {

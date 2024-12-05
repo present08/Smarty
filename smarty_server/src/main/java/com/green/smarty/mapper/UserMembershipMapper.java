@@ -21,4 +21,7 @@ public interface UserMembershipMapper {
 
     int resetMembershipEvery6Months();
 
+    int resetRemainingAmountEvery6Months();
+
+
 }

@@ -5,34 +5,28 @@ import com.green.smarty.vo.LoginHistoryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 
 @Service
-
 public class UserLoginHistoryService {
 
     @Autowired
-    private UserLoginHistoryMapper userloginHistoryMapper;
+    private UserLoginHistoryMapper userLoginHistoryMapper;
 
-    // 로그인 기록 삽입
+    // 로그인 성공 기록 삽입
     public void logLoginSuccess(LoginHistoryVO loginHistory) {
         loginHistory.setLogin_status("SUCCESS");
-        userloginHistoryMapper.insertLoginHistory(loginHistory);
+        userLoginHistoryMapper.insertLoginHistory(loginHistory);
     }
 
     // 로그인 실패 기록 삽입
     public void logLoginFailure(LoginHistoryVO loginHistory) {
         loginHistory.setLogin_status("FAILURE");
-        userloginHistoryMapper.insertLoginFailureHistory(loginHistory);
-    }
-
-    // 특정 사용자의 로그인 기록 조회
-    public List<LoginHistoryVO> getLoginHistory(String userId) {
-        return userloginHistoryMapper.getLoginHistoryByUserId(userId);
+        userLoginHistoryMapper.insertLoginFailureHistory(loginHistory);
     }
 
     // 로그아웃 시간 업데이트
     public void logLogoutTime(String userId) {
-        userloginHistoryMapper.updateLogoutTime(userId);
+        userLoginHistoryMapper.updateLogoutTime(userId);
     }
 }

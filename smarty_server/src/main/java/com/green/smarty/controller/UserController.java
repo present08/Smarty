@@ -45,6 +45,9 @@ public class UserController {
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
 
+    @Autowired
+    private UserLoginHistoryService userLoginHistoryService;
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {

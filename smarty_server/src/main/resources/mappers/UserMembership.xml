@@ -9,7 +9,8 @@
         LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
         LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
         LEFT JOIN rental ren ON p.rental_id = ren.rental_id
-        WHERE r.user_id =  #{userId} OR e.user_id =  #{userId} OR ren.user_id =  #{userId};
+        WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})
+        AND (MONTH(p.payment_date) BETWEEN 1 AND 6 OR MONTH(p.payment_date) BETWEEN 7 AND 12);
     </select>
 
     <!-- 멤버십 등급 추가해주기 -->
@@ -41,9 +42,8 @@
         last_reset_date = CURRENT_TIMESTAMP,
         membership_level = '브론즈'
         WHERE
-        TIMESTAMPDIFF(MONTH, last_reset_date, CURRENT_TIMESTAMP) >= 6
-        OR last_reset_date IS NULL;
+        MONTH(CURRENT_TIMESTAMP) = 6 OR MONTH(CURRENT_TIMESTAMP) = 12;
     </update>
 
-
 </mapper>
+

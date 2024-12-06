@@ -17,6 +17,8 @@ const ProductRead = lazy(() => import("../pages/admin/products/productRead/Produ
 
 const Permission = lazy(() => import("../component/admin/permission/Permission"))
 
+const Mail = lazy(() => import("../pages/admin/mail/Mail"))
+
 const adminRouter = () => {
 
     return [
@@ -67,6 +69,10 @@ const adminRouter = () => {
         {// muam i 77ㅓ
             path: "permission",
             element: <Suspense fallback={<SyncLoader />}><Permission /></Suspense>,
+        },
+        {// younjun i 77ㅓ
+            path: "mail",
+            element: <Suspense fallback={<SyncLoader />}><Mail /></Suspense>,
         }
     ]
 }

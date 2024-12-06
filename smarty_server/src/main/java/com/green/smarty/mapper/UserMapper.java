@@ -47,8 +47,8 @@ public interface UserMapper {
     String getIdByEmail(String email);
     // (영준) 로그인한지 3개월이 지난 유저 찾기
     List<UserVO> getUserHuman();
-    // (영준) 만료 일주일 전 사람들
-    List<UserVO> getUserHumanBerforeSevendays();
-    // (영준) 만료 메세지 보내고 sent_human_message true로 업데이트
-    void updateSentHumanMessage(String user_id);
+    // (영준) 로그인한지 3개월이 지나기 일주일 전 유저 찾기
+    List<UserVO> humanSevenbefore();
+    // (영준) 이메일 발송을 위해 필요한 정보만 가져오는 Get
+    List<UserVO> getUserForSendMail();
 }

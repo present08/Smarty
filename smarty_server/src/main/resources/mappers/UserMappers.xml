@@ -149,18 +149,17 @@
         AND user_status = 1;
     </select>
 
-
-    <!--    영준-->
-    <select id="getUserHumanBerforeSevendays" parameterType="com.green.smarty.vo.UserVO">
-        SELECT * FROM login_history lh
-        JOIN user u
-        ON lh.user_id = u.user_id
-        WHERE lh.sent_human_message = 0;
+<!--    영준-->
+    <select id="humanSevenbefore" parameterType="com.green.smarty.vo.UserVO">
+        SELECT *
+        FROM user
+        WHERE login_date = DATE_SUB(DATE_SUB(CURDATE(), INTERVAL 3 MONTH), INTERVAL 7 DAY);
     </select>
 
+<!--    영준-->
+    <select id="getUserForSendMail" parameterType="com.green.smarty.vo.UserVO">
+        SELECT user_id, user_name, email
+        FROM user
+    </select>
 
-    <!--    영준-->
-    <update id="updateSentHumanMessage" parameterType="String">
-        update login_history SET sent_human_message = true WHERE user_id = #{user_id};
-    </update>
 </mapper>

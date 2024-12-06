@@ -19,6 +19,9 @@ public class UserMembershipService {
 
     @Autowired
     UserMembershipMapper userMembershipMapper;
+//    (영준)
+    @Autowired
+    private SendEmailService sendEmailService;
 
     // 결제 금액 합계를 반환하는 메서드
     public float getPaymentDetailsByUserId(String user_id) {
@@ -45,7 +48,17 @@ public class UserMembershipService {
         } else if (totalAmount >= 300) {
             newLevel = "실버";
         }
-        userMembershipMapper.updateMembershipLevel(user_id, newLevel);
+
+
+        String currentLevel = userMembershipMapper.getlevelbyuserid(user_id);
+        String email = userMembershipMapper.getEmailbyuserId(user_id);
+        String user_name = userMembershipMapper.getUsernamebyuserId(user_id);
+
+        if(!newLevel.equals(currentLevel)){
+            System.out.println("이거 실행되긴함?");
+            userMembershipMapper.updateMembershipLevel(user_id, newLevel);
+            sendEmailService.sendMembershipLevel(email, newLevel, user_name, user_id);
+        }
     }
 
     public List<MembershipVO> getUserMembergrade (String user_id) {
@@ -54,7 +67,7 @@ public class UserMembershipService {
     }
 
     @Scheduled(cron = "0 0 0 1 6,12 ?") //6월 12월에 수정
-    //@Scheduled(cron = "0 */1 * * * ?") -> 테스트용 1분마다 변경
+//    @Scheduled(cron = "0 */1 * * * ?") // -> 테스트용 1분마다 변경
     public void scheduledMembershipReset() {
         int resetCount = userMembershipMapper.resetMembershipEvery6Months();
         if (resetCount > 0) {

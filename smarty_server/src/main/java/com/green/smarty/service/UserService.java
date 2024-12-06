@@ -38,6 +38,8 @@ public class UserService {
                 byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("코드생성 완료 : "+qrCode);
 
+
+
                 //QR 코드를 UserVO 객체에 저장
                 user.setQrCode(qrCode);
 

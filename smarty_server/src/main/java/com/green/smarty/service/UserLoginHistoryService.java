@@ -30,7 +30,4 @@ public class UserLoginHistoryService {
         userLoginHistoryMapper.updateLogoutTime(userId);
     }
 
-    public void insertSentHumanMessageByUserId(String user_id){
-        userLoginHistoryMapper.insertOrUpdateSentHumanMessageByUserId(user_id);
-    }
 }

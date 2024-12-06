@@ -149,9 +149,4 @@
         AND user_status = 1;
     </select>
 
-
-    <!--    영준-->
-    <update id="updateSentHumanMessage" parameterType="String">
-        update login_history SET sent_human_message = true WHERE user_id = #{user_id};
-    </update>
 </mapper>

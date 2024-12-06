@@ -6,6 +6,7 @@ import com.green.smarty.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,8 @@ public interface UserMapper {
     List<UserClassApplicationDTO> getClassUserApplication(String user_id);
     // 대여한 리스트 정보 가져오기
     List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(String user_id);
+    // 생일 확인
+    public List<UserVO> getUsersWithBirthday(@Param("today") String today);
     // (영준) 아이디로 이메일 찾기
     String getUserEmailById(String user_id);
     // (영준) 아이디로 이름 찾기

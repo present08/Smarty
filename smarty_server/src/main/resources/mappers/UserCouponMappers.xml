@@ -10,8 +10,8 @@
 
 <!--    회원가입시 쿠폰 발급 쿼리문-->
     <insert id="InsertUserNewCoupon" parameterType="com.green.smarty.vo.CouponVO">
-        INSERT INTO conpon (coupon_id,coupon_code,coupon_name,issue_date,expiry_date,user_id,status)
-        VALUES (#{coupon_id}, #{coupon_code}, #{coupon_name},#{issue_date},#{expiry_date},#{user_id},#{status})
+        INSERT INTO coupon (coupon_id,coupon_code,coupon_name,issue_date,expiry_date,user_id,status,discount_rate)
+        VALUES (#{coupon_id}, #{coupon_code}, #{coupon_name},#{issue_date},#{expiry_date},#{user_id},#{status},#{discount_rate})
     </insert>
 
 <!--    이미 발급을 받았는지 체크 (중복체크)-->
@@ -28,13 +28,19 @@
         WHERE coupon_id = #{coupon_id} AND user_id = #{user_id} AND status = 'ISSUED';
     </update>
 
-<!--    발급 상태에서 1년이 지나면 자동으로 폐기 아직 구현 x-->
-<!--    <update id="expireUnusedCoupons" parameterType="String">-->
-<!--        UPDATE user_coupon-->
-<!--        SET status = 'EXPIRED'-->
-<!--        WHERE issue_date < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 YEAR)-->
-<!--        AND status = 'ISSUED'-->
-<!--        AND (expiry_date < CURRENT_TIMESTAMP OR expiry_date IS NULL)-->
-<!--    </update>-->
+<!--    쿠폰목록 불러오기-->
+    <select id="getCouponsByUser" parameterType="string" resultType="com.green.smarty.vo.CouponVO">
+        SELECT *
+        FROM coupon
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 생일 축하 쿠폰 발급-->
+    <insert id="insertBirthdayCoupon" parameterType="com.green.smarty.vo.CouponVO">
+        INSERT INTO coupon (coupon_id, coupon_code, coupon_name, user_id, status, issue_date, expiry_date, discount_rate)
+        VALUES (#{coupon_id}, #{coupon_code}, #{coupon_name}, #{user_id}, 'ISSUED', #{issue_date}, #{expiry_date}, #{discount_rate})
+    </insert>
+
+
 
 </mapper>

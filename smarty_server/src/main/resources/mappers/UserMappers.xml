@@ -126,14 +126,20 @@
         u.user_id = #{user_id};
     </select>
 
+    <!--    생일 쿠폰 발급 위한 쿼리-->
+    <select id="getUsersWithBirthday" resultType="com.green.smarty.vo.UserVO">
+        SELECT * FROM user
+        WHERE DATE_FORMAT(birthday, '%m-%d') = #{today}
+    </select>
+
     <select id="getUserEmailById" parameterType="String">
         SELECT email FROM user
         WHERE user_id = #{user_id}
     </select>
 
     <select id="getUserNameById" parameterType="String">
-        SELECT user_name FROM user
-        WHERE user_id = #{user_id}
+        SELECT * FROM user
+        WHERE DATE(birthday) = #{today}
     </select>
 
     <select id="getIdByEmail" parameterType="String">
@@ -148,5 +154,7 @@
         WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
         AND user_status = 1;
     </select>
+
+
 
 </mapper>

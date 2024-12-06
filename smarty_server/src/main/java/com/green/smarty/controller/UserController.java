@@ -5,6 +5,7 @@ import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.*;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.vo.CouponVO;
 import com.green.smarty.vo.LoginHistoryVO;
 import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
@@ -49,6 +50,9 @@ public class UserController {
     @Autowired
     private UserLoginHistoryService userLoginHistoryService;
 
+    @Autowired
+    private UserCouponService userCouponService;
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -82,6 +86,29 @@ public class UserController {
                 if (!isMembershipSaved) {
                     throw new Exception("멤버십 생성 실패");
                 }
+
+                // ** 신규 쿠폰 발급 로직 추가 **
+                CouponVO coupon = new CouponVO();
+
+                // 쿠폰 ID 생성
+                String couponID = userVO.getUser_id().substring(0, Math.min(userVO.getUser_id().length(), 2));
+                String timestamps = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                String couponsID = "C_" + couponID + timestamps;
+
+                // 랜덤 쿠폰 코드 생성
+                String randomCouponCode = "COUPON_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+                coupon.setCoupon_id(couponsID); // 쿠폰 ID
+                coupon.setCoupon_code(randomCouponCode); // 랜덤 쿠폰 코드 설정
+                coupon.setUser_id(userVO.getUser_id()); // 사용자
+                coupon.setCoupon_name("회원가입 축하 쿠폰"); // 무슨 쿠폰인지 ?
+                coupon.setStatus("ISSUED"); // 상태
+                coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
+                coupon.setExpiry_date(LocalDateTime.now().plusMonths(12)); // 만료 날짜
+                coupon.setDiscount_rate(new BigDecimal("10.00")); //할인율 10%
+
+                // 쿠폰 저장
+                userCouponService.InsertUserNewCoupon(coupon);
+                System.out.println("쿠폰 발급 완료: " + coupon);
 
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용

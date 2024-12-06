@@ -1,0 +1,65 @@
+.couponContainer {
+    margin-right: 2rem;
+}
+
+.couponContainer>button {
+    width: 70px;
+    height: 70px;
+    background-color: #F0F0F3;
+    color: #003f66;
+    font-weight: bold;
+    border: none;
+    border-radius: 35px;
+    filter: drop-shadow(-10px -10px 10px rgba(255, 255, 255, 0.7)) drop-shadow(10px 10px 10px rgba(174, 174, 192, 0.2));
+    box-shadow: inset -10px -10px 10px rgba(255, 255, 255, 0.7),
+        inset 10px 10px 10px rgba(174, 174, 192, 0.2);
+}
+
+.couponModalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.couponModalBox {
+    width: 30%;
+    height: 80%;
+    background-color: rgb(252, 252, 252);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.couponModalCont {
+    width: 80%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.couponModalCont>div:first-child {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.couponModalCont>div:last-child {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

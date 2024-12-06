@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,4 +20,5 @@ public class CouponVO {
     private LocalDateTime expiry_date;
     private String user_id;
     private String status;
+    private BigDecimal discount_rate;
 }

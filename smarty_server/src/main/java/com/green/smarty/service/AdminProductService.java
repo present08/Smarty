@@ -94,7 +94,7 @@ public class AdminProductService {
         String productId;
 
         do {
-            productId = "p" + baseId + String.format("%02d", index++);
+            productId = "p_" + baseId + String.format("%02d", index++);
         } while (adminProductMapper.existsByProductId(productId));
 
         return productId;

@@ -28,7 +28,7 @@ public class PaymentService {
     @Autowired
     private PaymentMapper paymentMapper;
     @Autowired
-    private UserRentalMapper userRentalMapper;
+    private UserRentalService userRentalService;
     @Autowired
     private PublicMapper publicMapper;
     @Autowired
@@ -40,6 +40,8 @@ public class PaymentService {
     private UserProductMapper userProductMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRentalMapper userRentalMapper;
 
     public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();

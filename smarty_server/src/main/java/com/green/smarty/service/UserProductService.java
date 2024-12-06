@@ -7,10 +7,13 @@ import com.green.smarty.vo.ProductAttachVO;
 import com.green.smarty.vo.ProductVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +23,7 @@ public class UserProductService{
     @Autowired
     private UserProductMapper userProductMapper;
     @Autowired
-    private UserProductAttachMapper userAttachFileMapper;
-    @Autowired
-    private CustomFileUtil fileUtil;
+    private CustomFileUtil customFileUtil;
 
 
 //    @Transactional
@@ -120,12 +121,31 @@ public class UserProductService{
     }
 
 
-    public List<ProductAttachVO> getAttachList(String product_id) {
-        return userAttachFileMapper.findByProductId(product_id);
+    // 상품 이미지 파일 이름 조회
+    public List<String> getProductImageNames(String product_id) {
+        List<String> fileNames = userProductMapper.getProductImages(product_id);
+        if (fileNames == null || fileNames.isEmpty()) {
+            log.warn("상품 이미지가 없습니다. product_id: {}", product_id);
+            return Collections.emptyList();
+        }
+        return fileNames;
     }
 
-    private boolean isImageFile(String fileName) {
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        return Arrays.asList("jpg", "jpeg", "png", "gif").contains(extension);
+    public ResponseEntity<Resource> showProductImage(String file_name) {
+        log.info("서비스 파일 조회 요청 - file_name: {}", file_name);
+
+        // 파일 이름이 null 또는 빈 값일 경우 기본 이미지 반환
+        if (file_name == null || file_name.trim().isEmpty()) {
+            log.warn("파일 이름이 비어있습니다. 기본 이미지로 반환합니다.");
+            file_name = "default.jpg";
+        }
+
+        try {
+            // CustomFileUtil을 사용해 파일 반환
+            return customFileUtil.getFile(file_name);
+        } catch (Exception e) {
+            log.error("파일 조회 중 오류 발생 - file_name: {}", file_name, e);
+            throw new RuntimeException("파일 조회 중 오류 발생", e);
+        }
     }
 }

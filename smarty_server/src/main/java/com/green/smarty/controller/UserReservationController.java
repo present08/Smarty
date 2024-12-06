@@ -3,13 +3,10 @@ package com.green.smarty.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -51,7 +48,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("/Users/hyesoo/Desktop/TF33_smarty/Smarty/smarty_server/upload")
+        Path filePath = Paths.get("upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 

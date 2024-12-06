@@ -7,7 +7,7 @@ import '../../css/reservationComplete.css';
 
 const ReservationComplete = (props) => {
     const { postData, facilityData, user, price, closeModal } = props;
-    const [btnData, setBtnData] = useState({})
+    const [btnData, setBtnData] = useState([])
     const navigate = useNavigate()
     const closed = (e) => {
         if (e == "mypage") {

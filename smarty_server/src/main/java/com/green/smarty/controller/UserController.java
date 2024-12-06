@@ -45,6 +45,8 @@ public class UserController {
 
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
+    @Autowired
+    private LoginHistoryService loginHistoryService; // 영준 추가 코드
 
     @Autowired
     private UserLoginHistoryService userLoginHistoryService;
@@ -126,6 +128,8 @@ public class UserController {
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
+            loginHistoryService.insertSentHumanMessageByUserId(user.getUser_id());
+
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {
             // 로그인 실패

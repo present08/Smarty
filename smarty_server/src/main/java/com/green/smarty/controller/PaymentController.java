@@ -106,21 +106,6 @@ public class PaymentController {
         return id;
     }
 
-//    @PostMapping("/create")
-//    public String createPayment(@RequestBody PaymentDetailDTO dto) {
-//        try {
-//            // 장바구니 데이터를 Rental로 변환 밑 저장
-//            cartService.createRentalsFromCart(dto.getItems());
-//
-//            //결제 정보 생성
-//            String id = paymentService.createPayment(dto);
-//
-//            return id;
-//        } catch (Exception e) {
-//            throw new RuntimeException("결제 생성 중 오류 발생 : " + e.getMessage());
-//        }
-//    }
-
     @GetMapping("/{payment_id}")
     public ResponseEntity<?> getPaymentById(@PathVariable String payment_id) {
         try {

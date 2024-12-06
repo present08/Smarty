@@ -12,6 +12,5 @@ public class LoginHistoryService {
     private LoginHistoryMapper loginHistoryMapper;
 
     public void insertSentHumanMessageByUserId(String user_id){
-        loginHistoryMapper.insertOrUpdateSentHumanMessageByUserId(user_id);
     }
 }

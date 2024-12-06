@@ -128,7 +128,6 @@ public class UserController {
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
-            loginHistoryService.insertSentHumanMessageByUserId(user.getUser_id());
 
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {

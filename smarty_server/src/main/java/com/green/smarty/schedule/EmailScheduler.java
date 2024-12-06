@@ -44,7 +44,7 @@ public class EmailScheduler {
     private LoginHistoryMapper loginHistoryMapper;
 
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     public void sendOverdue() {
         List<RentalDTO> overdueRentals = userRentalService.getOverdueRentals();
         for(RentalDTO rentalDTO : overdueRentals){
@@ -78,7 +78,7 @@ public class EmailScheduler {
             javaMailsender.send(message);
         }
 
-    @Scheduled(cron = "0 */1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
     public void sendSevendaysBefore() {
         List<ReservationDTO> upcomingSevenDays = userReservationMapper.getStartBeforeSevendays();
 
@@ -137,7 +137,7 @@ public class EmailScheduler {
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 */1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
     private void sendHumanMessage() {
         List<UserVO> upcomingHuman = userMapper.getUserHuman();
         for (UserVO userVO : upcomingHuman) {
@@ -195,7 +195,7 @@ public class EmailScheduler {
         }
 
 
-    @Scheduled(cron = "0 */1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
     private void sendHumanMessageSevendayBefore(){
         List<UserVO> sevendaysbeforehuman = userMapper.getUserHumanBerforeSevendays();
 
@@ -253,7 +253,7 @@ public class EmailScheduler {
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     private void updateSentHumanMessageBeforeThreeMonths(){
         loginHistoryMapper.upsertSentHumanMessageBasedOnUser();
     }

@@ -6,6 +6,7 @@ import Wrapper from '../../component/Wrapper'
 import Footer from '../../component/Footer'
 import RentalInfo from '../../component/product/RentalInfo'
 import { createPayment } from '../../api/paymentAPI'
+import cartApi from "../../api/cartApi"; // API 파일 import
 import PaymentModal from '../../component/payment/PaymentModal'
 import '../../css/rentalPage.css';
 

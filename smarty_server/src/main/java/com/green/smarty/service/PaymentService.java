@@ -5,7 +5,6 @@ import com.green.smarty.mapper.*;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,19 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.green.smarty.mapper.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import com.green.smarty.dto.PaymentDetailDTO;
-import com.green.smarty.vo.PaymentVO;
-import com.green.smarty.vo.RentalVO;
 
 @Service
 
@@ -75,6 +66,7 @@ public class PaymentService {
         String userName = userMapper.getUserNameById(user_id);
         String userEmail = userMapper.getUserEmailById(user_id);
         String productName = userProductMapper.getProductNameByProductId(product_id);
+
         if (userName == null || userEmail == null || productName == null) {
             System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
             throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
@@ -92,8 +84,21 @@ public class PaymentService {
         userRentalMapper.insertRental(vo);
         System.out.println("insert rental : "+vo);
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("product_id", dto.getProduct_id());
+        map.put("count", dto.getCount());
+        System.out.println("product_id 확인: " + map.get("product_id"));
+        System.out.println("count 확인: "+map.get("count"));
+        int stockDown = userRentalMapper.productStockDown(map);
+
+        if (stockDown > 0) {
+        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
+        } else {
+            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
+        }
         return vo;
     }
+
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

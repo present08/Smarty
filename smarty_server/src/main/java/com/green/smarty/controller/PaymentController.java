@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.green.smarty.dto.*;
 import com.green.smarty.mapper.*;
@@ -56,13 +55,15 @@ public class PaymentController {
     @Autowired
     private UserMembershipService userMembershipService;
 
+    @Autowired
+    private UserRentalMapper userRentalMapper;
+
     // (영준)
     @Autowired
     private SendEmailService sendEmailService;
 
     @Autowired
     private UserFacilityService facilityService;
-
 
     // 결제 생성
     @PostMapping("/create")
@@ -93,7 +94,12 @@ public class PaymentController {
                 .build();
 
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto);
+        RentalVO rentalID = paymentService.insertRental(dto, id);
+        System.out.println(rentalID);
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+        // 멤버십 업데이트
+        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
         return id;
     }

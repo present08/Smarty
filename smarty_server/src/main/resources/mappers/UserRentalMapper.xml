@@ -6,22 +6,20 @@
     <!-- 대여 등록 -->
     <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
         INSERT INTO rental (
-        rental_id,
-        user_id,
-        product_id,
-        rental_status,
-        rental_date,
-        return_date,
-        count
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            count
         ) VALUES (
-        #{rental_id},
-        #{user_id},
-        #{product_id},
-        #{rental_status},
-        #{rental_date},
-        #{return_date},
-        #{count}
-        );
+            #{rental_id},
+            #{user_id},
+            #{product_id},
+            #{rental_status},
+            #{rental_date},
+            #{count}
+        )
     </insert>
 
     <!-- 모든 대여 조회 -->

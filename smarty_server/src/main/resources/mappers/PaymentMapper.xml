@@ -7,6 +7,7 @@
             payment_id,
             reservation_id,
             enrollment_id,
+            rental_id,
             amount,
             payment_date,
             payment_status
@@ -15,6 +16,7 @@
             #{payment_id},
             #{reservation_id},
             #{enrollment_id},
+            #{rental_id},
             #{amount},
             #{payment_date},
             #{payment_status}

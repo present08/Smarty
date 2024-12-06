@@ -9,11 +9,11 @@ import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -45,6 +45,10 @@ public class UserController {
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
 
+    // 시큐리티 추가
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
@@ -53,6 +57,10 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
+
+        // 시큐리티 추가 : 사용자 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(userVO.getPassword());
+        userVO.setPassword(encodedPassword);
 
         boolean isSuccess = userservice.signup(userVO);
 

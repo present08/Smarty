@@ -49,8 +49,12 @@ dependencies {
 
 
 	// 스프링 시큐리티 관련 모듈
-//	 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-//	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.4'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.4'
+
+	// jwt
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 
 	// 테스트 환경에서 Lombok을 이용할 수 있는 설정으로 변경
 	testCompileOnly 'org.projectlombok:lombok'

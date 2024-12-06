@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,7 +52,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("/Users/hyesoo/Desktop/TF33_smarty/Smarty/smarty_server/upload")
+        Path filePath = Paths.get("upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -63,6 +64,7 @@ public class UserReservationController {
     }
 
     // 시설 정보 불러오기
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")  // 시큐리티 추가
     @GetMapping("/")
     public List<FacilityDTO> getFacilityVO() {
         List<FacilityDTO> dto = reservationService.getFacility();

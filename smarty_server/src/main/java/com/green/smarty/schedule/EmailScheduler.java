@@ -41,7 +41,7 @@ public class EmailScheduler {
     @Autowired
     private NotificationMapper notificationMapper;
     @Autowired
-    private LoginHistoryMapper loginHistoryMapper;
+    private UserLoginHistoryMapper userLoginHistoryMapper;
 
 
     @Scheduled(cron = "*/30 * * * * *")
@@ -255,6 +255,6 @@ public class EmailScheduler {
 
     @Scheduled(cron = "0 */30 * * * *")
     private void updateSentHumanMessageBeforeThreeMonths(){
-        loginHistoryMapper.upsertSentHumanMessageBasedOnUser();
+        userLoginHistoryMapper.upsertSentHumanMessageBasedOnUser();
     }
 }

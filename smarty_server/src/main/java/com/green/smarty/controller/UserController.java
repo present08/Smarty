@@ -45,8 +45,6 @@ public class UserController {
 
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
-    @Autowired
-    private LoginHistoryService loginHistoryService; // 영준 추가 코드
 
     @Autowired
     private UserLoginHistoryService userLoginHistoryService;

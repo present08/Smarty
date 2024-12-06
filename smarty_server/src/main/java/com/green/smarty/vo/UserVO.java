@@ -22,4 +22,5 @@ public class UserVO {
     private boolean user_status;
     private byte[] qrCode;
     private String level;
+    private String fcm_token;
 }

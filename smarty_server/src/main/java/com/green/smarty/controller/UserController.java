@@ -4,9 +4,11 @@ import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.QRCodeService;
+import com.green.smarty.service.UserMembershipService;
 import com.green.smarty.service.UserReservationService;
 import com.green.smarty.service.UserService;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +41,9 @@ public class UserController {
 
     @Autowired
     private UserReservationService reservationService;
+
+    @Autowired
+    private UserMembershipService userMembershipService;
 
     // 회원가입 처리
     @PostMapping("/signup")

@@ -37,72 +37,10 @@ const RentalPage = () => {
         }
     }, [navigate])
 
-    // 수정
-    // const handleRentalSubmit = async () => {
-    //     // 결제 모달 오픈
-    //     setIsPaymentModal(true)
-    // }
-
-    // 수정 1차
-    // const handleRentalSubmit = async () => {
-    //     try {
-    //         setLoading(true);
-
-    //         // 장바구니에 추가할 데이터
-    //         const cartItem = {
-    //             user_id: user_id,
-    //             product_id: selectProduct.product_id,
-    //             quantity: quantity || 1,
-    //         };
-
-    //         // 장바구니에 추가 API 호출
-    //         const response = await cartApi.addCartItem(cartItem);
-
-    //         console.log("장바구니 추가 응답: ", response);
-
-    //         // 장바구니 페이지로 이동
-    //         navigate('/cart');
-    //     } catch (error) {
-    //         console.error("장바구니 추가 중 오류: ", error);
-    //         setError('장바구니에 추가하지 못했습니다. 다시 시도해주세요.');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // 수정 2차
     const handleRentalSubmit = async () => {
-        try {
-            setLoading(true);
-
-            // 대여 ID 생성 요청 데이터
-            const rentalData = {
-                user_id: user_id,
-                product_id: selectProduct.product_id,
-                count: quantity || 1,
-            };
-
-            // 대여 ID 생성 API 호출
-            const response = await createRental(rentalData); // Rental ID 생성
-            console.log("생성된 Rental ID: ", response.data);
-
-            // 장바구니 페이지로 이동
-            navigate('/cart', {
-                state: {
-                    rental_id: response.data, // 생성된 Rental ID 전달
-                    product_id: selectProduct.product_id,
-                    product_name: selectProduct.product_name,
-                    quantity: quantity,
-                    price: price,
-                },
-            });
-        } catch (error) {
-            console.error("대여 ID 생성 중 오류: ", error);
-            setError('대여 ID 생성에 실패했습니다.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        // 결제 모달 오픈
+        setIsPaymentModal(true)
+    }
 
     const handlePaymentComplete = (postData) => {
         setIsPaymentModal(false)

@@ -18,7 +18,7 @@ public class RentalVO {
     private String rental_id; //대여ID
     private String user_id; //사용자ID
     private String product_id; //상품ID
-    private String payment_id;
+//    private String payment_id;
     private boolean rental_status; // 대여상태(true: 대여 중, false: 반납 완료)
     private int count;
 

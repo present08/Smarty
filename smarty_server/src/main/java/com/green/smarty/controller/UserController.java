@@ -3,10 +3,7 @@ package com.green.smarty.controller;
 import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
-import com.green.smarty.service.QRCodeService;
-import com.green.smarty.service.UserMembershipService;
-import com.green.smarty.service.UserReservationService;
-import com.green.smarty.service.UserService;
+import com.green.smarty.service.*;
 import com.green.smarty.dto.ReservationUserDTO;
 import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
@@ -58,7 +55,6 @@ public class UserController {
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
         userVO.setUser_status(true);
-        System.out.println(userVO.getFcm_token());
 
         boolean isSuccess = userservice.signup(userVO);
 

@@ -6,6 +6,7 @@ import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -22,7 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @Service
-
+@Transactional
 public class PaymentService {
 
     @Autowired
@@ -81,21 +82,11 @@ public class PaymentService {
                 .user_id(dto.getUser_id())
                 .rental_status(true)
                 .build();
-        userRentalMapper.insertRental(vo);
+
+        userRentalService.insertRental(vo, dto.getCount());
         System.out.println("insert rental : "+vo);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("product_id", dto.getProduct_id());
-        map.put("count", dto.getCount());
-        System.out.println("product_id 확인: " + map.get("product_id"));
-        System.out.println("count 확인: "+map.get("count"));
-        int stockDown = userRentalMapper.productStockDown(map);
 
-        if (stockDown > 0) {
-        System.out.println("재고 감소 product_id: " + dto.getProduct_id() + ", 요청 수량: " + dto.getCount());
-        } else {
-            throw new RuntimeException("stockDown 실패 : " + dto.getProduct_id());
-        }
         return vo;
     }
 

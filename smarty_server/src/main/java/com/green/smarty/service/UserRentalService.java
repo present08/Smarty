@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,8 +20,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-
-
+@Transactional
 public class UserRentalService{
     @Autowired
     private UserRentalMapper userRentalMapper;
@@ -30,7 +30,7 @@ public class UserRentalService{
     private UserProductMapper userProductMapper;
     @Autowired
     private PublicMapper publicMapper;
-    //대여
+    // 대여
     public int insertRental(RentalVO vo, int count) {
         log.info("대여 등록 시작: {}", vo);
 
@@ -46,15 +46,25 @@ public class UserRentalService{
             throw new RuntimeException("존재하지 않는 상품입니다. ID: " + vo.getProduct_id());
         }
 
-        // 3. 상품 재고 확인
-        int availableStock = userRentalMapper.getAvailableStock(vo.getProduct_id());
-        if (availableStock < count) {
-            throw new RuntimeException("상품 재고가 부족합니다. 요청 수량: " + count + ", 대여 가능 수량: " + availableStock);
+        // 3. 대여 가능 여부 확인
+        int stock = product.getStock(); // product.stock 값 가져오기
+        int totalUnavailableQuantity = userRentalMapper.getTotalUnavailableQuantity(vo.getProduct_id()); // 상태별 감소 수량 합산
+        int availableQuantity = stock - totalUnavailableQuantity; // 대여 가능 수량 계산
+
+        log.info("대여 가능 여부 확인: stock={}, totalUnavailableQuantity={}, availableQuantity={}, 요청 수량={}",
+                stock, totalUnavailableQuantity, availableQuantity, count);
+
+        if (availableQuantity < count || availableQuantity <= 0) {
+            throw new RuntimeException("대여 불가능: 남은 수량=" + availableQuantity +
+                    ", 요청 수량=" + count + ", 상품 ID=" + vo.getProduct_id());
         }
 
         // 4. 날짜 확인
-        if (vo.getRental_date() == null || vo.getReturn_date() == null) {
-            throw new RuntimeException("대여 날짜 또는 반납 날짜가 누락되었습니다.");
+//        if (vo.getRental_date() == null || vo.getReturn_date() == null) {
+//            throw new RuntimeException("대여 날짜 또는 반납 날짜가 누락되었습니다.");
+//        }
+        if (vo.getRental_date() == null) {
+            vo.setRental_date(LocalDateTime.now()); // 기본 대여 날짜 설정
         }
 
         // 5. 대여 상태 설정
@@ -65,45 +75,55 @@ public class UserRentalService{
         int rentalId = userRentalMapper.insertRental(vo);
         log.info("렌탈 데이터 저장 완료: Rental ID={}", rentalId);
 
-        // 7. 대여 가능한 status_id 조회
-        List<String> statusIds = userRentalMapper.getAvailableStatusIds(vo.getProduct_id(), count);
-        if (statusIds.size() < count) {
-            throw new RuntimeException("대여 가능한 상태 ID가 충분하지 않습니다. 요청 수량: " + count + ", 상태 ID 수량: " + statusIds.size());
-        }
-
-        // 8. 대여 로그 기록 및 상태 변경
-        for (String statusId : statusIds) {
-            Map<String, Object> logData = new HashMap<>();
-            logData.put("rental_id", rentalId); // 렌탈 ID
-            logData.put("status_id", statusId); // 상태 ID
-            logData.put("product_id", vo.getProduct_id()); // 상품 ID
-            logData.put("changed_status", "대여 중"); // 변경 상태
-            logData.put("change_quantity", count); // 대여 수량
-            userRentalMapper.insertRentalLogWithRentalId(logData); // 로그 기록
-
-            userRentalMapper.updateChangedStatus(statusId, "대여 중"); // 상태 변경
-            log.info("상태 변경 및 로그 기록 완료: Rental ID={}, Status ID={}, Changed Status='대여 중'", rentalId, statusId);
-        }
+        // 7. 대여 로그 기록
+        insertRentalLog(vo.getRental_id(), vo.getProduct_id(), count);
 
         return rentalId;
     }
 
+    // 새로운 메서드: 로그 기록
+    private void insertRentalLog(String rentalId, String productId, int count) {
+        // 1. 대여 가능한 status_id 조회
+        List<String> statusIds = userRentalMapper.getAvailableStatusIds(productId, count);
+        if (statusIds.size() < count) {
+            throw new RuntimeException("대여 가능한 상태 ID가 충분하지 않습니다. 요청 수량: " + count + ", 상태 ID 수량: " + statusIds.size());
+        }
+
+        // 2. 대여 로그 기록 및 상태 변경
+        for (String statusId : statusIds) {
+            Map<String, Object> logData = new HashMap<>();
+            logData.put("rental_id", rentalId); // 렌탈 ID
+            logData.put("status_id", statusId); // 상태 ID
+            logData.put("changed_status", "대여 중"); // 변경 상태
+            logData.put("change_quantity", count); // 대여 수량
+
+            log.info("Rental Log Data: {}", logData);
+
+            try {
+                userRentalMapper.insertRentalLogWithRentalId(logData); // 로그 삽입
+                userRentalMapper.updateChangedStatus(statusId, "대여 중"); // 상태 변경
+            } catch (Exception e) {
+                log.error("Failed to insert rental log or update status: {}", logData, e);
+                throw e;
+            }
+        }
+    }
 
     //반납
     public int returnRental(String rental_id, int count) {
-        System.out.println("반납할 렌탈 ID: " + rental_id + ", count: " + count);
+        log.info("반납할 렌탈 ID: {}, count: {}", rental_id, count);
 
+        // 1. 대여 정보 확인
         RentalDTO rental = userRentalMapper.getRentalById(rental_id);
-
         if (rental == null) {
-            throw new RuntimeException("대여 정보가 존재하지 않습니다 ID: " + rental_id);
+            throw new RuntimeException("대여 정보가 존재하지 않습니다. Rental ID: " + rental_id);
         }
 
         if (!rental.isRental_status()) {
-            throw new RuntimeException("이미 반납된 대여입니다 ID: " + rental_id);
+            throw new RuntimeException("이미 반납된 대여입니다. Rental ID: " + rental_id);
         }
 
-        // 반납 데이터 업데이트
+        // 2. 반납 데이터 업데이트
         RentalVO rentalVO = new RentalVO();
         rentalVO.setRental_id(rental_id);
         rentalVO.setRental_status(false);
@@ -113,29 +133,41 @@ public class UserRentalService{
         if (result <= 0) {
             throw new RuntimeException("반납 처리 중 오류가 발생했습니다. Rental ID: " + rental_id);
         }
-
         log.info("반납 데이터 업데이트 완료: Rental ID={}", rental_id);
 
-        // 3. 대여 중인 status_id 조회
-        List<String> statusIds = userRentalMapper.getRentedStatusIds(rental.getProduct_id(), count);
+        // 3. 반납 처리 - 로그 삭제 및 상태 복구
+        processReturnLogs(rental_id, rental.getProduct_id(), count);
+
+        log.info("반납 처리 완료: Rental ID={}, Count={}", rental_id, count);
+        return result;
+    }
+
+    // 새로운 메서드: 로그 삭제 및 상태 복구
+    private void processReturnLogs(String rental_id, String product_id, int count) {
+        // 1. 대여 중인 status_id 조회
+        List<String> statusIds = userRentalMapper.getRentedStatusIds(product_id, count);
         if (statusIds.size() < count) {
             throw new RuntimeException("반납 처리 중 상태 ID가 충분하지 않습니다. Rental ID: " + rental_id);
         }
 
-        // 4. 상태 복구 및 로그 삭제
+        // 2. 로그 삭제 및 상태 복구
         for (String statusId : statusIds) {
+            log.info("반납 처리 중: Status ID={}", statusId);
+
             // 로그 삭제
-            userRentalMapper.deleteRentalLog(statusId, count);
+            int logDeleted = userRentalMapper.deleteRentalLog(statusId, count);
+            if (logDeleted <= 0) {
+                throw new RuntimeException("반납 로그 삭제 실패. Status ID: " + statusId);
+            }
 
             // 상태 복구
-            userRentalMapper.restoreToAvailable(statusId);
+            int restored = userRentalMapper.restoreToAvailable(statusId);
+            if (restored <= 0) {
+                throw new RuntimeException("상태 복구 실패. Status ID: " + statusId);
+            }
 
-            log.info("반납 처리 완료 - 상태 복구: Status ID={}, Count={}", statusId, count);
+            log.info("로그 삭제 및 상태 복구 완료: Status ID={}", statusId);
         }
-
-        log.info("반납 처리 완료: Rental ID={}, Count={}", rental_id, count);
-
-        return result;
     }
 
     public int updatePaymentStatus(String rental_id, boolean payment_status) {
@@ -175,4 +207,6 @@ public class UserRentalService{
     public List<RentalDTO> getOverdueRentals(){
         return userRentalMapper.getOverdueRentals();
     }
+
+
 }

@@ -2,6 +2,7 @@ package com.green.smarty.service;
 
 import com.green.smarty.mapper.AdminProductMapper;
 import com.green.smarty.mapper.AdminProductStatusMapper;
+import com.green.smarty.vo.ProductStatusLogVO;
 import com.green.smarty.vo.ProductStatusVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class AdminProductStatusService {
     @Autowired
     private AdminProductStatusMapper productStatusMapper;
+    @Autowired
+    private AdminProductMapper productMapper;
 
     public void registerDefaultStatus(String productId, String managementType, int stock, String size) {
         log.info("상태 등록 - productId: {}, managementType: {}, stock: {}, size: {}", productId, managementType, stock, size);
@@ -25,26 +28,26 @@ public class AdminProductStatusService {
         String productBaseId = productId.substring(productId.length() - 4);
 
         switch (managementType) {
-            case "개별 관리":
-                for (int i = 0; i < stock; i++) {
-                    ProductStatusVO status = new ProductStatusVO();
-                    String statusIdBase = "ps_" + productBaseId + "Ind";
-                    int suffixIndex = productStatusMapper.findMaxSuffix(statusIdBase) + 1;
-                    String statusId = statusIdBase + String.format("%02d", suffixIndex);
+                case "개별 관리":
+                    for (int i = 0; i < stock; i++) {
+                        ProductStatusVO status = new ProductStatusVO();
+                        String statusIdBase = "ps_" + productBaseId + "Ind";
+                        int suffixIndex = productStatusMapper.findMaxSuffix(statusIdBase) + 1;
+                        String statusId = statusIdBase + String.format("%02d", suffixIndex);
 
-                    while (isDuplicateStatusId(statusId)) {
-                        suffixIndex = productStatusMapper.findMaxSuffix(statusIdBase) + 1;
-                        statusId = statusIdBase + String.format("%02d", suffixIndex);
+                        while (isDuplicateStatusId(statusId)) {
+                            suffixIndex = productStatusMapper.findMaxSuffix(statusIdBase) + 1;
+                            statusId = statusIdBase + String.format("%02d", suffixIndex);
+                        }
+
+                        status.setStatus_id(statusId);
+                        status.setProduct_id(productId);
+                        status.setCurrent_status(true);
+                        productStatusMapper.insertProductStatus(status);
+
+                        log.info("등록된 개별 관리 상태: {}", status);
                     }
-
-                    status.setStatus_id(statusId);
-                    status.setProduct_id(productId);
-                    status.setProduct_status("대여 가능");
-                    productStatusMapper.insertProductStatus(status);
-
-                    log.info("등록된 개별 관리 상태: {}", status);
-                }
-                break;
+                    break;
 
             case "일괄 관리":
                 ProductStatusVO bulkStatus = new ProductStatusVO();
@@ -59,7 +62,7 @@ public class AdminProductStatusService {
 
                 bulkStatus.setStatus_id(bulkStatusId);
                 bulkStatus.setProduct_id(productId);
-                bulkStatus.setProduct_status("대여 가능");
+                bulkStatus.setCurrent_status(true);
                 productStatusMapper.insertProductStatus(bulkStatus);
 
                 log.info("등록된 일괄 관리 상태: {}", bulkStatus);
@@ -79,7 +82,7 @@ public class AdminProductStatusService {
 
                     sizeStatus.setStatus_id(sizeStatusId);
                     sizeStatus.setProduct_id(productId);
-                    sizeStatus.setProduct_status("대여 가능");
+                    sizeStatus.setCurrent_status(true);
                     productStatusMapper.insertProductStatus(sizeStatus);
 
                     log.info("등록된 사이즈별 관리 상태: {}", sizeStatus);
@@ -101,10 +104,36 @@ public class AdminProductStatusService {
         return productStatusMapper.findProductStatusByFacility(facilityId);
     }
 
-    // 대여 상품 상태 수정
-    public void udpateProductStatus(String statusId, String newStatus) {
-        productStatusMapper.updateProductStatus(statusId, newStatus);
+    // 상태 변경 및 로그 삽입
+    public void changeStatusWithLog(String statusId, String changedStatus, int quantity) {
+        log.info("상태 변경 및 로그 기록 시작 - statusId: {}, changedStatus: {}, quantity: {}", statusId, changedStatus, quantity);
+
+        // 상태 변경
+        productStatusMapper.updateChangedStatus(statusId, changedStatus);
+
+        // 로그 삽입
+        ProductStatusLogVO log = ProductStatusLogVO.builder()
+                .status_id(statusId)
+                .changed_status(changedStatus)
+                .change_quantity(quantity)
+                .build();
+        productStatusMapper.insertStatusLog(log);
     }
+
+    // 상태 복구 및 로그 삭제
+    public void restoreStatusWithLog(String statusId) {
+        log.info("상태 복구 및 로그 삭제 시작 - statusId: {}", statusId);
+
+        // 상태 복구
+        productStatusMapper.restoreToAvailable(statusId);
+
+        // 가장 최근 로그 삭제
+        ProductStatusLogVO latestLog = productStatusMapper.findLatestLogByStatusId(statusId);
+        if (latestLog != null) {
+            productStatusMapper.deleteLogByLogId(latestLog.getLog_id());
+        }
+    }
+
     // 대여 상품 수량 수정
     public void updateProductStockAndUpdatedAt(String productId, int newStock) {
         // stock 업데이트
@@ -116,54 +145,19 @@ public class AdminProductStatusService {
         log.info("상품 ID {}: stock={}, updated_at 갱신 완료", productId, newStock);
     }
 
-    public void updateStatusAndStock(String statusId, String newStatus) {
-        // 현재 상태 및 관리 방식 조회
-        Map<String, Object> productInfo = productStatusMapper.getProductInfoByStatusId(statusId);
-        String currentStatus = (String) productInfo.get("product_status");
-        String managementType = (String) productInfo.get("management_type");
-        int stock = (int) productInfo.get("stock");
-
-        // 관리 방식 확인
-        if (!"개별 관리".equals(managementType)) {
-            throw new IllegalArgumentException("개별 관리 방식에 대해서만 처리 가능합니다.");
-        }
-
-        // 상태 변경 로직
-        if ("대여 가능".equals(currentStatus) && !"대여 가능".equals(newStatus)) {
-            // 재고 감소
-            if (stock <= 0) {
-                throw new IllegalArgumentException("재고가 부족하여 상태를 변경할 수 없습니다.");
-            }
-            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), stock - 1);
-        } else if (!"대여 가능".equals(currentStatus) && "대여 가능".equals(newStatus)) {
-            // 재고 증가
-            productStatusMapper.updateProductStock((String) productInfo.get("product_id"), stock + 1);
-        }
-
-        // 상태 업데이트
-        productStatusMapper.updateProductStatus(statusId, newStatus);
-    }
-
     public List<Map<String, Object>> getStatusCountsByProductId(String productId) {
         return productStatusMapper.findStatusCountsByProductId(productId);
     }
 
-    public void updateStatusWithQuantity(String statusId, String newStatus, int quantity) {
-        // 현재 상태 조회
-        Map<String, Object> currentStatusInfo = productStatusMapper.getProductInfoByStatusId(statusId);
-        String currentStatus = (String) currentStatusInfo.get("product_status");
-        int stock = (int) currentStatusInfo.get("stock");
-
-        // 수량 검증
-        if (quantity > stock) {
-            throw new IllegalArgumentException("변경할 수량이 현재 재고를 초과할 수 없습니다.");
-        }
-
-        // 재고 감소
-        productStatusMapper.updateProductStock((String) currentStatusInfo.get("product_id"), stock - quantity);
-
-        // 상태 변경
-        productStatusMapper.updateProductStatus(statusId, newStatus);
+    // 로그 조회
+    public List<ProductStatusLogVO> getLogsByStatusId(String statusId) {
+        return productStatusMapper.findLogsByStatusId(statusId);
+    }
+    // 특정 product_id의 status 로그 조회
+    public List<ProductStatusLogVO> getLogsByProductId(String productId) {
+        List<ProductStatusLogVO> logs = productStatusMapper.findLogsByProductId(productId);
+        log.info("조회된 로그 데이터: {}", logs); // 조회 결과 확인
+        return logs;
     }
 
 }

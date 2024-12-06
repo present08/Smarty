@@ -14,8 +14,10 @@
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="com.green.smarty.vo.UserVO">
-        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday, join_date, login_date, user_status, level, qr_Code)
-        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday}, #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
+        INSERT INTO user (user_id, user_name, email, password, phone, address, birthday,
+        join_date, login_date, user_status, level, qr_Code)
+        VALUES (#{user_id}, #{user_name}, #{email}, #{password}, #{phone}, #{address}, #{birthday},
+        #{join_date}, #{login_date}, #{user_status}, #{level}, #{qrCode})
     </insert>
 
     <!-- 아이디 찾기-->
@@ -139,17 +141,26 @@
         WHERE email = #{email}
     </select>
 
+
+<!--    영준-->
     <select id="getUserHuman" parameterType="com.green.smarty.vo.UserVO">
         SELECT * FROM user
         WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
         AND user_status = 1;
     </select>
 
+
+    <!--    영준-->
     <select id="getUserHumanBerforeSevendays" parameterType="com.green.smarty.vo.UserVO">
-        SELECT * FROM user u
-        INNER JOIN notification n
-        ON u.user_id = n.user_id
-        WHERE n.sent_human_message = 1
+        SELECT * FROM login_history lh
+        JOIN user u
+        ON lh.user_id = u.user_id
+        WHERE lh.sent_human_message = 0;
     </select>
 
+
+    <!--    영준-->
+    <update id="updateSentHumanMessage" parameterType="String">
+        update login_history SET sent_human_message = true WHERE user_id = #{user_id};
+    </update>
 </mapper>

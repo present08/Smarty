@@ -42,17 +42,36 @@ public class EmailScheduler {
     private NotificationMapper notificationMapper;
     @Autowired
     private UserLoginHistoryMapper userLoginHistoryMapper;
+    @Autowired
+    private UserRentalMapper userRentalMapper;
 
 
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void sendOverdue() {
         List<RentalDTO> overdueRentals = userRentalService.getOverdueRentals();
         for (RentalDTO rentalDTO : overdueRentals) {
             try {
                 String email = userRentalService.getEmailByUserId(rentalDTO.getUser_id());
                 sendEmail(email, rentalDTO);
+
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setUser_id(rentalDTO.getUser_id());
+                notificationDTO.setStatus("SUCCESS");
+                notificationDTO.setUser_name(userMapper.getUserNameById(userMapper.getUserNameById(rentalDTO.getUser_id())));
+                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationDTO.setResponse_detail("Email sent successfully to " + email);
+                notificationMapper.insertByNotificationId(notificationDTO);
+
                 System.out.println("이메일 발송 완료 : " + email);
             } catch (Exception e) {
+
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setUser_id(rentalDTO.getUser_id());
+                notificationDTO.setStatus("FAILURE");
+                notificationDTO.setUser_name(userMapper.getUserNameById(userMapper.getUserNameById(rentalDTO.getUser_id())));
+                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationMapper.insertByNotificationId(notificationDTO);
+
                 System.out.println("이메일 발송 실패 : {}" + e);
             }
         }
@@ -60,10 +79,11 @@ public class EmailScheduler {
 
     private void sendEmail(String email, RentalDTO rentalDTO) throws MessagingException {
 
+        String productName = userRentalMapper.getProductNameByProductId(rentalDTO.getProduct_id());
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime rentalDate = rentalDTO.getRental_date();
 
-        long overdueDays = ChronoUnit.DAYS.between(rentalDate, today) - 3;
+        long overdueDays = ChronoUnit.DAYS.between(rentalDate, today) - 1;
         overdueDays = Math.max(overdueDays, 0);
 
 
@@ -72,14 +92,16 @@ public class EmailScheduler {
 
         helper.setTo(email);
         helper.setSubject("반납 연체 알림");
-        helper.setText("<h1>연체된 대여 물품이 있어서 안내 드립니다.</h1>"
-                + "<p> 상품 ID :" + rentalDTO.getProduct_id() + "</p>"
-                + "<p> 연체 일수 : " + overdueDays + " </p>", true);
+        helper.setText("<h1>📢 [알림] 연체된 대여 물품이 있습니다! 📅</h1>"
+                + "<p>💼 <strong>상품명:</strong> " + productName + "</p>"
+                + "<p>⏳ <strong>연체 일수:</strong> " + overdueDays + "일</p>"
+                + "<p>🔔 빠른 반납을 부탁드립니다. 😊</p>"
+                + "<p>📞 문의사항이 있으시면 고객센터로 연락 주세요.</p>", true);
 
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
     public void sendSevendaysBefore() {
         List<ReservationDTO> upcomingSevenDays = userReservationMapper.getStartBeforeSevendays();
 
@@ -138,8 +160,8 @@ public class EmailScheduler {
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
-    private void sendHumanMessage() {
+    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
+    public void sendHumanMessage() {
         List<UserVO> upcomingHuman = userMapper.getUserHuman();
         for (UserVO userVO : upcomingHuman) {
             String email = userVO.getEmail();
@@ -195,63 +217,63 @@ public class EmailScheduler {
         helper.setText(email_content, true);
         javaMailsender.send(message);
     }
+
+
+    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
+    public void sendHumanMessageSevendayBefore(){
+        System.out.println("스케줄러는 실행중임");
+        List<UserVO> sevendaysbeforehuman = userMapper.humanSevenbefore();
+
+        for (UserVO userVO : sevendaysbeforehuman){
+            String email = userVO.getEmail();
+            String user_name = userVO.getUser_name();
+            String user_id = userVO.getUser_id();
+            String email_content =
+                    "<h1>📢 안녕하세요, SMARTY 입니다! 💌</h1>" +
+                            "<p> 회원님 휴먼 회원으로 전환까지 <Strong>일주일</Strong>이 남았습니다. </p>" +
+                            "<p>👉 계속 서비스를 이용하시려면 <a href='http://localhost:3000/user/login'>여기</a>를 클릭하여 로그인해주세요!</p>" +
+                            "<br>" +
+                            "<p>회원 이름: " + user_name + "</p>" +
+                            "<p>회원 아이디: " + user_id + "</p>" +
+                            "<br>" +
+                            "<p>📞 기타 문의사항이 있으시면 고객센터로 연락 주세요.</p>" +
+                            "<p>SMARTY는 항상 여러분과 함께합니다! 💪</p>" +
+                            "<br>" +
+                            "<p>SMARTY 팀 드림 🌟</p>";
+            try{
+                sendHumanMessageBeforeSevendays(email, email_content);
+
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setUser_id(user_id);
+                notificationDTO.setMessage(email_content);
+                notificationDTO.setStatus("SUCCESS");
+                notificationDTO.setUser_name(user_name);
+                notificationDTO.setMessage_type("휴먼 회원 전환 일주일 전 알림");
+                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
+                notificationMapper.insertByNotificationId(notificationDTO);
+                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 완료" + email);
+
+            }catch (Exception e){
+
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setUser_id(user_id);
+                notificationDTO.setMessage(email_content);
+                notificationDTO.setStatus("FAILURE");
+                notificationDTO.setUser_name(user_name);
+                notificationDTO.setMessage_type("휴면 회원 전환 일주일 전 알림");
+                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
+                notificationMapper.insertByNotificationId(notificationDTO);
+                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 실패 : " + email);
+            }
+        }
+    }
+    private void sendHumanMessageBeforeSevendays(String email, String email_content) throws  MessagingException{
+        MimeMessage message = javaMailsender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setTo(email);
+        helper.setSubject("휴먼 회원 전환 일주일 전 알림");
+        helper.setText(email_content, true);
+        javaMailsender.send(message);
+    }
 }
-
-
-//    @Scheduled(cron = "0 */30 * * * *") // 매일 아침 9시에 실행
-//    private void sendHumanMessageSevendayBefore(){
-//        여기에 만료 일주일 전인 사람들 List 코드 작성
-//
-//        for (UserVO userVO : sevendaysbeforehuman){
-//            String email = userVO.getEmail();
-//            String user_name = userVO.getUser_name();
-//            String user_id = userVO.getUser_id();
-//            String email_content =
-//                    "<h1>📢 안녕하세요, SMARTY 입니다! 💌</h1>" +
-//                            "<p> 회원님 휴먼 회원으로 전환까지 <Strong>일주일</Strong>이 남았습니다. </p>" +
-//                            "<p>👉 계속 서비스를 이용하시려면 <a href='https://smarty-website.com/login'>여기</a>를 클릭하여 로그인해주세요!</p>" +
-//                            "<br>" +
-//                            "<p>회원 이름: " + user_name + "</p>" +
-//                            "<p>회원 아이디: " + user_id + "</p>" +
-//                            "<br>" +
-//                            "<p>📞 기타 문의사항이 있으시면 고객센터로 연락 주세요.</p>" +
-//                            "<p>SMARTY는 항상 여러분과 함께합니다! 💪</p>" +
-//                            "<br>" +
-//                            "<p>SMARTY 팀 드림 🌟</p>";
-//            try{
-//                sendHumanMessageBeforeSevendays(email, email_content);
-//
-//                NotificationDTO notificationDTO = new NotificationDTO();
-//                notificationDTO.setUser_id(user_id);
-//                notificationDTO.setMessage(email_content);
-//                notificationDTO.setStatus("SUCCESS");
-//                notificationDTO.setUser_name(user_name);
-//                notificationDTO.setMessage_type("휴먼 회원 전환 일주일 전 알림");
-//                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
-//                notificationMapper.insertByNotificationId(notificationDTO);
-//                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 완료" + email);
-//
-//            }catch (Exception e){
-//
-//                NotificationDTO notificationDTO = new NotificationDTO();
-//                notificationDTO.setUser_id(user_id);
-//                notificationDTO.setMessage(email_content);
-//                notificationDTO.setStatus("FAILURE");
-//                notificationDTO.setUser_name(user_name);
-//                notificationDTO.setMessage_type("휴면 회원 전환 일주일 전 알림");
-//                notificationDTO.setResponse_detail("Email sent successfully to :" + email);
-//                notificationMapper.insertByNotificationId(notificationDTO);
-//                System.out.println("휴먼 회원 전환 일주일 전 알림 이메일 전송 실패 : " + email);
-//            }
-//        }
-//    }
-//    private void sendHumanMessageBeforeSevendays(String email, String email_content) throws  MessagingException{
-//        MimeMessage message = javaMailsender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-//
-//        helper.setTo(email);
-//        helper.setSubject("휴먼 회원 전환 일주일 전 알림");
-//        helper.setText(email_content, true);
-//        javaMailsender.send(message);
-//    }
-//}

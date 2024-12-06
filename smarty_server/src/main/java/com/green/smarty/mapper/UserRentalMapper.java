@@ -65,4 +65,6 @@ public interface UserRentalMapper {
 
     // 추가: 사용자 이메일 조회 (user_id 기준)
     String getEmailByUserId(String user_id);
+
+    String getProductNameByProductId(String product_id);
 }

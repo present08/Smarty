@@ -8,8 +8,7 @@ import java.util.Map;
 
 import com.green.smarty.dto.*;
 import com.green.smarty.mapper.*;
-import com.green.smarty.service.SendEmailService;
-import com.green.smarty.service.UserFacilityService;
+import com.green.smarty.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.green.smarty.mapper.PaymentMapper;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserReservationMapper;
-import com.green.smarty.service.PaymentService;
-import com.green.smarty.service.UserMembershipService;
-import com.green.smarty.service.UserReservationService;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.ReservationVO;
@@ -38,6 +34,15 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @Autowired
+    private UserMembershipService userMembershipService;
+
+    @Autowired
+    private UserReservationService reservationService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
     private PublicMapper publicMapper;
 
     @Autowired
@@ -47,16 +52,12 @@ public class PaymentController {
     private UserReservationMapper reservationMapper;
 
     @Autowired
-    private UserReservationService reservationService;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Autowired
-    private UserMembershipService userMembershipService;
-
-    @Autowired
     private UserRentalMapper userRentalMapper;
+
+
 
     // (영준)
     @Autowired
@@ -82,7 +83,7 @@ public class PaymentController {
             }
         }
 
-        String id = "P_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
+        String id = "P_" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
         System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()
@@ -91,10 +92,11 @@ public class PaymentController {
                 .enrollment_id(dto.getEnrollment_id())
                 .amount(dto.getAmount())
                 .payment_date(date)
+                .payment_status(true)
                 .build();
 
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto, id);
+        RentalVO rentalID = paymentService.insertRental(dto);
         System.out.println(rentalID);
 
         System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
@@ -103,6 +105,21 @@ public class PaymentController {
 
         return id;
     }
+
+//    @PostMapping("/create")
+//    public String createPayment(@RequestBody PaymentDetailDTO dto) {
+//        try {
+//            // 장바구니 데이터를 Rental로 변환 밑 저장
+//            cartService.createRentalsFromCart(dto.getItems());
+//
+//            //결제 정보 생성
+//            String id = paymentService.createPayment(dto);
+//
+//            return id;
+//        } catch (Exception e) {
+//            throw new RuntimeException("결제 생성 중 오류 발생 : " + e.getMessage());
+//        }
+//    }
 
     @GetMapping("/{payment_id}")
     public ResponseEntity<?> getPaymentById(@PathVariable String payment_id) {

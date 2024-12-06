@@ -1,5 +1,6 @@
 package com.green.smarty.controller;
 
+import com.green.smarty.dto.ProductRentalUserDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.service.SendEmailService;
@@ -132,6 +133,13 @@ public class UserRentalController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/rentalUser")
+    public List<ProductRentalUserDTO> getUserRentalListData(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
+        List<ProductRentalUserDTO> result = userRentalService.getUserRentalListData(user_id);
+        return result;
     }
 
 

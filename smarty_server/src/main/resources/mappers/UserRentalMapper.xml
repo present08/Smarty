@@ -25,14 +25,15 @@
     <!-- 모든 대여 조회 -->
     <select id="getAllRentals" resultType="com.green.smarty.dto.RentalDTO">
         SELECT
-        rental_id,
-        user_id,
-        product_id,
-        rental_status,
-        rental_date,
-        return_date,
-        count
-        FROM rental;
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            return_date,
+            count
+        FROM
+            rental;
     </select>
 
     <!-- 특정 대여 조회 -->
@@ -81,18 +82,18 @@
     <!-- 대여 로그 추가 -->
     <insert id="insertRentalLogWithRentalId" parameterType="map">
         INSERT INTO product_status_log (
-        rental_id,
-        status_id,
-        product_id,
-        changed_status,
-        change_quantity,
-        created_at
+            rental_id,
+            status_id,
+            product_id,
+            changed_status,
+            change_quantity,
+            created_at
         ) VALUES (
-        #{rental_id},
-        #{status_id},
-        #{product_id},
-        #{changed_status},
-        #{change_quantity},
+            #{rental_id},
+            #{status_id},
+            #{product_id},
+            #{changed_status},
+            #{change_quantity},
         CURRENT_TIMESTAMP
         );
     </insert>
@@ -158,7 +159,7 @@
     <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
         UPDATE payment
         SET payment_status = #{payment_status}
-        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id});
+        WHERE payment_id = (SELECT payment_id FROM rental WHERE user_id = #{user_id});
     </update>
 
     <!-- 날짜 기반 최대 Rental ID 조회 -->
@@ -180,5 +181,11 @@
         SELECT email
         FROM user
         WHERE user_id = #{user_id};
+    </select>
+
+    <select id="getRentedStatusIds" parameterType="int" resultType="int">
+        SELECT status_id
+        FROM rental_status
+        WHERE user_id = #{user_id}
     </select>
 </mapper>

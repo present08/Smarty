@@ -16,10 +16,10 @@ export const getRentalById = async (rental_id) => {
 }
 
 // 렌탈 신청
-export const createRental = async ({amount, user_id}) => {
+export const createRental = async ({ amount, user_id }) => {
     try {
         console.log('API 호출 전 데이터:', amount, user_id);
-        const response = await axios.post('http://localhost:8080/api/rentals', {amount,user_id});
+        const response = await axios.post('http://localhost:8080/api/rentals', { amount, user_id });
         // console.log('API 응답:', response);
         // console.log("여기를 확인: ", response.data)
         return response.data;
@@ -38,7 +38,7 @@ export const returnRental = async (rental_id) => {
 
 //렌탈 정보 가져오기
 export const getProductRentalUser = async (user_id) => {
-    const response = await axios.get(`${host}/rentalUser`, {params: {user_id }} );
+    const response = await axios.get(`${host}/rentalUser`, { params: { user_id } });
     // console.log(response.data)
     return response.data;
 }
@@ -48,4 +48,20 @@ export const getList = async (user_id) => {
     const response = await axios.get(`${host}/payment/list/${user_id}`)
     // console.log("어떤게 왔나 볼까요 ", response.data)
     return response.data;
+}
+
+//카트에서 렌탈서버로 던지기
+export const cartRental = async (postData) => {
+    const response = await axios.post(`${host}/rentals/cart`, postData)
+    return response.data
+
+}
+
+export const rentalPayment = async (paymentData) => {
+    const response = await axios.post(
+        "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
+        paymentData
+    );
+    console.log("결제 데이터 확인 : ", response.data)
+    return response.data; // 서버에서 반환된 결제 ID
 }

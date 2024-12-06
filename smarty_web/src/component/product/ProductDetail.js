@@ -151,9 +151,7 @@ const ProductDetail = ({ product }) => {
                         <button className="wishlist-btn" onClick={handleAddCart}>
                             장바구니
                         </button>
-                        <button className="wishlist-btn" onClick={handleRental}>
-                            대여하기
-                        </button>
+                        
                     </div>
                 </div>
             </div>

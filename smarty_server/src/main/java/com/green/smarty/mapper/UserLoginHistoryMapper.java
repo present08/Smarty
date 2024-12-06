@@ -15,8 +15,4 @@ public interface UserLoginHistoryMapper {
 
     // 로그아웃 시간 업데이트
     void updateLogoutTime(String userId);
-
-    void insertOrUpdateSentHumanMessageByUserId(@Param("user_id") String user_id);
-
-    void upsertSentHumanMessageBasedOnUser();
 }

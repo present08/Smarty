@@ -23,5 +23,4 @@ public class LoginHistoryVO {
     private String login_status;    // 'SUCCESS', 'FAILURE'
     private String user_agent;      // 사용자 접속 환경
     private String ip_address;      // ip 주소
-
 }

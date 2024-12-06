@@ -41,9 +41,8 @@
         last_reset_date = CURRENT_TIMESTAMP,
         membership_level = '브론즈'
         WHERE
-        TIMESTAMPDIFF(MONTH, last_reset_date, CURRENT_TIMESTAMP) >= 6
-        OR last_reset_date IS NULL;
+        MONTH(CURRENT_TIMESTAMP) = 6 OR MONTH(CURRENT_TIMESTAMP) = 12;
     </update>
 
-
 </mapper>
+

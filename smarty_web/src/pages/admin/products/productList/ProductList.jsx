@@ -443,7 +443,7 @@ export default function ProductList() {
     {
       field: "action",
       headerName: "작업",
-      width: 250,
+      width: 240,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (

@@ -93,7 +93,7 @@ public class PaymentController {
                 .build();
 
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto, id);
+        RentalVO rentalID = paymentService.insertRental(dto);
 
         return id;
     }

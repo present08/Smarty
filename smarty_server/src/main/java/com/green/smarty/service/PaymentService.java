@@ -52,7 +52,7 @@ public class PaymentService {
     @Autowired
     private UserRentalMapper userRentalMapper;
 
-    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
+    public RentalVO insertRental(PaymentDetailDTO dto) {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
@@ -88,7 +88,6 @@ public class PaymentService {
                 .product_id(dto.getProduct_id())
                 .user_id(dto.getUser_id())
                 .rental_status(true)
-                .payment_id(payment_id)
                 .build();
         userRentalMapper.insertRental(vo);
         System.out.println("insert rental : "+vo);

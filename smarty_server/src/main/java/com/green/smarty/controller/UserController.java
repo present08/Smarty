@@ -280,11 +280,12 @@ public class UserController {
         return result;
     }
 
-    // 등급매기기
-    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
-        userservice.updateUserLevel(user, totalAmount);
-        System.out.println(user.getLevel());
-    }
+//    // 등급매기기
+//    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
+//        userservice.updateUserLevel(user, totalAmount);
+//        System.out.println(user.getLevel());
+//    }
+
 
     // 수강 리스트 불러오기
     @GetMapping("/classApplication")

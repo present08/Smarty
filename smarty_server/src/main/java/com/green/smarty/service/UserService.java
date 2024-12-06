@@ -141,19 +141,19 @@ public class UserService {
     }
 
     // 레벨 구분하기
-    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
-        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
-            userVO.setLevel("Diamond");
-        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
-            userVO.setLevel("Platinum");
-        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
-            userVO.setLevel("Gold");
-        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
-            userVO.setLevel("Silver");
-        }else {
-            userVO.setLevel("일반");
-        }
-    }
+//    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
+//        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
+//            userVO.setLevel("Diamond");
+//        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
+//            userVO.setLevel("Platinum");
+//        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
+//            userVO.setLevel("Gold");
+//        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
+//            userVO.setLevel("Silver");
+//        }else {
+//            userVO.setLevel("일반");
+//        }
+//    }
 
     // 등록한 클래스 정보 가져오기
     public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {

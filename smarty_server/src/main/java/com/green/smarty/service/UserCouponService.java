@@ -1,6 +1,5 @@
 package com.green.smarty.service;
 
-import com.green.smarty.dto.ProductRentalMyPageUserDTO;
 import com.green.smarty.mapper.UserCouponMapper;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.vo.CouponVO;
@@ -13,7 +12,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 
@@ -24,7 +25,6 @@ public class UserCouponService {
 
     @Autowired
     private UserCouponMapper usercouponMapper;
-
 
     // 새로운 쿠폰을 사용자에게 추가하는 코드
     // couponVO 쿠폰 정보를 담고 있는 객체
@@ -54,14 +54,17 @@ public class UserCouponService {
         return usercouponMapper.getCouponsByUser(user_id);
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // 자정의 발급
-//    @Scheduled(cron = "0 12 * * * ?") // 매 시간의 3분에 실행 : 테스트용
-    public void issueBirthdayCoupons() {
-        LocalDate today = LocalDate.now();
-        String todayMonthDay = today.format(DateTimeFormatter.ofPattern("MM-dd")); // 오늘 날짜를 'MM-dd' 형식으로 변환
 
-        // 생일인 사용자 목록 조회 (월일만 비교)
-        List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(todayMonthDay);
+//    @Scheduled(cron = "0 0 0 * * ?") // 자정 발급
+    @Scheduled(cron = "0 17 * * * ?") // 매 시간 58분에 실행: 테스트용
+    public void issueBirthdayCoupons() {
+
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int day = today.getDayOfMonth();
+
+        // 생일인 사용자 목록 조회
+        List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(month, day);
 
         for (UserVO userVO : usersWithBirthday) {
             try {
@@ -88,12 +91,46 @@ public class UserCouponService {
     }
 
 
-    // 쿠폰 ID 생성 (예시)
+////    @Scheduled(cron = "0 0 0 * * ?") // 자정의 발급
+//    @Scheduled(cron = "0 58 * * * ?") // 매 시간의 3분에 실행 : 테스트용
+//    public void issueBirthdayCoupons() {
+//
+//        LocalDate today = LocalDate.now();
+//        String todayMonthDay = today.format(DateTimeFormatter.ofPattern("MM-dd"));
+//
+//        // 생일인 사용자 목록 조회 (월일만 비교)
+//        List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(todayMonthDay);
+//
+//
+//        for (UserVO userVO : usersWithBirthday) {
+//            try {
+//                // 쿠폰 생성
+//                CouponVO coupon = new CouponVO();
+//                coupon.setCoupon_id(generateCouponId(userVO)); // 사용자별 쿠폰 ID 생성
+//                coupon.setUser_id(userVO.getUser_id()); // 해당 사용자 ID 설정
+//                coupon.setCoupon_name("생일축하 쿠폰"); // 쿠폰 이름 설정
+//                coupon.setCoupon_code(generateCouponCode()); // 랜덤 쿠폰 코드 생성
+//                coupon.setStatus("ISSUED"); // 발급 상태 설정
+//                coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
+//                coupon.setExpiry_date(LocalDateTime.now().plusMonths(2)); // 만료 날짜
+//                coupon.setDiscount_rate(new BigDecimal("10.00")); // 할인율 10%
+//
+//                // 사용자에게 발급된 쿠폰을 DB에 저장
+//                usercouponMapper.insertBirthdayCoupon(coupon);
+//                System.out.println("생일 쿠폰 발급 완료: " + coupon.getUser_id());
+//
+//            } catch (Exception e) {
+//                // 발급 실패 시 에러 로그 출력
+//                System.out.println("생일 쿠폰 발급 실패: " + userVO.getUser_id() + " - " + e.getMessage());
+//            }
+//        }
+//    }
+
+
     private String generateCouponId(UserVO user) {
-        return "BIRTHDAY_" + user.getUser_id() + "_" + System.currentTimeMillis();
+        return "BIRTHDAY_" + user.getUser_id();
     }
 
-    // 랜덤 쿠폰 코드 생성 (예시)
     private String generateCouponCode() {
         return "BD" + (int)(Math.random() * 1000000);
     }

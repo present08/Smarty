@@ -127,10 +127,18 @@
     </select>
 
     <!--    생일 쿠폰 발급 위한 쿼리-->
-    <select id="getUsersWithBirthday" resultType="com.green.smarty.vo.UserVO">
-        SELECT * FROM user
-        WHERE DATE_FORMAT(birthday, '%m-%d') = #{today}
+<!--    <select id="getUsersWithBirthday" resultType="com.green.smarty.vo.UserVO" parameterType="String">-->
+<!--        SELECT *-->
+<!--        FROM user-->
+<!--        WHERE DATE_FORMAT(birthday, '%m-%d') = #{today}-->
+<!--    </select>-->
+    <select id="getUsersWithBirthday" resultType="com.green.smarty.vo.UserVO" parameterType="map">
+        SELECT *
+        FROM user
+        WHERE MONTH(birthday) = #{month}
+        AND DAY(birthday) = #{day}
     </select>
+
 
     <select id="getUserEmailById" parameterType="String">
         SELECT email FROM user

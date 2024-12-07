@@ -3,13 +3,13 @@ import '../../css/userCoupon.css';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiCoupon3Line } from 'react-icons/ri';
 import { getCouponsByUser } from '../../api/couponApi';
+import { ImGift } from "react-icons/im";
 
 const UserCoupon = (props) => {
 
     const [modal, setModal] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [coupons, setCoupons] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     // 모달 열기
@@ -28,8 +28,6 @@ const UserCoupon = (props) => {
             const fetchCoupons = async () => {
                 const userId = props.user.user_id;
                 console.log('Fetching coupons for user_id: ', userId);
-
-                setLoading(true);
                 try {
                     const couponsData = await getCouponsByUser(userId);
                     console.log('회원쿠폰:', couponsData);
@@ -37,8 +35,6 @@ const UserCoupon = (props) => {
                 } catch (err) {
                     setError('쿠폰을 불러오는 데 실패했습니다.');
                     console.error('쿠폰 불러오기 실패:', err);
-                } finally {
-                    setLoading(false);
                 }
             };
             fetchCoupons();
@@ -57,21 +53,30 @@ const UserCoupon = (props) => {
                     <div className='couponModalBox'>
                         <div className='couponModalCont'>
                             <div>
+                                <div>
+                                    <ImGift style={{ width: '30px', height: '30px' }} />
+                                    <h3>쿠폰 목록</h3>
+                                </div>
                                 <AiOutlineClose style={{ width: '40px', height: '40px' }} onClick={closeModal} />
                             </div>
                             <div>
                                 <div>
-                                    <h3>쿠폰 목록</h3>
-                                    <ul>
-                                        {coupons.map((coupon) => (
-                                            <li key={coupon.coupon_id}>
+                                    <p>사용완료</p>
+                                    <p>사용가능</p>
+                                </div>
+                                <div>
+                                    {coupons.map((coupon, index) => (
+                                        <div className='couponbox' key={index}>
+                                            <div>
+                                                <h3>{coupon.discount_rate}%</h3>
+                                            </div>
+                                            <div>
                                                 <p>{coupon.coupon_name}</p>
-                                                <p>유효기간: {coupon.expiry_date}</p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    ) : (
-                                    <p>사용할 수 있는 쿠폰이 없습니다.</p>
+                                                <p>{coupon.expiry_date}</p>
+                                                <p>{coupon.status}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>

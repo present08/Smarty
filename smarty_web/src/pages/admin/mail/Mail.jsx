@@ -13,17 +13,22 @@ import {
     Button,
     Typography,
     Stack,
+    Snackbar,
 } from '@mui/material';
-import { getMailList } from '../../../api/admin/mailApi';
+import { getMailList, sendMail } from '../../../api/admin/mailApi';
 
 export default function Mail() {
     const [users, setUsers] = useState([]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [recipients, setRecipients] = useState([]);
     const [customEmail, setCustomEmail] = useState('');
+    const [customUserName, setCustomUserName] = useState('');
     const [mailContent, setMailContent] = useState({
         subject: '',
         content: '',
     });
+    const [loading, setLoading] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     // 메일 리스트 불러오기
     useEffect(() => {
@@ -40,45 +45,67 @@ export default function Mail() {
         fetchMailList();
     }, []);
 
-    // 전체 선택 처리
-    const handleSelectAll = (event) => {
-        if (event.target.checked) {
-            setSelectedUsers(users.map(user => user.id));
-        } else {
-            setSelectedUsers([]);
-        }
+    // 사용자 수신자 목록에 추가
+    const handleAddRecipient = (user) => {
+        setRecipients(prev => {
+            if (prev.find(r => r.email === user.email)) {
+                return prev;
+            }
+            return [...prev, user];
+        });
     };
 
-    // 개별 선택 처리
-    const handleSelect = (userId) => {
-        setSelectedUsers(prev => {
-            if (prev.includes(userId)) {
-                return prev.filter(id => id !== userId);
-            } else {
-                return [...prev, userId];
-            }
-        });
+    // 수신자 목록에서 제거
+    const handleRemoveRecipient = (email) => {
+        setRecipients(prev => prev.filter(r => r.email !== email));
+    };
+
+    // 직접 입력한 이메일 추가
+    const handleAddCustomEmail = () => {
+        if (customEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customEmail)) {
+            handleAddRecipient({
+                email: customEmail,
+                user_name: customUserName || '직접 입력'
+            });
+            setCustomEmail('');
+            setCustomUserName('');
+        }
     };
 
     // 메일 발송 처리
-    const handleSendMail = () => {
-        const recipients = [...selectedUsers];
-        if (customEmail) {
-            recipients.push(customEmail);
-        }
+    const handleSendMail = async () => {
+        setLoading(true);
+        try {
+            const emailList = recipients.map(r => r.email);
+            const requestData = {
+                email: emailList,
+                subject: mailContent.subject,
+                content: mailContent.content
+            };
 
-        console.log('메일 발송:', {
-            recipients,
-            subject: mailContent.subject,
-            content: mailContent.content,
-        });
-        // API 호출 로직 추가
+            const data = await sendMail(requestData);
+
+            if (data) {
+                setSnackbarMessage('발송이 완료되었습니다.');
+                setRecipients([]);
+                setMailContent({ subject: '', content: '' });
+            }
+        } catch (error) {
+            setSnackbarMessage(`발송 실패: ${error.response?.data?.error || '알 수 없는 오류'}`);
+        } finally {
+            setLoading(false);
+            setSnackbarOpen(true);
+        }
+    };
+
+    // 스낵바 닫기
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
 
     return (
         <Box p={3}>
             <Typography variant="h5" gutterBottom>메일 발송</Typography>
-
             <Stack spacing={3}>
                 {/* 메일 작성 폼 */}
                 <Paper elevation={2} sx={{ p: 2 }}>
@@ -97,49 +124,83 @@ export default function Mail() {
                             value={mailContent.content}
                             onChange={(e) => setMailContent(prev => ({ ...prev, content: e.target.value }))}
                         />
-                        <TextField
-                            fullWidth
-                            label="추가 이메일 주소"
-                            value={customEmail}
-                            onChange={(e) => setCustomEmail(e.target.value)}
-                            placeholder="직접 이메일 입력"
-                        />
+                        <Stack direction="row" spacing={2}>
+                            <TextField
+                                label="수신자 정보"
+                                value={customUserName}
+                                onChange={(e) => setCustomUserName(e.target.value)}
+                                placeholder="수신자 이름 입력"
+                                sx={{ width: '30%' }}
+                            />
+                            <TextField
+                                fullWidth
+                                label="추가 이메일 주소"
+                                value={customEmail}
+                                onChange={(e) => setCustomEmail(e.target.value)}
+                                placeholder="직접 이메일 입력"
+                            />
+                            <Button variant="contained" onClick={handleAddCustomEmail}>
+                                추가
+                            </Button>
+                        </Stack>
                     </Stack>
                 </Paper>
 
-                {/* 사용자 목록 */}
+                {/* 수신자 목록 */}
+                <Paper elevation={2} sx={{ p: 2 }}>
+                    <Typography variant="h6" gutterBottom>수신자 목록</Typography>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>수신자정보</TableCell>
+                                <TableCell>이메일</TableCell>
+                                <TableCell>작업</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {recipients.map((recipient) => (
+                                <TableRow key={recipient.email}>
+                                    <TableCell>{recipient.user_name}</TableCell>
+                                    <TableCell>{recipient.email}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            color="error"
+                                            onClick={() => handleRemoveRecipient(recipient.email)}
+                                        >
+                                            제거
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Paper>
+
+                {/* 사용자 목록 테이블 */}
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        onChange={handleSelectAll}
-                                        checked={users.length > 0 && selectedUsers.length === users.length}
-                                        indeterminate={selectedUsers.length > 0 && selectedUsers.length < users.length}
-                                    />
-                                </TableCell>
                                 <TableCell>이름</TableCell>
-                                <TableCell>이메일</TableCell>
-                                <TableCell>클래스명</TableCell>
                                 <TableCell>사용자 ID</TableCell>
-                                <TableCell>가입일</TableCell>
+                                <TableCell>이메일</TableCell>
+                                <TableCell>작업</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {users.map((user) => (
                                 <TableRow key={user.id}>
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            checked={selectedUsers.includes(user.id)}
-                                            onChange={() => handleSelect(user.id)}
-                                        />
-                                    </TableCell>
                                     <TableCell>{user.user_name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>{user.class_name}</TableCell>
                                     <TableCell>{user.user_id}</TableCell>
-                                    <TableCell>{user.createdAt}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => handleAddRecipient(user)}
+                                        >
+                                            추가
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -151,12 +212,19 @@ export default function Mail() {
                         variant="contained"
                         color="primary"
                         onClick={handleSendMail}
-                        disabled={selectedUsers.length === 0 && !customEmail}
+                        disabled={recipients.length === 0 || loading}
                     >
-                        메일 발송
+                        {loading ? '발송 중...' : '메일 발송'}
                     </Button>
                 </Box>
             </Stack>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                message={snackbarMessage}
+            />
         </Box>
     );
 }

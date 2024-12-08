@@ -12,7 +12,7 @@ const Community = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/notice/allList');
+                const response = await axios.get('http://localhost:8080/api/user/notice/allList');
                 setPosts(response.data);
             } catch (error) {
                 console.error('게시글을 불러오는데 실패했습니다:', error);

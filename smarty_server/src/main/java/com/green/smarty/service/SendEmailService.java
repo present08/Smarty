@@ -8,6 +8,7 @@ import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.Loader;
 import org.checkerframework.checker.units.qual.N;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -170,12 +171,14 @@ public class SendEmailService {
                         "수강 신청이 정상적으로 완료되었습니다. 강의와 함께 멋진 여정을 시작하시길 바랍니다! ✨\n" +
                         "더 궁금한 사항이 있으시면 언제든지 문의 부탁드립니다.\n\n" +
                         "감사합니다.\n"
+
         );
+        simpleMailMessage.setFrom("smartytf33@gmail.com");
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("[스마트 아카데미] 강의 수강 신청 완료 안내");
 
         try {
-            simpleMailMessage.setFrom("smartytf33@gmail.com");
-            simpleMailMessage.setTo(email);
-            simpleMailMessage.setSubject("[스마트 아카데미] 강의 수강 신청 완료 안내");
+
             javaMailSender.send(simpleMailMessage);
 
             NotificationDTO notificationDTO = new NotificationDTO();
@@ -245,6 +248,45 @@ public class SendEmailService {
             log.info("이메일 발송 실패 : " + e.getMessage());
             return "FAILURE";
         }
+    }
+
+    public void sendHandEmail(String recipient, String subject, String content){
+
+        String user_id = userMapper.getIdByEmail(recipient);
+        String user_name = userMapper.getUserNameById(user_id);
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setTo(recipient);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(content);
+
+        try{
+            javaMailSender.send(mailMessage);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail("Success sent message" + recipient);
+            notificationDTO.setUser_id(user_id);
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setMessage(content);
+            notificationDTO.setStatus("SUCCESS");
+            notificationDTO.setMessage_type("수동 메일 발송");
+
+            notificationMapper.insertByNotificationId(notificationDTO);
+
+
+        }catch (Exception e){
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setResponse_detail("FAILURE sent message" + recipient);
+            notificationDTO.setUser_id(user_id);
+            notificationDTO.setUser_name(user_name);
+            notificationDTO.setMessage(content);
+            notificationDTO.setStatus("FAILURE");
+            notificationDTO.setMessage_type("수동 메일 발송");
+
+            notificationMapper.insertByNotificationId(notificationDTO);
+        }
+
     }
 }
 

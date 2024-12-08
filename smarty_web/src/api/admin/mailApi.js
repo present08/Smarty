@@ -7,3 +7,9 @@ export const getMailList = async () => {
     const res = await axios.get(`${prefix}/getList`)
     return res.data
 }
+
+export const sendMail = async (mailData) => {
+    const response = await axios.post(`${prefix}/sendMail`, mailData, {
+    });
+    return response.data;
+};

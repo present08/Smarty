@@ -37,10 +37,8 @@
 
     <!-- 생일 축하 쿠폰 발급-->
     <insert id="insertBirthdayCoupon" parameterType="com.green.smarty.vo.CouponVO">
-        INSERT INTO coupon (coupon_id, coupon_code, coupon_name, user_id, status, issue_date, expiry_date, discount_rate)
-        VALUES (#{coupon_id}, #{coupon_code}, #{coupon_name}, #{user_id}, 'ISSUED', #{issue_date}, #{expiry_date}, #{discount_rate})
+        INSERT INTO coupon (coupon_id, coupon_code, coupon_name, issue_date, expiry_date, user_id, status, discount_rate)
+        VALUES (#{coupon_id}, #{coupon_code}, #{coupon_name}, #{issue_date}, #{expiry_date}, #{user_id}, #{status},#{discount_rate} )
     </insert>
-
-
 
 </mapper>

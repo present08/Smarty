@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 
@@ -66,7 +67,9 @@ public class UserCouponService {
         // 생일인 사용자 목록 조회
         List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(month, day);
 
-        for (UserVO userVO : usersWithBirthday) {
+            for (UserVO userVO : usersWithBirthday) {
+                System.out.println("User ID: " + userVO.getUser_id() + ", Birthday: " + userVO.getBirthday());
+
             try {
                 // 쿠폰 생성
                 CouponVO coupon = new CouponVO();
@@ -90,49 +93,16 @@ public class UserCouponService {
         }
     }
 
-
-////    @Scheduled(cron = "0 0 0 * * ?") // 자정의 발급
-//    @Scheduled(cron = "0 58 * * * ?") // 매 시간의 3분에 실행 : 테스트용
-//    public void issueBirthdayCoupons() {
-//
-//        LocalDate today = LocalDate.now();
-//        String todayMonthDay = today.format(DateTimeFormatter.ofPattern("MM-dd"));
-//
-//        // 생일인 사용자 목록 조회 (월일만 비교)
-//        List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(todayMonthDay);
-//
-//
-//        for (UserVO userVO : usersWithBirthday) {
-//            try {
-//                // 쿠폰 생성
-//                CouponVO coupon = new CouponVO();
-//                coupon.setCoupon_id(generateCouponId(userVO)); // 사용자별 쿠폰 ID 생성
-//                coupon.setUser_id(userVO.getUser_id()); // 해당 사용자 ID 설정
-//                coupon.setCoupon_name("생일축하 쿠폰"); // 쿠폰 이름 설정
-//                coupon.setCoupon_code(generateCouponCode()); // 랜덤 쿠폰 코드 생성
-//                coupon.setStatus("ISSUED"); // 발급 상태 설정
-//                coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
-//                coupon.setExpiry_date(LocalDateTime.now().plusMonths(2)); // 만료 날짜
-//                coupon.setDiscount_rate(new BigDecimal("10.00")); // 할인율 10%
-//
-//                // 사용자에게 발급된 쿠폰을 DB에 저장
-//                usercouponMapper.insertBirthdayCoupon(coupon);
-//                System.out.println("생일 쿠폰 발급 완료: " + coupon.getUser_id());
-//
-//            } catch (Exception e) {
-//                // 발급 실패 시 에러 로그 출력
-//                System.out.println("생일 쿠폰 발급 실패: " + userVO.getUser_id() + " - " + e.getMessage());
-//            }
-//        }
-//    }
-
-
+    
     private String generateCouponId(UserVO user) {
-        return "BIRTHDAY_" + user.getUser_id();
+        if (user == null || user.getUser_id() == null) {
+            throw new IllegalArgumentException("User or User ID cannot be null");
+        }
+        return "BIRTHDAY_" + user.getUser_id() + "_" + System.currentTimeMillis();
     }
 
     private String generateCouponCode() {
-        return "BD" + (int)(Math.random() * 1000000);
+        return "BD" + UUID.randomUUID().toString().replace("-", "").substring(0, 6);
     }
 
 }

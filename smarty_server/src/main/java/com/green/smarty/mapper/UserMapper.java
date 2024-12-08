@@ -58,10 +58,6 @@ public interface UserMapper {
     // 생일 확인
     List<UserVO> getUsersWithBirthday(@Param("month") int month, @Param("day") int day);
 
-    //List<UserVO> getUsersWithBirthday(@Param("params") Map<String, Object> params);
-    //List<UserVO> getUsersWithBirthday(@Param("today") String today);
-
-
     // (영준) 아이디로 이메일 찾기
     String getUserEmailById(String user_id);
     // (영준) 아이디로 이름 찾기

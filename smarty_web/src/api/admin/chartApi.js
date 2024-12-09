@@ -13,6 +13,17 @@ export const getIncomeComparison = async () => {
     }
 }
 
+export const getDailyReservation = async () => {
+    try {
+        const response = await axios.get(`${prefix}/admin-daily-reservation`);
+        return response.data;
+    } catch (error) {
+        console.error("일일 예약현황을 불러오는데 실패하였습니다. : ", error);
+        throw error;
+    }
+}
+
+
 
 
 

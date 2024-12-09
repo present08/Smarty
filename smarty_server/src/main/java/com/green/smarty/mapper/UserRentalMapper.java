@@ -67,4 +67,6 @@ public interface UserRentalMapper {
 
     int updateCurrentStatus(@Param("product_id") String productId);
 
+    String getProductNameByProductId(@Param("product_id") String productId);
+
 }

@@ -129,7 +129,8 @@
 
     <!--    영준-->
     <select id="getUserEmailById" parameterType="String">
-        SELECT email FROM user
+        SELECT email
+        FROM user
         WHERE user_id = #{user_id}
     </select>
 

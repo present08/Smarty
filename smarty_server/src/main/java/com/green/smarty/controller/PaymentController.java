@@ -96,7 +96,7 @@ public class PaymentController {
                 .build();
 
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto, id);
+        RentalVO rentalID = paymentService.insertRental(dto);
         System.out.println(rentalID);
 
         // 멤버십 업데이트

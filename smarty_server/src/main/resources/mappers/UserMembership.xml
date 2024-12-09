@@ -53,14 +53,14 @@
 <!--    (영준) user_id로 email 불러오기-->
     <select id="getEmailbyuserId" parameterType="String">
         SELECT email FROM membership m
-        INNER JOIN user u
-        WHERE m.user_id = u.user_id
+        INNER JOIN user u ON m.user_id = u.user_id
+        WHERE m.user_id = #{user_id}
     </select>
 <!--    (영준) user_id로 user_name 불러오기-->
     <select id="getUsernamebyuserId" parameterType="String">
         SELECT user_name FROM membership m
-        INNER JOIN user u
-        WHERE m.user_id = u.user_id
+        INNER JOIN user u ON m.user_id = u.user_id
+        WHERE m.user_id = #{user_id}
     </select>
 
 </mapper>

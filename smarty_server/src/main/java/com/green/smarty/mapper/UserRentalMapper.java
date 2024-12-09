@@ -31,6 +31,7 @@ public interface UserRentalMapper {
                                     @Param("rental_id") String rentalId,
                                     @Param("count") int count);
 
+
     // 특정 상태의 총 감소 수량 계산
     int getTotalUnavailableQuantity(@Param("product_id") String productId);
 
@@ -41,7 +42,7 @@ public interface UserRentalMapper {
     int insertRentalLogWithRentalId(Map<String, Object> logData);
 
     // 대여 로그 삭제
-    int deleteRentalLog(@Param("logData") Map<String, Object> logData);
+    int deleteRentalLog(@Param("status_id") String statusId, @Param("rental_id") String rentalId);
 
     // 반납 상태 복구
     int restoreToAvailable(@Param("status_id") String statusId);

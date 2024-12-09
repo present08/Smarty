@@ -82,34 +82,56 @@ public class UserRentalService {
 
         // 1. 대여 가능한 `status_id` 조회
         List<String> statusIds = userRentalMapper.getAvailableStatusIds(productId, count);
+        if (statusIds.isEmpty()) {
+            throw new RuntimeException("대여 가능한 상태 ID가 부족합니다. productId=" + productId);
+        }
 
         // 2. 개별 관리 여부 확인
         boolean isIndividualManaged = statusIds.size() > 1;
+        log.info("관리 방식: {}", isIndividualManaged ? "개별 관리" : "일괄/사이즈별 관리");
 
-        if (!isIndividualManaged && statusIds.isEmpty()) {
-            throw new RuntimeException("대여 가능한 상태 ID가 부족합니다. 상품 ID=" + productId);
-        }
+        // 3. 관리 방식에 따라 처리
+        if (isIndividualManaged) {
+            // 개별 관리: 각 상태 ID별로 로그 생성
+            for (int i = 0; i < count; i++) {
+                Map<String, Object> logData = new HashMap<>();
+                logData.put("rental_id", rentalId);
+                logData.put("status_id", statusIds.get(i)); // 개별 상태 ID
+                logData.put("changed_status", "대여 중");
+                logData.put("change_quantity", 1);
 
-        // 3. 로그 기록 및 상태 변경
-        for (int i = 0; i < count; i++) {
-            String statusId = isIndividualManaged ? statusIds.get(i) : statusIds.get(0);
+                try {
+                    userRentalMapper.insertRentalLogWithRentalId(logData); // 로그 삽입
+                    userRentalMapper.updateChangedStatus(statusIds.get(i), "대여 중"); // 상태 변경
+                    log.info("개별 관리 로그 생성 완료: {}", logData);
+                } catch (Exception e) {
+                    log.error("Failed to insert rental log or update status: {}", logData, e);
+                    throw e;
+                }
+            }
+        } else {
+            // 일괄 관리와 사이즈별 관리: 단일 상태 ID로 처리
             Map<String, Object> logData = new HashMap<>();
             logData.put("rental_id", rentalId);
-            logData.put("status_id", statusId);
+            logData.put("status_id", statusIds.get(0)); // 단일 상태 ID
             logData.put("changed_status", "대여 중");
-            logData.put("change_quantity", 1);
+            logData.put("change_quantity", count); // 전체 수량
 
             try {
                 userRentalMapper.insertRentalLogWithRentalId(logData); // 로그 삽입
-                userRentalMapper.updateChangedStatus(statusId, "대여 중"); // 상태 변경
+                userRentalMapper.updateChangedStatus(statusIds.get(0), "대여 중"); // 상태 변경
+                log.info("일괄/사이즈별 관리 로그 생성 완료: {}", logData);
             } catch (Exception e) {
                 log.error("Failed to insert rental log or update status: {}", logData, e);
                 throw e;
             }
         }
 
-        userRentalMapper.updateCurrentStatus(productId); // 전체 상태 업데이트
+        // 4. 상품 상태 업데이트
+        userRentalMapper.updateCurrentStatus(productId);
+        log.info("전체 상태 업데이트 완료: productId={}", productId);
     }
+
 
     // 반납
     public int returnRental(String rental_id, int count) {
@@ -144,44 +166,50 @@ public class UserRentalService {
         return result;
     }
 
-    // 새로운 메서드: 로그 삭제 및 상태 복구
     private void processReturnLogs(String rentalId, String productId, int count) {
         log.info("반납 로그 처리 시작: rentalId={}, productId={}, count={}", rentalId, productId, count);
 
-        // 1. 대여 중인 status_id 조회
-        List<String> statusIds = userRentalMapper.getRentedStatusIds(productId, rentalId, count); // rentalId 추가
-        log.info("반환된 대여 상태 ID: {}", statusIds);
+        // 1. 대여 중인 `status_id` 조회
+        List<String> statusIds = userRentalMapper.getRentedStatusIds(productId, rentalId, count);
+        log.info("조회된 상태 ID: {}", statusIds);
 
         if (statusIds == null || statusIds.isEmpty()) {
             throw new RuntimeException("반납 처리 오류: 대여 중인 상태 ID를 찾을 수 없습니다. productId=" + productId);
         }
 
-        // 2. 로그 삭제 및 상태 복구
+        // 2. 관리 방식 판단
+        boolean isIndividualManaged = statusIds.size() > 1; // 개별 관리 여부 판단
+        log.info("관리 방식: {}", isIndividualManaged ? "개별 관리" : "일괄/사이즈별 관리");
+
+        // 3. 관리 방식에 따른 처리
         for (String statusId : statusIds) {
-            log.info("반납 처리 중: Status ID={}", statusId);
+            log.info("처리 중인 Status ID: {}", statusId);
 
-            // 로그 삭제
-            Map<String, Object> logData = new HashMap<>();
-            logData.put("status_id", statusId);
-            logData.put("rental_id", rentalId); // rental_id 추가
-            logData.put("count", 1);           // 개별 수량 삭제
+            try {
+                // 로그 삭제
+                int logDeleted = userRentalMapper.deleteRentalLog(statusId, rentalId);
+                if (logDeleted <= 0) {
+                    log.error("반납 로그 삭제 실패: statusId={}, rentalId={}", statusId, rentalId);
+                    throw new RuntimeException("반납 로그 삭제 실패. Status ID: " + statusId);
+                }
 
-            int logDeleted = userRentalMapper.deleteRentalLog(logData);
-            if (logDeleted <= 0) {
-                throw new RuntimeException("반납 로그 삭제 실패. Status ID: " + statusId);
+                // 상태 복구
+                int restored = userRentalMapper.restoreToAvailable(statusId);
+                if (restored <= 0) {
+                    log.error("상태 복구 실패: statusId={}", statusId);
+                    throw new RuntimeException("상태 복구 실패. Status ID: " + statusId);
+                }
+
+                log.info("반납 처리 완료: Status ID={}", statusId);
+            } catch (Exception e) {
+                log.error("반납 처리 중 오류 발생: Status ID={}", statusId, e);
+                throw e;
             }
-
-            // 상태 복구
-            int restored = userRentalMapper.restoreToAvailable(statusId);
-            if (restored <= 0) {
-                throw new RuntimeException("상태 복구 실패. Status ID: " + statusId);
-            }
-
-            log.info("로그 삭제 및 상태 복구 완료: Status ID={}", statusId);
         }
 
         // 전체 상태 업데이트
         userRentalMapper.updateCurrentStatus(productId);
+        log.info("전체 상태 업데이트 완료: productId={}", productId);
     }
 
 

@@ -103,7 +103,6 @@
         DELETE FROM product_status_log
         WHERE status_id = #{status_id}
         AND rental_id = #{rental_id}
-        AND change_quantity = #{count};
     </delete>
 
     <!-- 대여된 상태 복구 -->
@@ -176,8 +175,8 @@
         FROM product_status_log psl
         INNER JOIN product_status ps ON psl.status_id = ps.status_id
         WHERE ps.product_id = #{product_id}
-        AND psl.rental_id = #{rental_id} <!-- rental_id 추가 -->
-        AND psl.changed_status = '대여 중' <!-- 대여 상태 필터 -->
+        AND psl.rental_id = #{rental_id}
+        AND psl.changed_status = '대여 중'
         LIMIT #{count};
     </select>
 

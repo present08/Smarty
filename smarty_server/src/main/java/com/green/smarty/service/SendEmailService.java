@@ -205,14 +205,14 @@ public class SendEmailService {
         }
     }
 
-    public String sendMembershipLevel(String email, String membership_level, String user_name, String user_id){
+    public String sendMembershipLevel(String email, String new_level, String user_name, String user_id){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setText(
                 "안녕하세요, " + user_name + "님! \n\n" +
                         "저희 SMRTY 복합문화체육시설을 이용해 주셔서 진심으로 감사드립니다. 😊\n\n" +
                         "축하합니다! 🎉\n\n" +
                         "회원님의 멤버십 등급이 새롭게 업그레이드되었습니다. \n\n" +
-                        "새로운 등급: \"" + membership_level + "\"\n\n" +
+                        "새로운 등급: \"" + new_level + "\"\n\n" +
                         "새로운 등급과 함께 더 많은 혜택과 특별한 경험을 즐기실 수 있습니다! \n" +
                         "저희 시설은 회원님께 최고의 만족을 드리기 위해 항상 노력하고 있습니다. \n\n" +
                         "앞으로도 다양한 프로그램과 서비스를 통해 풍성한 체육 활동과 문화를 누리시길 바랍니다. \n\n" +
@@ -225,23 +225,26 @@ public class SendEmailService {
             simpleMailMessage.setFrom("smartytf33@gmail.com");
             simpleMailMessage.setTo(email);
             simpleMailMessage.setSubject("등급 업그레이드 안내");
+            javaMailSender.send(simpleMailMessage);
 
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setResponse_detail("Success sent message to: " + email);
             notificationDTO.setMessage(simpleMailMessage.getText());
             notificationDTO.setStatus("SUCCESS");
-            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setMessage_type("등업 안내");
             notificationDTO.setUser_name(user_name);
             notificationDTO.setUser_id(user_id);
             notificationMapper.insertByNotificationId(notificationDTO);
+
             log.info("이메일 발송 성공 " + email);
             return "SUCCESS";
+
         } catch (Exception e){
             NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setResponse_detail("Success sent message to: " + email);
+            notificationDTO.setResponse_detail("Fail send message : " + e);
             notificationDTO.setMessage(simpleMailMessage.getText());
-            notificationDTO.setStatus("SUCCESS");
-            notificationDTO.setMessage_type("일일 예약 안내");
+            notificationDTO.setStatus("FAILURE");
+            notificationDTO.setMessage_type("등업 안내");
             notificationDTO.setUser_name(user_name);
             notificationDTO.setUser_id(user_id);
             notificationMapper.insertByNotificationId(notificationDTO);
@@ -271,9 +274,7 @@ public class SendEmailService {
             notificationDTO.setMessage(content);
             notificationDTO.setStatus("SUCCESS");
             notificationDTO.setMessage_type("수동 메일 발송");
-
             notificationMapper.insertByNotificationId(notificationDTO);
-
 
         }catch (Exception e){
             NotificationDTO notificationDTO = new NotificationDTO();
@@ -286,7 +287,6 @@ public class SendEmailService {
 
             notificationMapper.insertByNotificationId(notificationDTO);
         }
-
     }
 }
 

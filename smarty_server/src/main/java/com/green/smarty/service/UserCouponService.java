@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -93,7 +90,7 @@ public class UserCouponService {
         }
     }
 
-    
+
     private String generateCouponId(UserVO user) {
         if (user == null || user.getUser_id() == null) {
             throw new IllegalArgumentException("User or User ID cannot be null");

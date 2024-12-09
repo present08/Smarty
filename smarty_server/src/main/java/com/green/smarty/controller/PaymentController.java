@@ -98,7 +98,6 @@ public class PaymentController {
         RentalVO rentalID = paymentService.insertRental(dto, id);
         System.out.println(rentalID);
 
-        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
         // 멤버십 업데이트
         userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 

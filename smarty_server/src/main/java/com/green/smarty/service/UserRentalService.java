@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserRentalService{
+public class UserRentalService {
     @Autowired
     private UserRentalMapper userRentalMapper;
     @Autowired
@@ -30,6 +30,7 @@ public class UserRentalService{
     private UserProductMapper userProductMapper;
     @Autowired
     private PublicMapper publicMapper;
+
     // 대여
     public int insertRental(RentalVO vo, int count) {
         log.info("대여 등록 시작: {}", vo);
@@ -47,12 +48,9 @@ public class UserRentalService{
         }
 
         // 3. 대여 가능 여부 확인
-        int stock = product.getStock(); // product.stock 값 가져오기
-        int totalUnavailableQuantity = userRentalMapper.getTotalUnavailableQuantity(vo.getProduct_id()); // 상태별 감소 수량 합산
-        int availableQuantity = stock - totalUnavailableQuantity; // 대여 가능 수량 계산
-
-        log.info("대여 가능 여부 확인: stock={}, totalUnavailableQuantity={}, availableQuantity={}, 요청 수량={}",
-                stock, totalUnavailableQuantity, availableQuantity, count);
+        int availableQuantity = userRentalMapper.getAvailableQuantity(vo.getProduct_id());
+        log.info("대여 가능 여부 확인: product_id={}, availableQuantity={}, 요청 수량={}",
+                vo.getProduct_id(), availableQuantity, count);
 
         if (availableQuantity < count || availableQuantity <= 0) {
             throw new RuntimeException("대여 불가능: 남은 수량=" + availableQuantity +
@@ -60,9 +58,6 @@ public class UserRentalService{
         }
 
         // 4. 날짜 확인
-//        if (vo.getRental_date() == null || vo.getReturn_date() == null) {
-//            throw new RuntimeException("대여 날짜 또는 반납 날짜가 누락되었습니다.");
-//        }
         if (vo.getRental_date() == null) {
             vo.setRental_date(LocalDateTime.now()); // 기본 대여 날짜 설정
         }
@@ -83,21 +78,26 @@ public class UserRentalService{
 
     // 새로운 메서드: 로그 기록
     private void insertRentalLog(String rentalId, String productId, int count) {
-        // 1. 대여 가능한 status_id 조회
+        log.info("대여 로그 기록 시작: rentalId={}, productId={}, count={}", rentalId, productId, count);
+
+        // 1. 대여 가능한 `status_id` 조회
         List<String> statusIds = userRentalMapper.getAvailableStatusIds(productId, count);
-        if (statusIds.size() < count) {
-            throw new RuntimeException("대여 가능한 상태 ID가 충분하지 않습니다. 요청 수량: " + count + ", 상태 ID 수량: " + statusIds.size());
+
+        // 2. 개별 관리 여부 확인
+        boolean isIndividualManaged = statusIds.size() > 1;
+
+        if (!isIndividualManaged && statusIds.isEmpty()) {
+            throw new RuntimeException("대여 가능한 상태 ID가 부족합니다. 상품 ID=" + productId);
         }
 
-        // 2. 대여 로그 기록 및 상태 변경
-        for (String statusId : statusIds) {
+        // 3. 로그 기록 및 상태 변경
+        for (int i = 0; i < count; i++) {
+            String statusId = isIndividualManaged ? statusIds.get(i) : statusIds.get(0);
             Map<String, Object> logData = new HashMap<>();
-            logData.put("rental_id", rentalId); // 렌탈 ID
-            logData.put("status_id", statusId); // 상태 ID
-            logData.put("changed_status", "대여 중"); // 변경 상태
-            logData.put("change_quantity", count); // 대여 수량
-
-            log.info("Rental Log Data: {}", logData);
+            logData.put("rental_id", rentalId);
+            logData.put("status_id", statusId);
+            logData.put("changed_status", "대여 중");
+            logData.put("change_quantity", 1);
 
             try {
                 userRentalMapper.insertRentalLogWithRentalId(logData); // 로그 삽입
@@ -107,9 +107,11 @@ public class UserRentalService{
                 throw e;
             }
         }
+
+        userRentalMapper.updateCurrentStatus(productId); // 전체 상태 업데이트
     }
 
-    //반납
+    // 반납
     public int returnRental(String rental_id, int count) {
         log.info("반납할 렌탈 ID: {}, count: {}", rental_id, count);
 
@@ -143,11 +145,15 @@ public class UserRentalService{
     }
 
     // 새로운 메서드: 로그 삭제 및 상태 복구
-    private void processReturnLogs(String rental_id, String product_id, int count) {
+    private void processReturnLogs(String rentalId, String productId, int count) {
+        log.info("반납 로그 처리 시작: rentalId={}, productId={}, count={}", rentalId, productId, count);
+
         // 1. 대여 중인 status_id 조회
-        List<String> statusIds = userRentalMapper.getRentedStatusIds(product_id, count);
-        if (statusIds.size() < count) {
-            throw new RuntimeException("반납 처리 중 상태 ID가 충분하지 않습니다. Rental ID: " + rental_id);
+        List<String> statusIds = userRentalMapper.getRentedStatusIds(productId, rentalId, count); // rentalId 추가
+        log.info("반환된 대여 상태 ID: {}", statusIds);
+
+        if (statusIds == null || statusIds.isEmpty()) {
+            throw new RuntimeException("반납 처리 오류: 대여 중인 상태 ID를 찾을 수 없습니다. productId=" + productId);
         }
 
         // 2. 로그 삭제 및 상태 복구
@@ -155,7 +161,12 @@ public class UserRentalService{
             log.info("반납 처리 중: Status ID={}", statusId);
 
             // 로그 삭제
-            int logDeleted = userRentalMapper.deleteRentalLog(statusId, count);
+            Map<String, Object> logData = new HashMap<>();
+            logData.put("status_id", statusId);
+            logData.put("rental_id", rentalId); // rental_id 추가
+            logData.put("count", 1);           // 개별 수량 삭제
+
+            int logDeleted = userRentalMapper.deleteRentalLog(logData);
             if (logDeleted <= 0) {
                 throw new RuntimeException("반납 로그 삭제 실패. Status ID: " + statusId);
             }
@@ -168,7 +179,11 @@ public class UserRentalService{
 
             log.info("로그 삭제 및 상태 복구 완료: Status ID={}", statusId);
         }
+
+        // 전체 상태 업데이트
+        userRentalMapper.updateCurrentStatus(productId);
     }
+
 
     public int updatePaymentStatus(String rental_id, boolean payment_status) {
         Map<String, Object> map = new HashMap<>();
@@ -184,29 +199,22 @@ public class UserRentalService{
 
     // 대여 조회
     public List<RentalDTO> getAllRentals() {
-        List<RentalDTO> rentalList = userRentalMapper.getAllRentals();
-        return rentalList;
+        return userRentalMapper.getAllRentals();
     }
 
     public RentalDTO getRentalById(String rental_id) {
         return userRentalMapper.getRentalById(rental_id);
     }
 
-
     public List<ProductRentalUserDTO> getUserRentalListData(String user_id) {
-        List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
-        return result;
+        return userRentalMapper.getUserRentalListData(user_id);
     }
 
-//    (영준) user_id가 아니라 이메일을 가져오기 위한 코드
-    public String getEmailByUserId(String user_id){
+    public String getEmailByUserId(String user_id) {
         return userRentalMapper.getEmailByUserId(user_id);
     }
 
-    //    (영준) 기간 지난 rental 목록들 전부가져옴
-    public List<RentalDTO> getOverdueRentals(){
+    public List<RentalDTO> getOverdueRentals() {
         return userRentalMapper.getOverdueRentals();
     }
-
-
 }

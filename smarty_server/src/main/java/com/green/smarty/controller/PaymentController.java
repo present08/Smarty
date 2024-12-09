@@ -82,7 +82,8 @@ public class PaymentController {
             }
         }
 
-        String id = "P_" + date.getYear() + date.getMonthValue() + date.getDayOfMonth()
+        String id = "P_" + date.getYear() + date.getMonthValue()
+                + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
         System.out.println("payment ID : " + id);
         PaymentVO vo = PaymentVO.builder()

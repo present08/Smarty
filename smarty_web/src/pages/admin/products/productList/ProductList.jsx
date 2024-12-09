@@ -448,7 +448,6 @@ export default function ProductList() {
       align: "center",
       renderCell: (params) => (
         <div className="productAction">
-
           <Link to={`/admin/products/${facility_id}/read/${params.row.product_id}`}>
             <button className="productListEdit">상품 조회</button>
           </Link>

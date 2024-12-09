@@ -70,15 +70,8 @@
     <update id="updateUserInfo" parameterType="com.green.smarty.vo.UserVO" >
         UPDATE user
         SET address = #{address}, phone = #{phone}
-        WHERE user_id = #{userId} <!-- 기존과 동일하게 user_id 사용 -->
+        WHERE user_id = #{userId}
     </update>
-
-    <!-- 회원 레벨 업데이트 -->
-<!--    <update id="updateUserLevel">-->
-<!--        UPDATE user-->
-<!--        SET level = #{level}-->
-<!--        WHERE user_id = #{userId}-->
-<!--    </update>-->
 
     <!-- 유저 수강신청 불러오기-->
     <select id="getClassUserApplication" parameterType="String" resultType="com.green.smarty.dto.UserClassApplicationDTO">
@@ -134,30 +127,26 @@
         AND DAY(birthday) = #{day}
     </select>
 
-
+    <!--    영준-->
     <select id="getUserEmailById" parameterType="String">
         SELECT email FROM user
         WHERE user_id = #{user_id}
     </select>
 
-<!--    <select id="getUserNameById" parameterType="String">-->
-<!--        SELECT * FROM user-->
-<!--        WHERE DATE(birthday) = #{today}-->
-<!--    </select>-->
+    <select id="getUserNameById" parameterType="String">
+        SELECT * FROM user
+        WHERE user_id = #{user_id}
+    </select>
 
     <select id="getIdByEmail" parameterType="String">
         SELECT user_id FROM user
         WHERE email = #{email}
     </select>
 
-
-<!--    영준-->
     <select id="getUserHuman" parameterType="com.green.smarty.vo.UserVO">
         SELECT * FROM user
         WHERE login_date &lt;= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
         AND user_status = 1;
     </select>
-
-
 
 </mapper>

@@ -46,7 +46,7 @@ public class EmailScheduler {
     private UserRentalMapper userRentalMapper;
 
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 9 1/3 * *") // 매일 아침 9시에 3일에 한번
     public void sendOverdue() {
         List<RentalDTO> overdueRentals = userRentalService.getOverdueRentals();
         for (RentalDTO rentalDTO : overdueRentals) {
@@ -58,7 +58,7 @@ public class EmailScheduler {
                 notificationDTO.setUser_id(rentalDTO.getUser_id());
                 notificationDTO.setStatus("SUCCESS");
                 notificationDTO.setUser_name(userMapper.getUserNameById(userMapper.getUserNameById(rentalDTO.getUser_id())));
-                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationDTO.setMessage_type("물품 대여 연체 알림");
                 notificationDTO.setResponse_detail("Email sent successfully to " + email);
                 notificationMapper.insertByNotificationId(notificationDTO);
 
@@ -69,7 +69,7 @@ public class EmailScheduler {
                 notificationDTO.setUser_id(rentalDTO.getUser_id());
                 notificationDTO.setStatus("FAILURE");
                 notificationDTO.setUser_name(userMapper.getUserNameById(userMapper.getUserNameById(rentalDTO.getUser_id())));
-                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationDTO.setMessage_type("물품 대여 연체 알림");
                 notificationMapper.insertByNotificationId(notificationDTO);
 
                 System.out.println("이메일 발송 실패 : {}" + e);
@@ -101,17 +101,18 @@ public class EmailScheduler {
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 0 9 * * *") // 매일 아침 9시에 실행
     public void sendSevendaysBefore() {
-        List<ReservationDTO> upcomingSevenDays = userReservationMapper.getStartBeforeSevendays();
+        List<ReservationDTO> upcomingOneDays = userReservationMapper.sendOnedaysBefore();
+        System.out.println("1분마다 실행은 맞음?");
 
-        for (ReservationDTO reservationDTO : upcomingSevenDays) {
+        for (ReservationDTO reservationDTO : upcomingOneDays) {
 
             String email = userMapper.getUserEmailById(reservationDTO.getUser_id());
             String facilityName = userFacilityMapper.getFacilityNameById(reservationDTO.getFacility_id());
             String emailContent =
                     "<h1>안녕하세요!</h1>" +
-                            "<p>예약하신 일정이 7일 앞으로 다가왔습니다</p>" +
+                            "<p>예약하신 일정 하루 전 날 입니다.</p>" +
                             "<p>시설 이름: " + facilityName + "</p>" +
                             "<p>코트 번호: " + reservationDTO.getCourt_id() + "</p>" +
                             "<p>예약 시작: " + reservationDTO.getReservation_start() + "</p>" +
@@ -121,19 +122,19 @@ public class EmailScheduler {
                 // 이메일 내용 생성
 
                 // 이메일 전송
-                sendSevendaysBefore(email, emailContent);
+                sendOnedaysBefore(email, emailContent);
                 // 알림 정보 생성
                 NotificationDTO notificationDTO = new NotificationDTO();
                 notificationDTO.setUser_id(reservationDTO.getUser_id());
                 notificationDTO.setMessage(emailContent); // 이메일 본문을 메시지로 설정
                 notificationDTO.setStatus("SUCCESS");
                 notificationDTO.setUser_name(userMapper.getUserNameById(reservationDTO.getUser_id()));
-                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationDTO.setMessage_type("예약 하루 전 알림");
                 notificationDTO.setResponse_detail("Email sent successfully to " + email);
                 System.out.println(reservationDTO.getUser_id());
                 notificationMapper.insertByNotificationId(notificationDTO);
 
-                System.out.println("7일 전 이메일 발송 완료: " + email);
+                System.out.println("하루 전 이메일 발송 완료: " + email);
             } catch (Exception e) {
 
                 NotificationDTO notificationDTO = new NotificationDTO();
@@ -141,26 +142,26 @@ public class EmailScheduler {
                 notificationDTO.setMessage(emailContent); // 이메일 본문을 메시지로 설정
                 notificationDTO.setStatus("FAILURE");
                 notificationDTO.setUser_name(userMapper.getUserNameById(reservationDTO.getUser_id()));
-                notificationDTO.setMessage_type("예약 7일 전 알림");
+                notificationDTO.setMessage_type("예약 하루 전 알림");
                 notificationDTO.setResponse_detail("이메일 발송 실패 : {}" + e);
                 notificationMapper.insertByNotificationId(notificationDTO);
 
-                System.out.println("7일 전 이메일 발송 실패: " + e.getMessage());
+                System.out.println("하루 전 이메일 발송 실패: " + e.getMessage());
             }
         }
     }
 
-    private void sendSevendaysBefore(String email, String emailContent) throws MessagingException {
+    private void sendOnedaysBefore(String email, String emailContent) throws MessagingException {
         MimeMessage message = javaMailsender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(email);
-        helper.setSubject("예약 7일 전 알림");
+        helper.setSubject("예약 하루 전 알림");
         helper.setText(emailContent, true); // 이메일 본문 설정
         javaMailsender.send(message);
     }
 
-    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 0 9 * * *") // 매일 아침 9시에 실행
     public void sendHumanMessage() {
         List<UserVO> upcomingHuman = userMapper.getUserHuman();
         for (UserVO userVO : upcomingHuman) {
@@ -219,7 +220,7 @@ public class EmailScheduler {
     }
 
 
-    @Scheduled(cron = "0 0/1 * * * *") // 매일 아침 9시에 실행
+    @Scheduled(cron = "0 0 9 * * *") // 매일 아침 9시에 실행
     public void sendHumanMessageSevendayBefore(){
         System.out.println("스케줄러는 실행중임");
         List<UserVO> sevendaysbeforehuman = userMapper.humanSevenbefore();

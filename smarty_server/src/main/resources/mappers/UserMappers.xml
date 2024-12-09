@@ -153,7 +153,7 @@
     <select id="humanSevenbefore" parameterType="com.green.smarty.vo.UserVO">
         SELECT *
         FROM user
-        WHERE login_date = DATE_SUB(DATE_SUB(CURDATE(), INTERVAL 3 MONTH), INTERVAL 7 DAY);
+        WHERE login_date = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 3 MONTH), INTERVAL 7 DAY);
     </select>
 
 <!--    영준-->

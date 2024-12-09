@@ -31,7 +31,7 @@ public class UserMembershipService {
     }
 
     public void updateMembershipLevel(String user_id, float amount) {
-        float totalAmount = userMembershipMapper.getPaymentDetailsByUserId(user_id) + amount;
+        float totalAmount = userMembershipMapper.getPaymentDetailsByUserId(user_id);
         System.out.println("Total Amount for user " + user_id + ": " + totalAmount);
 
         String newLevel = "브론즈";

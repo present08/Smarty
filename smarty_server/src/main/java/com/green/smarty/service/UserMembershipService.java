@@ -22,7 +22,6 @@ public class UserMembershipService {
     // 결제 금액 합계를 반환하는 메서드
     public float getPaymentDetailsByUserId(String user_id) {
         float total = userMembershipMapper.getPaymentDetailsByUserId(user_id);
-        System.out.println("Retrieved payment total for user " + user_id + ": " + total);
         return total;
     }
 
@@ -32,7 +31,6 @@ public class UserMembershipService {
 
     public void updateMembershipLevel(String user_id, float amount) {
         float totalAmount = userMembershipMapper.getPaymentDetailsByUserId(user_id);
-        System.out.println("Total Amount for user " + user_id + ": " + totalAmount);
 
         String newLevel = "브론즈";
         if (totalAmount >= 1000) {
@@ -45,7 +43,6 @@ public class UserMembershipService {
             newLevel = "실버";
         }
 
-        System.out.println("New Level for user " + user_id + ": " + newLevel);
         userMembershipMapper.updateMembershipLevel(user_id, newLevel);
     }
 

@@ -17,3 +17,6 @@ export const MembershipUser = async (user_id) => {
     console.log(response.data)
     return response.data;
 }
+
+
+

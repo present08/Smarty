@@ -5,11 +5,12 @@ import com.green.smarty.dto.UserClassApplicationDTO;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.*;
 import com.green.smarty.dto.ReservationUserDTO;
+import com.green.smarty.vo.CouponVO;
+import com.green.smarty.vo.LoginHistoryVO;
 import com.green.smarty.vo.MembershipVO;
 import com.green.smarty.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,13 +45,21 @@ public class UserController {
 
     @Autowired
     private SendEmailService sendEmailService; // 영준 추가 코드
+
     @Autowired
-    private LoginHistoryService loginHistoryService; // 영준 추가 코드
+    private UserLoginHistoryService userLoginHistoryService;
+
+    @Autowired
+    private UserCouponService userCouponService;
+
+
 
     // 회원가입 처리
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserVO userVO) {
+
         System.out.println(userVO);
+
         // 가입 날짜와 로그인 날짜 자동 설정
         userVO.setJoin_date(LocalDateTime.now());
         userVO.setLogin_date(LocalDate.now());
@@ -63,8 +72,10 @@ public class UserController {
 
             try {
                 // 멤버십 아이디 발급 및 초기 데이터 저장
-                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-                String membershipId = "m_" + userVO.getUser_id()+ "_" + timestamp ;
+                // userId의 앞 두 자리 추출
+                String userIdPrefix = userVO.getUser_id().substring(0, Math.min(userVO.getUser_id().length(), 2));
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                String membershipId = "M_" + userIdPrefix + timestamp ;
 
                 MembershipVO membership = new MembershipVO();
                 membership.setMembership_id(membershipId);
@@ -76,6 +87,29 @@ public class UserController {
                 if (!isMembershipSaved) {
                     throw new Exception("멤버십 생성 실패");
                 }
+
+                // ** 신규 쿠폰 발급 로직 추가 **
+                CouponVO coupon = new CouponVO();
+
+                // 쿠폰 ID 생성
+                String couponID = userVO.getUser_id().substring(0, Math.min(userVO.getUser_id().length(), 2));
+                String timestamps = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                String couponsID = "C_" + couponID + timestamps;
+
+                // 랜덤 쿠폰 코드 생성
+                String randomCouponCode = "COUPON_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+                coupon.setCoupon_id(couponsID); // 쿠폰 ID
+                coupon.setCoupon_code(randomCouponCode); // 랜덤 쿠폰 코드 설정
+                coupon.setUser_id(userVO.getUser_id()); // 사용자
+                coupon.setCoupon_name("회원가입 축하 쿠폰"); // 무슨 쿠폰인지 ?
+                coupon.setStatus("ISSUED"); // 상태
+                coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
+                coupon.setExpiry_date(LocalDateTime.now().plusMonths(12)); // 만료 날짜
+                coupon.setDiscount_rate(new BigDecimal("10.00")); //할인율 10%
+
+                // 쿠폰 저장
+                userCouponService.InsertUserNewCoupon(coupon);
+                System.out.println("쿠폰 발급 완료: " + coupon);
 
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
@@ -91,39 +125,32 @@ public class UserController {
         }
     }
 
-
-//    //로그인 처리
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
-//        // 사용자 ID와 비밀번호를 기반으로 로그인 시도
-//        UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
-//        if (user != null) {
-//            // 로그인 성공 시 사용자 정보를 JSON으로 반환
-//            System.out.println("로그인 성공: " + user);
-//            session.setAttribute("user" , user); //세션에 사용자 정보 저장
-//            return ResponseEntity.ok(user) ;  // 로그인 성공 시 사용자 정보 반환
-//        } else {
-//            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
-//            System.out.println("로그인 실패");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
-//        }
-//    }
-
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session, HttpServletRequest request) {
+        // 로그인 요청을 처리
         UserVO user = userservice.login(loginRequest.getUser_id(), loginRequest.getPassword());
 
+        // 로그인 기록 VO 생성
+        LoginHistoryVO loginHistory = new LoginHistoryVO();
+        loginHistory.setUser_id(loginRequest.getUser_id());
+        loginHistory.setIp_address(request.getRemoteAddr());
+        loginHistory.setUser_agent(request.getHeader("User-Agent"));
+
         if (user != null) {
-            // 로그인 성공 시 로그인 날짜 업데이트
-            userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트 호출
+            // 로그인 성공
+            userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트
+            userLoginHistoryService.logLoginSuccess(loginHistory); // 로그인 성공 기록 추가
 
             System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
-            loginHistoryService.insertSentHumanMessageByUserId(user.getUser_id());
 
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
         } else {
-            // 로그인 실패 시 에러 메시지와 함께 401 Unauthorized 상태 코드 반환
+            // 로그인 실패
+            loginHistory.setLogin_status("FAILURE"); // 실패 상태 설정
+            userLoginHistoryService.logLoginFailure(loginHistory); // 로그인 실패 기록 추가
+
             System.out.println("로그인 실패");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user_id or password.");
         }
@@ -208,11 +235,22 @@ public class UserController {
         }
     }
 
-    //로그아웃
+    // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
-        // 세션에서 사용자 정보 제거
-        session.invalidate(); //전체 세션 무효화
+        // 세션에서 사용자 정보 가져오기
+        UserVO user = (UserVO) session.getAttribute("user");
+
+        if (user != null) {
+            // 로그아웃 시간 기록
+            userLoginHistoryService.logLogoutTime(user.getUser_id());
+            System.out.println("로그아웃 기록 추가됨: " + user.getUser_id());
+        } else {
+            System.out.println("로그아웃 요청 시 세션에 사용자 정보가 없음");
+        }
+
+        // 세션 무효화
+        session.invalidate();
 
         System.out.println("로그아웃 성공");
         return ResponseEntity.ok("로그아웃 성공");
@@ -260,11 +298,12 @@ public class UserController {
         return result;
     }
 
-    // 등급매기기
-    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
-        userservice.updateUserLevel(user, totalAmount);
-        System.out.println(user.getLevel());
-    }
+//    // 등급매기기
+//    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
+//        userservice.updateUserLevel(user, totalAmount);
+//        System.out.println(user.getLevel());
+//    }
+
 
      // 수강 리스트 불러오기
     @GetMapping("/classApplication")

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notice")
+@RequestMapping("/api/user/notice")
 public class CommunityController {
     private final CommunityService communityService;
 

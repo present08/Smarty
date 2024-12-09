@@ -13,48 +13,49 @@ function BoardDetail() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
 
-  const user = localStorage.getItem('user');
-  const userId = JSON.parse(user).userId;
-
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const boardResponse = await noticeApi.getBoardDetail(board_id);
-        setBoard(boardResponse.data);
+      const boardResponse = await noticeApi.getBoardDetail(board_id);
+      setBoard(boardResponse.data);
 
-        const commentsResponse = await noticeApi.comments.getComments(board_id);
-        setComments(commentsResponse.data);
-      } catch (error) {
-        console.error("Error:", error);
-        alert("데이터를 불러오는데 실패했습니다.");
-      }
+      const commentsResponse = await noticeApi.comments.getComments(board_id);
+      setComments(commentsResponse.data);
     };
     fetchData();
   }, [board_id]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) {
-      alert('댓글 내용을 입력해주세요.');
+
+    const user = localStorage.getItem('user');
+    console.log('저장된 사용자 정보:', user);
+
+    if (!user) {
+      alert('로그인이 필요한 서비스 입니다.');
+      navigate('/user/login');
       return;
     }
 
+    const userData = JSON.parse(user);
+    console.log('파싱된 사용자 정보:', userData);
+
+    
+    console.log('사용자 ID 필드들:', {
+      id: userData.id,
+      userId: userData.userId,
+      user_id: userData.user_id
+    });
+
+    const userId = userData.id || userData.userId || userData.user_id;
     if (!userId) {
-      try {
-        const sessionCheck = await noticeApi.checkSession();
-        if (sessionCheck.userId) {
-          localStorage.setItem('userId', sessionCheck.userId);
-        } else {
-          alert('로그인이 필요한 서비스 입니다.');
-          navigate('/user/login');
-          return;
-        }
-      } catch (error) {
-        console.error('세션 확인 실패:', error);
-        alert('로그인이 필요한 서비스 입니다.');
-        navigate('/user/login');
-        return;
-      }
+      alert('사용자 정보가 올바르지 않습니다. 다시 로그인해주세요.');
+      navigate('/user/login');
+      return;
+    }
+
+    if (!newComment.trim()) {
+      alert('댓글 내용을 입력해주세요.');
+      return;
     }
 
     try {
@@ -123,7 +124,7 @@ function BoardDetail() {
         content: editedContent,
         reply_id: reply_id,
         board_id: board_id,
-        user_id: userId
+        user_id: JSON.parse(localStorage.getItem('user')).userId
       };
 
       await noticeApi.comments.modifyComment(reply_id, commentData);
@@ -145,7 +146,7 @@ function BoardDetail() {
   const handleCommentDelete = async (reply_id) => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
       try {
-        await noticeApi.comments.deleteCommnet(reply_id);
+        await noticeApi.comments.deleteComment(reply_id);
         const commentsResponse = await noticeApi.comments.getComments(board_id);
         setComments(commentsResponse.data);
         alert('댓글이 삭제되었습니다.');
@@ -163,7 +164,7 @@ function BoardDetail() {
           <div className="board-header">
             <h2>{board.title}</h2>
             <div className="board-info">
-              <span>작성일: {new Date(board.send_date).toLocaleString()}</span>
+              <span>작일성일자: {new Date(board.send_date).toLocaleString()}</span>
               <span>조회수: {board.view_count}</span>
               <span>작성자: {board.user_id}</span>
             </div>
@@ -183,14 +184,16 @@ function BoardDetail() {
             <button onClick={() => navigate('/notice/board')}>
               목록
             </button>
-            <button
-              onClick={handleDelete}>
-              삭제
-            </button>
-            <button
-              onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
-              수정
-            </button>
+            {board.user_id === JSON.parse(localStorage.getItem('user'))?.userId && (
+              <>
+                <button onClick={handleDelete}>
+                  삭제
+                </button>
+                <button onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
+                  수정
+                </button>
+              </>
+            )}
           </div>
         </>
       )}
@@ -234,16 +237,14 @@ function BoardDetail() {
                       {new Date(comment.send_date).toLocaleString()}
                     </div>
                     <span className="comment-author">작성자: {comment.user_id}</span>
-                    {comment.user_id === userId && (
-                      <div className="comment-actions">
-                        <button onClick={() => handleCommentEdit(comment.reply_id, comment.content)}>
-                          수정
-                        </button>
-                        <button onClick={() => handleCommentDelete(comment.reply_id)}>
-                          삭제
-                        </button>
-                      </div>
-                    )}
+                    <div className="comment-actions">
+                      <button onClick={() => handleCommentEdit(comment.reply_id, comment.content)}>
+                        수정
+                      </button>
+                      <button onClick={() => handleCommentDelete(comment.reply_id)}>
+                        삭제
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

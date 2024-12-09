@@ -73,8 +73,8 @@ public class PaymentController {
         LocalDateTime date = LocalDateTime.now();
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
-        for (PaymentVO item : paymentVO) {
-            String itemDate = item.getPayment_id().substring(2, 10);
+        for(PaymentVO item : paymentVO){
+            String itemDate = item.getPayment_id().substring(2,10);
             System.out.println(itemDate);
             if (itemDate.equals("" + date.getYear() + date.getMonthValue()
                     + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
@@ -85,20 +85,20 @@ public class PaymentController {
         String id = "P_" + date.getYear() + date.getMonthValue()
                 + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
                 + String.format("%03d", paymentList.size() + 1);
-        System.out.println("payment ID : " + id);
+        System.out.println("payment ID : "+ id);
         PaymentVO vo = PaymentVO.builder()
                 .payment_id(id)
                 .reservation_id(dto.getReservation_id())
                 .enrollment_id(dto.getEnrollment_id())
                 .amount(dto.getAmount())
                 .payment_date(date)
+                .payment_status(true)
                 .build();
 
         paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto);
+        RentalVO rentalID = paymentService.insertRental(dto, id);
         System.out.println(rentalID);
 
-        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
         // 멤버십 업데이트
         userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 
@@ -182,7 +182,7 @@ public class PaymentController {
                 Float.parseFloat(enrollData.get("amount"))
         );
 
-          // (영준) 이메일 발송 코드
+        // (영준) 이메일 발송 코드
         ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());
         String user_name = userMapper.getUserNameById(scatterDTO.getUser_id());
         String email = userMapper.getUserEmailById(scatterDTO.getUser_id());

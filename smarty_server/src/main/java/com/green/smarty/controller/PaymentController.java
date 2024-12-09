@@ -32,7 +32,7 @@ import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.ReservationVO;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/user/payment")
 public class PaymentController {
 
     @Autowired

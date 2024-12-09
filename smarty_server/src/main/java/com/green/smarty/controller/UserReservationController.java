@@ -64,7 +64,6 @@ public class UserReservationController {
     }
 
     // 시설 정보 불러오기
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")  // 시큐리티 추가
     @GetMapping("/")
     public List<FacilityDTO> getFacilityVO() {
         List<FacilityDTO> dto = reservationService.getFacility();

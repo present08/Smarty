@@ -1,6 +1,5 @@
 package com.green.smarty.controller.advice;
 
-import com.green.smarty.sercurity.util.CustomJWTException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,12 +25,6 @@ public class CustomControllerAdvice {
         // 페이지 번호를 숫자가 아닌 문자로 전달하는 등 잘못된 접근 시
         String msg = e.getMessage();
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("msg", msg));
-    }
-
-    @ExceptionHandler(CustomJWTException.class)
-    protected ResponseEntity<?> handleJWTException(CustomJWTException e) {
-        String msg = e.getMessage();
-        return ResponseEntity.ok().body(Map.of("error", msg));
     }
 
 }

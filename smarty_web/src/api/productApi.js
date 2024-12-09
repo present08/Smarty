@@ -11,7 +11,7 @@ export const getFailityData = async () => {
 
 //전체 상품 조회
 export const getProduct = async () => {
-    const response = await axios.get(`${host}`)
+    const response = await axios.get(`${host}/`)
     return response.data
 }
 

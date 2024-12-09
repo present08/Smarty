@@ -9,8 +9,9 @@
         LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
         LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
         LEFT JOIN rental ren ON p.rental_id = ren.rental_id
-        WHERE r.user_id =  #{userId} OR e.user_id =  #{userId} OR ren.user_id =  #{userId};
+        WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})
     </select>
+
 
     <!-- 멤버십 등급 추가해주기 -->
     <insert id="insertMembership" parameterType="com.green.smarty.vo.MembershipVO">
@@ -41,9 +42,8 @@
         last_reset_date = CURRENT_TIMESTAMP,
         membership_level = '브론즈'
         WHERE
-        TIMESTAMPDIFF(MONTH, last_reset_date, CURRENT_TIMESTAMP) >= 6
-        OR last_reset_date IS NULL;
+        MONTH(CURRENT_TIMESTAMP) = 6 OR MONTH(CURRENT_TIMESTAMP) = 12;
     </update>
 
-
 </mapper>
+

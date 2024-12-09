@@ -464,6 +464,8 @@ export default function ProductList() {
     },
   ];
 
+  const paginationModel = { page: 0, pageSize: 10 };
+
   return (
     <div className="productList">
       <Stack direction="row" justifyContent="space-between" className="productContainer">
@@ -505,6 +507,8 @@ export default function ProductList() {
         className="productTable"
         rowHeight={60} // 모든 행의 높이를 60px로 통일
         onSelectionModelChange={(selection) => setSelectedRowKeys(selection)}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[10, 30, 50, 100]} // 선택 가능한 페이지 크기 옵션 추가
       />
       {productModalOpen && (
         <Modal

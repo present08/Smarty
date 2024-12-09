@@ -15,6 +15,7 @@ import UserNavber from '../../component/mypage/UserNavber';
 import QrButton from '../../component/mypage/QrButton';
 import UserGrade from '../../component/mypage/UserGrade';
 import { logout } from '../../api/userApi';
+import UserCoupon from '../../component/mypage/UserCoupon';
 
 const MyPage = () => {
 
@@ -52,6 +53,7 @@ const MyPage = () => {
                     <div style={{ display: 'flex', width: '90%', height: '70px', alignItems: 'center', marginBottom: '3rem', justifyContent: 'space-between', position: 'relative' }}>
                         {currentUser && <h1 style={{ fontSize: '28px', display: 'flex', width: '40%' }}>Hello~{currentUser.user_name}님 환영합니다~<AiFillSmile /></h1>}
                         <div style={{ width: '40%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                            <UserCoupon user={currentUser}/>
                             <UserGrade user={currentUser} />
                             <QrButton user={currentUser} />
                         </div>
@@ -97,7 +99,7 @@ const MyPage = () => {
                         </div>
                         <UserButton user={currentUser} />
                         <CancellationButton user={currentUser} />
-                        <ReceiptButton user={currentUser}  />
+                        <ReceiptButton user={currentUser} />
                     </div>
                     <div style={{ width: '100%', height: '10%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Link onClick={handleLogout} to={"/"} style={{ display: 'flex', alignItems: 'center', color: 'black', cursor: 'pointer' }} >

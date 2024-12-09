@@ -4,13 +4,12 @@
 
     <!-- 결제 금액 합계를 구하는 쿼리 -->
     <select id="getPaymentDetailsByUserId" parameterType="String" resultType="float">
-        SELECT COALESCE(SUM(p.amount), 0)
+        SELECT COALESCE(SUM(DISTINCT p.amount), 0)
         FROM payment p
         LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
         LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
         LEFT JOIN rental ren ON p.rental_id = ren.rental_id
         WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})
-<!--        AND (MONTH(p.payment_date) BETWEEN 1 AND 6 OR MONTH(p.payment_date) BETWEEN 7 AND 12);-->
     </select>
 
     <!-- 멤버십 등급 추가해주기 -->

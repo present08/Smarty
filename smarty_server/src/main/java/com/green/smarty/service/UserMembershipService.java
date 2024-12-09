@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.mybatis.spring.SqlSessionTemplate;
 
 import com.green.smarty.mapper.UserMembershipMapper;
 import com.green.smarty.vo.MembershipVO;
@@ -25,7 +24,9 @@ public class UserMembershipService {
 
     // 결제 금액 합계를 반환하는 메서드
     public float getPaymentDetailsByUserId(String user_id) {
-        return userMembershipMapper.getPaymentDetailsByUserId(user_id);
+        float total = userMembershipMapper.getPaymentDetailsByUserId(user_id);
+        System.out.println("Retrieved payment total for user " + user_id + ": " + total);
+        return total;
     }
 
     public boolean saveMembership(MembershipVO membership) {
@@ -34,9 +35,7 @@ public class UserMembershipService {
 
     public void updateMembershipLevel(String user_id, float amount) {
         float totalAmount = userMembershipMapper.getPaymentDetailsByUserId(user_id) + amount;
-
-        System.out.println("total  " + totalAmount);
-        System.out.println("amount  " + amount);
+        System.out.println("Total Amount for user " + user_id + ": " + totalAmount);
 
         String newLevel = "브론즈";
         if (totalAmount >= 1000) {

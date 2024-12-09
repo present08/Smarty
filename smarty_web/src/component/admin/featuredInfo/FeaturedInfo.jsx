@@ -34,11 +34,11 @@ export default function FeaturedInfo() {
             <div className="featuredItem">
                 <span className="featuredTitle">금일 수익</span>
                 <div className="featuredMoneyContainer">
-                    <span className="featuredMoney">{today_income.toFixed(2)}원</span>
+                    <span className="featuredMoney">{today_income}원</span>
                     <span className="featuredMoneyRate">
                         {change_ratio !== null ? (
                             <>
-                                {change_ratio.toFixed(1)}{" "}
+                                {change_ratio}{" "}
                                 {change_ratio >= 0 ? (
                                     <ArrowUpward className="featuredIcon" />
                                 ) : (
@@ -56,7 +56,7 @@ export default function FeaturedInfo() {
             <div className="featuredItem">
                 <span className="featuredTitle">전일 수익</span>
                 <div className="featuredMoneyContainer">
-                    <span className="featuredMoney">{yesterday_income.toFixed(2)}원</span>
+                    <span className="featuredMoney">{yesterday_income}원</span>
                  {/*    <span className="featuredMoneyRate">
                         -1.4 <ArrowDownward className="featuredIcon negative" />
                     </span> */}
@@ -67,7 +67,7 @@ export default function FeaturedInfo() {
             <div className="featuredItem">
                 <span className="featuredTitle">월간 평균 수익</span>
                 <div className="featuredMoneyContainer">
-                    <span className="featuredMoney">{monthly_average_income.toFixed(2)}원</span>
+                    <span className="featuredMoney">{monthly_average_income}원</span>
 {/*                     <span className="featuredMoneyRate">
                         +2.4 <ArrowUpward className="featuredIcon" />
                     </span> */}

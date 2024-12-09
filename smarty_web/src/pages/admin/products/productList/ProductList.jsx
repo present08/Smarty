@@ -483,7 +483,7 @@ export default function ProductList() {
             onClick={handleBulkSaveChanges}
             className="MuiButton-root"
           >
-            선택 저장
+            일괄 저장
           </Button>
           <Button
             variant="contained"

@@ -14,6 +14,7 @@ import {
 import Modal from "../../../../component/admin/modal/Modal";
 import NewProduct from "../../products/newProduct/NewProduct";
 import ProductStatusLog from "../prodcutStatusLog/ProductStatusLog";
+import { RentalProduct } from "../rentalProduct/RentalProduct";
 
 
 export default function ProductList() {
@@ -443,7 +444,7 @@ export default function ProductList() {
     {
       field: "action",
       headerName: "작업",
-      width: 200,
+      width: 220,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -497,6 +498,7 @@ export default function ProductList() {
           </Button>
         </div>
       </Stack>
+      <RentalProduct facilityId={facility_id} />
       <DataGrid
         rows={data}
         columns={columns}

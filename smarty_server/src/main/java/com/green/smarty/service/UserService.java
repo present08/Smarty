@@ -38,8 +38,6 @@ public class UserService {
                 byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("코드생성 완료 : "+qrCode);
 
-
-
                 //QR 코드를 UserVO 객체에 저장
                 user.setQrCode(qrCode);
 
@@ -141,19 +139,19 @@ public class UserService {
     }
 
     // 레벨 구분하기
-    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
-        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
-            userVO.setLevel("Diamond");
-        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
-            userVO.setLevel("Platinum");
-        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
-            userVO.setLevel("Gold");
-        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
-            userVO.setLevel("Silver");
-        }else {
-            userVO.setLevel("일반");
-        }
-    }
+//    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
+//        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
+//            userVO.setLevel("Diamond");
+//        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
+//            userVO.setLevel("Platinum");
+//        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
+//            userVO.setLevel("Gold");
+//        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
+//            userVO.setLevel("Silver");
+//        }else {
+//            userVO.setLevel("일반");
+//        }
+//    }
 
     // 등록한 클래스 정보 가져오기
     public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {
@@ -167,4 +165,5 @@ public class UserService {
         List<ProductRentalMyPageUserDTO> result = userMapper.getUserMyPageRentalListData(user_id);
         return result;
     }
+
 }

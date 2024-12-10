@@ -141,11 +141,6 @@
     transition: background 0.2s;
 }
 
-body,
-* {
-    font-family: 'BMHANNA_11yrs_ttf', sans-serif !important;
-}
-
 .submit-button {
     background: #4a90e2;
     color: white;

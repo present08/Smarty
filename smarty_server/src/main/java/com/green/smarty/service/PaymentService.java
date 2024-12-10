@@ -8,6 +8,7 @@ import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -25,7 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @Service
-
+@Transactional
 public class PaymentService {
 
     @Autowired
@@ -90,7 +91,8 @@ public class PaymentService {
                 .user_id(dto.getUser_id())
                 .rental_status(true)
                 .build();
-        userRentalMapper.insertRental(vo);
+
+        userRentalService.insertRental(vo, dto.getCount());
         System.out.println("insert rental : "+vo);
 
         return vo;

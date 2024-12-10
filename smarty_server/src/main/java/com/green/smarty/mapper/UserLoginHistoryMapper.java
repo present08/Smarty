@@ -2,7 +2,6 @@ package com.green.smarty.mapper;
 
 import com.green.smarty.vo.LoginHistoryVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserLoginHistoryMapper {

@@ -6,14 +6,18 @@ import WidgetSm from './../../../component/admin/widgetSm/WidgetSm';
 import WidgetLg from './../../../component/admin/widgetLg/WidgetLg';
 
 export default function Dashboard() {
-  return (    
-      <div className="home">
-          <FeaturedInfo />
-          <Chart data={userData} title="User Analytics" dataKey="uv" grid />
-          <div className="homeWidgets">
-            <WidgetSm />
-            <WidgetLg />
-          </div>
+  return (
+    <div className="home">
+      <FeaturedInfo />
+      <Chart
+        title="일일 시설 예약 현황"
+        dataKey="reservation_count" // Y축 데이터 키
+        grid
+      />
+      <div className="homeWidgets">
+        <WidgetSm />
+        <WidgetLg />
       </div>
+    </div>
   )
 }

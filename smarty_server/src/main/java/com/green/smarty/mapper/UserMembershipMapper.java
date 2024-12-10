@@ -21,7 +21,7 @@ public interface UserMembershipMapper {
 
     int resetMembershipEvery6Months();
 
-    int resetRemainingAmountEvery6Months();
+//    int resetRemainingAmountEvery6Months();
 
 //    (영준) user_id 로 membership_level 찾기
     String getlevelbyuserid(String user_id);

@@ -10,8 +10,8 @@
         LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
         LEFT JOIN rental ren ON p.rental_id = ren.rental_id
         WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})
-<!--        AND (MONTH(p.payment_date) BETWEEN 1 AND 6 OR MONTH(p.payment_date) BETWEEN 7 AND 12);-->
     </select>
+
 
     <!-- 멤버십 등급 추가해주기 -->
     <insert id="insertMembership" parameterType="com.green.smarty.vo.MembershipVO">
@@ -53,14 +53,14 @@
 <!--    (영준) user_id로 email 불러오기-->
     <select id="getEmailbyuserId" parameterType="String">
         SELECT email FROM membership m
-        INNER JOIN user u
-        WHERE m.user_id = u.user_id
+        INNER JOIN user u ON m.user_id = u.user_id
+        WHERE m.user_id = #{user_id}
     </select>
 <!--    (영준) user_id로 user_name 불러오기-->
     <select id="getUsernamebyuserId" parameterType="String">
         SELECT user_name FROM membership m
-        INNER JOIN user u
-        WHERE m.user_id = u.user_id
+        INNER JOIN user u ON m.user_id = u.user_id
+        WHERE m.user_id = #{user_id}
     </select>
 
 </mapper>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://localhost:8080/api/membership';
+const host = 'http://localhost:8080/api/user/membership';
 
 //사용자 결제 금액 합계 가져오는 api
 export const getPaymentDetailsByUserId = async (user_id) => {

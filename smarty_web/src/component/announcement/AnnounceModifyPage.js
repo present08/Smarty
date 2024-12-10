@@ -16,7 +16,7 @@ const AnnounceModifyPage = () => {
     useEffect(() => {
         const fetchAnnouncement = async () => {
             try {
-                const response = await axios.get(`/api/announcements/${announce_id}`);
+                const response = await axios.get(`${noticeApi.announcement.getOneList(announce_id)}`);
                 setFormData(response.data);
             } catch (error) {
                 console.error('공지사항 조회 실패:', error);

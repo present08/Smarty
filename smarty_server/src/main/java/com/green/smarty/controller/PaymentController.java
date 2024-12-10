@@ -237,7 +237,7 @@ public class PaymentController {
                 Float.parseFloat(enrollData.get("amount"))
         );
 
-          // (영준) 이메일 발송 코드
+        // (영준) 이메일 발송 코드
         ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());
         String user_name = userMapper.getUserNameById(scatterDTO.getUser_id());
         String email = userMapper.getUserEmailById(scatterDTO.getUser_id());

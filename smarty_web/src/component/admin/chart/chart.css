@@ -9,3 +9,36 @@
 .chartTitle {
     margin-bottom: 20px;
 }
+
+/* CustomTooltip 관련 CSS */
+.chart .custom-tooltip {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+}
+
+.chart .custom-tooltip .label {
+    font-weight: bold;
+    font-size: 16px; /* 라벨 크기 조정 */
+}
+
+.chart .custom-tooltip .detail {
+    color: #555;
+    font-size: 12px; /* 디테일 크기 조정 */
+    margin-bottom: 5px;
+    font-style: italic;
+}
+
+.chart .custom-tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chart .custom-tooltip ul li {
+    margin-bottom: 5px;
+}

@@ -92,7 +92,9 @@ public class UserRentalService {
         }
     }
 
-
+    // 새로운 메서드: 로그 기록
+    private void insertRentalLog(String rentalId, String productId, int count) {
+        log.info("대여 로그 기록 시작: rentalId={}, productId={}, count={}", rentalId, productId, count);
 
         // 1. 대여 가능한 `status_id` 조회
         List<String> statusIds = userRentalMapper.getAvailableStatusIds(productId, count);

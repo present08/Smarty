@@ -189,7 +189,7 @@ public class PaymentController {
         System.out.println("User Name: " + user_name);
         System.out.println("Class Name: " + class_name);
         System.out.println("Email: " + email);
-        sendEmailService.sendClassReservation(user_name, class_name ,email);
+        sendEmailService.sendFacilityReservation(user_name, class_name ,email);
 
 
         System.out.println("예약이 완료 됨");
@@ -202,6 +202,9 @@ public class PaymentController {
         // 결제 승인시 reservation Table insert
         reservationMapper.insertReservation(dto);
         System.out.println("payment" + dto);
+
+        System.out.println("이건 유저 아이디 " + dto.getUser_id());
+        System.out.println("이건 이메일 " + userMapper.getUserEmailById(dto.getUser_id()));
 //        String user_name = userMapper.getUserNameById(dto.getUser_id());
 //        String class_name =
 //        sendEmailService.sendClassReservarion(user_name, dto.get)
@@ -229,6 +232,7 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
+
         System.out.println(vo);
         paymentMapper.insertPayment(vo);
 
@@ -239,6 +243,7 @@ public class PaymentController {
 
         // (영준) 이메일 발송 관련 코드
         String email = userMapper.getUserEmailById(dto.getUser_id());
+        System.out.println("이메일 발송 관련된 곳의 시작인데 여기는 들어오냐?" + email);
         String user_name = userMapper.getUserNameById(dto.getUser_id());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedStart = dto.getReservation_start().format(formatter);

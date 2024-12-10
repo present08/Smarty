@@ -59,7 +59,7 @@ public interface UserMapper {
     List<UserVO> getUsersWithBirthday(@Param("month") int month, @Param("day") int day);
 
     // (영준) 아이디로 이메일 찾기
-    String getUserEmailById(String user_id);
+    String getUserEmailById(@Param("user_id") String user_id);
     // (영준) 아이디로 이름 찾기
     String getUserNameById(String user_id);
     // (영준) 이메일로 아이디 찾기

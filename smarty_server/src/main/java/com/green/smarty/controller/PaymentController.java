@@ -9,6 +9,7 @@ import java.util.Map;
 import com.green.smarty.dto.*;
 import com.green.smarty.mapper.*;
 import com.green.smarty.service.*;
+import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,10 @@ import com.green.smarty.mapper.PaymentMapper;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.vo.PaymentVO;
-import com.green.smarty.vo.RentalVO;
 import com.green.smarty.vo.ReservationVO;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/user/payment")
 public class PaymentController {
 
     @Autowired
@@ -66,45 +66,99 @@ public class PaymentController {
     @Autowired
     private UserFacilityService facilityService;
 
-    // 결제 생성
     @PostMapping("/create")
-    public String createPayment(@RequestBody PaymentDetailDTO dto) {
-        System.out.println("paymentDetailDTO : "+dto);
-        System.out.println("Items 데이터 : "+dto.getItems());
-        LocalDateTime date = LocalDateTime.now();
-        List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
-        List<PaymentVO> paymentList = new ArrayList<>();
-        for (PaymentVO item : paymentVO) {
-            String itemDate = item.getPayment_id().substring(2, 10);
-            System.out.println(itemDate);
-            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
-                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
-                paymentList.add(item);
+    public ResponseEntity<String> rentalPayment(@RequestBody PaymentDTO paymentDTO) {
+        try {
+            System.out.println("paymentDTO 데이터 확인: " + paymentDTO);
+            // 현재 날짜 및 시간 가져오기
+            LocalDateTime date = LocalDateTime.now();
+
+            // 모든 Payment 데이터 조회
+            List<PaymentVO> paymentVOList = publicMapper.getPaymentAll();
+            List<PaymentVO> paymentList = new ArrayList<>();
+
+            // payment_id 날짜 기준으로 필터링
+            for (PaymentVO item : paymentVOList) {
+                String itemDate = item.getPayment_id().substring(2, 10); // ID의 날짜 부분 추출
+                String currentDate = date.getYear() +
+                        String.format("%02d", date.getMonthValue()) +
+                        String.format("%02d", date.getDayOfMonth());
+
+                if (itemDate.equals(currentDate)) {
+                    paymentList.add(item);
+                }
             }
+
+            // 새로운 payment_id 생성
+            String paymentId = "P_" + date.getYear() +
+                    String.format("%02d", date.getMonthValue()) +
+                    String.format("%02d", date.getDayOfMonth()) +
+                    String.format("%03d", paymentList.size() + 1);
+
+            System.out.println("Generated Payment ID: " + paymentId);
+
+            // Payment 데이터 생성
+            PaymentVO payment = PaymentVO.builder()
+                    .payment_id(paymentId) // 생성된 ID 사용
+                    .amount(paymentDTO.getAmount()) // 결제 금액
+                    .reservation_id(paymentDTO.getReservation_id())
+                    .enrollment_id(paymentDTO.getEnrollment_id())
+                    .rental_id(paymentDTO.getRental_id()) // Rental ID 사용
+                    .payment_date(date) // 현재 날짜와 시간
+                    .payment_status(true) // 결제 성공 상태
+                    .build();
+
+            // Payment 테이블에 데이터 삽입
+            paymentMapper.insertPayment(payment);
+
+            return ResponseEntity.ok(paymentId); // 생성된 payment_id 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment 데이터 삽입 실패: " + e.getMessage());
         }
-
-        String id = "P_" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
-                + String.format("%03d", paymentList.size() + 1);
-        System.out.println("payment ID : " + id);
-        PaymentVO vo = PaymentVO.builder()
-                .payment_id(id)
-                .reservation_id(dto.getReservation_id())
-                .enrollment_id(dto.getEnrollment_id())
-                .amount(dto.getAmount())
-                .payment_date(date)
-                .payment_status(true)
-                .build();
-
-        paymentMapper.insertPayment(vo);
-        RentalVO rentalID = paymentService.insertRental(dto);
-        System.out.println(rentalID);
-
-        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
-        // 멤버십 업데이트
-        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
-
-        return id;
     }
+
+
+    // 결제 생성
+    //수정 전
+//    @PostMapping("/create")
+//    public String createPayment(@RequestBody PaymentDetailDTO dto) {
+//        System.out.println("paymentDetailDTO : "+dto);
+//        System.out.println("Items 데이터 : "+dto.getItems());
+//        LocalDateTime date = LocalDateTime.now();
+//        List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
+//        List<PaymentVO> paymentList = new ArrayList<>();
+//        for (PaymentVO item : paymentVO) {
+//            String itemDate = item.getPayment_id().substring(2, 10);
+//            System.out.println(itemDate);
+//            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
+//                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+//                paymentList.add(item);
+//            }
+//        }
+//
+//        String id = "P_" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
+//                + String.format("%03d", paymentList.size() + 1);
+//        System.out.println("payment ID : " + id);
+//        PaymentVO vo = PaymentVO.builder()
+//                .payment_id(id)
+//                .reservation_id(dto.getReservation_id())
+//                .enrollment_id(dto.getEnrollment_id())
+//                .amount(dto.getAmount())
+//                .payment_date(date)
+//                .payment_status(true)
+//                .build();
+//
+//        paymentMapper.insertPayment(vo);
+//        RentalVO rentalID = paymentService.insertRental(dto);
+//        System.out.println(rentalID);
+//
+//        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+//        // 멤버십 업데이트
+//        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
+//
+//        return id;
+//    }
 
     @GetMapping("/{payment_id}")
     public ResponseEntity<?> getPaymentById(@PathVariable String payment_id) {
@@ -122,7 +176,7 @@ public class PaymentController {
 
     @GetMapping("/list/{user_id}")
     public UserActivityDTO getList(@PathVariable String user_id) {
-        System.out.println(user_id);
+        System.out.println("여기에 getList 데이터가 들어옴 : "+user_id);
         List<ReservationVO> reservationVO = publicMapper.getReservationAll();
         List<EnrollmentClassDTO> enrollmentClassDTO = paymentMapper.getEnrollmentClass();
         List<ReservationVO> reservationList = new ArrayList<>();

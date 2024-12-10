@@ -101,7 +101,7 @@ const RentalList = () => {
         try {
             // count를 params로 전달
             const response = await axios.put(
-                `http://localhost:8080/api/rentals/${rental_id}/return`,
+                `http://localhost:8080/api/user/rentals/${rental_id}/return`,
                 null,
                 { params: { count: rentalCount } } // count를 명시적으로 전달
             );

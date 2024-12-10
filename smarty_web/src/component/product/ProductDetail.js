@@ -18,7 +18,7 @@ const ProductDetail = ({ product }) => {
                 const images = await getProductFiles(product.product_id); // API 호출
                 setProductImages(
                     images.length > 0
-                        ? images.map((file) => `http://localhost:8080/api/product/products/images/${file}`) // 동일한 경로 사용
+                        ? images.map((file) => `http://localhost:8080/api/user/products/images/${file}`) // 동일한 경로 사용
                         : ['/no-image.png'] // 기본 이미지 설정
                 );
             } catch (error) {
@@ -54,16 +54,21 @@ const ProductDetail = ({ product }) => {
         }
 
         const user = JSON.parse(userStr);
-        const cartItem = {
-            user_id: user.user_id,
-            product_id: product.product_id,
-            product_name: product.product_name,
-            quantity: quantity,
-        };
+        const cartItem = [
+            {
+                user_id: user.user_id,
+                product_id: product.product_id,
+                product_name: product.product_name,
+                quantity: quantity,
+            }
+        ];
+
+        console.log("cartItem 데이터 : ", [cartItem])
         try {
-            await axios.post('http://localhost:8080/api/cart', cartItem);
+            await axios.post('http://localhost:8080/api/user/cart/', cartItem
+                );
             alert('장바구니에 추가되었습니다');
-            console.log(cartItem);
+            console.log("cartItem 데이터 들어가냐: ",cartItem);
 
             const confirmMovetoCart = window.confirm('장바구니로 이동 하시겠습니까?');
             if (confirmMovetoCart) {
@@ -151,7 +156,7 @@ const ProductDetail = ({ product }) => {
                         <button className="wishlist-btn" onClick={handleAddCart}>
                             장바구니
                         </button>
-                        
+
                     </div>
                 </div>
             </div>

@@ -15,6 +15,8 @@ public interface UserRentalMapper {
     // 대여 등록
     int insertRental(RentalVO vo);
 
+    void updateRental(RentalDTO rental);
+
     // 모든 대여 조회
     List<RentalDTO> getAllRentals();
 

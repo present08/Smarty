@@ -21,7 +21,7 @@
 
     @Slf4j
     @RestController
-    @RequestMapping("/api/product")
+    @RequestMapping("/api/user/products")
 
     public class UserProductController {
         @Autowired
@@ -32,7 +32,7 @@
         private String uploadPath;
 
         // product Data 전달
-        @GetMapping("/products")
+        @GetMapping("/")
         public List<ProductVO> getProduct() {
                 List<ProductVO> productList = productMapper.getAllProducts();
     //            log.info("Products from controller: {}", productList);
@@ -40,7 +40,7 @@
         }
 
 
-        @GetMapping("/products/detail/{product_id}")
+        @GetMapping("/detail/{product_id}")
         public ResponseEntity<ProductVO> getProductById(@PathVariable String product_id) {
             try {
                 ProductVO product = service.getProductById(product_id);
@@ -57,7 +57,7 @@
             }
         }
 
-        @GetMapping("/products/images/{file_name}")
+        @GetMapping("/images/{file_name}")
         public ResponseEntity<Resource> showProductImage (@PathVariable(name = "file_name") String file_name){
             log.info("상품 이미지 요청 - file_name: {}", file_name);
             try {
@@ -68,7 +68,7 @@
             }
         }
 
-        @GetMapping("/products/files/{product_id}")
+        @GetMapping("/files/{product_id}")
         public ResponseEntity<List<String>> getProductFiles(@PathVariable String product_id) {
             log.info("첨부파일 조회 요청 - product_id: {}", product_id);
             try {

@@ -31,8 +31,11 @@ public class UserRentalService{
     @Autowired
     private PublicMapper publicMapper;
     //대여
+    //수정 전
     public int insertRental(RentalVO vo, int count) {
         log.info("대여 등록 시작: {}", vo);
+        System.out.println("RentalVO 데이터 확인 : " + vo);
+        System.out.println("Count 데이터 확인 : " + count);
 
         // 1. 사용자 존재 여부 확인
         UserVO user = userMapper.getById(vo.getUser_id());
@@ -87,6 +90,21 @@ public class UserRentalService{
 
         return rentalId;
     }
+
+//    public void insertRentals(List<RentalVO> rentals) {
+//        for (RentalVO rental : rentals) {
+//            System.out.println("insertRentals 내부: RentalVO 데이터 확인 - " + rental); // 추가 확인
+//            insertRental(rental, rental.getCount());
+//        }
+//    }
+
+    public void insertRentals(List<RentalVO> rentals) {
+        for (RentalVO rental : rentals) {
+            userRentalMapper.insertRental(rental);
+            System.out.println("rentalService의 insertRentals 데이터 확인 : "+rental);
+        }
+    }
+
 
 
     //반납
@@ -165,6 +183,7 @@ public class UserRentalService{
         List<ProductRentalUserDTO> result = userRentalMapper.getUserRentalListData(user_id);
         return result;
     }
+
 
 //    (영준) user_id가 아니라 이메일을 가져오기 위한 코드
     public String getEmailByUserId(String user_id){

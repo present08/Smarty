@@ -1,6 +1,7 @@
 package com.green.smarty.service;
 
 import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.*;
 import com.green.smarty.vo.CartVO;
 import com.green.smarty.vo.PaymentVO;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +45,13 @@ public class PaymentService {
     private UserMapper userMapper;
     @Autowired
     private UserRentalMapper userRentalMapper;
+
+    public String createPayment(PaymentVO payment) {
+        paymentMapper.insertPayment(payment);
+
+        return payment.getPayment_id();
+    }
+
 
     public RentalVO insertRental(PaymentDetailDTO dto) {
         LocalDateTime date = LocalDateTime.now();

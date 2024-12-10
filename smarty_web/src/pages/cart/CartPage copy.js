@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
 import "../../css/cart.css";
 import axios from "axios";
-import { cartRental, rentalPayment } from "../../api/rentalAPI";
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -87,28 +86,29 @@ const CartPage = () => {
     };
 
     // 결제 완료 처리
-    const handlePaymentComplete = (paymentData) => {
+    const handlePaymentComplete = async (paymentData) => {
         console.log("payment 데이터 : ", paymentData)
         try {
             setIsPaymentModal(false); // 모달 닫기
-            cartRental(cartItems).then(e => {
-                rentalPayment(paymentData).then(paymentId => {
-                    navigate("/payment/success", {
-                        state: {
-                            paymentId: paymentId,
-                            items: cartItems.map((item) => ({
-                                product_name: item.product_name,
-                                count: item.quantity,
-                                price: item.price,
-                            })),
-                            totalAmount: totalPrice,
-                        },
-                    });
-                })
-            })
-
+            const response = await axios.post(
+                "http://localhost:8080/api/payment/create", // 결제 API 엔드포인트
+                paymentData
+            );
+            console.log("결제 데이터 확인 : ", response.data)
+            const paymentId = response.data; // 서버에서 반환된 결제 ID
 
             // 결제 성공 시 페이지로 이동하면서 데이터 전달
+            navigate("/payment/success", {
+                state: {
+                    paymentId: paymentId,
+                    items: cartItems.map((item) => ({
+                        product_name: item.product_name,
+                        count: item.quantity,
+                        price: item.price,
+                    })),
+                    totalAmount: totalPrice,
+                },
+            });
 
             handleClearCart(); // 장바구니 초기화
         } catch (error) {
@@ -181,7 +181,7 @@ const CartPage = () => {
                 }))}
                 user_id={user_id}
             />
-
+            
         </div>
     );
 };

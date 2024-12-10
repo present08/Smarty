@@ -61,17 +61,9 @@ const MainNav = () => {
         if (token) {
             // 서버로 상태 검증 요청
             axiosInstance.get('/security/status')
-                .then((response) => {
+                .then((response) => {            
                     setIsLoggedIn(true);
-                    setUser({
-                        userName: response.data.userName,
-                        userId: response.data.userId,
-                        role: response.data.role,
-                        email: response.data.email,
-                        phone: response.data.phone,
-                        address: response.data.address,
-                        birthday: response.data.birthday
-                    });
+                    setUser(JSON.parse(localStorage.getItem('user')));
                 })
                 .catch((error) => {
                     console.error('로그인 상태 확인 실패:', error);
@@ -80,6 +72,10 @@ const MainNav = () => {
                 });
         }
     }, []);
+    useEffect(() => {
+      console.log("저장값 확인 : ", user)
+    }, [user])
+    
 
     const handleLogout = () => {
         alert("로그아웃 성공");
@@ -95,7 +91,7 @@ const MainNav = () => {
                 <ul>
                     {isLoggedIn ? (
                         <>
-                        {user && user.role == 'admin'?
+                        {user && user.level == 'admin'?
                             (
                                 <li><Link to={"/admin"}>관리자모드</Link></li>
                             ) : (

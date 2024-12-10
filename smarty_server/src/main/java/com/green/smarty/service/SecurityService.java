@@ -59,7 +59,6 @@ public class SecurityService implements UserDetailsService {
     private final String SECRET_KEY = "YourSecretKey";
     private final long EXPIRATION_TIME = 3600000; // 1시간
 
-
     public ResponseEntity<?> register(UserVO userVO) throws IOException, WriterException {
         // 관리자 계정에만 관리자 권한, 나머지는 사용자 권한
         if(userVO.getUser_id().equals("admin")) userVO.setLevel("admin");
@@ -143,7 +142,7 @@ public class SecurityService implements UserDetailsService {
         }
     }
 
-    public SecurityResponseDTO login(String userId, String password) {
+    public Map<String, Object> login(String userId, String password) {
         // 사용자 조회
         UserVO user = userMapper.findUserById(userId);
         if (user == null) {
@@ -154,27 +153,33 @@ public class SecurityService implements UserDetailsService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
+        SecurityUserDTO securityUserDTO = new SecurityUserDTO(user);
 
         // JWT 발급
-        String token = jwtTokenProvider.createToken(user.getUser_id(), user.getLevel());
+        String token = jwtTokenProvider.createToken(securityUserDTO.getClaims());
 
         // SecurityResponseDTO 생성
-        return new SecurityResponseDTO(
-                token,
-                user.getUser_name(),
-                user.getUser_id(),
-                user.getLevel()
-        );
+//        return new SecurityResponseDTO(
+//                token,
+//                user.getUser_name(),
+//                user.getUser_id(),
+//                user.getLevel()
+//        );
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("user", securityUserDTO);
+
+        return response;
     }
 
     public Map<String, Object> checkLoginStatus(String token) throws Exception {
         // 토큰 유효성 검증
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new Exception("Invalid or expired token");
-        }
+        Map<String, Object> claims = jwtTokenProvider.validateToken(token);
+        System.out.println("토큰 클레임 : " + claims);
 
         // 토큰에서 사용자 ID 추출
         String userId = jwtTokenProvider.getUserId(token);
+        System.out.println("토큰에서 추출된 사용자 ID : " + userId);
 
         // 사용자 정보 조회
         UserVO userVO = userMapper.getById(userId);
@@ -185,13 +190,7 @@ public class SecurityService implements UserDetailsService {
         // 응답 데이터 구성
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("isLoggedIn", true);
-        userInfo.put("userName", userVO.getUser_name());
-        userInfo.put("userId", userVO.getUser_id());
-        userInfo.put("role", userVO.getLevel());
-        userInfo.put("email", userVO.getEmail());
-        userInfo.put("phone", userVO.getPhone());
-        userInfo.put("address", userVO.getAddress());
-        userInfo.put("birthday", userVO.getBirthday());
+        userInfo.put("user", userVO);
         return userInfo;
     }
 

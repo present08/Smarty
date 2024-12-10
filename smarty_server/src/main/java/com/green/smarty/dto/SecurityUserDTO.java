@@ -7,10 +7,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,7 +27,7 @@ public class SecurityUserDTO implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // String Security의 getAuthorities() 메서드는 다수의 권한을 가질 수 있다는 전제로 설계됨
         // Collection<? extends GrantedAuthority> 타입을 반환하도록 정의
-        if (userVO.getLevel().equals("admin")) return List.of(() -> "ROLE_ADMIN");
+        if (userVO.getLevel().equals("admin")) return List.of(() -> "ROLE_USER", () -> "ROLE_ADMIN");
         else return List.of(() -> "ROLE_USER");
     }
 
@@ -54,10 +51,18 @@ public class SecurityUserDTO implements UserDetails {
 
     public Map<String, Object> getClaims() {
         Map<String, Object> dataMap = new HashMap<>();
+        List<String> roleList = new ArrayList<>();
         dataMap.put("id", userVO.getUser_id());
         dataMap.put("email", userVO.getEmail());
         dataMap.put("level", userVO.getLevel());
+        if(userVO.getLevel().equals("admin")) {
+            roleList.add(0, "USER");
+            roleList.add(0, "ADMIN");
+            dataMap.put("role", roleList);
+        } else {
+            roleList.add(0, "USER");
+            dataMap.put("role", roleList);
+        }
         return dataMap;
     }
-
 }

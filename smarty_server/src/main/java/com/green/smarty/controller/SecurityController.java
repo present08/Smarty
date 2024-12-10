@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class SecurityController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserVO userVO) {
         try {
-            return securityService.register(userVO); // SecurityService의 register 호출
+            return securityService.register(userVO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed: " + e.getMessage());
         }
@@ -31,20 +33,17 @@ public class SecurityController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVO userVO) {
-        try {
-            // 서비스에서 SecurityResponseDTO 반환
-            SecurityResponseDTO response = securityService.login(userVO.getUser_id(), userVO.getPassword());
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed: " + e.getMessage());
-        }
+    public Map<String, Object> login(@RequestBody UserVO userVO) {
+        return securityService.login(userVO.getUser_id(), userVO.getPassword());
     }
 
     // 로그인 상태 확인
     @GetMapping("/status")
     public ResponseEntity<Map<String, Object>> checkLoginStatus(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         String token = request.getHeader("Authorization");
+        System.out.println("status 토큰 확인 : " + token);
 
         // Authorization 헤더에서 "Bearer "를 제거하고 토큰만 추출
         if (token != null && token.startsWith("Bearer ")) {

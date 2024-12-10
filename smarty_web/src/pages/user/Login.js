@@ -74,11 +74,12 @@ const Login = () => {
             const response = await securityLogin(user_id, password);
             console.log('로그인 성공:', response);
 
-            // JWT 토큰 저장 (localStorage 사용)
+            // localStorage 저장
             localStorage.setItem('jwtToken', response.token);
+            localStorage.setItem('user', JSON.stringify(response.user.userVO));
 
             // 사용자 이름 환영 메시지
-            alert(`${response.userName}님 환영합니다!`);
+            alert(`${response.user.userVO.user_name}님 환영합니다!`);
 
             // 로그인 후 홈으로 이동
             navigate('/');

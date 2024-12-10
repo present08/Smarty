@@ -1,16 +1,16 @@
 import axios from "axios";
 
-const host = "http://localhost:8080/api"
+const host = "http://localhost:8080/api/user/rentals"
 
 // 전체 렌탈 목록 조회
 export const getAllRentals = async () => {
-    const response = await axios.get(`${host}/rentals`);
+    const response = await axios.get(`${host}`);
     return response.data;
 }
 
 // 렌탈 상세 조회
 export const getRentalById = async (rental_id) => {
-    const response = await axios.get(`${host}/rentals/${rental_id}`);
+    const response = await axios.get(`${host}/${rental_id}`);
     // console.log("getRentalById : ",response.data)
     return response.data;
 }
@@ -31,7 +31,7 @@ export const createRental = async ({amount, user_id}) => {
 
 // 렌탈 반납
 export const returnRental = async (rental_id) => {
-    const response = await axios.put(`${host}/rentals/${rental_id}/return`);
+    const response = await axios.put(`${host}/${rental_id}/return`);
     console.log("반납 데이터가 뭐가 있나 ", response.data)
     return response.data;
 }

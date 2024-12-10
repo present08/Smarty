@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const API_SERVER_HOST = "http://localhost:8080"
-const prefix = `${API_SERVER_HOST}/api/facilities`
+const prefix = `${API_SERVER_HOST}/api/user/facilities`
 
 
 export const getList = async() => {

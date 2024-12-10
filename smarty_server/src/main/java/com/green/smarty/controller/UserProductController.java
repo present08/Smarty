@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/user/products")
 
 public class UserProductController {
     @Autowired
@@ -32,7 +32,7 @@ public class UserProductController {
     private String uploadPath;
 
     // product Data 전달
-    @GetMapping("/products")
+    @GetMapping("/")
     public List<ProductVO> getProduct() {
             List<ProductVO> productList = productMapper.getAllProducts();
 //            log.info("Products from controller: {}", productList);
@@ -40,7 +40,7 @@ public class UserProductController {
     }
 
 
-    @GetMapping("/products/detail/{product_id}")
+    @GetMapping("/detail/{product_id}")
     public ResponseEntity<ProductVO> getProductById(@PathVariable String product_id) {
         try {
             ProductVO product = service.getProductById(product_id);
@@ -57,7 +57,7 @@ public class UserProductController {
         }
     }
 
-    @GetMapping("/products/images/{filename}")
+    @GetMapping("/images/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
 //            log.info("요청된 이미지 파일명: {}", filename);
@@ -88,7 +88,7 @@ public class UserProductController {
         }
     }
 
-    @GetMapping("/products/{product_id}/images")
+    @GetMapping("/{product_id}/images")
     public ResponseEntity<List<ProductAttachVO>> getProductImages(@PathVariable String product_id) {
         try {
             List<ProductAttachVO> attachList = service.getAttachList(product_id);

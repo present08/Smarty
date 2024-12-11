@@ -15,71 +15,72 @@ import { getRentalStatistic } from "../../../../api/admin/chartApi";
 // Chart.js 필수 컴포넌트 등록
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const RentalProduct = ({ facilityId }) => {
+export const RentalProduct = ({ facilityId, onDataReload }) => {
   const [graphData, setGraphData] = useState(null);
-  const [rawData, setRawData] = useState([]); // 원본 데이터 저장
+  const [rawData, setRawData] = useState([]);
+
+  const fetchGraphData = async () => {
+    try {
+      const data = await getRentalStatistic(facilityId);
+      setRawData(data);
+
+      const labels = data.map(
+        (item) =>
+          `${item.product_name}${item.size ? ` (${item.size})` : ""}`
+      );
+
+      const rentedPercentage = data.map((item) =>
+        item.total_stock > 0
+          ? (item.rented_quantity / item.total_stock) * 100
+          : 0
+      );
+
+      const unavailablePercentage = data.map((item) =>
+        item.total_stock > 0
+          ? (item.unavailable_quantity / item.total_stock) * 100
+          : 0
+      );
+
+      const remainingPercentage = data.map((item, index) =>
+        100 - (rentedPercentage[index] + unavailablePercentage[index])
+      );
+
+      setGraphData({
+        labels,
+        datasets: [
+          {
+            label: "대여량",
+            data: rentedPercentage,
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+          },
+          {
+            label: "대여불가량",
+            data: unavailablePercentage,
+            backgroundColor: "rgba(255, 99, 132, 0.6)",
+          },
+          {
+            label: "남은 수량",
+            data: remainingPercentage,
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("그래프 데이터 로드 실패:", error.message);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getRentalStatistic(facilityId);
-        console.log("[Info] Fetched Data:", data);
-        setRawData(data); // 원본 데이터를 저장
-
-        // 라벨: 상품명 + 사이즈 포함
-        const labels = data.map(
-          (item) =>
-            `${item.product_name}${item.size ? ` (${item.size})` : ""}`
-        );
-
-        // 상태별 데이터 계산
-        const rentedPercentage = data.map((item) =>
-          item.total_stock > 0
-            ? (item.rented_quantity / item.total_stock) * 100
-            : 0
-        );
-        const unavailablePercentage = data.map((item) =>
-          item.total_stock > 0
-            ? (item.unavailable_quantity / item.total_stock) * 100
-            : 0
-        );
-        const remainingPercentage = data.map((item) =>
-          item.total_stock > 0
-            ? 100 -
-              ((item.rented_quantity + item.unavailable_quantity) /
-                item.total_stock) *
-                100
-            : 0
-        );
-
-        setGraphData({
-          labels,
-          datasets: [
-            {
-              label: "대여량",
-              data: rentedPercentage,
-              backgroundColor: "rgba(54, 162, 235, 0.6)", // 파란색
-            },
-            {
-              label: "대여불가량",
-              data: unavailablePercentage,
-              backgroundColor: "rgba(255, 99, 132, 0.6)", // 빨간색
-            },
-            {
-              label: "남은 수량",
-              data: remainingPercentage,
-              backgroundColor: "rgba(75, 192, 192, 0.6)", // 녹색
-            },
-          ],
-        });
-      } catch (error) {
-        console.error("[Error] Failed to fetch rental statistics:", error);
-      }
-    };
-
-    fetchData();
+    fetchGraphData();
   }, [facilityId]);
 
+  // 데이터 로드 함수 전달
+  useEffect(() => {
+    if (onDataReload) {
+      onDataReload(() => fetchGraphData()); // 콜백 함수로만 전달
+    }
+  }, [onDataReload]); // 종속성 배열이 올바르게 설정되었는지 확인
+  
   if (!graphData) return <div>Loading...</div>;
 
   return (
@@ -114,10 +115,6 @@ export const RentalProduct = ({ facilityId }) => {
                   return `${context.dataset.label}: ${value}개`;
                 },
               },
-            },
-            title: {
-              display: true,
-              text: `시설 ${facilityId}의 물품 상태 (100% 기준)`,
             },
           },
           scales: {

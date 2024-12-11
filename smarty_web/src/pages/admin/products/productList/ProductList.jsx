@@ -26,6 +26,9 @@ export default function ProductList() {
   const [statusLogs, setStatusLogs] = useState({});
   const [logModalOpen, setLogModalOpen] = useState(false);
   const [selectedLogs, setSelectedLogs] = useState([]);
+  const [reloadGraphData, setReloadGraphData] = useState(null);
+  const [inputValues, setInputValues] = useState({});
+
 
 
   // 데이터 로드
@@ -151,17 +154,23 @@ export default function ProductList() {
     try {
       // 상태 복구 요청
       await restoreToAvailable(statusId);
-
+  
+      // 데이터 동기화
+      await fetchData(); // 테이블 데이터 다시 로드
+      if (reloadGraphData) reloadGraphData(); // 그래프 데이터 갱신
+  
       // 복구 후 로그 데이터 갱신
       const updatedLogs = await fetchLogsByStatusId(statusId);
-      setSelectedLogs(updatedLogs); // 모달에 최신 로그 데이터 반영
-
+      setSelectedLogs(updatedLogs); // 최신 로그 데이터 반영
+  
       alert("상태 복구 완료!");
     } catch (error) {
       console.error("복구 실패:", error.message);
+      alert("복구 중 오류가 발생했습니다.");
     }
   };
-
+  
+  
   // 상태 변경 로그 조회
   const loadLogsForStatus = async (statusId) => {
     try {
@@ -175,65 +184,110 @@ export default function ProductList() {
     }
   };
 
+  const handleInputChange = (productId, value) => {
+    setInputValues((prev) => ({
+      ...prev,
+      [productId]: value,
+    }));
+  };
+
   // 전체 수량 증감 처리
   const handleStockAdjustment = async (productId, adjustmentValue) => {
     const product = data.find((item) => item.product_id === productId);
-
+  
     if (!product) {
       alert("상품을 찾을 수 없습니다.");
       return;
     }
-
+  
     if (adjustmentValue === "" || isNaN(adjustmentValue)) {
       alert("올바른 수량을 입력하세요.");
       return;
     }
-
+  
     const newStock = product.stock + parseInt(adjustmentValue);
-
+  
     if (newStock < 0) {
       alert("총량은 0보다 작을 수 없습니다.");
       return;
     }
-
+  
     try {
-      await updateProductStock(productId, newStock); // 백엔드 API 호출
-
-      // UI 업데이트
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.product_id === productId ? { ...item, stock: newStock } : item
-        )
-      );
-      alert("총량 수정이 완료되었습니다.");
+      const response = await updateProductStock(productId, newStock); // 서버 API 호출
+  
+      if (response.status === 200) {
+        // 상태 업데이트: 서버에서 최신 데이터를 반영하여 재고량 계산
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.product_id === productId
+              ? {
+                  ...item,
+                  stock: newStock,
+                  availableStock:
+                    newStock -
+                    (item.logs.reduce((sum, log) => sum + log.change_quantity, 0) || 0),
+                }
+              : item
+          )
+        );
+  
+        // 입력 필드 초기화
+        setInputValues((prev) => ({
+          ...prev,
+          [productId]: "",
+        }));
+  
+        alert("총량 수정이 완료되었습니다.");
+      } else {
+        alert("서버 응답 실패: " + response.statusText);
+      }
     } catch (error) {
       console.error("총량 수정 실패:", error.message);
       alert("총량 수정 중 오류가 발생했습니다.");
     }
   };
+  
 
   // 상태 변경 및 로그 반영
   const handleStatusAdjustment = async (statusId, changedStatus, changeQuantity) => {
     const product = data.find((item) => item.status_id === statusId);
-
+  
     if (!product) {
       console.error("상품을 찾을 수 없습니다.");
       return;
     }
-
+  
     try {
       // 상태 변경 요청
       await updateProductStatus(statusId, changedStatus, changeQuantity);
-
-      // UI 업데이트
-      fetchData(); // 변경된 데이터를 다시 로드
-
+  
+      // 데이터 동기화
+      await fetchData(); // 최신 데이터를 다시 로드
+      if (reloadGraphData) reloadGraphData(); // 그래프 데이터 갱신
+  
+      // 수량 입력 필드 초기화
+      setModifiedData((prev) => ({
+        ...prev,
+        [statusId]: {
+          current_status: "",
+          changed_status: "",
+          change_quantity: 0,
+        },
+      }));
+  
+      // 입력 필드 초기화 (상태 기반으로)
+      setInputValues((prev) => ({
+        ...prev,
+        [statusId]: "",
+      }));
+  
       alert("상태 변경 및 로그 기록 완료!");
     } catch (error) {
       console.error("상태 변경 실패:", error.message);
       alert("상태 변경 중 오류가 발생했습니다.");
     }
   };
+  
 
   // 일괄 저장
   const handleBulkSaveChanges = async () => {
@@ -348,14 +402,14 @@ export default function ProductList() {
             type="number"
             className="quantityInput"
             placeholder="수량 입력"
-            onBlur={(e) =>
-              handleStockAdjustment(params.row.product_id, e.target.value)
-            }
+            value={inputValues[params.row.product_id] || ""}
+            onChange={(e) => handleInputChange(params.row.product_id, e.target.value)}
           />
           <Button
             variant="contained"
             size="small"
             className="applyButton"
+            onClick={() => handleStockAdjustment(params.row.product_id, inputValues[params.row.product_id])}
           >
             적용
           </Button>
@@ -373,7 +427,7 @@ export default function ProductList() {
           modifiedData[params.row.status_id]?.changed_status ||
           params.row.changed_status ||
           "";
-
+      
         return (
           <div className="statusChangeCell">
             <select
@@ -390,36 +444,35 @@ export default function ProductList() {
                 </option>
               ))}
             </select>
-
+      
             <input
               type="number"
               className="quantityInput"
               min="0"
               placeholder="수량 입력"
-              onChange={(e) => {
-                const quantity = Number(e.target.value);
-                handleQuantityChange(params.row.status_id, quantity);
-              }}
+              value={inputValues[params.row.status_id] || ""}
+              onChange={(e) =>
+                handleInputChange(params.row.status_id, e.target.value)
+              }
             />
-
+      
             <button
               onClick={() => {
                 const changedStatus =
                   modifiedData[params.row.status_id]?.changed_status ||
                   params.row.changed_status;
                 const changeQuantity =
-                  modifiedData[params.row.status_id]?.change_quantity ||
-                  params.row.change_quantity;
-
+                  inputValues[params.row.status_id] || 0;
+      
                 if (!changedStatus) {
                   alert("상태를 선택해주세요.");
                   return;
                 }
-
+      
                 handleStatusAdjustment(
                   params.row.status_id,
                   changedStatus,
-                  changeQuantity
+                  parseInt(changeQuantity)
                 );
               }}
               className="saveButton"
@@ -498,7 +551,10 @@ export default function ProductList() {
           </Button>
         </div>
       </Stack>
-      <RentalProduct facilityId={facility_id} />
+      <RentalProduct
+        facilityId={facility_id}
+        onDataReload={(reloadFn) => setReloadGraphData(() => reloadFn)}
+      />
       <DataGrid
         rows={data}
         columns={columns}

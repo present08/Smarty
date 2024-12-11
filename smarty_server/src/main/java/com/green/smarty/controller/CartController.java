@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.smarty.dto.CartDTO;
 import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.dto.UserCartListDTO;
+import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserProductMapper;
 import com.green.smarty.mapper.UserRentalMapper;
@@ -36,6 +37,9 @@ public class CartController {
 
     @Autowired
     private UserRentalService userRentalService;
+
+    @Autowired
+    private PublicMapper publicMapper;
 
     //영준
     @Autowired
@@ -102,15 +106,33 @@ public class CartController {
 //        }
 //    }
 
-
     @PostMapping("/rentals")
     public ResponseEntity<String> cartRental(@RequestBody List<CartDTO> cartDTOList) {
         try {
             System.out.println("cartDTOList(cartRental) 데이터 확인 : " + cartDTOList);
-            // 다중 Rental 데이터 처리
+
             for (CartDTO cartDTO : cartDTOList) {
                 System.out.println("Count 데이터 확인 CartDTO 처리 중: " + cartDTO + ", Quantity: " + cartDTO.getQuantity());
+
+                // rental_id 생성 로직 추가
+                LocalDateTime date = LocalDateTime.now();
+                List<RentalVO> rentalVOList = publicMapper.getRentalAll();
+                List<RentalVO> rentalList = new ArrayList<>();
+
+                for (RentalVO item : rentalVOList) {
+                    String itemDate = item.getRental_id().substring(2, 10);
+                    if (itemDate.equals("" + date.getYear() + date.getMonthValue() +
+                            (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+                        rentalList.add(item);
+                    }
+                }
+
+                String rentalId = "R_" + date.getYear() + date.getMonthValue() +
+                        (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) +
+                        String.format("%03d", rentalList.size() + 1);
+
                 RentalVO rental = RentalVO.builder()
+                        .rental_id(rentalId) // rental_id 설정
                         .user_id(cartDTO.getUser_id())
                         .product_id(cartDTO.getProduct_id())
                         .rental_date(LocalDateTime.now())
@@ -129,6 +151,34 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Rental 데이터 삽입 실패: " + e.getMessage());
         }
     }
+
+
+//    @PostMapping("/rentals")
+//    public ResponseEntity<String> cartRental(@RequestBody List<CartDTO> cartDTOList) {
+//            System.out.println("cartDTOList(cartRental) 데이터 확인 : " + cartDTOList);
+//        try {
+//            // 다중 Rental 데이터 처리
+//            for (CartDTO cartDTO : cartDTOList) {
+//                System.out.println("Count 데이터 확인 CartDTO 처리 중: " + cartDTO + ", Quantity: " + cartDTO.getQuantity());
+//                RentalVO rental = RentalVO.builder()
+//                        .user_id(cartDTO.getUser_id())
+//                        .product_id(cartDTO.getProduct_id())
+//                        .rental_date(LocalDateTime.now())
+//                        .count(cartDTO.getQuantity())
+//                        .return_date(LocalDateTime.now().plusDays(1)) // 기본 반납일 (1일 뒤)
+//                        .rental_status(true)
+//                        .build();
+//
+//                System.out.println("Cart에서 RentalVO 생성 데이터 확인 : " + rental);
+//                userRentalService.insertRental(rental, cartDTO.getQuantity());
+//            }
+//
+//            return ResponseEntity.ok("Rental 데이터 삽입 완료");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Rental 데이터 삽입 실패: " + e.getMessage());
+//        }
+//    }
 
     @PostMapping("/")
     public ResponseEntity<List<String>> addCartItem(@RequestBody List<CartDTO> cartDTOList) {

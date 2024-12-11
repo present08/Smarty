@@ -87,8 +87,8 @@ public class UserRentalController {
                         String.format("%02d", date.getMonthValue()) +
                         String.format("%02d", date.getDayOfMonth()) +
                         String.format("%03d", rentalList.size() + 1);
-
-                System.out.println(" Rental ID: " + rentalId);
+//                (date.getDayOfMonth() < 10 ? String.format("%02d", date.getDayOfMonth()) : date.getDayOfMonth())
+                System.out.println(" Rental 생성 확인 ID: " + rentalId);
 
                 // Rental 데이터 생성
                 RentalVO rentalVO = RentalVO.builder()

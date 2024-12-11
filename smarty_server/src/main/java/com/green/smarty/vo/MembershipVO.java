@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class MembershipVO {
     private String membership_id;
     private String membership_level;
@@ -19,5 +18,4 @@ public class MembershipVO {
     private Timestamp last_reset_date;
     private String membership_status;
     private int used_benefit_count;
-    private float total_payment_amount;
 }

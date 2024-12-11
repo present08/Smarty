@@ -1,7 +1,6 @@
 package com.green.smarty.mapper;
 
 import com.green.smarty.dto.EnrollmentClassDTO;
-import com.green.smarty.dto.PaymentDTO;
 import com.green.smarty.dto.ScatterDTO;
 import com.green.smarty.vo.PaymentVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +15,6 @@ public interface PaymentMapper {
     int updatePaymentStatus(@Param("payment_id") String payment_id, @Param("status") String status);
     PaymentVO getPaymentById(@Param("payment_id") String payment_id);
     String getMaxPaymentIdForDate(@Param("datePrefix") String datePrefix);
-    List<PaymentDTO> getAllPayment();
     // enrollment
     List<EnrollmentClassDTO> getEnrollmentClass();
     void updateEnroll(String enrollment_id);

@@ -53,53 +53,42 @@ public class UserCouponService {
     }
 
 
-@Scheduled(cron = "0 0 0 * * ?") // 자정 발급
-//@Scheduled(cron = "0 18 * * * ?") // 매 시간 18분에 실행: 테스트용 사용x
-public void issueBirthdayCoupons() {
+//    @Scheduled(cron = "0 0 0 * * ?") // 자정 발급
+    @Scheduled(cron = "0 17 * * * ?") // 매 시간 58분에 실행: 테스트용
+    public void issueBirthdayCoupons() {
 
-    LocalDate today = LocalDate.now();
-    int month = today.getMonthValue();
-    int day = today.getDayOfMonth();
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int day = today.getDayOfMonth();
 
-    // 생일인 사용자 목록 조회
-    List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(month, day);
+        // 생일인 사용자 목록 조회
+        List<UserVO> usersWithBirthday = userMapper.getUsersWithBirthday(month, day);
 
-    for (UserVO userVO : usersWithBirthday) {
-        System.out.println("User ID: " + userVO.getUser_id() + ", Birthday: " + userVO.getBirthday());
-        try {
-            // 중복 체크: 이미 발급된 쿠폰이 있는지 확인
-            boolean couponExists = usercouponMapper.CheckExistingCoupon(userVO.getUser_id());
+            for (UserVO userVO : usersWithBirthday) {
+                System.out.println("User ID: " + userVO.getUser_id() + ", Birthday: " + userVO.getBirthday());
 
-            // 중복 체크 결과 출력
-            if (couponExists) {
-                System.out.println("이미 발급된 쿠폰이 있습니다: " + userVO.getUser_id());
-                continue; // 중복이 있을 경우 다음 사용자로 넘어감
-            } else {
-                System.out.println("쿠폰 발급 가능: " + userVO.getUser_id());
+            try {
+                // 쿠폰 생성
+                CouponVO coupon = new CouponVO();
+                coupon.setCoupon_id(generateCouponId(userVO)); // 사용자별 쿠폰 ID 생성
+                coupon.setUser_id(userVO.getUser_id()); // 해당 사용자 ID 설정
+                coupon.setCoupon_name("생일축하 쿠폰"); // 쿠폰 이름 설정
+                coupon.setCoupon_code(generateCouponCode()); // 랜덤 쿠폰 코드 생성
+                coupon.setStatus("ISSUED"); // 발급 상태 설정
+                coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
+                coupon.setExpiry_date(LocalDateTime.now().plusMonths(2)); // 만료 날짜
+                coupon.setDiscount_rate(new BigDecimal("10.00")); // 할인율 10%
+
+                // 사용자에게 발급된 쿠폰을 DB에 저장
+                usercouponMapper.insertBirthdayCoupon(coupon);
+                System.out.println("생일 쿠폰 발급 완료: " + coupon.getUser_id());
+
+            } catch (Exception e) {
+                // 발급 실패 시 에러 로그 출력
+                System.out.println("생일 쿠폰 발급 실패: " + userVO.getUser_id() + " - " + e.getMessage());
             }
-
-            // 쿠폰 생성
-            CouponVO coupon = new CouponVO();
-            coupon.setCoupon_id(generateCouponId(userVO)); // 사용자별 쿠폰 ID 생성
-            coupon.setUser_id(userVO.getUser_id()); // 해당 사용자 ID 설정
-            coupon.setCoupon_name("생일축하 쿠폰"); // 쿠폰 이름 설정
-            coupon.setCoupon_code(generateCouponCode()); // 랜덤 쿠폰 코드 생성
-            coupon.setStatus("ISSUED"); // 발급 상태 설정
-            coupon.setIssue_date(LocalDateTime.now()); // 발급 날짜
-            coupon.setExpiry_date(LocalDateTime.now().plusMonths(2)); // 만료 날짜
-            coupon.setDiscount_rate(new BigDecimal("10.00")); // 할인율 10%
-
-            // 사용자에게 발급된 쿠폰을 DB에 저장
-            usercouponMapper.insertBirthdayCoupon(coupon);
-            System.out.println("생일 쿠폰 발급 완료: " + coupon.getUser_id());
-
-        } catch (Exception e) {
-            // 발급 실패 시 에러 로그 출력
-            System.out.println("생일 쿠폰 발급 실패: " + userVO.getUser_id() + " - " + e.getMessage());
         }
     }
-}
-
 
 
     private String generateCouponId(UserVO user) {

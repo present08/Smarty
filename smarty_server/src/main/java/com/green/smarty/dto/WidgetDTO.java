@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class WidgetDTO {
+    private String rental_id;
     private String enrollment_id;
     private String reservation_id;
     private String payment_id;

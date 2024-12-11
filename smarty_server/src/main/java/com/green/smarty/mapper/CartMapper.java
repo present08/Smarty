@@ -11,10 +11,8 @@ import java.util.List;
 public interface CartMapper {
     List<UserCartListDTO> getUserCart(String user_id);
     void addCart(CartVO cartVO);
-    void updateCartByUserAndProduct(CartVO cartVO);
+    void updateCart(CartVO cartVO);
     void removeCart(String cart_id);
     void clearCart(String user_id);
     List<CartVO> getAllCart();
-
-
 }

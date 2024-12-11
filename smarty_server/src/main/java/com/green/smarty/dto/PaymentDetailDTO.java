@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 
 public class PaymentDetailDTO {
-    private String rental_id;
     private String reservation_id;
     private String enrollment_id;
     private float amount;

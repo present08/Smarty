@@ -78,11 +78,6 @@
         WHERE product_id = #{product_id}
     </select>
 
-    <select id="getProductImages" resultType="String">
-        SELECT file_name
-        FROM product_attach
-        WHERE product_id = #{product_id}
-    </select>
 
 
 </mapper>

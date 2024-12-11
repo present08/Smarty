@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user/facilities")
+@RequestMapping("/api/facilities")
 
 public class UserFacilityController {
     @Autowired

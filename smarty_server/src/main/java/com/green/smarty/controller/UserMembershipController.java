@@ -1,6 +1,5 @@
 package com.green.smarty.controller;
 
-import com.green.smarty.mapper.UserMembershipMapper;
 import com.green.smarty.service.UserMembershipService;
 import com.green.smarty.vo.MembershipVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,9 @@ public class UserMembershipController {
     @Autowired
     UserMembershipService userMembershipService;
 
-    @Autowired
-    UserMembershipMapper userMembershipMapper;
-
     @GetMapping("/totalGrade")
     public float getPaymentDetailsByUserId(@RequestParam String user_id) {
-        float totalAmount = userMembershipMapper.getTotalPaymentAmountByUserId(user_id);
+        float totalAmount = userMembershipService.getPaymentDetailsByUserId(user_id);
         System.out.println("총 결제 금액 : " + totalAmount);
         return totalAmount;
     }

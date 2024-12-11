@@ -1,32 +1,37 @@
 package com.green.smarty.service;
 
 import com.green.smarty.dto.PaymentDetailDTO;
-import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.*;
-import com.green.smarty.vo.CartVO;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.green.smarty.mapper.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.vo.PaymentVO;
+import com.green.smarty.vo.RentalVO;
 
 @Service
-@Transactional
+
 public class PaymentService {
 
     @Autowired
@@ -47,14 +52,7 @@ public class PaymentService {
     @Autowired
     private UserRentalMapper userRentalMapper;
 
-    public String createPayment(PaymentVO payment) {
-        paymentMapper.insertPayment(payment);
-
-        return payment.getPayment_id();
-    }
-
-
-    public RentalVO insertRental(PaymentDetailDTO dto) {
+    public RentalVO insertRental(PaymentDetailDTO dto, String payment_id) {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
         List<RentalVO> rentalList = new ArrayList<>();
@@ -90,14 +88,13 @@ public class PaymentService {
                 .product_id(dto.getProduct_id())
                 .user_id(dto.getUser_id())
                 .rental_status(true)
+                .payment_id(payment_id)
                 .build();
-
-        userRentalService.insertRental(vo, dto.getCount());
+        userRentalMapper.insertRental(vo);
         System.out.println("insert rental : "+vo);
 
         return vo;
     }
-
 
     // 결제 조회
     public PaymentVO getPaymentById(String payment_id) {

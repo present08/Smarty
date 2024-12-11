@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.green.smarty.dto.ClassAdminDTO;
 import com.green.smarty.mapper.UserClassMapper;
 import com.green.smarty.mapper.UserReservationMapper;
 import com.green.smarty.vo.ClassDetailVO;
@@ -75,10 +76,10 @@ public class Test1 {
         // 시작일~종료일 사이의 월, 수, 금에 해당하는 요일, 날짜 맵에 담기
         List<String> weeekday = new ArrayList<>();
         weeekday.add("월요일");
-        // weeekday.add("화요일");
-        // weeekday.add("수요일");
+//        weeekday.add("화요일");
+//        weeekday.add("수요일");
         weeekday.add("목요일");
-        weeekday.add("금요일");
+         weeekday.add("금요일");
 
         List<String> weekdays = new ArrayList<>();
         List<LocalDate> weekDates = new ArrayList<>();
@@ -145,10 +146,5 @@ public class Test1 {
                         entry -> entry.getValue().stream().distinct().collect(Collectors.toList())));
 
         System.out.println(result);
-    }
-
-    @Test
-    public void paymentData() {
-
     }
 }

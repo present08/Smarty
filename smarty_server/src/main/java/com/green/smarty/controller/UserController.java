@@ -112,10 +112,21 @@ public class UserController {
                 System.out.println("쿠폰 발급 완료: " + coupon);
 
                 // QR 코드 생성
-                byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 id를 QR 코드 데이터로 사용
+                byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
+
+                // 영준 추가 이메일 발송 코드
+                String emailStatus = sendEmailService.sendWelcomeEmail(userVO.getEmail(),  userVO.getUser_name(), userVO.getUser_id());
+                if("FAILURE".equals(emailStatus)){
+                    System.out.println("회원가입 성공, 하지만 이메일 전송 중 오류 발생");
+                    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
+                }
+
+                // 만약 qr이랑 이메일 발송 전부 성공한다면..
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
+
             } catch (Exception e) {
+                System.out.println("QR 코드 생성 중 오류 발생: " + e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 성공, 하지만 QR 코드 생성 중 오류가 발생했습니다.");
             }
         } else {
@@ -141,6 +152,7 @@ public class UserController {
             userservice.updateLoginDate(user.getUser_id()); // 로그인 날짜 업데이트
             userLoginHistoryService.logLoginSuccess(loginHistory); // 로그인 성공 기록 추가
 
+            System.out.println("로그인 성공: " + user);
             session.setAttribute("user", user); // 세션에 사용자 정보 저장
 
             return ResponseEntity.ok(user); // 로그인 성공 시 사용자 정보 반환
@@ -221,11 +233,14 @@ public class UserController {
         HttpSession session = request.getSession(false);
         if(session != null){
             Boolean isLoggedIn = session.getAttribute("user") != null;
+            System.out.println("session: "+ session);// user이 있다면 로그인 상태로 간주
+            System.out.println("isLogin: "+ isLoggedIn);
             // 로그인 상태 응답
             Map<String, Boolean> response = new HashMap<>();
             response.put("isLoggedIn", isLoggedIn);
             return ResponseEntity.ok(response);
         }else{
+            System.out.println("세션없음");
             return null;
         }
     }
@@ -254,6 +269,7 @@ public class UserController {
     //사용자 휴면 여부 확인
     @GetMapping("/me/{userId}")
     public String getUserStatus(@PathVariable("userId") String userId){
+        System.out.println();
         return userservice.checkUserStatus(userId);
     }
 
@@ -277,23 +293,32 @@ public class UserController {
 
     @PutMapping("/info")
     public ResponseEntity<UserVO> updateUserInfo(@RequestBody UserVO userVO) {
+        System.out.println(userVO);
         String resultMessage = userservice.updateUserProfile(userVO);
         UserVO user = userMapper.getById(userVO.getUser_id());
         System.out.println("업데이트 완료 :" + user);
-            return ResponseEntity.ok(user);
+        return ResponseEntity.ok(user);
     }
 
     // 예약정보
     @GetMapping("/reservationUser")
     public List<ReservationUserDTO> getReservationUserDate(@RequestParam String user_id){
+        System.out.println(user_id);
         List<ReservationUserDTO> result = reservationService.getReservationUserDate(user_id);
         return result;
     }
 
+//    // 등급매기기
+//    public void checkAndUpdateUserLevel(UserVO user, BigDecimal totalAmount) {
+//        userservice.updateUserLevel(user, totalAmount);
+//        System.out.println(user.getLevel());
+//    }
 
-     // 수강 리스트 불러오기
+
+    // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
+        System.out.println("유저아이디 확인 : "+user_id);
         List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
         return  result;
     }
@@ -303,7 +328,7 @@ public class UserController {
     public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
         List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
         return result;
-    }   
+    }
 
     // 로그인 세션 체크
     @GetMapping("/check-session")
@@ -315,6 +340,7 @@ public class UserController {
             System.out.println("session: "+ userVO);// user이 있다면 로그인 상태로 간주
             return ResponseEntity.ok(userVO);
         }else{
+            System.out.println("세션없음");
             return null;
         }
     }

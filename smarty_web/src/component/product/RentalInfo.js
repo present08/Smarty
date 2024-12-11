@@ -24,7 +24,7 @@ const RentalInfo = ({ product, quantity, price }) => {
         if (imageError || !product.attachFiles?.[0]?.fileName) {
             return '/no-image.png';
         }
-        return `http://localhost:8080/api/products/images/${product.attachFiles[0].fileName}`;
+        return `http://localhost:8080/api/user/products/images/${product.attachFiles[0].fileName}`;
     };
 
     return (

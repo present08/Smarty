@@ -68,6 +68,7 @@ public class AdminProductStatusController {
             log.error("상태 변경 실패: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상태 변경에 실패했습니다.");
         }
+
     }
 
     // 상품 총량 변경

@@ -53,10 +53,14 @@
     <!-- 현재 상태 변경 -->
     <update id="updateChangedStatus" parameterType="map">
         UPDATE product_status
-        SET current_status = FALSE, -- 대여 불가능으로 설정
+        SET current_status = CASE
+        WHEN #{changedStatus} = '대여 가능' THEN TRUE
+        ELSE FALSE
+        END,
         updated_at = CURRENT_TIMESTAMP
         WHERE status_id = #{statusId};
     </update>
+
 
     <!-- 상태 복구 (대여 가능으로 변경) -->
     <update id="restoreToAvailable" parameterType="string">
@@ -141,6 +145,31 @@
         WHERE ps.product_id = #{productId}
         GROUP BY ps.current_status;
     </select>
+
+    <!-- 특정 상태 ID의 change_quantity 합계 조회 -->
+    <select id="calculateTotalChangeQuantity" parameterType="string" resultType="int">
+        SELECT COALESCE(SUM(change_quantity), 0)
+        FROM product_status_log
+        WHERE status_id = #{statusId}
+    </select>
+
+    <update id="updateAvailability" parameterType="string">
+        UPDATE product_status
+        JOIN (
+        SELECT ps.status_id AS sid,
+        p.stock - COALESCE(SUM(pl.change_quantity), 0) AS remaining_stock
+        FROM product_status ps
+        JOIN product p ON ps.product_id = p.product_id
+        LEFT JOIN product_status_log pl ON ps.status_id = pl.status_id
+        WHERE ps.status_id = #{statusId}
+        GROUP BY ps.status_id, p.stock
+        ) AS subquery ON product_status.status_id = subquery.sid
+        SET product_status.current_status = CASE
+        WHEN subquery.remaining_stock > 0 THEN TRUE
+        ELSE FALSE
+        END,
+        product_status.updated_at = CURRENT_TIMESTAMP;
+    </update>
 
 
 </mapper>

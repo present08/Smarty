@@ -89,6 +89,7 @@ const ReservationComponent = (props) => {
             }
         }
     }
+
     // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
@@ -100,9 +101,7 @@ const ReservationComponent = (props) => {
         setTimeLine(newTimeLine)
         setPrice(facilityData.basic_fee)
         extra_price(tl.id)
-
     };
-
 
     useEffect(() => {
         // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
@@ -123,7 +122,6 @@ const ReservationComponent = (props) => {
             reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
             amount: (membership != "브론즈" ? Dprice : price)
         })
-
     }, [timeLine])
 
     // server 전송
@@ -209,7 +207,7 @@ const ReservationComponent = (props) => {
                             <td data-content="시설명">{facilityData.facility_name}</td>
                             <td data-content="예약일자">{date}</td>
                             <td data-content="예약시간">{fristNum + ':00 ~ '}{lastNum + ':00'}</td>
-                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color:'gray', fontSize:'15px', marginRight:"5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
+                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color: 'gray', fontSize: '15px', marginRight: "5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -217,7 +215,7 @@ const ReservationComponent = (props) => {
                 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
                 <script src="/main.js"></script>
             </div>
-            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
+            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={Dprice} closeModal={closeModal} /> : <></>}
         </div>
     )
 }

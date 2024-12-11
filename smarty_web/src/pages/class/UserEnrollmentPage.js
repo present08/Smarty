@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LuCalendarCheck } from 'react-icons/lu';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MembershipUser } from '../../api/classAPI';
 import { enrollpayment } from '../../api/paymentAPI';
 import '../../css/reservationComplete.css';
 
 const UserEnrollmentPage = () => {
     const location = useLocation();
 
-    const { classData, user, e } = location.state
+    const { classData, Dprice, user, e } = location.state
+    console.log(classData, "123132321321321")
     const init = {
         enrollment_id: e, amount: classData.price, user_id: user.user_id
     }
     const [enrollData, setEnrollData] = useState(init)
     const navigate = useNavigate()
-   
+
     const closed = (page) => {
         if (page == "mypage") {
             navigate('/mypage', { state: { user } })
@@ -34,7 +34,7 @@ const UserEnrollmentPage = () => {
             pg: 'html5_inicis',                           // PG사
             pay_method: 'card',                           // 결제수단
             merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
-            amount: classData.price,                                 // 결제금액
+            amount: Dprice,                                 // 결제금액
             name: classData.class_name,                  // 주문명
             buyer_name: user.user_id,                           // 구매자 이름
         };
@@ -80,7 +80,7 @@ const UserEnrollmentPage = () => {
                     </div>
                     <h3 style={{ marginTop: '100px', fontSize: '21px' }}>{user.user_name} 님께서 접수하신 <span style={{ color: '#50c4d2' }}>{classData.class_name}</span> 수강신청이 완료 되었습니다!</h3>
                     <h1 style={{ fontSize: '40px', marginTop: '30px', marginBottom: '30px' }}>{classData.start_date} {classData.start_time} - {classData.end_date} {classData.end_time}</h1>
-                    <h3 style={{ fontSize: '21px' }}>이용금액 {classData.price}원 입니다.</h3>
+                    <h3 style={{ fontSize: '21px' }}>이용금액 {Dprice}원 입니다.</h3>
                     <h3 style={{ fontSize: '21px', marginTop: '10px' }}>수강 현황은 <span style={{ color: '#50c4d2' }}>마이페이지</span>에서 확인 가능합니다.</h3>
                     <h3 style={{ fontSize: '20px', marginTop: '10px' }}>이용해주셔서 감사합니다.</h3>
                 </div>

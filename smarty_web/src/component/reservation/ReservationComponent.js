@@ -89,6 +89,7 @@ const ReservationComponent = (props) => {
             }
         }
     }
+
     // 시간 버튼 클릭하면 Default time의 set버튼들 모두 선택 기능
     const handleClick = (tl) => {
         const newTimeLine = timeLine.map((item) => {
@@ -100,9 +101,7 @@ const ReservationComponent = (props) => {
         setTimeLine(newTimeLine)
         setPrice(facilityData.basic_fee)
         extra_price(tl.id)
-
     };
-
 
     useEffect(() => {
         // 클릭된 버튼의 타임별 첫시간 ~ 끝시간 저장
@@ -123,7 +122,6 @@ const ReservationComponent = (props) => {
             reservation_end: moment(new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), last < 10 ? '0' + last : last)).format("YYYY-MM-DD HH:mm:ss"),
             amount: (membership != "브론즈" ? Dprice : price)
         })
-
     }, [timeLine])
 
     // server 전송

@@ -27,9 +27,11 @@ const ReservationPage = () => {
     const location = useLocation();
     const focusRef = useRef(null);
     const navigate = useNavigate();
+
     const newDate = (date) => {
         setDate(date);
     }
+
     useEffect(() => {
         setFacilityData(location.state)
         try {
@@ -44,7 +46,6 @@ const ReservationPage = () => {
         getCourt(location.state.facility_id, location.state.court_id, date)
             .then((e) => {
                 setReserved(e)
-                console.log("btndata ", e)
             })
     }, [date])
 

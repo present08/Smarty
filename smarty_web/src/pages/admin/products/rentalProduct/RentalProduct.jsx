@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -16,71 +16,75 @@ import { getRentalStatistic } from "../../../../api/admin/chartApi";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const RentalProduct = ({ facilityId, onDataReload }) => {
-  const [graphData, setGraphData] = useState(null);
   const [rawData, setRawData] = useState([]);
 
+  // 데이터를 가져오는 함수
   const fetchGraphData = async () => {
     try {
       const data = await getRentalStatistic(facilityId);
+      console.log("Fetched rawData:", data); // 데이터 확인
       setRawData(data);
-
-      const labels = data.map(
-        (item) =>
-          `${item.product_name}${item.size ? ` (${item.size})` : ""}`
-      );
-
-      const rentedPercentage = data.map((item) =>
-        item.total_stock > 0
-          ? (item.rented_quantity / item.total_stock) * 100
-          : 0
-      );
-
-      const unavailablePercentage = data.map((item) =>
-        item.total_stock > 0
-          ? (item.unavailable_quantity / item.total_stock) * 100
-          : 0
-      );
-
-      const remainingPercentage = data.map((item, index) =>
-        100 - (rentedPercentage[index] + unavailablePercentage[index])
-      );
-
-      setGraphData({
-        labels,
-        datasets: [
-          {
-            label: "대여량",
-            data: rentedPercentage,
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-          },
-          {
-            label: "대여불가량",
-            data: unavailablePercentage,
-            backgroundColor: "rgba(255, 99, 132, 0.6)",
-          },
-          {
-            label: "남은 수량",
-            data: remainingPercentage,
-            backgroundColor: "rgba(75, 192, 192, 0.6)",
-          },
-        ],
-      });
     } catch (error) {
       console.error("그래프 데이터 로드 실패:", error.message);
     }
   };
 
+  // 그래프 데이터를 계산
+  const graphData = useMemo(() => {
+    if (!rawData.length) return null;
+
+    const labels = rawData.map(
+      (item) =>
+        `${item.product_name}${item.size ? ` (${item.size})` : ""}`
+    );
+
+    const rentedPercentage = rawData.map((item) =>
+      item.total_stock > 0
+        ? (item.rented_quantity / item.total_stock) * 100
+        : 0
+    );
+
+    const unavailablePercentage = rawData.map((item) =>
+      item.total_stock > 0
+        ? (item.unavailable_quantity / item.total_stock) * 100
+        : 0
+    );
+
+    const remainingPercentage = rawData.map((item, index) =>
+      100 - (rentedPercentage[index] + unavailablePercentage[index])
+    );
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: "대여량",
+          data: rentedPercentage,
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+        },
+        {
+          label: "대여불가량",
+          data: unavailablePercentage,
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+        },
+        {
+          label: "남은 수량",
+          data: remainingPercentage,
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+        },
+      ],
+    };
+  }, [rawData]); // rawData가 변경될 때만 재계산
+
   useEffect(() => {
     fetchGraphData();
   }, [facilityId]);
 
-  // 데이터 로드 함수 전달
   useEffect(() => {
     if (onDataReload) {
-      onDataReload(() => fetchGraphData()); // 콜백 함수로만 전달
+      onDataReload(() => fetchGraphData());
     }
-  }, [onDataReload]); // 종속성 배열이 올바르게 설정되었는지 확인
-  
+  }, [onDataReload, facilityId]);
   if (!graphData) return <div>Loading...</div>;
 
   return (
@@ -93,6 +97,7 @@ export const RentalProduct = ({ facilityId, onDataReload }) => {
       <Bar
         data={graphData}
         options={{
+          animation: false, // 애니메이션 비활성화
           indexAxis: "y", // 가로형 차트
           responsive: true,
           maintainAspectRatio: false,

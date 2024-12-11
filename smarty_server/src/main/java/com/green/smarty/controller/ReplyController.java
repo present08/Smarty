@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/notice/board/comments")
+@RequestMapping("/api/user/comments")
 public class ReplyController {
     @Autowired
     private ReplyService replyService;

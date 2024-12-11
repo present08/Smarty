@@ -443,12 +443,11 @@ export default function ProductList() {
     {
       field: "action",
       headerName: "작업",
-      width: 250,
+      width: 200,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
         <div className="productAction">
-
           <Link to={`/admin/products/${facility_id}/read/${params.row.product_id}`}>
             <button className="productListEdit">상품 조회</button>
           </Link>
@@ -464,6 +463,8 @@ export default function ProductList() {
       ),
     },
   ];
+
+  const paginationModel = { page: 0, pageSize: 10 };
 
   return (
     <div className="productList">
@@ -484,7 +485,7 @@ export default function ProductList() {
             onClick={handleBulkSaveChanges}
             className="MuiButton-root"
           >
-            선택 저장
+            일괄 저장
           </Button>
           <Button
             variant="contained"
@@ -506,6 +507,8 @@ export default function ProductList() {
         className="productTable"
         rowHeight={60} // 모든 행의 높이를 60px로 통일
         onSelectionModelChange={(selection) => setSelectedRowKeys(selection)}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[10, 30, 50, 100]} // 선택 가능한 페이지 크기 옵션 추가
       />
       {productModalOpen && (
         <Modal

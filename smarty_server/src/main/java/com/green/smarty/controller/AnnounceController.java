@@ -2,6 +2,7 @@ package com.green.smarty.controller;
 
 import com.green.smarty.dto.AnnounceDTO;
 import com.green.smarty.dto.BoardDTO;
+import com.green.smarty.mapper.AnnounceMapper;
 import com.green.smarty.service.AnnounceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/notice/announce/user")
+@RequestMapping("/api/user/announce")
 public class AnnounceController {
     @Autowired
     private AnnounceService announceService;
+
 
     //게시글 작성하기
     @PostMapping("/write")
@@ -44,6 +46,7 @@ public class AnnounceController {
     public ResponseEntity<List<AnnounceDTO>> getAllAnnounce() {
         try {
             List<AnnounceDTO> announcements = announceService.getAllAnnounce();
+            System.out.println("조회 했을 때 값은 가져오는지?");
             return ResponseEntity.ok(announcements);
         } catch (Exception e) {
             log.error("Error fetching announcements: ", e);
@@ -90,10 +93,11 @@ public class AnnounceController {
         announceService.modifyAnnounce(announceDTO);
     }
 
-
-    @GetMapping("/get-ip")
-    public String getIpAddress(HttpServletRequest request) {
-        return request.getRemoteAddr();
+    // 수정을 위한 공지사항 조회
+    @GetMapping("/getOneList/{announce_id}")
+    public void getAnnounceById(@PathVariable int announce_id){
+        System.out.println("여기까지는 들어오는지?");
+        announceService.getAnnounceById(announce_id);
     }
 
 }

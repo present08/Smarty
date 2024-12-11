@@ -114,17 +114,7 @@ public class UserController {
                 // QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(userVO.getUser_id()); // 사용자 id를 QR 코드 데이터로 사용
                 System.out.println("QR 코드 바이트 배열 길이: " + qrCode.length); // QR 코드 데이터의 길이 로그 출력
-
-                // 영준 추가 이메일 발송 코드
-                String emailStatus = sendEmailService.sendWelcomeEmail(userVO.getEmail(),  userVO.getUser_name(), userVO.getUser_id());
-                if("FAILURE".equals(emailStatus)){
-                    System.out.println("회원가입 성공, 하지만 이메일 전송 중 오류 발생");
-                    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
-                }
-
-                // 만약 qr이랑 이메일 발송 전부 성공한다면..
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);  // QR 코드 이미지를 반환
-
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 성공, 하지만 QR 코드 생성 중 오류가 발생했습니다.");
             }
@@ -290,7 +280,7 @@ public class UserController {
         String resultMessage = userservice.updateUserProfile(userVO);
         UserVO user = userMapper.getById(userVO.getUser_id());
         System.out.println("업데이트 완료 :" + user);
-        return ResponseEntity.ok(user);
+            return ResponseEntity.ok(user);
     }
 
     // 예약정보
@@ -301,7 +291,7 @@ public class UserController {
     }
 
 
-    // 수강 리스트 불러오기
+     // 수강 리스트 불러오기
     @GetMapping("/classApplication")
     public List<UserClassApplicationDTO> getClassUserApplication(@RequestParam String user_id) {
         List<UserClassApplicationDTO>  result = userservice.getClassUserApplication(user_id);
@@ -313,7 +303,7 @@ public class UserController {
     public List<ProductRentalMyPageUserDTO> getUserMyPageRentalListData(@RequestParam String user_id) {
         List<ProductRentalMyPageUserDTO> result = userservice.getUserMyPageRentalListData(user_id);
         return result;
-    }
+    }   
 
     // 로그인 세션 체크
     @GetMapping("/check-session")

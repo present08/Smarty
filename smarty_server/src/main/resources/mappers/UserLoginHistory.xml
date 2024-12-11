@@ -21,5 +21,4 @@
         WHERE user_id = #{user_id} AND logout_time IS NULL
     </update>
 
-
 </mapper>

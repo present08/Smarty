@@ -6,37 +6,34 @@
     <!-- 대여 등록 -->
     <insert id="insertRental" parameterType="com.green.smarty.vo.RentalVO">
         INSERT INTO rental (
-        rental_id,
-        user_id,
-        product_id,
-        payment_id,
-        rental_status,
-        rental_date,
-        return_date,
-        count
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            count
         ) VALUES (
-        #{rental_id},
-        #{user_id},
-        #{product_id},
-        #{payment_id},
-        #{rental_status},
-        #{rental_date},
-        #{return_date},
-        #{count}
-        );
+            #{rental_id},
+            #{user_id},
+            #{product_id},
+            #{rental_status},
+            #{rental_date},
+            #{count}
+        )
     </insert>
 
     <!-- 모든 대여 조회 -->
     <select id="getAllRentals" resultType="com.green.smarty.dto.RentalDTO">
         SELECT
-        rental_id,
-        user_id,
-        product_id,
-        rental_status,
-        rental_date,
-        return_date,
-        count
-        FROM rental;
+            rental_id,
+            user_id,
+            product_id,
+            rental_status,
+            rental_date,
+            return_date,
+            count
+        FROM
+            rental;
     </select>
 
     <!-- 특정 대여 조회 -->
@@ -53,12 +50,12 @@
         WHERE rental_id = #{rental_id};
     </select>
 
-    <!-- 대여 가능한 status_id 조회 -->
-    <select id="getAvailableStatusIds" parameterType="map" resultType="string">
-        SELECT status_id
-        FROM product_status
-        WHERE product_id = #{product_id} AND current_status = TRUE
-        LIMIT #{count};
+    <select id="getAvailableQuantity" parameterType="string" resultType="int">
+        SELECT p.stock - COALESCE(SUM(psl.change_quantity), 0) AS available_quantity
+        FROM product p
+        LEFT JOIN product_status ps ON p.product_id = ps.product_id
+        LEFT JOIN product_status_log psl ON ps.status_id = psl.status_id
+        WHERE p.product_id = #{product_id};
     </select>
 
     <!-- 대여 상태 변경 -->
@@ -68,35 +65,38 @@
         WHERE status_id = #{status_id};
     </update>
 
-    <!-- 대여 가능한 재고 확인 -->
-    <select id="getAvailableStock" parameterType="string" resultType="int">
-        SELECT
-        p.stock -
-        IFNULL((
-        SELECT SUM(psl.change_quantity)
+    <!-- product_status 테이블의 current_status 업데이트 -->
+    <update id="updateCurrentStatus" parameterType="string">
+        UPDATE product_status ps
+        SET ps.current_status = CASE
+        WHEN (
+        SELECT COALESCE(SUM(change_quantity), 0)
         FROM product_status_log psl
-        INNER JOIN product_status ps ON ps.status_id = psl.status_id
-        WHERE ps.product_id = #{product_id}
-        ), 0) AS available_stock
-        FROM product p
-        WHERE p.product_id = #{product_id};
-    </select>
-
+        WHERE psl.status_id = ps.status_id
+        ) >= (
+        SELECT stock
+        FROM product
+        WHERE product_id = ps.product_id
+        ) THEN FALSE
+        ELSE TRUE
+        END
+        WHERE ps.product_id = #{product_id};
+    </update>
     <!-- 대여 로그 추가 -->
     <insert id="insertRentalLogWithRentalId" parameterType="map">
         INSERT INTO product_status_log (
-        rental_id,
-        status_id,
-        product_id,
-        changed_status,
-        change_quantity,
-        created_at
+            rental_id,
+            status_id,
+            product_id,
+            changed_status,
+            change_quantity,
+            created_at
         ) VALUES (
-        #{rental_id},
-        #{status_id},
-        #{product_id},
-        #{changed_status},
-        #{change_quantity},
+            #{rental_id},
+            #{status_id},
+            #{product_id},
+            #{changed_status},
+            #{change_quantity},
         CURRENT_TIMESTAMP
         );
     </insert>
@@ -104,7 +104,8 @@
     <!-- 대여 로그 삭제 -->
     <delete id="deleteRentalLog" parameterType="map">
         DELETE FROM product_status_log
-        WHERE status_id = #{status_id} AND change_quantity = #{count};
+        WHERE status_id = #{status_id}
+        AND rental_id = #{rental_id}
     </delete>
 
     <!-- 대여된 상태 복구 -->
@@ -113,20 +114,6 @@
         SET current_status = TRUE, updated_at = CURRENT_TIMESTAMP
         WHERE status_id = #{status_id};
     </update>
-
-    <!-- 특정 상품의 전체 재고 확인 -->
-    <select id="getTotalStock" parameterType="map" resultType="int">
-        SELECT COUNT(*)
-        FROM product_status
-        WHERE product_id = #{product_id};
-    </select>
-
-    <!-- 특정 상품의 대여 불가량 확인 -->
-    <select id="getUnavailableStock" parameterType="map" resultType="int">
-        SELECT COUNT(*)
-        FROM product_status
-        WHERE product_id = #{product_id} AND current_status = FALSE;
-    </select>
 
     <!-- 특정 사용자 대여 목록 조회 -->
     <select id="getUserRentalListData" parameterType="String" resultType="com.green.smarty.dto.ProductRentalUserDTO">
@@ -162,7 +149,7 @@
     <update id="updatePaymentStatus" parameterType="com.green.smarty.dto.PaymentDTO">
         UPDATE payment
         SET payment_status = #{payment_status}
-        WHERE payment_id = (SELECT payment_id FROM rental WHERE rental_id = #{rental_id});
+        WHERE payment_id = (SELECT payment_id FROM rental WHERE user_id = #{user_id});
     </update>
 
     <!-- 날짜 기반 최대 Rental ID 조회 -->
@@ -172,17 +159,53 @@
         WHERE rental_id LIKE CONCAT('R_', #{datePrefix}, '%');
     </select>
 
-    <!-- 기간 지난 대여 목록 조회 -->
+    <!-- 반납하지 않은 모든 대여 물품 조회 -->
     <select id="getOverdueRentals" resultType="com.green.smarty.dto.RentalDTO">
         SELECT * FROM rental
-        WHERE rental_date &lt; NOW() - INTERVAL 10 DAY
-        AND rental_status = 1;
+        WHERE rental_status = 1;
     </select>
 
     <!-- 사용자 ID 기반 이메일 조회 -->
     <select id="getEmailByUserId" resultType="String" parameterType="String">
-        SELECT email
-        FROM user
-        WHERE user_id = #{user_id};
+        SELECT u.email
+        FROM rental r
+        INNER JOIN user u ON r.user_id = u.user_id
+        WHERE r.user_id = #{userId}
     </select>
+
+<!-- product_name 가져오기-->
+    <select id="getProductNameByProductId" parameterType="String" resultType="String">
+        SELECT p.product_name
+        FROM rental r
+        INNER JOIN product p ON r.product_id = p.product_id
+        WHERE r.product_id = #{productId}
+    </select>
+
+    <select id="getRentedStatusIds" parameterType="map" resultType="string">
+        SELECT psl.status_id
+        FROM product_status_log psl
+        INNER JOIN product_status ps ON psl.status_id = ps.status_id
+        WHERE ps.product_id = #{product_id}
+        AND psl.rental_id = #{rental_id}
+        AND psl.changed_status = '대여 중'
+        LIMIT #{count};
+    </select>
+
+    <!-- 특정 상태의 총 감소 수량 계산 -->
+    <select id="getTotalUnavailableQuantity" parameterType="string" resultType="int">
+        SELECT IFNULL(SUM(change_quantity), 0)
+        FROM product_status_log psl
+        INNER JOIN product_status ps ON psl.status_id = ps.status_id
+        WHERE ps.product_id = #{product_id}
+        AND psl.changed_status IN ('대여 중', '손상', '수리 필요', '재구매 필요');
+    </select>
+
+    <select id="getAvailableStatusIds" parameterType="map" resultType="string">
+        SELECT ps.status_id
+        FROM product_status ps
+        WHERE ps.product_id = #{product_id}
+        AND ps.current_status = TRUE
+        LIMIT #{count};
+    </select>
+
 </mapper>

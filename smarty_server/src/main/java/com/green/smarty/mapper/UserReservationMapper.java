@@ -44,5 +44,5 @@ public interface UserReservationMapper {
 
     String getUserMembership(String user_id);
 //    (영준)
-    List<ReservationDTO> getStartBeforeSevendays();
+    List<ReservationDTO> sendOnedaysBefore();
 }

@@ -44,8 +44,8 @@
         update enrollment set enrollment_status = '승인완료' where enrollment_id = #{enrollment_id}
     </update>
     <select id = "getPaymentData" parameterType='map'>
-        select  A.reservation_id, A.facility_name,  A.court_name, p.payment_date, p.amount,  COALESCE(A.user_id, B.user_id, C.user_id) AS user_id,  B.class_name,  B.enrollment_id, C.product_name, C.rental_id from payment p 
-        left join (select r.reservation_id, f.facility_name, c.court_name, r.user_id  from reservation r join court c using(court_id) 
+        select  A.reservation_id, A.facility_name,  A.court_name, p.payment_date, p.amount,  COALESCE(A.user_id, B.user_id, C.user_id) AS user_id,  B.class_name,  B.enrollment_id, C.product_name, C.rental_id from payment p
+        left join (select r.reservation_id, f.facility_name, c.court_name, r.user_id  from reservation r join court c using(court_id)
         join facility f on c.facility_id = f.facility_id) A using(reservation_id)
         left join (select c.class_name, e.enrollment_id, e.user_id from enrollment e join class c on e.class_id = c.class_id) B using(enrollment_id)
         left join (select p.product_name, r.rental_id, r.user_id from rental r join product p on r.product_id = p.product_id) C using(rental_id)

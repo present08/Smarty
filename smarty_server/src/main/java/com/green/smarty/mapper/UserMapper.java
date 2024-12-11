@@ -64,11 +64,15 @@ public interface UserMapper {
 
     //영준이가 사용중인 로직
     // (영준) 아이디로 이메일 찾기
-    String getUserEmailById(String user_id);
+    String getUserEmailById(@Param("user_id") String user_id);
     // (영준) 아이디로 이름 찾기
     String getUserNameById(String user_id);
     // (영준) 이메일로 아이디 찾기
     String getIdByEmail(String email);
     // (영준) 로그인한지 3개월이 지난 유저 찾기
     List<UserVO> getUserHuman();
+    // (영준) 로그인한지 3개월이 지나기 일주일 전 유저 찾기
+    List<UserVO> humanSevenbefore();
+    // (영준) 이메일 발송을 위해 필요한 정보만 가져오는 Get
+    List<UserVO> getUserForSendMail();
 }

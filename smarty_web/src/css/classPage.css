@@ -18,8 +18,8 @@
     top: 0;
 }
 
-.classContent{
-    margin:200px auto 0;
+.classContent {
+    margin: 200px auto 0;
     width: 70%;
     display: flex;
     align-content: flex-start;
@@ -33,7 +33,7 @@
     font-size: 1.3rem;
 }
 
-.classTitle{
+.classTitle {
     margin-bottom: 30px;
 }
 
@@ -56,19 +56,19 @@
     color: gray;
 }
 
-.classClose{
-    position:absolute;
-    top:30px;
-    right:50px;
+.classClose {
+    position: absolute;
+    top: 30px;
+    right: 50px;
 }
 
-.enrollBtn{
+.class_page_enrollBtn {
     border: 0;
-    padding:20px 50px;
+    padding: 20px 50px;
     font-size: 1.2em;
     border-radius: 30px;
     background-color: #011b2f;
-    color:white;
+    color: white;
     margin-top: 50px;
     cursor: pointer;
 }

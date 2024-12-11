@@ -209,7 +209,7 @@ const ReservationComponent = (props) => {
                             <td data-content="시설명">{facilityData.facility_name}</td>
                             <td data-content="예약일자">{date}</td>
                             <td data-content="예약시간">{fristNum + ':00 ~ '}{lastNum + ':00'}</td>
-                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color:'gray', fontSize:'15px', marginRight:"5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
+                            <td data-content="이용요금">{membership != "브론즈" ? <><span style={{ textDecoration: 'line-through', color: 'gray', fontSize: '15px', marginRight: "5px" }}> {price} </span> <span style={{ fontWeight: "bold" }}>{Dprice}</span></> : price}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -217,7 +217,7 @@ const ReservationComponent = (props) => {
                 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
                 <script src="/main.js"></script>
             </div>
-            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={price} closeModal={closeModal} /> : <></>}
+            {complete ? <ReservationComplete postData={postData} facilityData={facilityData} user={user} price={Dprice} closeModal={closeModal} /> : <></>}
         </div>
     )
 }

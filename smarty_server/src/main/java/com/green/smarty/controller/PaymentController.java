@@ -154,6 +154,9 @@ public class PaymentController {
 //        System.out.println(rentalID);
 //
 //        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+// 혜수
+    // 멤버십 업데이트: 총 결제 금액 업데이트
+//        userMembershipService.updateTotalPaymentAmount(dto.getUser_id());
 //        // 멤버십 업데이트
 //        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 //
@@ -231,10 +234,13 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
+        // 혜수
+        // 멤버십 업데이트: 총 결제 금액 업데이트
+        userMembershipService.updateTotalPaymentAmount(enrollData.get("user_id"));
+
         // 멤버십 업데이트(혜수코드)
         userMembershipService.updateMembershipLevel(
-                enrollData.get("user_id"),
-                Float.parseFloat(enrollData.get("amount"))
+                enrollData.get("user_id")
         );
 
         // (영준) 이메일 발송 코드
@@ -290,8 +296,12 @@ public class PaymentController {
 
         UserReservationDTO result = reservationService.insertReservation(dto);
 
-        // 멤버십 업데이트(혜수코드)
-        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
+        // 혜수
+        // 멤버십 업데이트: 총 결제 금액 업데이트
+        userMembershipService.updateTotalPaymentAmount(dto.getUser_id());
+
+        // 멤버십 업데이트: 레벨
+        userMembershipService.updateMembershipLevel(dto.getUser_id());
 
         // (영준) 이메일 발송 관련 코드
         String email = userMapper.getUserEmailById(dto.getUser_id());

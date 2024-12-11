@@ -136,17 +136,6 @@ label,
     width: 120px;
 }
 
-/* 버튼 스타일 */
-.subItemButton {
-    border: none;
-    width: 100px;
-    border-radius: 5px;
-    padding: 5px 0px;
-    color: white;
-    background-color: #58A3BC;
-    cursor: pointer;
-    font-size: 14px;
-}
 .courtButton {
     /* width: 100%; */
     display: flex;

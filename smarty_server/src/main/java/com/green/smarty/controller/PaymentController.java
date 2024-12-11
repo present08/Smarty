@@ -111,6 +111,9 @@ public class PaymentController {
             // Payment 테이블에 데이터 삽입
             paymentMapper.insertPayment(payment);
 
+//            아직 유저아이디 못불러옴
+//            userMembershipService.updateTotalPaymentAmount();
+
             return ResponseEntity.ok(paymentId); // 생성된 payment_id 반환
         } catch (Exception e) {
             e.printStackTrace();

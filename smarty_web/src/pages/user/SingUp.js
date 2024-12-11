@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp } from '../../api/userApi';
 import '../../css/signup.css';
-import { securitySignUp } from '../../api/securityApi';
 
 
 const SignUp = () => {
@@ -49,8 +48,7 @@ const SignUp = () => {
         };
 
         if (window.confirm("회원가입 하시겠습니까?")) {
-            securitySignUp(userData).then(response => { // 시큐리티 방식
-            // signUp(userData).then(response => {  // 세션 방식
+            signUp(userData).then(response => {
                 console.log('회원가입 성공:', response);
                 alert('회원가입이 완료되었습니다. 로그인 해주세요.');
 
@@ -63,7 +61,7 @@ const SignUp = () => {
 
                 setTimeout(() => {
                     navigate("/user/login");
-                }, 4000);
+                }, 3000);
             }).catch((err) => {
                 setError('회원가입 실패: 다시 시도해 주세요.');
                 console.log(err);

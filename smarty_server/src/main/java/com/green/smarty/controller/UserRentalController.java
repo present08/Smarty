@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/user/rentals")
+@RequestMapping("/api")
 
 public class UserRentalController {
     @Autowired
@@ -32,7 +32,7 @@ public class UserRentalController {
     @Autowired
     private UserProductMapper userProductMapper;
 
-    @GetMapping("/")
+    @GetMapping("/rentals")
     public ResponseEntity<List<RentalDTO>> getRental() {
         try {
             List<RentalDTO> rentals = userRentalService.getAllRentals();
@@ -45,7 +45,7 @@ public class UserRentalController {
     }
 
     // 대여 등록
-    @PostMapping("/")
+    @PostMapping("/rentals")
     public ResponseEntity<?> postRental(@RequestBody Map<String, Object> rentalRequest) {
         try {
             String user_id = (String) rentalRequest.get("user_id");
@@ -86,7 +86,7 @@ public class UserRentalController {
     }
 
     // 대여 반납
-    @PutMapping("/{rental_id}/return")
+    @PutMapping("/rentals/{rental_id}/return")
     public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {
         System.out.println("반납 요청 rental_id: " + rental_id + ", count: " + count);
         try {
@@ -102,7 +102,7 @@ public class UserRentalController {
         }
     }
 
-    @PutMapping("/{rental_id}/payment_status")
+    @PutMapping("/rentals/{rental_id}/payment_status")
     public ResponseEntity<String> updatePaymentStatus(@PathVariable String rental_id, @RequestParam boolean payment_status) {
         try {
             int result = userRentalService.updatePaymentStatus(rental_id, payment_status);
@@ -117,7 +117,7 @@ public class UserRentalController {
             }
     }
 
-    @GetMapping("/{rental_id}")
+    @GetMapping("/rentals/{rental_id}")
     public ResponseEntity<RentalDTO> getRentalById(@PathVariable String rental_id) {
         System.out.println("특정 대여 조회 렌탈ID: " + rental_id );  // 로그 추가
         try {

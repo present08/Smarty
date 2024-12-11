@@ -16,21 +16,10 @@ export const login = async (user_id, password) => {
 }
 
 // 로그인 상태 확인
-// export const checkLoginStatus = async () => {
-//     const response = await axios.get(`${host}/status`, { withCredentials: true });
-//     return response.data;
-// };
-
-// 로그인 상태 확인(시큐리티)
-export const checkLoginStatus = async(user_id) => {
-    try {        
-        const res = await axios.get(`${prefix}/${user_id}`)
-        console.log("getOneClass : ", res.data)
-        return res.data
-    } catch(error) {
-        console.error("ERROR! : ", error)
-    }
-}
+export const checkLoginStatus = async () => {
+    const response = await axios.get(`${host}/status`, { withCredentials: true });
+    return response.data;
+};
 
 // 로그아웃
 export const logout = async () => {

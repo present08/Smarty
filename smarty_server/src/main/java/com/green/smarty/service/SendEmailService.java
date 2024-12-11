@@ -162,7 +162,7 @@ public class SendEmailService {
     }
 
 
-    public String sendFacilityReservation(String user_name, String class_name, String email) {
+    public String sendClassReservation(String user_name, String class_name, String email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setText(
                 "안녕하세요, " + user_name + "님! \n\n" +

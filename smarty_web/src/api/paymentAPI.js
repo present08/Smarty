@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const host = "http://localhost:8080/api/user/payment";
+const host = "http://localhost:8080/api/payment";
 
 export const createPayment = async (paymentData) => {
   const response = await axios.post(`${host}/create`, paymentData)
@@ -24,7 +24,7 @@ export const handlePayment = async () => {
   };
 
   try {
-    const response = await axios.post("http://localhost:8080/api/payment/user/create", paymentData)
+    const response = await axios.post("http://localhost:8080/api/payment/create", paymentData)
     console.log(response.data)
   } catch (error) {
     console.error(error.response.data)

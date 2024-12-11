@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_SERVER_HOST = "http://localhost:5000"
+export const API_SERVER_HOST = "http://localhost:5500"
 const prefix = `${API_SERVER_HOST}/api`
 
 export const getIncomeComparison = async () => {

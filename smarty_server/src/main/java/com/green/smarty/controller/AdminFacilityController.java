@@ -68,7 +68,7 @@ public class AdminFacilityController {
     public String remove(@PathVariable(name = "facility_id") String facility_id) {
         System.out.println("시설 삭제! facility_id = " + facility_id);
         adminFacilityService.remove(facility_id);
-        return "시설 삭제 완료";
+        return "해당 시설이 삭제되었습니다.";
     }
 
 }

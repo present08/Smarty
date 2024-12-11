@@ -1,10 +1,13 @@
   .newProduct {
     display: flex;
+    width: 700px;
   }
   
   .addProductForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex: 1;
-    margin-top: 10px;
   }
   .addProductList {
     flex: 1;
@@ -20,7 +23,7 @@
     width: 250px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   
   .addProductItem > label {
@@ -66,23 +69,34 @@
   margin-right: 5px;     /* 체크박스와 텍스트 사이 간격 */
 }
 
-
-.addProductButton,
 .submitProductButton,
 .resetProductButton {
-  margin-top: 10px;
-  padding: 7px 10px;
+  width: 80px;
+  height: 30px;
   border: none;
   border-radius: 10px;
-  background-color: darkblue;
+  background-color: #195E8E;
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
+.addProductListButton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .addProductButton {
   background-color: #58A3BC;
+  width: 50px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 }
 .resetProductButton {
-  background-color: rgb(167, 16, 16);
+  background-color: rgb(161, 20, 20);
 }

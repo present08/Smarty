@@ -82,6 +82,14 @@
     border-top-left-radius: 10px;
 }
 
+.mainProductImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
 .mainProductText {
     width: 90%;
     height: 40%;
@@ -138,7 +146,6 @@
 .mainProductList_cont:hover .mainProductButton>button {
     display: block;
 }
-
 
 @media (max-width: 768px) {
     .mainProductList_body {

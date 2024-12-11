@@ -1,47 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/mainProductList.css';
-import { getProduct,getProductFiles } from '../../api/productApi';
-import { useNavigate, } from 'react-router-dom';
+import { getProduct, getProductFiles } from '../../api/productApi';
+import { useNavigate } from 'react-router-dom';
 
-const MainProductList = ({productList}) => {
-
+const MainProductList = ({ productList }) => {
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [visibleCount, setVisibleCount] = useState(8);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [productFiles, setProductFiles] = useState({}); // 상품 ID별 이미지 파일 데이터를 저장
+    const [productFiles, setProductFiles] = useState({});
 
     useEffect(() => {
         const fetchProducts = async () => {
             const data = await getProduct();
             setProducts(data);
+            console.log("Fetched products:", data);
         };
         fetchProducts();
     }, []);
 
     useEffect(() => {
         const fetchImages = async () => {
+            const effectiveProductList = productList || products; // productList가 없으면 products 사용
+            if (!effectiveProductList || effectiveProductList.length === 0) {
+                console.warn("Effective productList is empty or undefined:", effectiveProductList);
+                return;
+            }
+
             try {
                 const filesMap = {};
                 await Promise.all(
-                    productList.map(async (product) => {
-                        const files = await getProductFiles(product.product_id).catch(() => []);
-                        filesMap[product.product_id] = files.length > 0
-                            ? files.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
-                            : ['/no-image.png']; // 기본 이미지 설정
+                    effectiveProductList.map(async (product) => {
+                        try {
+                            const files = await getProductFiles(product.product_id);
+                            filesMap[product.product_id] = files.length > 0
+                                ? files.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
+                                : ['/no-image.png'];
+                        } catch (error) {
+                            console.error(`Error fetching files for product ${product.product_id}:`, error);
+                            filesMap[product.product_id] = ['/no-image.png'];
+                        }
                     })
                 );
                 setProductFiles(filesMap);
-                console.log('Updated productFiles:', filesMap); // 디버깅 로그
+                console.log("Updated productFiles:", filesMap);
             } catch (error) {
-                console.error('이미지 파일 조회 실패:', error.response?.data || error.message);
+                console.error("Error fetching images:", error);
             }
         };
 
-        if (productList.length > 0) {
-            fetchImages();
-        }
-    }, [productList]);
+        fetchImages();
+    }, [productList, products]);
 
     const handleProductClick = (i) => {
         navigate(`/product/detail/${i.product_id}`, { state: i });
@@ -69,12 +78,17 @@ const MainProductList = ({productList}) => {
                     <p>체육 시설에서 필요한 다양한 대여 물품을 한곳에서 만나보세요! 우리의 서비스로 편리하게 운동을 즐기고, 필요한 장비를 손쉽게 빌려가세요.</p>
                 </div>
                 <div className='mainProductList_body'>
-                    {products.slice(0, visibleCount).map((product, index, item) => (
-                        <div key={product.id || index} className='mainProductList_cont'>
+                    {(productList || products).slice(0, visibleCount).map((product) => (
+                        <div key={product.product_id} className='mainProductList_cont'>
                             <div className='mainProductImg'>
                                 <img
-                                    src={productFiles[item.product_id][0]} // 첫 번째 이미지 URL
-                                    alt={product.product_name} />
+                                    src={productFiles[product.product_id]?.[0] || '/no-image.png'}
+                                    alt={product.product_name}
+                                    onError={(e) => {
+                                        e.target.src = '/no-image.png';
+                                        e.target.onerror = null;
+                                    }}
+                                />
                             </div>
                             <div className='mainProductText'>
                                 <h4>{product.product_name}</h4>

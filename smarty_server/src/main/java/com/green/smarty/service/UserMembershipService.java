@@ -17,13 +17,13 @@ import java.util.List;
 public class UserMembershipService {
 
     @Autowired
-    UserMembershipMapper userMembershipMapper;
+     UserMembershipMapper userMembershipMapper;
 //    (영준)
     @Autowired
     private SendEmailService sendEmailService;
 
     // 결제 금액 합계를 반환하는 메서드
-    public float getPaymentDetailsByUserId(String userId) {
+    public float getTotalPaymentAmountByUserId(String userId) {
         float total = userMembershipMapper.getPaymentDetailsByUserId(userId);
         return total;
     }
@@ -37,24 +37,6 @@ public class UserMembershipService {
     public boolean saveMembership(MembershipVO membership) {
         return userMembershipMapper.insertMembership(membership) > 0;
     }
-
-//    public void updateMembershipLevel(String user_id, float amount) {
-//
-//        float totalAmount = userMembershipMapper.getPaymentDetailsByUserId(user_id);
-//
-//        String newLevel = "브론즈";
-//        if (totalAmount >= 1000) {
-//            newLevel = "다이아";
-//        } else if (totalAmount >= 800) {
-//            newLevel = "플레티넘";
-//        } else if (totalAmount >= 600) {
-//            newLevel = "골드";
-//        } else if (totalAmount >= 300) {
-//            newLevel = "실버";
-//        }
-//
-//        userMembershipMapper.updateMembershipLevel(user_id, newLevel);
-//    }
 
     public void updateMembershipLevel(String user_id) {
 

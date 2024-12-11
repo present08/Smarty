@@ -8,7 +8,7 @@
         FROM payment p
         LEFT JOIN reservation r ON p.reservation_id = r.reservation_id
         LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id
-        LEFT JOIN rental ren ON p.rental_id = ren.rental_id
+        LEFT JOIN rental ren ON p.user_id = ren.user_id
         WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})
         AND (
         (MONTH(CURRENT_DATE) BETWEEN 1 AND 6 AND p.payment_date BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-01-01') AND DATE_FORMAT(CURRENT_DATE, '%Y-06-30')) OR

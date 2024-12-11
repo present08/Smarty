@@ -19,7 +19,6 @@ public class JwtTokenProvider {
 
     // JWT 생성
     public String createToken(Map<String, Object> claims) {
-        System.out.println("토큰 생성 : " + claims);
         Date now = new Date();
         Date validity = new Date(now.getTime() + EXPIRATION_TIME);
 
@@ -50,7 +49,6 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            System.out.println("유효성 검증 : " + claims);
 
             // 반환할 데이터를 Map에 담아 반환
             Map<String, Object> claimMap = new HashMap<>();

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../css/productDetail.css'
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 
 const ProductDetail = ({ product }) => {
     const navigate = useNavigate()
@@ -38,7 +39,8 @@ const ProductDetail = ({ product }) => {
             quantity: quantity,
         }
         try {
-            await axios.post('http://localhost:8080/api/cart', cartItem)
+            // await axios.post('http://localhost:8080/api/cart', cartItem)
+            await axiosInstance.post('/user/cart', cartItem)
             alert("장바구니에 추가되었습니다")
             console.log(cartItem)
 

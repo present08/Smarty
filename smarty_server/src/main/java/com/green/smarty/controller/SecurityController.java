@@ -41,9 +41,7 @@ public class SecurityController {
     @GetMapping("/status")
     public ResponseEntity<Map<String, Object>> checkLoginStatus(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         String token = request.getHeader("Authorization");
-        System.out.println("status 토큰 확인 : " + token);
 
         // Authorization 헤더에서 "Bearer "를 제거하고 토큰만 추출
         if (token != null && token.startsWith("Bearer ")) {

@@ -77,6 +77,7 @@ const Login = () => {
             // localStorage 저장
             localStorage.setItem('jwtToken', response.token);
             localStorage.setItem('user', JSON.stringify(response.user.userVO));
+            localStorage.setItem('isLoggedIn', 'true');
 
             // 사용자 이름 환영 메시지
             alert(`${response.user.userVO.user_name}님 환영합니다!`);

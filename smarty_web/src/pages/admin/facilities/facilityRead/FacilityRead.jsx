@@ -6,6 +6,7 @@ import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
 import { Add } from '@mui/icons-material';
+import axiosInstance from "../../../../api/axiosInstance"
 
 const initFacility = {
     facility_name: '',
@@ -46,7 +47,7 @@ export default function FacilityRead() {
             setCurrentCourt(res)
         }).catch((error) => console.error("ERROR!", error))
     }, [currentFacility])
-
+    
     const courtPass = (court) => {
         setNewCourt(court)
         setCourtModal(false)
@@ -238,7 +239,7 @@ export default function FacilityRead() {
                             <div className="imageContainer">
                                 {currentFacility ? currentFacility.file_name.map((file, i) => (
                                     <div key={i}>
-                                        <img src={`${API_SERVER_HOST}/api/admin/facilities/images/s_${file}`} alt={`${i}`} />
+                                        <img src={`http://localhost:8080/api/admin/facilities/images/s_${file}`} />
                                     </div>)) : (<></>)
                                 }
                             </div>

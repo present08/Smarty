@@ -37,7 +37,11 @@ public class SecurityConfig {
                 registry.requestMatchers("/api/user/class/").permitAll();
                 registry.requestMatchers("/api/user/products/").permitAll();
                 registry.requestMatchers("/api/user/reservation/").permitAll();
+                registry.requestMatchers("/api/admin/facilities/images/**").permitAll();
+                registry.requestMatchers("/api/admin/products/images/**").permitAll();
+                registry.requestMatchers("/api/user/reservation/uploads/**").permitAll();
                 registry.requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER");
+                registry.requestMatchers("/api/auth/**").hasAnyRole("ADMIN", "USER");
                 registry.requestMatchers("/api/admin/**").hasRole("ADMIN");
                 registry.anyRequest().authenticated();});
         http.addFilterBefore(new JWTCheckFilter(jwtTokenProvider, userMapper), AnonymousAuthenticationFilter.class);

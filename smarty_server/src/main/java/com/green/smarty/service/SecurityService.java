@@ -175,11 +175,9 @@ public class SecurityService implements UserDetailsService {
     public Map<String, Object> checkLoginStatus(String token) throws Exception {
         // 토큰 유효성 검증
         Map<String, Object> claims = jwtTokenProvider.validateToken(token);
-        System.out.println("토큰 클레임 : " + claims);
 
         // 토큰에서 사용자 ID 추출
         String userId = jwtTokenProvider.getUserId(token);
-        System.out.println("토큰에서 추출된 사용자 ID : " + userId);
 
         // 사용자 정보 조회
         UserVO userVO = userMapper.getById(userId);

@@ -11,13 +11,14 @@ const MainProductList = () => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
-
         const fetchProducts = async () => {
             const data = await getProduct();
             setProducts(data);
         };
         fetchProducts();
     }, []);
+
+
 
     const handleProductClick = (i) => {
         navigate(`/product/detail/${i.product_id}`, { state: i });
@@ -48,7 +49,7 @@ const MainProductList = () => {
                     {products.slice(0, visibleCount).map((product, index) => (
                         <div key={product.id || index} className='mainProductList_cont'>
                             <div className='mainProductImg'>
-                                <img src={product.product_images} alt={product.product_name} />
+                                <img src={product.imageUrl} alt={product.product_name} />
                             </div>
                             <div className='mainProductText'>
                                 <h4>{product.product_name}</h4>

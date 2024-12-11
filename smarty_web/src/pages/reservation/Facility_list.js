@@ -18,7 +18,6 @@ const Facility_list = () => {
         if (facility_id.length < e.length) {
           setFacility_id(prev => [...prev, i]);
         }
-        console.log(i)
       });
     })
   }, [])
@@ -26,7 +25,6 @@ const Facility_list = () => {
 
   const handleClick = (i) => {
     navigate(`/facilityList/${i.facility_id}`, { state: i })
-    console.log("iiiiiii", i.facility_id)
   }
 
   return (

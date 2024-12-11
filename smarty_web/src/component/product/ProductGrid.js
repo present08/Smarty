@@ -15,7 +15,7 @@ const ProductGrid = ({ productList, selectedFacility }) => {
                     productList.map(async (product) => {
                         const files = await getProductFiles(product.product_id).catch(() => []);
                         filesMap[product.product_id] = files.length > 0
-                            ? files.map((file) => `http://localhost:8080/api/product/products/images/${file}`)
+                            ? files.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
                             : ['/no-image.png']; // 기본 이미지 설정
                     })
                 );

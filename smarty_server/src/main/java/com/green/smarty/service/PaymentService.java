@@ -1,7 +1,9 @@
 package com.green.smarty.service;
 
 import com.green.smarty.dto.PaymentDetailDTO;
+import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.mapper.*;
+import com.green.smarty.vo.CartVO;
 import com.green.smarty.vo.PaymentVO;
 import com.green.smarty.vo.RentalVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +47,13 @@ public class PaymentService {
     @Autowired
     private UserRentalMapper userRentalMapper;
 
+    public String createPayment(PaymentVO payment) {
+        paymentMapper.insertPayment(payment);
+
+        return payment.getPayment_id();
+    }
+
+
     public RentalVO insertRental(PaymentDetailDTO dto) {
         LocalDateTime date = LocalDateTime.now();
         List<RentalVO> rentalVO = publicMapper.getRentalAll();
@@ -67,7 +77,6 @@ public class PaymentService {
         String userName = userMapper.getUserNameById(user_id);
         String userEmail = userMapper.getUserEmailById(user_id);
         String productName = userProductMapper.getProductNameByProductId(product_id);
-
         if (userName == null || userEmail == null || productName == null) {
             System.err.println("유효하지 않은 데이터: userName=" + userName + ", userEmail=" + userEmail + ", productName=" + productName);
             throw new IllegalArgumentException("유효하지 않은 데이터입니다.");
@@ -85,7 +94,6 @@ public class PaymentService {
 
         userRentalService.insertRental(vo, dto.getCount());
         System.out.println("insert rental : "+vo);
-
 
         return vo;
     }

@@ -10,23 +10,23 @@
 
     <select id="getUserCart" parameterType="String" resultType="com.green.smarty.dto.UserCartListDTO">
         SELECT
-            cart.cart_id,
-            cart.user_id,
-            cart.product_id,
-            cart.quantity,
-            cart.created_at,
-            cart.updated_at,
+            c.cart_id,
+            c.user_id,
+            c.product_id,
+            c.quantity,
+            c.created_at,
+            c.updated_at,
             p.product_name,
             p.price,
             pa.file_name
         FROM
-            cart
+            cart c
         INNER JOIN
-            product p on cart.product_id = p.product_id
+            product p on c.product_id = p.product_id
         LEFT JOIN
             product_attach pa ON p.product_id = pa.product_id
         WHERE
-            user_id = #{user_id}
+            c.user_id = #{user_id}
     </select>
 
     <update id="updateCart" parameterType="com.green.smarty.vo.CartVO">

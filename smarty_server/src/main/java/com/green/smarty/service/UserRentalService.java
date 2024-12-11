@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,36 @@ public class UserRentalService {
     private UserProductMapper userProductMapper;
     @Autowired
     private PublicMapper publicMapper;
-
-    // 대여
+    //대여
+    //수정 전
     public int insertRental(RentalVO vo, int count) {
+        System.out.println("RentalVO 데이터 확인 : " + vo);
+        System.out.println("Count 데이터 확인 : " + count);
         log.info("대여 등록 시작: {}", vo);
+
+        if (vo.getRental_id() == null || vo.getRental_id().isEmpty()) {
+            LocalDateTime date = LocalDateTime.now(); // 현재 날짜 가져오기
+            List<RentalVO> rentalVOList = publicMapper.getRentalAll(); // 모든 렌탈 데이터 조회
+            List<RentalVO> rentalList = new ArrayList<>();
+
+            for (RentalVO item : rentalVOList) {
+                String itemDate = item.getRental_id().substring(2, 10); // rental_id의 날짜 부분 추출
+                System.out.println(itemDate);
+                // 현재 날짜와 일치하는 rental_id를 리스트에 추가
+                if (itemDate.equals("" + date.getYear() + date.getMonthValue() +
+                        (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
+                    rentalList.add(item);
+                }
+            }
+
+            // rental_id 생성
+            String rentalId = "R_" + date.getYear() + date.getMonthValue() +
+                    (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()) +
+                    String.format("%03d", rentalList.size() + 1);
+            vo.setRental_id(rentalId);
+            System.out.println("rental ID : " + rentalId);
+            log.info("rental_id 생성 완료: {}", rentalId);
+        }
 
         // 1. 사용자 존재 여부 확인
         UserVO user = userMapper.getById(vo.getUser_id());
@@ -74,6 +101,20 @@ public class UserRentalService {
         insertRentalLog(vo.getRental_id(), vo.getProduct_id(), count);
 
         return rentalId;
+    }
+
+//    public void insertRentals(List<RentalVO> rentals) {
+//        for (RentalVO rental : rentals) {
+//            System.out.println("insertRentals 내부: RentalVO 데이터 확인 - " + rental); // 추가 확인
+//            insertRental(rental, rental.getCount());
+//        }
+//    }
+
+    public void insertRentals(List<RentalVO> rentals) {
+        for (RentalVO rental : rentals) {
+            userRentalMapper.insertRental(rental);
+            System.out.println("rentalService의 insertRentals 데이터 확인 : "+rental);
+        }
     }
 
     // 새로운 메서드: 로그 기록
@@ -238,7 +279,9 @@ public class UserRentalService {
         return userRentalMapper.getUserRentalListData(user_id);
     }
 
-    public String getEmailByUserId(String user_id) {
+
+//    (영준) user_id가 아니라 이메일을 가져오기 위한 코드
+    public String getEmailByUserId(String user_id){
         return userRentalMapper.getEmailByUserId(user_id);
     }
 

@@ -82,7 +82,7 @@ export default function Chart({ title, grid }) {
       <h3 className="chartTitle">{title}</h3>
       <ResponsiveContainer width="100%" aspect={4 / 1}>
         <LineChart data={data}>
-          <XAxis dataKey="reservation_date" stroke="#8884d8" />
+          <XAxis dataKey="reservation_date" stroke="#8884d8"  interval="preserveStartEnd"/>
           <Line type="monotone" dataKey="total_count" stroke="#82ca9d" />
           <Tooltip content={<CustomTooltip />} />
           {grid && <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5" />}

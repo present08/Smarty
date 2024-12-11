@@ -22,6 +22,7 @@ public class UserService {
     @Autowired
     private QRCodeService qrCodeService;
 
+
     // 회원가입
     public boolean signup(UserVO user) {
         try {
@@ -37,8 +38,6 @@ public class UserService {
                 //QR 코드 생성
                 byte[] qrCode = qrCodeService.generateQRCode(user.getEmail());  // 사용자 이메일을 QR 코드 데이터로 사용
                 System.out.println("코드생성 완료 : "+qrCode);
-
-
 
                 //QR 코드를 UserVO 객체에 저장
                 user.setQrCode(qrCode);
@@ -62,6 +61,7 @@ public class UserService {
         return userVO.getQrCode();
     }
 
+
     // 로그인
     public UserVO login(String user_id, String password) {
         UserVO user = userMapper.getById(user_id);
@@ -75,8 +75,9 @@ public class UserService {
         }
     }
 
+    // 로그인 날짜 업데이트 호출
     public void updateLoginDate(String userId) {
-        userMapper.updateLoginDate(userId); // 로그인 날짜 업데이트 호출
+        userMapper.updateLoginDate(userId);
     }
 
     // 아이디 찾기
@@ -140,21 +141,6 @@ public class UserService {
         return result > 0 ? "회원 정보 수정 성공" : "회원 정보 수정 실패";
     }
 
-    // 레벨 구분하기
-    public void updateUserLevel (UserVO userVO, BigDecimal totalAmount) {
-        if (totalAmount.compareTo(new BigDecimal("1500000")) >= 0) {
-            userVO.setLevel("Diamond");
-        } else if (totalAmount.compareTo(new BigDecimal("1000000")) >= 0) {
-            userVO.setLevel("Platinum");
-        }else if (totalAmount.compareTo(new BigDecimal("500000")) >= 0) {
-            userVO.setLevel("Gold");
-        }else if (totalAmount.compareTo(new BigDecimal("300000")) >= 0) {
-            userVO.setLevel("Silver");
-        }else {
-            userVO.setLevel("일반");
-        }
-    }
-
     // 등록한 클래스 정보 가져오기
     public List<UserClassApplicationDTO> getClassUserApplication (String user_id) {
         List<UserClassApplicationDTO> result = userMapper.getClassUserApplication(user_id);
@@ -167,4 +153,5 @@ public class UserService {
         List<ProductRentalMyPageUserDTO> result = userMapper.getUserMyPageRentalListData(user_id);
         return result;
     }
+
 }

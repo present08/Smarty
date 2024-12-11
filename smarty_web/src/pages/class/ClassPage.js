@@ -86,7 +86,7 @@ const ClassPage = (props) => {
                     </div>
                     <p style={{ display: 'block', width: '100%', textAlign: 'center' }}>* 맴버십 등급에 맞는 할인된 금액으로 결제 됩니다.</p>
                 </div>
-                <button onClick={enrollClass} className='enrollBtn'>등록하기</button>
+                <button onClick={enrollClass} className='class_page_enrollBtn'>등록하기</button>
             </div>
         </div>
     )

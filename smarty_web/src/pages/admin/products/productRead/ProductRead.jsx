@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
     getOneProduct,
     getProductFiles,
@@ -16,6 +16,8 @@ export default function ProductRead() {
     const [statusLogs, setStatusLogs] = useState([]);
     const [files, setFiles] = useState([]);
     const [rentals, setRentals] = useState([]);
+    const facility_id = productData?.facility_id; // 상품 데이터에서 facility_id 가져오기
+
 
     useEffect(() => {
         fetchProductDetails();
@@ -115,6 +117,9 @@ export default function ProductRead() {
         <div className="productRead">
             <div className="productTitleContainer">
                 <div className="productTitle">상품 상세 정보</div>
+                <Link to={`/admin/products/${facility_id}`} className="backButton">
+                    전체 물품 리스트로 돌아가기
+                </Link>
             </div>
 
             <div className="productTop">

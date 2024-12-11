@@ -27,7 +27,7 @@ const RentalList = () => {
         localStorage.setItem('rentalCounts', JSON.stringify(rentalCounts));
     }, [rentalCounts]);
 
-    // console.log("여기를 확인 렌탈 데이터: ", rentals)
+    console.log("여기를 확인 렌탈 데이터: ", rentals)
 
     // 로그인한 사용자의 대여 목록 조회
     const getUserRentals = async () => {
@@ -40,7 +40,7 @@ const RentalList = () => {
             }
 
             const user = JSON.parse(userStr);
-            // console.log("API 호출전 : ", user.user_id)
+            console.log("API 호출전 : ", user.user_id)
             const rentals = await getProductRentalUser(user.user_id)
 
             // 대여 ㅅ량 초기화
@@ -48,7 +48,7 @@ const RentalList = () => {
                 acc[rental.rental_id] = rental.count;
                 return acc;
             }, {});
-            // console.log("rentalCounts 초기화 데이터: ", counts)
+            console.log("rentalCounts 초기화 데이터: ", counts)
             setRentalCounts(counts);
 
             // 대여일 기준으로 정렬 (최신순)
@@ -101,7 +101,7 @@ const RentalList = () => {
         try {
             // count를 params로 전달
             const response = await axios.put(
-                `http://localhost:8080/api/rentals/${rental_id}/return`,
+                `http://localhost:8080/api/user/rentals/${rental_id}/return`,
                 null,
                 { params: { count: rentalCount } } // count를 명시적으로 전달
             );
@@ -110,12 +110,12 @@ const RentalList = () => {
             
             if (response.status === 200) {
                 alert("반납이 완료되었습니다.");
-                getUserRentals(); // 반납 후 목록 새로고침
+                await getUserRentals(); // 반납 후 목록 새로고침
             }
         } 
         catch (error) {
             console.error("반납 처리 실패:", error);
-            alert(error.response?.data || "반납 처리에 실패했습니다.");
+            alert(error.response?.data?.message || "반납 처리에 실패했습니다.");
         }
     };
 

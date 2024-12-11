@@ -11,7 +11,7 @@ const init = {
     amount: 0,
     user_id: "",
     product_id: "",
-    count: 0
+    count: 0,
 }
 
 const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, rentalInfo, user_id }) => {
@@ -26,7 +26,7 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
             setReservationList(e.reservationList)
             setEnrollmentList(e.enrollmentList)
         })
-    }, [])
+    }, [user_id])
 
     useEffect(() => {
         console.log("PaymentModal에서 전달받은 rentalInfo: ", rentalInfo);
@@ -48,6 +48,7 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
             pay_method: 'card',
             name: rentalInfo[0]?.product_name || "상품명",
             amount: postData.amount,
+            buyer_name: postData.user_id,
             merchant_uid: `order_${new Date().getTime()}`,
         };
 

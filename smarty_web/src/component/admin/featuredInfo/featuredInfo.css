@@ -2,41 +2,46 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    gap: 20px; /* 항목 간 간격 추가 */
 }
 
 .featuredItem {
     flex: 1;
-    margin: 0px 20px;
-    padding: 30px;
+    margin: 0px 10px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
     -webkit-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
     -moz-box-shadow: 2px 2px 5px -1px rgba(185,185,185,0.75);
+    text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 .featuredTitle {
-    font-style: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px; /* 타이틀 아래 여백 추가 */
 }
 
 .featuredMoneyContainer {
-    margin: 10px 0px;
+    margin: 15px 0px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    justify-content: center; /* 금액과 비율을 가운데 정렬 */
+    gap: 10px; /* 금액과 비율 간 간격 추가 */
 }
 
 .featuredMoney {
-    font-size: 30px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .featuredMoneyRate {
-    display: flex;
     align-items: center;
-    margin-left: 20px;
+    font-size: 14px; /* 비율 크기 축소 */
 }
 
 .featuredIcon {
-    font-style: 14px;
+    font-size: 14px;
     margin-left: 5px;
     color: green;
 }
@@ -46,6 +51,7 @@
 }
 
 .featuredSub {
-    font-size: 15px;
+    font-size: 14px;
     color: gray;
+    margin-top: 5px; /* 하단 설명과 금액 컨테이너 간 간격 */
 }

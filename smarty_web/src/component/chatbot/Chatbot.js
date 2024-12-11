@@ -45,89 +45,89 @@ function ChatBot() {
         messagesRef.current = messages;
     }, [messages]);
 
-    useEffect(() => {
-        const firstMsg =
-            <div>
-                안녕하세요. Smarty Chat-bot입니다.<br />
-                다음과 같은 기능을 제공하고 있으니, 편하게 이용부탁드려요😁<br />
-                사용예시 - &#91;시설명&#93;번호 알려줘, &#91;시설명&#93;위치 알려줘<br />
-                사용예시2 - &#91;시설/강의명&#91; 강의정보 알려줘, 주차정보 알려줘<br />
-                답변 받고 싶은 질문을 입력해주시면 빠르게 업데이트 하겠습니다.<br /><br />
-                <br /><br />
-                <span style={{ fontSize: "12px" }}>※ 회원 로그인을 하지않을 시 채팅 내역이 저장되지 않습니다. ※</span>
-                <button style={{ padding: "15px 25px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px" }} onClick={() => handleSendMessage({ input: "시설", botType: "QUICK" })}>시설</button>
-                <button style={{ padding: "15px 25px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px", marginLeft: "10px" }} onClick={() => handleSendMessage({ input: "예약", botType: "QUICK" })}>예약</button>
-            </div>
-        setMessages((prevMessages) => [...prevMessages, { text: firstMsg, type: 'bot' }]);
+    // useEffect(() => {
+    //     const firstMsg =
+    //         <div>
+    //             안녕하세요. Smarty Chat-bot입니다.<br />
+    //             다음과 같은 기능을 제공하고 있으니, 편하게 이용부탁드려요😁<br />
+    //             사용예시 - &#91;시설명&#93;번호 알려줘, &#91;시설명&#93;위치 알려줘<br />
+    //             사용예시2 - &#91;시설/강의명&#91; 강의정보 알려줘, 주차정보 알려줘<br />
+    //             답변 받고 싶은 질문을 입력해주시면 빠르게 업데이트 하겠습니다.<br /><br />
+    //             <br /><br />
+    //             <span style={{ fontSize: "12px" }}>※ 회원 로그인을 하지않을 시 채팅 내역이 저장되지 않습니다. ※</span>
+    //             <button style={{ padding: "15px 25px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px" }} onClick={() => handleSendMessage({ input: "시설", botType: "QUICK" })}>시설</button>
+    //             <button style={{ padding: "15px 25px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px", marginLeft: "10px" }} onClick={() => handleSendMessage({ input: "예약", botType: "QUICK" })}>예약</button>
+    //         </div>
+    //     setMessages((prevMessages) => [...prevMessages, { text: firstMsg, type: 'bot' }]);
 
-        // NORMAL TYPE
-        socket.on('receive_normal', (data) => {
-            // json 문자열을 받아오기 때문에 json객체로 변환 (parse)
-            const messageData = JSON.parse(data.response);
-            // replaceAll 대신 정규식으로 사용 replace(/'이자리에 단어'/g, '변경할 단어')
-            // 이때 g는 발생한 모든단어, i는 대소문자 구분x, m은 여러줄 검색
-            const msg = messageData.Answer.replace(/\\n/g, "\n")
-            setMessages((prevMessages) => [...prevMessages, { text: msg, type: 'bot' }]);
-            setLoading(false);
-        });
+    //     // NORMAL TYPE
+    //     socket.on('receive_normal', (data) => {
+    //         // json 문자열을 받아오기 때문에 json객체로 변환 (parse)
+    //         const messageData = JSON.parse(data.response);
+    //         // replaceAll 대신 정규식으로 사용 replace(/'이자리에 단어'/g, '변경할 단어')
+    //         // 이때 g는 발생한 모든단어, i는 대소문자 구분x, m은 여러줄 검색
+    //         const msg = messageData.Answer.replace(/\\n/g, "\n")
+    //         setMessages((prevMessages) => [...prevMessages, { text: msg, type: 'bot' }]);
+    //         setLoading(false);
+    //     });
 
-        // QUICK TYPE
-        socket.on('receive_quick', (data) => {
-            const messageData = JSON.parse(data.response);
-            console.log(messageData)
+    //     // QUICK TYPE
+    //     socket.on('receive_quick', (data) => {
+    //         const messageData = JSON.parse(data.response);
+    //         console.log(messageData)
 
-            // 첫 분류
-            const quickMsg = idx => {
-                const question = messageData.question[idx];
-                const message = (
-                    <div>
-                        {question.answer}
-                        <br /><br />
-                        {question.items.map((item, idx) => (
-                            <button style={{ padding: "15px 15px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px", marginLeft: "10px" }} key={idx} onClick={() => quickTitle(item)}>{item.title}</button>
-                        ))}
-                    </div>
-                );
-                setMessages((prevMessages) => [...prevMessages, { text: message, type: 'SmartyBot' }]);
-                setLoading(false);
-            }
+    //         // 첫 분류
+    //         const quickMsg = idx => {
+    //             const question = messageData.question[idx];
+    //             const message = (
+    //                 <div>
+    //                     {question.answer}
+    //                     <br /><br />
+    //                     {question.items.map((item, idx) => (
+    //                         <button style={{ padding: "15px 15px", textAlign: 'center', color: "white", backgroundColor: '#123456', border: 0, borderRadius: "10px", marginLeft: "10px" }} key={idx} onClick={() => quickTitle(item)}>{item.title}</button>
+    //                     ))}
+    //                 </div>
+    //             );
+    //             setMessages((prevMessages) => [...prevMessages, { text: message, type: 'SmartyBot' }]);
+    //             setLoading(false);
+    //         }
 
-            // 두번쨰 분류
-            const quickTitle = (item) => {
-                setMessages((prevMessages) => [...prevMessages, { text: item.title, type: 'user' }]);
-                const message =
-                    <div><img src={item.images} style={{ width: "350px" }} /><br /><br />{item.content}</div>
+    //         // 두번쨰 분류
+    //         const quickTitle = (item) => {
+    //             setMessages((prevMessages) => [...prevMessages, { text: item.title, type: 'user' }]);
+    //             const message =
+    //                 <div><img src={item.images} style={{ width: "350px" }} /><br /><br />{item.content}</div>
 
-                setMessages((prevMessages) => [...prevMessages, { text: message, type: 'SmartyBot' }]);
-            }
+    //             setMessages((prevMessages) => [...prevMessages, { text: message, type: 'SmartyBot' }]);
+    //         }
 
-            const questionMap = {
-                [messageData.question[0].text]: () => quickMsg(0),
-                [messageData.question[1].text]: () => quickMsg(1),
-            };
+    //         const questionMap = {
+    //             [messageData.question[0].text]: () => quickMsg(0),
+    //             [messageData.question[1].text]: () => quickMsg(1),
+    //         };
 
-            const action = questionMap[data.Query];
-            if (action) {
-                action();
-            }
-        });
-        return () => {
-            let user_id;
-            try {
-                user_id = JSON.parse(localStorage.getItem("user").user_id);
-            } catch (error) {
-                user_id = null;
-            }
-            const saveData = async () => {
-                await axios.post("http://localhost:5000/save", { messages: messagesRef.current, timestamp: new Date(), user_id });
-            };
-            if (user_id != null) {
-                saveData();
-            }
-            socket.off('receive_normal');
-            socket.off('receive_quick');
-        };
-    }, []);
+    //         const action = questionMap[data.Query];
+    //         if (action) {
+    //             action();
+    //         }
+    //     });
+    //     return () => {
+    //         let user_id;
+    //         try {
+    //             user_id = JSON.parse(localStorage.getItem("user").user_id);
+    //         } catch (error) {
+    //             user_id = null;
+    //         }
+    //         const saveData = async () => {
+    //             await axios.post("http://localhost:5000/save", { messages: messagesRef.current, timestamp: new Date(), user_id });
+    //         };
+    //         if (user_id != null) {
+    //             saveData();
+    //         }
+    //         socket.off('receive_normal');
+    //         socket.off('receive_quick');
+    //     };
+    // }, []);
 
     const handleSendMessage = ({ input, botType }) => {
         if (input) {

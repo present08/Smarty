@@ -1,7 +1,7 @@
 /* 최상위 클래스 기준으로 범위 제한 */
 .productRead .productTitleContainer {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between; /* 타이틀과 버튼 사이 간격을 최대로 */
     align-items: center;
     margin-bottom: 20px;
 }
@@ -11,6 +11,20 @@
     font-size: 28px;
     font-weight: 300;
     color: #011B2F;
+}
+
+.productRead .backButton {
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.productRead .backButton:hover {
+    background-color: #0056b3;
 }
 
 .productRead .productTop {

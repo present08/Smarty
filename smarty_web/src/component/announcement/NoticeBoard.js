@@ -39,7 +39,7 @@ function Announcement() {
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = boards.slice(indexOfFirstPost, indexOfLastPost);
 
-    // 전체 페이지 수 계산
+    // 전체 페이지 수 계산 
     const pageNumbers = Math.ceil(boards.length / postsPerPage);
 
     // 페이지 변경 핸들러
@@ -73,42 +73,30 @@ function Announcement() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const user = localStorage.getItem('user');
-        const userId = JSON.parse(user).userId;
-
-        if (!userId) {
-            try {
-                const sessionCheck = await noticeApi.checkSession();
-                if (sessionCheck.userId) {
-                    localStorage.setItem('userId', sessionCheck.userId);
-                } else {
-                    alert('로그인이 필요한 서비스입니다.');
-                    return;
-                }
-            } catch (error) {
-                console.error('세션 확인 실패:', error);
+        try {
+            // 세션 체크
+            const sessionResponse = await noticeApi.checkSession();
+            if (!sessionResponse || !sessionResponse.user_id) {
                 alert('로그인이 필요한 서비스입니다.');
                 return;
             }
-        }
 
-        if (!announcements.title.trim() || !announcements.content.trim() || !announcements.content_type) {
-            alert('제목, 내용, 카테고리를 모두 입력해주세요.');
-            return;
-        }
+            if (!announcements.title.trim() || !announcements.content.trim() || !announcements.content_type) {
+                alert('제목, 내용, 카테고리를 모두 입력해주세요.');
+                return;
+            }
 
-        const newNoticeItem = {
-            title: announcements.title.trim(),
-            content: announcements.content.trim(),
-            content_type: announcements.content_type,
-            user_id: userId,
-            view_count: 0,
-            good_btn: 0,
-            bad_btn: 0,
-            is_deleted: 0
-        };
+            const newNoticeItem = {
+                title: announcements.title.trim(),
+                content: announcements.content.trim(),
+                content_type: announcements.content_type,
+                user_id: sessionResponse.user_id,  // 세션에서 받아온 user_id 사용
+                view_count: 0,
+                good_btn: 0,
+                bad_btn: 0,
+                is_deleted: 0
+            };
 
-        try {
             const response = await noticeApi.createNotice(newNoticeItem);
             if (response >= 0) {
                 const updatedBoards = await noticeApi.getNoticeList();

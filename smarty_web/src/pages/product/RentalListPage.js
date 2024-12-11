@@ -7,10 +7,8 @@ import Footer from '../../component/Footer'
 const RentalListPage = () => {
   return (
     <div>
-      <div>
         <MainNav />
         <Wrapper />
-      </div>
       <div>
         <RentalList />
       </div>

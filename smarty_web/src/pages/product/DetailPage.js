@@ -32,19 +32,6 @@ const DetailPage = () => {
         fetchProductDetail();
     }, [product_id]);
 
-    const handleDelete = async () => {
-        if (window.confirm('정말 삭제하시겠습니까?')) {
-            try {
-                await deleteProduct(product_id)
-                alert('삭제되었습니다.');
-                navigate('/product');
-            } catch (error) {
-                setError('삭제에 실패했습니다.');
-                console.error('Delete Error:', error);
-            }
-        }
-    };
-
     const handleBack = () => {
         // 이전 페이지의 state가 있으면 해당 state와 함께 이동
         if (location.state?.from) {
@@ -67,12 +54,7 @@ const DetailPage = () => {
             <Wrapper />
             <ProductDetail product={product} />
             <div className="mt-8 flex gap-4 justify-end max-w-4xl mx-auto px-4">
-                <button
-                    onClick={handleBack}
-                    className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-                >
-                    목록으로
-                </button>
+                
             </div>
             <Footer />
         </div>

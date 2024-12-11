@@ -103,7 +103,7 @@ public class PaymentController {
                     .amount(paymentDTO.getAmount()) // 결제 금액
                     .reservation_id(paymentDTO.getReservation_id())
                     .enrollment_id(paymentDTO.getEnrollment_id())
-                    .rental_id(paymentDTO.getRental_id()) // Rental ID 사용
+                    .user_id(paymentDTO.getUser_id()) // Rental ID 사용
                     .payment_date(date) // 현재 날짜와 시간
                     .payment_status(true) // 결제 성공 상태
                     .build();

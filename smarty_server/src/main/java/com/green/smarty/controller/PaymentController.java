@@ -154,6 +154,9 @@ public class PaymentController {
 //        System.out.println(rentalID);
 //
 //        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
+// 혜수
+    // 멤버십 업데이트: 총 결제 금액 업데이트
+//        userMembershipService.updateTotalPaymentAmount(dto.getUser_id());
 //        // 멤버십 업데이트
 //        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
 //

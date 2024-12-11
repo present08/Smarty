@@ -27,8 +27,6 @@ const CartPage = () => {
         }
     }, [user_id]);
 
-
-
     const loadCartItems = async () => {
         try {
             const response = await cartApi.getCartItems(user_id);
@@ -88,41 +86,6 @@ const CartPage = () => {
         setIsPaymentModal(true);
     };
 
-    // 결제 완료 처리
-    // const handlePaymentComplete = (paymentData) => {
-    //     console.log("payment 데이터 : ", paymentData)
-    //     console.log("cartItems 데이터 : ", cartItems)
-
-    //     console.log("전송 데이터:", JSON.stringify(cartItems));
-
-        
-    //     try {
-    //         setIsPaymentModal(false); // 모달 닫기
-    //         cartRental(cartItems).then(e => {
-    //             rentalPayment(paymentData).then(paymentId => {
-    //                 navigate("/payment/success", {
-    //                     state: {
-    //                         paymentId: paymentId,
-    //                         items: cartItems.map((item) => ({
-    //                             product_name: item.product_name,
-    //                             count: item.quantity,
-    //                             price: item.price,
-    //                         })),
-    //                         totalAmount: totalPrice,
-    //                     },
-    //                 });
-    //             })
-    //         })
-
-    //         // 결제 성공 시 페이지로 이동하면서 데이터 전달
-
-    //         handleClearCart(); // 장바구니 초기화
-    //     } catch (error) {
-    //         console.error("결제 실패: ", error);
-    //         alert("결제 중 문제가 발생했습니다.");
-    //     }
-    // };
-
     const handlePaymentComplete = async (paymentData) => {
         console.log("paymentData 데이터 : ", paymentData)
         console.log("paymentData 데이터 전송 확인 : ", paymentData)
@@ -134,11 +97,13 @@ const CartPage = () => {
             // Step 1: 장바구니 항목을 Rental 테이블에 삽입
             const rentalResponse = await cartRental(cartItems);
             console.log("렌탈 완료 응답 데이터: ", rentalResponse);
+            console.log("렌탈 완료 응답 데이터: ", rentalResponse.data);
             
 
             // Step 2: Payment 테이블에 데이터 삽입
             const paymentResponse = await rentalPayment(paymentData);
             console.log("결제 완료 응답 데이터: ", paymentResponse);
+            console.log("결제 완료 응답 데이터: ", paymentResponse.data);
 
             // Step 3: 결제 성공 시, 장바구니 초기화 및 결제 성공 페이지로 이동
             handleClearCart(); // 장바구니 초기화

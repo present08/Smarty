@@ -1,4 +1,4 @@
-import { Language, Mail, NotificationsNone, Settings } from '@mui/icons-material';
+import { Mail, NotificationsNone } from '@mui/icons-material';
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { permissionWait } from "../../../api/admin/statusApi";
@@ -11,7 +11,7 @@ export default function Topbar() {
         permissionWait().then(e => {
             e.map(item => {
                 if (item.enrollment_status == "승인대기") {
-                    setNewData(e)
+                    setNewData(prev => [...prev, item])
                 }
             })
         })

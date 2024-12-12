@@ -9,9 +9,8 @@ import BackToTopButton from '../../component/BackToTopButton';
 
 const Facility_list = () => {
 
-  const navigate = useNavigate();
   const [facility_id, setFacility_id] = useState([])
-
+  
   useEffect(() => {
     getfacilityId().then(e => {
       e.map(i => {
@@ -22,7 +21,8 @@ const Facility_list = () => {
     })
   }, [])
 
-
+  
+  const navigate = useNavigate();
   const handleClick = (i) => {
     navigate(`/facilityList/${i.facility_id}`, { state: i })
   }

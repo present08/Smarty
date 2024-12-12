@@ -99,13 +99,12 @@ public class UserReservationService {
 
             if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i))
                 timeMap.put("disabled", 1);
-            else
-                timeMap.put("disabled", 0);
+            else timeMap.put("disabled", 0);
+
             timeBtn.add(timeMap);
-            if (now.compareTo(nowStart) == 0)
-                prevTime = cnt;
-            if ((i + 1) % default_time == 0)
-                cnt++;
+
+            if (now.compareTo(nowStart) == 0) prevTime = cnt;
+            if ((i + 1) % default_time == 0) cnt++;
         }
         // 현재시간 이전 Btn disabled
         if (now.toLocalDate().compareTo(LocalDate.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),

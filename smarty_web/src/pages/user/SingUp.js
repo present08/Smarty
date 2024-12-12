@@ -19,6 +19,7 @@ const SignUp = () => {
     const [selectEmail, setSelectEmail] = useState('');
     const navigate = useNavigate();
 
+    
     // 이메일 유효성 검사
     const isEmailValid = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

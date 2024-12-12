@@ -5,5 +5,4 @@
         INSERT INTO notification (user_id, message, send_date, status, response_detail, user_name, message_type)
         VALUES (#{user_id}, #{message}, NOW(), #{status}, #{response_detail}, #{user_name}, #{message_type})
     </insert>
-
 </mapper>

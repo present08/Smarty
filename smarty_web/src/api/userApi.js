@@ -43,7 +43,7 @@ export const getReservationInfo = async (user_id) => {
     return response.data;
 }
 
-// 수강신청 예약 정보 데이터 가져오기
+// 수강신청 예약 정보 데이터 가져오기 (쿼리문 없음)
 export const getUserClassApplication = async (user_id) => {
     // const response = await axios.get(`${host}/classApplication`, { params: { user_id } });
     const response = await axiosInstance.get(`${host}/classApplication`, { params: { user_id } });

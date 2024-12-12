@@ -63,4 +63,4 @@ const Information = ({props}) => {
   )
 }
 
-export default Information
+export default Information;

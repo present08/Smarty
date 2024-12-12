@@ -18,7 +18,7 @@ const ClassPage = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(classData)
+        console.log("31321",classData)
         setEnrollData({ user_id: user.user_id, class_id: classData.class_id });
         MembershipUser(user.user_id).then(e => {
             setMembership(e)
@@ -30,7 +30,6 @@ const ClassPage = (props) => {
                 case "다이아": setDPrice(Math.floor((classData.price - (classData.price * 0.1)) / 10) * 10); break;
             }
         })
-        console.log(membership)
     }, [])
 
     const enrollClass = () => {
@@ -41,7 +40,7 @@ const ClassPage = (props) => {
                 alert(e)
             } else {
                 alert("수강신청이 완료되었습니다. \n수강번호 : " + e)
-                navigate(`/enrollment/${classData.class_id}`, { state: { classData, user, e } })
+                navigate(`/enrollment/${classData.class_id}`, { state: { classData, Dprice, user, e } })
             }
         })
     }
@@ -87,7 +86,7 @@ const ClassPage = (props) => {
                     </div>
                     <p style={{ display: 'block', width: '100%', textAlign: 'center' }}>* 맴버십 등급에 맞는 할인된 금액으로 결제 됩니다.</p>
                 </div>
-                <button onClick={enrollClass} className='enrollBtn'>등록하기</button>
+                <button onClick={enrollClass} className='class_page_enrollBtn'>등록하기</button>
             </div>
         </div>
     )

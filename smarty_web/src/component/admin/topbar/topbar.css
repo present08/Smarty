@@ -59,3 +59,9 @@
     width: 35px !important;
     height: 35px !important;
 }
+
+.mailsend {
+    width: 30px !important;
+    height: 30px !important;
+    cursor: pointer;
+}

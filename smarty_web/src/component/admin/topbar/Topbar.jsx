@@ -1,5 +1,6 @@
 import "./topbar.css";
 import { NotificationsNone, Logout } from '@mui/icons-material';
+import { Language, Mail, NotificationsNone, Settings } from '@mui/icons-material';
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { permissionWait } from "../../../api/admin/statusApi";
@@ -53,6 +54,9 @@ export default function Topbar() {
         navigate("/");
     }
     //---------------------------------------------------------------------------------------//
+    const movetoMailPage = () => {
+        navigate("/admin/mail")
+    }
 
     return (
         <div className='topbar'>
@@ -67,6 +71,10 @@ export default function Topbar() {
                     <div className="topbarIconContainer" onClick={movetoPermission}>
                         <NotificationsNone className="dingdong" />
                         {newData.length == 0 ? <></> : <span className="topIconBadge">{newData.length}</span>}
+                    </div>
+                    {/*  (영준추가) 메일 아이콘 */}
+                    <div className="mailsend" onClick={movetoMailPage}>
+                        <Mail className="mailsend" />
                     </div>
                     <div className="topbarIconContainer">
                         <Logout className="dingdong" onClick={handleLogout} />                 

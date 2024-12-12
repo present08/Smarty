@@ -88,14 +88,12 @@
         INSERT INTO product_status_log (
             rental_id,
             status_id,
-<!--            product_id,-->
             changed_status,
             change_quantity,
             created_at
         ) VALUES (
             #{rental_id},
             #{status_id},
-<!--            #{product_id},-->
             #{changed_status},
             #{change_quantity},
         CURRENT_TIMESTAMP

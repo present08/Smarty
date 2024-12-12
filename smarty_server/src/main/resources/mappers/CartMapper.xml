@@ -29,7 +29,7 @@
             c.user_id = #{user_id}
     </select>
 
-    <update id="updateCart" parameterType="com.green.smarty.vo.CartVO">
+    <update id="updateCartByUserAndProduct" parameterType="com.green.smarty.vo.CartVO">
         UPDATE
             cart
         SET

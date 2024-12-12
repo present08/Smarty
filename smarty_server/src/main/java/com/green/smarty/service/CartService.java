@@ -36,7 +36,7 @@ public class CartService {
         cartMapper.addCart(cartVO);
     }
 
-    public void updateCart(CartVO cartVO) {
+    public void updateCartByUserAndProduct(CartVO cartVO) {
         cartMapper.updateCartByUserAndProduct(cartVO);
     }
 

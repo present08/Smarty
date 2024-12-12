@@ -111,7 +111,15 @@ public class PaymentController {
             // Payment 테이블에 데이터 삽입
             paymentMapper.insertPayment(payment);
 
+            // 혜수
+            // 멤버십 업데이트: 금액 (혜수코드)
+            userMembershipService.updateTotalPaymentAmount(paymentDTO.getUser_id());
+            // 멤버십 업데이트: 레벨 (혜수코드)
+            userMembershipService.updateMembershipLevel(paymentDTO.getUser_id());
+
             return ResponseEntity.ok(paymentId); // 생성된 payment_id 반환
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment 데이터 삽입 실패: " + e.getMessage());

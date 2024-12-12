@@ -275,7 +275,7 @@ public class CartController {
                 .cart_id(cartDTO.getCart_id())
                 .quantity(cartDTO.getQuantity())
                 .build();
-        cartService.updateCart(cartVO);
+        cartService.updateCartByUserAndProduct(cartVO);
         return ResponseEntity.ok("장바구니 업데이트");
     }
 

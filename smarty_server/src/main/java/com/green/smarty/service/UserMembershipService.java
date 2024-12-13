@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.green.smarty.mapper.UserMembershipMapper;
 import com.green.smarty.vo.MembershipVO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,11 @@ public class UserMembershipService {
 
     public float updateTotalPaymentAmount(String userId) {
         float totalPaymentAmount = userMembershipMapper.getPaymentDetailsByUserId(userId);
-        userMembershipMapper.updateTotalPaymentAmount(totalPaymentAmount, userId);
+        System.out.println("Total 금액 : "+totalPaymentAmount);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("totalPaymentAmount", totalPaymentAmount);
+        userMembershipMapper.updateTotalPaymentAmount(map);
         return totalPaymentAmount;
     }
 

@@ -81,6 +81,7 @@ public class UserController {
                 membership.setMembership_id(membershipId);
                 membership.setMembership_level("브론즈");
                 membership.setUser_id(userVO.getUser_id());
+                membership.setTotal_payment_amount(0.0f);
 
                 boolean isMembershipSaved = userMembershipService.saveMembership(membership);
 
@@ -319,3 +320,7 @@ public class UserController {
         }
     }
 }
+
+
+
+

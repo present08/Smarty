@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/user/products")
 
 public class UserProductController {
     @Autowired
@@ -32,23 +32,23 @@ public class UserProductController {
     private String uploadPath;
 
     // product Data 전달
-    @GetMapping("/products")
+    @GetMapping("/")
     public List<ProductVO> getProduct() {
-            List<ProductVO> productList = productMapper.getAllProducts();
-//            log.info("Products from controller: {}", productList);
-            return productList;
+        List<ProductVO> productList = productMapper.getAllProducts();
+        //            log.info("Products from controller: {}", productList);
+        return productList;
     }
 
 
-    @GetMapping("/products/detail/{product_id}")
+    @GetMapping("/detail/{product_id}")
     public ResponseEntity<ProductVO> getProductById(@PathVariable String product_id) {
         try {
             ProductVO product = service.getProductById(product_id);
             if (product != null) {
-//                log.info("Found product: {}", product);
+                //                log.info("Found product: {}", product);
                 return ResponseEntity.ok(product);
             } else {
-//                log.warn("Product not found with id: {}", product_id);
+                //                log.warn("Product not found with id: {}", product_id);
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
@@ -57,45 +57,27 @@ public class UserProductController {
         }
     }
 
-    @GetMapping("/products/images/{filename}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+    @GetMapping("/images/{file_name}")
+    public ResponseEntity<Resource> showProductImage (@PathVariable(name = "file_name") String file_name){
+        log.info("상품 이미지 요청 - file_name: {}", file_name);
         try {
-//            log.info("요청된 이미지 파일명: {}", filename);
-
-            // UUID 중복 제거 처리
-            String actualFileName = filename;
-            if (filename.contains("_")) {
-                actualFileName = filename.substring(0, filename.lastIndexOf("_")) +
-                        filename.substring(filename.lastIndexOf("."));
-            }
-
-//            log.info("처리된 파일명: {}", actualFileName);
-            Path filePath = Paths.get(uploadPath, actualFileName);
-//            log.info("전체 파일 경로: {}", filePath);
-
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(resource);
-            } else {
-//                log.warn("파일을 찾을 수 없음: {}", filePath);
-                return ResponseEntity.notFound().build();
-            }
+            return service.showProductImage(file_name);
         } catch (Exception e) {
-//            log.error("이미지 로딩 실패: ", e);
+            log.error("상품 이미지 조회 실패 - file_name: {}, 이유: {}", file_name, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/products/{product_id}/images")
-    public ResponseEntity<List<ProductAttachVO>> getProductImages(@PathVariable String product_id) {
+    @GetMapping("/files/{product_id}")
+    public ResponseEntity<List<String>> getProductFiles(@PathVariable String product_id) {
+        log.info("첨부파일 조회 요청 - product_id: {}", product_id);
         try {
-            List<ProductAttachVO> attachList = service.getAttachList(product_id);
-            return ResponseEntity.ok(attachList);
+            List<String> files = service.getProductImageNames(product_id);
+            log.info("조회된 첨부파일 목록: {}", files);
+            return ResponseEntity.ok(files);
         } catch (Exception e) {
-            log.error("이미지 조회 실패: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("첨부파일 조회 중 오류 발생: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

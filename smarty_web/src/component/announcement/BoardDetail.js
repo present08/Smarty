@@ -31,7 +31,7 @@ function BoardDetail() {
     console.log('저장된 사용자 정보:', user);
 
     if (!user) {
-      alert('로그인이 필요한 서비스 입니다.');
+      alert('로그인이 필��한 서비스 입니다.');
       navigate('/user/login');
       return;
     }
@@ -184,7 +184,9 @@ function BoardDetail() {
             <button onClick={() => navigate('/notice/board')}>
               목록
             </button>
-            {board.user_id === JSON.parse(localStorage.getItem('user'))?.userId && (
+            {board.user_id === JSON.parse(localStorage.getItem('user'))?.id || 
+             board.user_id === JSON.parse(localStorage.getItem('user'))?.userId || 
+             board.user_id === JSON.parse(localStorage.getItem('user'))?.user_id && (
               <>
                 <button onClick={handleDelete}>
                   삭제

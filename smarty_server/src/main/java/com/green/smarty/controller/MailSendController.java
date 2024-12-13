@@ -28,7 +28,6 @@ public class MailSendController {
 
     @PostMapping("/sendMail")
     public List<MailSendDTO> mailSend(@RequestBody MailSendDTO mailSendDTO) {
-        System.out.println("여기까지는 오는지 확인");
         // 이메일 리스트를 순회하면서 각각 발송
         if (mailSendDTO.getEmail() != null) {
             for (String email : mailSendDTO.getEmail()) {

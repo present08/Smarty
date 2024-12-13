@@ -18,4 +18,5 @@ public class MembershipVO {
     private Timestamp last_reset_date;
     private String membership_status;
     private int used_benefit_count;
+    private float total_payment_amount;
 }

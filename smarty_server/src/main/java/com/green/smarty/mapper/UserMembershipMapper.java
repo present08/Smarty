@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMembershipMapper {
@@ -14,7 +15,7 @@ public interface UserMembershipMapper {
     // 결제 금액의 합계를 반환하는 메서드
     float getPaymentDetailsByUserId(String user_id);
 
-    public void updateTotalPaymentAmount(float totalPaymentAmount, String userId);
+    void updateTotalPaymentAmount(Map<String,Object> map);
 
     float getTotalPaymentAmountByUserId(String user_id);
 

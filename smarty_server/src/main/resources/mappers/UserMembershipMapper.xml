@@ -16,22 +16,9 @@
         );
     </select>
 
-<!--            테스트용-->
-<!--    <select id="getPaymentDetailsByUserId" parameterType="String" resultType="float">-->
-<!--        SELECT COALESCE(SUM(p.amount), 0)-->
-<!--        FROM payment p-->
-<!--        LEFT JOIN reservation r ON p.reservation_id = r.reservation_id-->
-<!--        LEFT JOIN enrollment e ON p.enrollment_id = e.enrollment_id-->
-<!--        LEFT JOIN rental ren ON p.rental_id = ren.rental_id-->
-<!--        WHERE (r.user_id = #{userId} OR e.user_id = #{userId} OR ren.user_id = #{userId})-->
-<!--        AND (-->
-<!--        (MONTH(CURRENT_DATE) = 11 AND p.payment_date BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-11-01') AND DATE_FORMAT(CURRENT_DATE, '%Y-11-30'))-->
-<!--        );-->
-<!--    </select>-->
-
 
     <!-- 결제금액 업데이트 -->
-    <update id="updateTotalPaymentAmount">
+    <update id="updateTotalPaymentAmount" parameterType="map">
         UPDATE membership
         SET total_payment_amount = #{totalPaymentAmount}
         WHERE user_id = #{userId};
@@ -46,8 +33,8 @@
 
     <!-- 멤버십 등급 추가해주기 -->
     <insert id="insertMembership" parameterType="com.green.smarty.vo.MembershipVO">
-        INSERT INTO membership (membership_id, membership_level, user_id)
-        VALUES (#{membership_id}, #{membership_level}, #{user_id})
+        INSERT INTO membership (membership_id, membership_level, user_id, total_payment_amount)
+        VALUES (#{membership_id}, #{membership_level}, #{user_id}, #{total_payment_amount})
     </insert>
 
     <!-- 멤버십 등급 업데이트 -->

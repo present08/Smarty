@@ -236,14 +236,14 @@ public class PaymentController {
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
-        // 혜수
-        // 멤버십 업데이트: 총 결제 금액 업데이트
-        userMembershipService.updateTotalPaymentAmount(enrollData.get("user_id"));
-
-        // 멤버십 업데이트(혜수코드)
-        userMembershipService.updateMembershipLevel(
-                enrollData.get("user_id")
-        );
+//        // 혜수
+//        // 멤버십 업데이트: 총 결제 금액 업데이트
+//        userMembershipService.updateTotalPaymentAmount(enrollData.get("user_id"));
+//
+//        // 멤버십 업데이트(혜수코드)
+//        userMembershipService.updateMembershipLevel(
+//                enrollData.get("user_id")
+//        );
 
         // (영준) 이메일 발송 코드
         ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());

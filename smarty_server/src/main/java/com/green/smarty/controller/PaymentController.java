@@ -233,9 +233,6 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
-        System.out.println(vo.getReservation_id());
-        System.out.println(vo);
-
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
@@ -268,13 +265,8 @@ public class PaymentController {
     public UserReservationDTO reserPayment(@RequestBody ReservationDTO dto) {
         // 결제 승인시 reservation Table insert
         reservationMapper.insertReservation(dto);
-        System.out.println("payment" + dto);
-//        String user_name = userMapper.getUserNameById(dto.getUser_id());
-//        String class_name =
-//        sendEmailService.sendClassReservarion(user_name, dto.get)
-
+        
         LocalDateTime now = LocalDateTime.now();
-
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
         for (PaymentVO i : paymentVO) {
@@ -296,9 +288,10 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
-        System.out.println(vo);
+        // payment Table insert
         paymentMapper.insertPayment(vo);
 
+        // btnData Reset
         UserReservationDTO result = reservationService.insertReservation(dto);
 
         // 혜수

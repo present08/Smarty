@@ -18,7 +18,6 @@ const ClassPage = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("31321",classData)
         setEnrollData({ user_id: user.user_id, class_id: classData.class_id });
         MembershipUser(user.user_id).then(e => {
             setMembership(e)

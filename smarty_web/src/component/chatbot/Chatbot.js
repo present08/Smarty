@@ -17,12 +17,21 @@ const Nav = styled.div`
     background: rgba(12,34,56, 1);
     border-radius: 6px;
   }
-`;
+  `;
+  function ChatBot(props) {
+      const [socket, setSocket] = useState(props.props)
+    //   useEffect(() => {
+    //     const socket = io('http://localhost:5000', {
+    //         transports: ['websocket'], // 웹소켓만 사용
+    //     });
 
-const socket = io('http://localhost:5000', {
-    transports: ['websocket'], // 웹소켓만 사용
-});
-function ChatBot() {
+    //     setSocket(socket);
+
+    //     return () => {
+    //         socket.close();
+    //     }
+    // }, [])
+
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const chatEndRef = useRef(null);
@@ -118,6 +127,7 @@ function ChatBot() {
             }
             socket.off('receive_normal');
             socket.off('receive_quick');
+
         };
     }, []);
 

@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +49,7 @@ public class UserReservationController {
     @GetMapping("/uploads/{fileName}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("/Smarty_project/Smarty/smarty_server/upload")
+        Path filePath = Paths.get("upload")
                 .resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 

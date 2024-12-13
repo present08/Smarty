@@ -8,8 +8,10 @@
 }
 
 .widgetLgTitle {
+    font-family: inherit;
     font-size: 22px;
     font-weight: 600;
+    font-family: inherit;
 }
 
 .widgetLgTable {

@@ -3,6 +3,7 @@ import '../../css/productDetail.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProductFiles } from '../../api/productApi';
 import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 
 
 const ProductDetail = ({ product }) => {
@@ -52,21 +53,18 @@ const ProductDetail = ({ product }) => {
             navigate('/user/login');
             return;
         }
-
-        const user = JSON.parse(userStr);
-        const cartItem = [
-            {
-                user_id: user.user_id,
-                product_id: product.product_id,
-                product_name: product.product_name,
-                quantity: quantity,
-            }
-        ];
-
+        
+        const user = JSON.parse(userStr)
+        const cartItem = {
+            user_id: user.user_id,
+            product_id: product.product_id,
+            product_name: product.product_name,
+            quantity: quantity,
+        }
         console.log("cartItem 데이터 : ", [cartItem])
         try {
-            await axios.post('http://localhost:8080/api/user/cart/', cartItem
-                );
+            // await axios.post('http://localhost:8080/api/cart', cartItem)
+            await axiosInstance.post('/user/cart', cartItem)
             alert('장바구니에 추가되었습니다');
             console.log("cartItem 데이터 들어가냐: ",cartItem);
 

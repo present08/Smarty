@@ -92,7 +92,7 @@ public class UserReservationController {
         for (PaymentVO i : paymentList) {
             paramsMap.put("reservation_id", reservation_id);
             paramsMap.put("table", "payment");
-            if (i.getReservation_id().equals(reservation_id)) {
+            if (i.getReservation_id() != null && i.getReservation_id().equals(reservation_id)) {
                 reservationMapper.deleteReservationID(paramsMap);
             }
         }

@@ -1,5 +1,5 @@
 import "./topbar.css";
-import { Mail, NotificationsNone, Logout } from '@mui/icons-material';
+import { NotificationsNone, MailOutline, Logout } from '@mui/icons-material';
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { permissionWait } from "../../../api/admin/statusApi";
@@ -73,7 +73,7 @@ export default function Topbar() {
                     </div>
                     {/*  (영준추가) 메일 아이콘 */}
                     <div className="topbarIconContainer" onClick={movetoMailPage}>
-                        <Mail className="dingdong" />
+                        <MailOutline className="dingdong" />
                     </div>
                     <div className="topbarIconContainer">
                         <Logout className="dingdong" onClick={handleLogout} />                 

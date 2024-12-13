@@ -34,7 +34,7 @@
     </select>
     <select id="getNewUser" resultType="com.green.smarty.vo.UserVO">
         select * from user
-        where join_date BETWEEN #{start} and #{date}
+        where DATE(join_date) BETWEEN #{start} AND #{date}
         order by join_date desc;
     </select>
     <select id="getPermission" resultType = "com.green.smarty.dto.PermissionDTO">

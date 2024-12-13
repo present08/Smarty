@@ -100,8 +100,6 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
   return (
     <div className="newProduct">
       <div className="addProductForm">
-        <div className="addProductTitle">물품 등록</div>
-
         <div className="addProductItem">
           <label>물품명</label>
           <input
@@ -182,7 +180,7 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
       </div>
 
       <div className="addProductList">
-        <h4>등록된 상품 리스트</h4>
+        <h4 style={{fontFamily: 'inherit'}}>등록된 상품 리스트</h4>
         <h5>=========================</h5>
         {productList.map((item, index) => (
           <div key={index}>
@@ -195,7 +193,6 @@ export default function NewProduct({ productPass, facilityId, context, onClose }
           </div>
         ))}
       </div>
-
       <div className="addProductListButton">
         <button className="submitProductButton" onClick={handleProductSubmit}>
           {context === "facility" ? "폼에 추가" : "등록"}

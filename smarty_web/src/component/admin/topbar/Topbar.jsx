@@ -15,7 +15,7 @@ export default function Topbar() {
         permissionWait().then(e => {
             e.map(item => {
                 if (item.enrollment_status == "승인대기") {
-                    setNewData(e)
+                    setNewData(prev => [...prev, item])
                 }
             })
         })

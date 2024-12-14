@@ -30,7 +30,7 @@ const CartPage = () => {
     const loadCartItems = async () => {
         try {
             const response = await cartApi.getCartItems(user_id);
-            console.log("불러온 장바구니 데이터", response.data)
+            console.log("불러온 장바구니 데이터", response)
             setCartItems(response.data);
         } catch (error) {
             console.error("Failed to load cart items:", error);

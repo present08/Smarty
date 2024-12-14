@@ -63,14 +63,14 @@
     <update id="updateUserStatus">
         UPDATE user
         SET user_status = #{userStatus}
-        WHERE user_id = #{userId}
+        WHERE user_id = #{user_id}
     </update>
 
     <!-- 회원 수정 -->
     <update id="updateUserInfo" parameterType="com.green.smarty.vo.UserVO" >
         UPDATE user
         SET address = #{address}, phone = #{phone}
-        WHERE user_id = #{userId}
+        WHERE user_id = #{user_id}
     </update>
 
     <!-- 유저 수강신청 불러오기-->

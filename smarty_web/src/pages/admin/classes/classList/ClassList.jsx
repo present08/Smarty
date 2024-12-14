@@ -85,7 +85,7 @@ export default function ClassList() {
       renderCell: (params) => {
         return (
           <div>
-            {params.row.start_date < formattedDate && formattedDate < params.row.end_date?
+            {params.row.start_date <= formattedDate && formattedDate <= params.row.end_date?
               '진행중' : 
               formattedDate > params.row.end_date?
               '종료' : '개강전'}

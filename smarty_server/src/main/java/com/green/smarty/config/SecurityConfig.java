@@ -40,6 +40,8 @@ public class SecurityConfig {
                 registry.requestMatchers("/api/admin/facilities/images/**").permitAll();
                 registry.requestMatchers("/api/admin/products/images/**").permitAll();
                 registry.requestMatchers("/api/user/reservation/uploads/**").permitAll();
+                registry.requestMatchers("/api/user/products/images/**").permitAll();
+                registry.requestMatchers("/api/user/products/files/**").permitAll();
                 registry.requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER");
                 registry.requestMatchers("/api/auth/**").hasAnyRole("ADMIN", "USER");
                 registry.requestMatchers("/api/admin/**").hasRole("ADMIN");

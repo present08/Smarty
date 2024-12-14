@@ -182,31 +182,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/list/{user_id}")
-    public UserActivityDTO getList(@PathVariable String user_id) {
-        System.out.println("여기에 getList 데이터가 들어옴 : "+user_id);
-        List<ReservationVO> reservationVO = publicMapper.getReservationAll();
-        List<EnrollmentClassDTO> enrollmentClassDTO = paymentMapper.getEnrollmentClass();
-        List<ReservationVO> reservationList = new ArrayList<>();
-        List<EnrollmentClassDTO> enrollmentList = new ArrayList<>();
-
-        for (ReservationVO item : reservationVO) {
-            if (item.getUser_id().equals(user_id)) {
-                reservationList.add(item);
-            }
-        }
-        for (EnrollmentClassDTO item : enrollmentClassDTO) {
-            if (item.getUser_id().equals(user_id)) {
-                enrollmentList.add(item);
-            }
-        }
-        UserActivityDTO result = UserActivityDTO.builder()
-                .enrollmentList(enrollmentList)
-                .reservationList(reservationList)
-                .build();
-
-        return result;
-    }
+    
 
     // enrollment Payment
     @PostMapping("/enrollment")
@@ -233,20 +209,17 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
-        System.out.println(vo.getReservation_id());
-        System.out.println(vo);
-
         paymentMapper.insertPayment(vo);
         paymentMapper.updateEnroll(enrollData.get("enrollment_id"));
 
-        // 혜수
-        // 멤버십 업데이트: 총 결제 금액 업데이트
-        userMembershipService.updateTotalPaymentAmount(enrollData.get("user_id"));
-
-        // 멤버십 업데이트(혜수코드)
-        userMembershipService.updateMembershipLevel(
-                enrollData.get("user_id")
-        );
+//        // 혜수
+//        // 멤버십 업데이트: 총 결제 금액 업데이트
+//        userMembershipService.updateTotalPaymentAmount(enrollData.get("user_id"));
+//
+//        // 멤버십 업데이트(혜수코드)
+//        userMembershipService.updateMembershipLevel(
+//                enrollData.get("user_id")
+//        );
 
         // (영준) 이메일 발송 코드
         ScatterDTO scatterDTO = paymentMapper.selectScatter(vo.getPayment_id());
@@ -268,13 +241,8 @@ public class PaymentController {
     public UserReservationDTO reserPayment(@RequestBody ReservationDTO dto) {
         // 결제 승인시 reservation Table insert
         reservationMapper.insertReservation(dto);
-        System.out.println("payment" + dto);
-//        String user_name = userMapper.getUserNameById(dto.getUser_id());
-//        String class_name =
-//        sendEmailService.sendClassReservarion(user_name, dto.get)
-
+        
         LocalDateTime now = LocalDateTime.now();
-
         List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
         List<PaymentVO> paymentList = new ArrayList<>();
         for (PaymentVO i : paymentVO) {
@@ -296,9 +264,10 @@ public class PaymentController {
                 .payment_status(true)
                 .build();
 
-        System.out.println(vo);
+        // payment Table insert
         paymentMapper.insertPayment(vo);
 
+        // btnData Reset
         UserReservationDTO result = reservationService.insertReservation(dto);
 
         // 혜수

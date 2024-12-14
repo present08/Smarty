@@ -182,31 +182,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/list/{user_id}")
-    public UserActivityDTO getList(@PathVariable String user_id) {
-        System.out.println("여기에 getList 데이터가 들어옴 : "+user_id);
-        List<ReservationVO> reservationVO = publicMapper.getReservationAll();
-        List<EnrollmentClassDTO> enrollmentClassDTO = paymentMapper.getEnrollmentClass();
-        List<ReservationVO> reservationList = new ArrayList<>();
-        List<EnrollmentClassDTO> enrollmentList = new ArrayList<>();
-
-        for (ReservationVO item : reservationVO) {
-            if (item.getUser_id().equals(user_id)) {
-                reservationList.add(item);
-            }
-        }
-        for (EnrollmentClassDTO item : enrollmentClassDTO) {
-            if (item.getUser_id().equals(user_id)) {
-                enrollmentList.add(item);
-            }
-        }
-        UserActivityDTO result = UserActivityDTO.builder()
-                .enrollmentList(enrollmentList)
-                .reservationList(reservationList)
-                .build();
-
-        return result;
-    }
+    
 
     // enrollment Payment
     @PostMapping("/enrollment")

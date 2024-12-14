@@ -77,9 +77,9 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
                 </select>
                 {isLoggedIn && (
                     <div>
-                    <button onClick={handleMyCart}>
+                    {/* <button onClick={handleMyCart}>
                         장바구니
-                    </button>
+                    </button> */}
                     <button
                         className="rental-button"
                         onClick={handleMyRental}

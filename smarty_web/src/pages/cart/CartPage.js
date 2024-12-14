@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import cartApi from "../../api/cartApi";
+import cartApi, { updateCartItem } from "../../api/cartApi";
 import CartList from "../../component/cart/CartList";
 import { useLocation, useNavigate } from "react-router-dom";
 import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
@@ -42,7 +42,7 @@ const CartPage = () => {
 
     const handleUpdateCart = async (cart_id, quantity) => {
         try {
-            await cartApi.updateCartItem({ cart_id, quantity });
+            await updateCartItem({ cart_id, quantity });
             loadCartItems();
         } catch (error) {
             console.error("Failed to update cart item:", error);
@@ -99,14 +99,11 @@ const CartPage = () => {
 
             // Step 1: 장바구니 항목을 Rental 테이블에 삽입
             const rentalResponse = await cartRental(cartItems);
-            console.log("렌탈 완료 응답 데이터: ", rentalResponse);
-            console.log("렌탈 완료 응답 데이터: ", rentalResponse.data);
-            
+            console.log("렌탈 완료 응답 데이터: ", rentalResponse);            
 
             // Step 2: Payment 테이블에 데이터 삽입
             const paymentResponse = await rentalPayment(paymentData);
             console.log("결제 완료 응답 데이터: ", paymentResponse);
-            console.log("결제 완료 응답 데이터: ", paymentResponse.data);
 
             // Step 3: 결제 성공 시, 장바구니 초기화 및 결제 성공 페이지로 이동
             handleClearCart(); // 장바구니 초기화

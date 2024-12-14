@@ -3,11 +3,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getProductRentalUser } from '../../api/rentalAPI';
 import '../../css/rentalList.css';
+import axiosInstance from '../../api/axiosInstance';
 
 const RentalList = () => {
     const [rentals, setRentals] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+console.log("rentals 의 데이터 확인",rentals)
 
     const getUserRentals = async () => {
         try {
@@ -36,6 +39,27 @@ const RentalList = () => {
     if (loading) {
         return <div className="rentalList-container">로딩 중...</div>;
     }
+
+    const handleReturn = async (rental_id, count) => {
+        try {
+            const response = await axiosInstance.put(`/user/ren${rental_id}/return`, null, {
+                params: { count },
+            });
+            if (response.status === 200) {
+                alert('반납 완료');
+                setRentals((prev) =>
+                    prev.map((rental) =>
+                        rental.rental_id === rental_id
+                            ? { ...rental, rental_status: false, return_date: response.data.return_date }
+                            : rental
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('반납 처리 중 오류:', error);
+            alert('반납 처리에 실패했습니다.');
+        }
+    };
 
     return (
         <div className="rentalList-container">
@@ -85,7 +109,8 @@ const RentalList = () => {
                                     {rental.rental_status && (
                                         <button
                                             className="rentalList-return-button"
-                                            onClick={() => alert(`반납 처리: ${rental.rental_id}`)}
+                                            onClick={() => handleReturn(rental.rental_id, rental.count)}
+                                            // onClick={() => alert(`반납 처리: ${rental.rental_id}`)}
                                         >
                                             반납하기
                                         </button>

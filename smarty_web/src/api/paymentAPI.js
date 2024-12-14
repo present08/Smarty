@@ -36,7 +36,7 @@ export const handlePayment = async () => {
 }
 
 export const rentalPayment = async (paymentData) => {
-  const response = await axios.post(
+  const response = await axiosInstance.post(
     "http://localhost:8080/api/user/payment/create", // 결제 API 엔드포인트
     paymentData
   );

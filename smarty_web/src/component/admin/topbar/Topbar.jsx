@@ -1,4 +1,5 @@
-import { Language, Mail, NotificationsNone, Settings } from '@mui/icons-material';
+import "./topbar.css";
+import { NotificationsNone, MailOutline, Logout } from '@mui/icons-material';
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { permissionWait } from "../../../api/admin/statusApi";
@@ -11,7 +12,7 @@ export default function Topbar() {
         permissionWait().then(e => {
             e.map(item => {
                 if (item.enrollment_status == "승인대기") {
-                    setNewData(e)
+                    setNewData(prev => [...prev, item])
                 }
             })
         })
@@ -20,6 +21,35 @@ export default function Topbar() {
         navigate("/admin/permission")
     }
 
+    //-----------------------------------시큐리티 로그인--------------------------------------//
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            // 서버로 상태 검증 요청
+            axiosInstance.get('/security/status')
+                .then((response) => {
+                    setIsLoggedIn(true);
+                    setUser({
+                        userName: response.data.userName,
+                        userId: response.data.userId,
+                        role: response.data.role,
+                    });
+                })
+                .catch((error) => {
+                    console.error('로그인 상태 확인 실패:', error);
+                    setIsLoggedIn(false);
+                    localStorage.removeItem('jwtToken'); // 토큰 제거
+                });
+        }
+    }, []);
+
+    const handleLogout = () => {
+        alert("로그아웃 성공");
+        setIsLoggedIn(false);
+        localStorage.removeItem('jwtToken'); // JWT 제거
+        navigate("/");
+    }
+    //---------------------------------------------------------------------------------------//
     const movetoMailPage = () => {
         navigate("/admin/mail")
     }
@@ -40,12 +70,8 @@ export default function Topbar() {
                         {newData.length == 0 ? <></> : <span className="topIconBadge">{newData.length}</span>}
                     </div>
                     {/*  (영준추가) 메일 아이콘 */}
-                    <div className="mailsend" onClick={movetoMailPage}>
-                        <Mail className="mailsend" />
-                    </div>
-                    {/* <div className="topbarIconContainer">
-                        <Language />
-                        <span className="topIconBadge">2</span>
+                    <div className="topbarIconContainer" onClick={movetoMailPage}>
+                        <MailOutline className="dingdong" />
                     </div>
                     <div className="topbarIconContainer">
                         <Settings />

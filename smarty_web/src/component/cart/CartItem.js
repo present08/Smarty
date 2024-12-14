@@ -1,6 +1,7 @@
 import React from "react";
 
 const CartItem = ({ item, onUpdate, onRemove }) => {
+
     const handleQuantityChange = (e) => {
         const quantity = parseInt(e.target.value, 10);
         if (quantity > 0) {
@@ -23,7 +24,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
             <td className="cart-item-image">
                 {item.file_name ? (
                     <img
-                        src={`http://localhost:8080/uploads/${item.file_name}`}
+                        src={`http://localhost:8080/api/user/reservation/uploads/s_${item.file_name}`}
                         alt={item.product_name}
                         onError={(e) => {
                             e.target.src = "/no-image.png"; // 기본 이미지

@@ -26,6 +26,8 @@ const MyPage = () => {
     const location = useLocation();
     useEffect(() => {
         console.log(location.state)
+        // sessionStorage.setItem('user', JSON.stringify(location.state.user))
+        
         setCurrentUser(location.state.user)
     }, [location])
 

@@ -114,7 +114,6 @@ const UserCalendar = (props) => {
                 .then(classData => {
                     console.log("받은 수업 데이터:", classData); // 디버깅용
                     setClassInfo(classData);
-
                     const classSchedules = classData
                         .filter(classItem => classItem.start_date && classItem.end_date) // 유효성 검증
                         .map(classItem => ({

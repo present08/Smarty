@@ -136,9 +136,9 @@ const ProductDetail = ({ product }) => {
                         <div className="quantity-info">
                             <span className="label">{product.product_name}</span>
                             <div className="quantity-control">
-                                <button onClick={handleDown}>-</button>
-                                <input type="number" value={quantity} readOnly />
                                 <button onClick={handleUp}>+</button>
+                                <input type="number" value={quantity} readOnly />
+                                <button onClick={handleDown}>-</button>
                                 <span className="item-price">{product.price.toLocaleString()}원</span>
                             </div>
                         </div>

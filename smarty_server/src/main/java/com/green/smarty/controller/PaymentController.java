@@ -69,7 +69,6 @@ public class PaymentController {
     @PostMapping("/create")
     public ResponseEntity<String> rentalPayment(@RequestBody PaymentDTO paymentDTO) {
         try {
-            System.out.println("paymentDTO 데이터 확인: " + paymentDTO);
             // 현재 날짜 및 시간 가져오기
             LocalDateTime date = LocalDateTime.now();
 
@@ -94,9 +93,7 @@ public class PaymentController {
                     String.format("%02d", date.getMonthValue()) +
                     String.format("%02d", date.getDayOfMonth()) +
                     String.format("%03d", paymentList.size() + 1);
-
-            System.out.println("Generated Payment ID: " + paymentId);
-
+            
             // Payment 데이터 생성
             PaymentVO payment = PaymentVO.builder()
                     .payment_id(paymentId) // 생성된 ID 사용
@@ -123,50 +120,6 @@ public class PaymentController {
         }
     }
 
-
-    // 결제 생성
-    //수정 전
-//    @PostMapping("/create")
-//    public String createPayment(@RequestBody PaymentDetailDTO dto) {
-//        System.out.println("paymentDetailDTO : "+dto);
-//        System.out.println("Items 데이터 : "+dto.getItems());
-//        LocalDateTime date = LocalDateTime.now();
-//        List<PaymentVO> paymentVO = publicMapper.getPaymentAll();
-//        List<PaymentVO> paymentList = new ArrayList<>();
-//        for (PaymentVO item : paymentVO) {
-//            String itemDate = item.getPayment_id().substring(2, 10);
-//            System.out.println(itemDate);
-//            if (itemDate.equals("" + date.getYear() + date.getMonthValue()
-//                    + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()))) {
-//                paymentList.add(item);
-//            }
-//        }
-//
-//        String id = "P_" + date.getYear() + date.getMonthValue() + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth())
-//                + String.format("%03d", paymentList.size() + 1);
-//        System.out.println("payment ID : " + id);
-//        PaymentVO vo = PaymentVO.builder()
-//                .payment_id(id)
-//                .reservation_id(dto.getReservation_id())
-//                .enrollment_id(dto.getEnrollment_id())
-//                .amount(dto.getAmount())
-//                .payment_date(date)
-//                .payment_status(true)
-//                .build();
-//
-//        paymentMapper.insertPayment(vo);
-//        RentalVO rentalID = paymentService.insertRental(dto);
-//        System.out.println(rentalID);
-//
-//        System.out.println("+++++++++++++++++++++++++++++++++++++ " + dto);
-// 혜수
-    // 멤버십 업데이트: 총 결제 금액 업데이트
-//        userMembershipService.updateTotalPaymentAmount(dto.getUser_id());
-//        // 멤버십 업데이트
-//        userMembershipService.updateMembershipLevel(dto.getUser_id(), dto.getAmount());
-//
-//        return id;
-//    }
 
     @GetMapping("/{payment_id}")
     public ResponseEntity<?> getPaymentById(@PathVariable String payment_id) {

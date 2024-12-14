@@ -58,7 +58,7 @@ export const getList = async (user_id) => {
 //카트에서 렌탈서버로 던지기
 export const cartRental = async (postData) => {
     console.log("카트에서 렌탈 서버로 던지는 postData", postData)
-    const response = await axiosInstance.post(`http://localhost:8080/api/user/cart/rentals`, postData)
+    const response = await axiosInstance.post(`/user/cart/rentals`, postData)
     console.log("카트에서 렌탈 서버로 던지는 response.data", response.data)
     return response.data
 }

@@ -42,7 +42,7 @@ console.log("rentals 의 데이터 확인",rentals)
 
     const handleReturn = async (rental_id, count) => {
         try {
-            const response = await axiosInstance.put(`/user/ren${rental_id}/return`, null, {
+            const response = await axiosInstance.put(`/user/rentals/${rental_id}/return`, null, {
                 params: { count },
             });
             if (response.status === 200) {
@@ -87,38 +87,49 @@ console.log("rentals 의 데이터 확인",rentals)
                             <th>반납</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {rentals.map((rental) => (
-                            <tr key={rental.rental_id}>
-                                <td>
-                                    <div className="rentalList-image-container">
-                                        <img
-                                            src={rental.image || '/path/to/default-image.jpg'} // 이미지가 없을 경우 기본 이미지 사용
-                                            alt={rental.product_name}
-                                            className="rentalList-image"
-                                        />
-                                    </div>
-                                </td>
-                                <td>{rental.product_name}</td>
-                                <td>{rental.size}</td>
-                                <td>{new Date(rental.rental_date).toLocaleString()}</td>
-                                <td>{new Date(rental.return_date).toLocaleString()}</td>
-                                <td>{rental.count}</td>
-                                <td>{rental.rental_status ? '대여 중' : '반납 완료'}</td>
-                                <td>
-                                    {rental.rental_status && (
-                                        <button
-                                            className="rentalList-return-button"
-                                            onClick={() => handleReturn(rental.rental_id, rental.count)}
-                                            // onClick={() => alert(`반납 처리: ${rental.rental_id}`)}
-                                        >
-                                            반납하기
-                                        </button>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+                        <tbody>
+                            {rentals.map((rental) => {
+                                // 대여일(rental_date)을 기준으로 반납 예정일 계산
+                                const rentalDate = new Date(rental.rental_date);
+                                const returnDate = new Date(rentalDate);
+                                returnDate.setDate(rentalDate.getDate() + 1); // 대여일의 다음날 계산
+
+                                return (
+                                    <tr key={rental.rental_id}>
+                                        <td>
+                                            <div className="rentalList-image-container">
+                                                <img
+                                                    src={rental.image || '/path/to/default-image.jpg'}
+                                                    alt={rental.product_name}
+                                                    className="rentalList-image"
+                                                />
+                                            </div>
+                                        </td>
+                                        <td>{rental.product_name}</td>
+                                        <td>{rental.size || "N/A"}</td>
+                                        <td>{new Date(rental.rental_date).toLocaleString()}</td>
+                                        <td>
+                                            {/* 반납 예정일 */}
+                                            {rental.return_date
+                                                ? new Date(rental.return_date).toLocaleString() // 실제 반납일이 있는 경우 표시
+                                                : returnDate.toLocaleString()}
+                                        </td>
+                                        <td>{rental.count}</td>
+                                        <td>{rental.rental_status ? '대여 중' : '반납 완료'}</td>
+                                        <td>
+                                            {rental.rental_status && (
+                                                <button
+                                                    className="rentalList-return-button"
+                                                    onClick={() => handleReturn(rental.rental_id, rental.count)}
+                                                >
+                                                    반납하기
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
                 </table>
             )}
         </div>

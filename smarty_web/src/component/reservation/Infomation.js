@@ -30,17 +30,17 @@ const TabMenu = styled.ul`
 `;
 
 const Desc = styled.div`
-  text-align: center;
+  text-align: left;
   height: 500px;
   border: 4px solid #e7edf1;
 `;
 
-const Information = ({props}) => {
+const Information = ({ props }) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const menuArr = [
-    { name: '이용안내 및 허가조건', content: props.info },
-    { name: '이용수칙 및 환불기준 ', content: props.caution },
+    { name: '이용안내', content: props.info },
+    { name: '주의사항', content: props.caution },
     // { name: 'Tab3', content: 'Tab menu THREE' },
   ];
 
@@ -57,7 +57,7 @@ const Information = ({props}) => {
         ))}
       </TabMenu>
       <Desc>
-        <div>{menuArr[currentTab].content}</div>
+        <div><pre>{menuArr[currentTab].content}</pre></div>
       </Desc>
     </div>
   )

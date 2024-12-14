@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BarChart from '../chart/BarChart';
 import DoughnutChart from '../chart/DoughnutChart';
-
+import axiosInstance from '../../api/axiosInstance';
 const host = 'http://localhost:8080/api/auth';
 
 const UserRating = () => {
@@ -15,9 +15,12 @@ const UserRating = () => {
     // 현재 사용자 정보 가져오기
     const fetchCurrentUser = async () => {
         try {
-            const response = await axios.get(`${host}/me`, { withCredentials: true });
+            // const response = await axios.get(`${host}/me`, { withCredentials: true });
+            const response = await axiosInstance.get(`/security/status`, { withCredentials: true });
+            console.log("사용자 정보 : ", response.data.user)
             if (response.status === 200) {
-                const user = response.data;
+                // const user = response.data;
+                const user = response.data.user;
                 console.log("현재 로그인된 사용자 정보:", user);
                 localStorage.setItem("user", JSON.stringify(user));
                 return user;
@@ -33,7 +36,8 @@ const UserRating = () => {
     // 예약 정보 가져오기
     const getReservationInfo = async (user_id) => {
         try {
-            const response = await axios.get(`${host}/reservationUser`, { params: { user_id } });
+            // const response = await axios.get(`${host}/reservationUser`, { params: { user_id } });
+            const response = await axiosInstance.get(`/auth/reservationUser`, { params: { user_id } });
             console.log(response.data);
             return response.data; // 예약 정보를 반환
         } catch (error) {

@@ -159,6 +159,7 @@ public class UserController {
     //사용자 정보 가져오기
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        System.out.println("세션 " + session.getAttribute("JSESSIONID"));
         UserVO userVO = (UserVO) session.getAttribute("user");
         if (userVO != null){
             return ResponseEntity.ok(userVO);

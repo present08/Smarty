@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { AiOutlineQrcode } from 'react-icons/ai';
-
+import axiosInstance from '../../api/axiosInstance';
 const host = 'http://localhost:8080';
 
 const QrButton = (props) => {
@@ -21,7 +21,8 @@ const QrButton = (props) => {
         setError('');
 
         try {
-            const response = await axios.get(`${host}/api/auth/qrcode/${props.user.user_id}`, { responseType: 'arraybuffer' });
+            // const response = await axios.get(`${host}/api/auth/qrcode/${props.user.user_id}`, { responseType: 'arraybuffer' });
+            const response = await axiosInstance.get(`/auth/qrcode/${props.user.user_id}`, { responseType: 'arraybuffer' });
             const qrCodeBlob = new Blob([response.data], { type: 'image/png' });
             const qrCodeUrl = URL.createObjectURL(qrCodeBlob);
             setQrCode(qrCodeUrl);

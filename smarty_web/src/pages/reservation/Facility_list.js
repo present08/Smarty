@@ -6,6 +6,7 @@ import Wrapper from './../../component/Wrapper';
 import Footer from './../../component/Footer';
 import '../../css/reservationPage.css'
 import BackToTopButton from '../../component/BackToTopButton';
+import axiosInstance from '../../api/axiosInstance';
 
 const Facility_list = () => {
 
@@ -35,7 +36,7 @@ const Facility_list = () => {
       <div className='facility_container'>
         <div>
           {facility_id.map((i, idx) => (
-            <div className='facilityBtn' key={idx} onClick={() => handleClick(i)}>
+            <div className='facilityBtn' key={idx} onClick={() => handleClick(i)}>              
               <img src={`http://localhost:8080/api/user/reservation/uploads/${i.file_name[0]}`} />
               <div className='facility_info'>
                 <h3>{i.facility_name}</h3>

@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
+import { modify_info } from '../../api/userApi';
 
 const host = 'http://localhost:8080';
 
@@ -37,8 +37,9 @@ const UserButton = (props) => {
         console.log("전송할 사용자 정보:", userInfo); // 디버깅을 위한 로그
 
         try {
-            const response = await axios.put(`${host}/api/auth/info`, userInfo);
-            alert('변경 완료되었습니다. 재로그인해주세요!');
+            modify_info(userInfo).then(e => {
+                alert('변경 완료되었습니다. 재로그인해주세요!');
+            })
             closeModal();
         } catch (error) {
             console.error('Error updating user info:', error);

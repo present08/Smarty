@@ -56,8 +56,7 @@ public class PaymentController {
 
     @Autowired
     private UserRentalMapper userRentalMapper;
-
-
+    
 
     // (영준)
     @Autowired
@@ -93,7 +92,7 @@ public class PaymentController {
                     String.format("%02d", date.getMonthValue()) +
                     String.format("%02d", date.getDayOfMonth()) +
                     String.format("%03d", paymentList.size() + 1);
-            
+
             // Payment 데이터 생성
             PaymentVO payment = PaymentVO.builder()
                     .payment_id(paymentId) // 생성된 ID 사용
@@ -119,7 +118,6 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment 데이터 삽입 실패: " + e.getMessage());
         }
     }
-
 
     @GetMapping("/{payment_id}")
     public ResponseEntity<?> getPaymentById(@PathVariable String payment_id) {

@@ -32,18 +32,6 @@ const DetailPage = () => {
         fetchProductDetail();
     }, [product_id]);
 
-    const handleBack = () => {
-        // 이전 페이지의 state가 있으면 해당 state와 함께 이동
-        if (location.state?.from) {
-            navigate(location.state.from.pathname, {
-                state: { selectedFacility: location.state.selectedFacility }
-            });
-        } else {
-            // state가 없으면 기본 목록으로 이동
-            navigate('/product');
-        }
-    }
-
     if (loading) return <div className="text-xl text-center">로딩중...</div>;
     if (error) return <div className="text-red-500 text-center">{error}</div>;
     if (!product) return <div className="text-center">상품을 찾을 수 없습니다.</div>;

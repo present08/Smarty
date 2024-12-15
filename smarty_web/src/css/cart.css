@@ -2,33 +2,25 @@
 .cart-page-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    /* 화면 전체 높이 */
+    height: 100vh;
     background-color: #f7f9fc;
-    /* 부드러운 배경색 */
     font-family: 'Arial', sans-serif;
     color: #333;
 }
 
-/* 헤더와 푸터 스타일 */
-header,
-footer {
-    width: 100%;
-    background-color: #2c3e50;
-    /* 진한 네이비색 */
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
 
 /* 메인 컨텐츠 */
 .cart-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    /* 2:6:2 비율 */
+    gap: 0px;
+    /* 칸 사이 여백 */
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
+    /* 상하 여백 조정 */
+    padding: 0;
+    /* 내부 패딩 제거 */
 }
 
 /* 장바구니 아이템 영역 */
@@ -193,7 +185,7 @@ footer {
 
 .buttons-container {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
     margin-top: 20px;
     width: 100%;
 }
@@ -209,6 +201,9 @@ footer {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
+    width: 48%;
+    /* 버튼 너비 조정 */
+    box-sizing: border-box;
 }
 
 .clear-btn {

@@ -45,6 +45,9 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                     -
                 </button>
             </td>
+            <td className="cart-item-price">
+                {item.price.toLocaleString()} 원
+            </td>
             <td className="cart-item-remove">
                 <button className="remove-btn" onClick={() => onRemove(item.cart_id)}>
                     제거

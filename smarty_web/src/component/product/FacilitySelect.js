@@ -12,6 +12,7 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
         const fetchFacilities = async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             setIsLoggedIn(isLoggedIn);
+            console.log(isLoggedIn)
 
             if (!isLoggedIn) {
                 try {

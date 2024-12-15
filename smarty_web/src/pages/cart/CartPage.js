@@ -4,9 +4,13 @@ import CartList from "../../component/cart/CartList";
 import { useLocation, useNavigate } from "react-router-dom";
 import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
 import "../../css/cart.css";
+import axios from "axios";
+import { cartRental } from "../../api/rentalAPI";
+import { rentalPayment } from "../../api/paymentAPI";
 import MainNav from "../../component/MainNav";
 import Wrapper from "../../component/Wrapper";
 import Footer from "../../component/Footer";
+
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -14,8 +18,8 @@ const CartPage = () => {
     const userStr = localStorage.getItem("user");
     const user_id = userStr ? JSON.parse(userStr).user_id : null;
     const navigate = useNavigate();
+    const location = useLocation()
 
-    // 장바구니 데이터 로드
     useEffect(() => {
         if (!user_id) {
             alert("로그인이 필요한 서비스입니다.");
@@ -23,31 +27,22 @@ const CartPage = () => {
         } else {
             loadCartItems();
         }
-    }, [user_id]);
+    }, [user_id, location.key]);
 
     const loadCartItems = async () => {
         try {
             const response = await cartApi.getCartItems(user_id);
-            console.log("불러온 장바구니 데이터", response);
-            if (response.data) {
-                setCartItems(response.data);
-            } else {
-                console.error("장바구니 데이터가 비어 있습니다.");
-                setCartItems([]);
-            }
+            console.log("불러온 장바구니 데이터", response)
+            setCartItems(response.data);
         } catch (error) {
-            console.error("장바구니 데이터를 불러오는 중 오류 발생:", error);
+            console.error("Failed to load cart items:", error);
         }
     };
 
     const handleUpdateCart = async (cart_id, quantity) => {
         try {
             await updateCartItem({ cart_id, quantity });
-            const updatedItems = cartItems.map((item) =>
-                item.cart_id === cart_id ? { ...item, quantity } : item
-            );
-            setCartItems(updatedItems);
-            localStorage.setItem("cart", JSON.stringify(updatedItems));
+            loadCartItems();
         } catch (error) {
             console.error("Failed to update cart item:", error);
         }
@@ -56,9 +51,7 @@ const CartPage = () => {
     const handleRemoveCartItem = async (cart_id) => {
         try {
             await cartApi.removeCartItem(cart_id);
-            const updatedItems = cartItems.filter((item) => item.cart_id !== cart_id);
-            setCartItems(updatedItems);
-            localStorage.setItem("cart", JSON.stringify(updatedItems));
+            loadCartItems();
         } catch (error) {
             console.error("Failed to remove cart item:", error);
         }
@@ -67,8 +60,7 @@ const CartPage = () => {
     const handleClearCart = async () => {
         try {
             await cartApi.clearCart(user_id);
-            setCartItems([]);
-            localStorage.removeItem("cart");
+            loadCartItems();
         } catch (error) {
             console.error("Failed to clear cart:", error);
         }
@@ -97,16 +89,17 @@ const CartPage = () => {
     };
 
     const handlePaymentComplete = async (paymentData) => {
-        console.log("paymentData 데이터 : ", paymentData);
+        console.log("paymentData 데이터 : ", paymentData)
+        console.log("paymentData 데이터 전송 확인 : ", paymentData)
         console.log("cartItems 데이터 : ", cartItems);
 
         try {
             setIsPaymentModal(false); // 모달 닫기
 
-            const rentalResponse = await cartApi.cartRental(cartItems);
+            const rentalResponse = await cartRental(cartItems);
             console.log("렌탈 완료 응답 데이터: ", rentalResponse);
 
-            const paymentResponse = await cartApi.rentalPayment(paymentData);
+            const paymentResponse = await rentalPayment(paymentData);
             console.log("결제 완료 응답 데이터: ", paymentResponse);
 
             handleClearCart();
@@ -127,47 +120,50 @@ const CartPage = () => {
         }
     };
 
+
+    const rentalInfo = cartItems.map((item) => ({
+        product_id: item.product_id,
+        product_name: item.product_name,
+        count: item.quantity,
+        price: item.price,
+    }));
+
+    useEffect(() => {
+        console.log("CartPage에서 rentalInfo 데이터 확인: ", rentalInfo);
+    }, [cartItems]);
+
+
     return (
-        <div className="cart-page-container">
-            {/* 상단 네비게이션 */}
+        <div>
             <MainNav />
             <Wrapper />
-
-            {/* 장바구니 내용 */}
-            <div className="cart-container">
-                {/* 장바구니 아이템 */}
-                <div className="cart-items">
-                    <div className="cart-header">
-                        <h1>내 장바구니</h1>
-                        <button className="back-btn" onClick={handleBack}>
-                            이전
-                        </button>
-                    </div>
-                    {cartItems.length > 0 ? (
+            <div className="cart-page-container">
+                <div className="cart-container">
+                    <div className="cart-items">
+                        <div className="cart-header">
+                            <h1>내 장바구니</h1>
+                            <div className="cart-buttons">
+                                <button className="back-btn" onClick={handleBack}>
+                                    이전
+                                </button>
+                            </div>
+                        </div>
                         <CartList
                             items={cartItems}
                             onUpdate={handleUpdateCart}
                             onRemove={handleRemoveCartItem}
                         />
-                    ) : (
-                        <p style={{ textAlign: "center", color: "#555" }}>
-                            장바구니에 물품이 없습니다.
-                        </p>
-                    )}
-                </div>
-
-                {/* 주문 요약 */}
-                <div className="cart-summary">
-                    <h2 className="summary-title">주문 정보</h2>
-                    <div className="summary-line">
-                        <span>총 수량</span>
-                        <span>{totalQuantity} 개</span>
                     </div>
-                    <div className="summary-line">
-                        <span>총 금액</span>
-                        <span>{totalPrice.toLocaleString()} 원</span>
-                    </div>
-                    <div className="buttons-container">
+                    <div className="cart-summary">
+                        <h2>주문 정보</h2>
+                        <div className="summary-line">
+                            <span>총 수량</span>
+                            <span>{totalQuantity} 개</span>
+                        </div>
+                        <div className="summary-line">
+                            <span>총 금액</span>
+                            <span>{totalPrice.toLocaleString()} 원</span>
+                        </div>
                         <button className="clear-btn" onClick={handleClearCart}>
                             장바구니 초기화
                         </button>
@@ -175,25 +171,21 @@ const CartPage = () => {
                             결제하기
                         </button>
                     </div>
+                    <PaymentModal
+                        isOpen={isPaymentModal}
+                        onRequestClose={() => setIsPaymentModal(false)}
+                        onPaymentComplete={handlePaymentComplete}
+                        amount={totalPrice}
+                        rentalInfo={cartItems.map((item) => ({
+                            product_id: item.product_id,
+                            product_name: item.product_name,
+                            count: item.quantity,
+                            price: item.price,
+                        }))}
+                        user_id={user_id}
+                    />
                 </div>
-
-                {/* 결제 모달 */}
-                <PaymentModal
-                    isOpen={isPaymentModal}
-                    onRequestClose={() => setIsPaymentModal(false)}
-                    onPaymentComplete={handlePaymentComplete}
-                    amount={totalPrice}
-                    rentalInfo={cartItems.map((item) => ({
-                        product_id: item.product_id,
-                        product_name: item.product_name,
-                        count: item.quantity,
-                        price: item.price,
-                    }))}
-                    user_id={user_id}
-                />
             </div>
-
-            {/* 하단 푸터 */}
             <Footer />
         </div>
     );

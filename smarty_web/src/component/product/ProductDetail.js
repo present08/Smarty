@@ -60,12 +60,13 @@ const ProductDetail = ({ product }) => {
             quantity: quantity,
         }
         try {
-            addCartItem([cartItem]).then(e => console.log(e))
+            const response = await addCartItem([cartItem])
+            console.log("장바구니 추가 확인", response)
             alert('장바구니에 추가되었습니다');
 
             const confirmMovetoCart = window.confirm('장바구니로 이동 하시겠습니까?');
             if (confirmMovetoCart) {
-                navigate('/cart');
+                navigate('/cart', {replace: true});
             }
         } catch (error) {
             console.log('장바구니 담기 실패: ', error);

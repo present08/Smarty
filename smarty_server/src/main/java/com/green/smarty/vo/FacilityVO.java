@@ -41,6 +41,7 @@ public class FacilityVO {
     public void changeOpenTime(String open_time) {this.open_time = open_time;}
     public void changeCloseTime(String close_time) {this.close_time = close_time;}
     public void changeDefaultTIme(int default_time) {this.default_time = default_time;}
+    public void changeBasicFee(int basic_fee) {this.basic_fee = basic_fee;}
     public void changeRate(float rate_adjustment) {this.rate_adjustment = rate_adjustment;}
     public void changeHotTime(int hot_time) {this.hot_time = hot_time;}
     public void changeContact(String contact) {this.contact = contact;}

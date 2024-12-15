@@ -126,6 +126,7 @@ public class AdminFacilityService {
         originFacilityVO.changeOpenTime(facilityVO.getOpen_time());
         originFacilityVO.changeCloseTime(facilityVO.getClose_time());
         originFacilityVO.changeDefaultTIme(facilityVO.getDefault_time());
+        originFacilityVO.changeBasicFee(facilityVO.getBasic_fee());
         originFacilityVO.changeRate(facilityVO.getRate_adjustment());
         originFacilityVO.changeHotTime(facilityVO.getHot_time());
         originFacilityVO.changeContact(facilityVO.getContact());

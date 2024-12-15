@@ -2,33 +2,25 @@
 .cart-page-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    /* 화면 전체 높이 */
+    height: 100vh;
     background-color: #f7f9fc;
-    /* 부드러운 배경색 */
     font-family: 'Arial', sans-serif;
     color: #333;
 }
 
-/* 헤더와 푸터 스타일 */
-header,
-footer {
-    width: 100%;
-    background-color: #2c3e50;
-    /* 진한 네이비색 */
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
 
 /* 메인 컨텐츠 */
 .cart-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    /* 2:6:2 비율 */
+    gap: 0px;
+    /* 칸 사이 여백 */
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
+    /* 상하 여백 조정 */
+    padding: 0;
+    /* 내부 패딩 제거 */
 }
 
 /* 장바구니 아이템 영역 */
@@ -153,37 +145,165 @@ footer {
 }
 
 /* 주문 정보 섹션 */
-.cart-summary h2 {
-    margin-bottom: 20px;
+.cart-summary {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-title {
     font-size: 1.5rem;
-    color: #34495e;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+    width: 100%;
 }
 
 .summary-line {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.summary-line span {
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.clear-btn,
+.payment-btn {
+    flex: 1;
+    padding: 15px;
     font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 48%;
+    /* 버튼 너비 조정 */
+    box-sizing: border-box;
+}
+
+.clear-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.clear-btn:hover {
+    background: #c0392b;
 }
 
 .payment-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: #2ecc71;
-    /* 초록색 */
+    background: #2ecc71;
     color: white;
-    border: none;
+}
+
+.payment-btn:hover {
+    background: #27ae60;
+}
+
+/* 공통 버튼 스타일 */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: #ffffff;
+    /* 배경색 없음 */
+    color: #333;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-align: center;
 }
 
-.payment-btn:hover {
-    background-color: #27ae60;
-    /* 어두운 초록색 */
+.button:hover {
+    background-color: #f7f7f7;
+    border-color: #aaa;
+    /* hover 시 테두리 강조 */
+}
+
+/* +, - 버튼 스타일 */
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: transparent;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background-color: #3498db;
+    /* hover 시 파란색 */
+    color: white;
+    border-color: #3498db;
+}
+
+/* 제거 버튼 스타일 */
+.remove-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    background: transparent;
+    color: #e74c3c;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* 이전 버튼 스타일 */
+.back-btn {
+    padding: 5px 15px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: transparent;
+    color: #333;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #333;
+    color: white;
 }
 
 /* 반응형 디자인 */

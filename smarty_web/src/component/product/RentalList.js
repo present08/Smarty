@@ -13,30 +13,6 @@ const RentalList = () => {
 
 console.log("rentals 의 데이터 확인",rentals)
 
-    // const getUserRentals = async () => {
-    //     try {
-    //         const userStr = localStorage.getItem('user');
-    //         if (!userStr) {
-    //             alert('로그인이 필요한 서비스입니다.');
-    //             navigate('/user/login');
-    //             return;
-    //         }
-
-    //         const user = JSON.parse(userStr);
-    //         const rentals = await getProductRentalUser(user.user_id);
-    //         setRentals(rentals);
-    //     } catch (error) {
-    //         console.error('대여 목록 조회 실패:', error);
-    //         alert('대여 목록을 불러오는데 실패했습니다.');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     getUserRentals();
-    // }, []);
-
     const getUserRentals = async () => {
         try {
             const userStr = localStorage.getItem('user');
@@ -100,7 +76,6 @@ console.log("rentals 의 데이터 확인",rentals)
 
     return (
         <div className="rentalList-container">
-            <h1 className="rentalList-title">내 대여 목록</h1>
             <button
                 className="rentalList-return-button"
                 onClick={() => navigate(-1)}

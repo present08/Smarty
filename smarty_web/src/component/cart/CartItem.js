@@ -39,6 +39,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                     type="number"
                     value={item.quantity}
                     readOnly
+                    className="quantity-input"
                 />
                 <button className="quantity-btn" onClick={handleDownQuantity}>
                     -
@@ -48,7 +49,9 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                 {item.price.toLocaleString()} 원
             </td>
             <td className="cart-item-remove">
-                <button onClick={() => onRemove(item.cart_id)}>삭제</button>
+                <button className="remove-btn" onClick={() => onRemove(item.cart_id)}>
+                    제거
+                </button>
             </td>
         </tr>
     );

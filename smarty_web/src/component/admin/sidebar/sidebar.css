@@ -7,7 +7,7 @@
 
 .sidebarWrapper {
     flex: 1;
-    width: 160px;
+    width: 170px;
     display: flex;
     flex-direction: column;
 }
@@ -40,7 +40,7 @@
     text-align: left;
     text-indent: 45px;
     color: #555;
-    font-size: 20px;
+    font-size: 18px;
     padding: 5px 0;
 }
 
@@ -60,6 +60,6 @@
     text-align: left;
     text-indent: 55px;
     color: #555;
-    font-size: 18px;
+    font-size: 16px;
     transition: max-height 0.3s ease;
 }

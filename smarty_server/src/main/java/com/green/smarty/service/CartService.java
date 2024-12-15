@@ -1,5 +1,7 @@
 package com.green.smarty.service;
 
+import com.green.smarty.dto.CartDTO;
+import com.green.smarty.dto.RentalDTO;
 import com.green.smarty.dto.UserCartListDTO;
 import com.green.smarty.mapper.CartMapper;
 import com.green.smarty.mapper.PaymentMapper;
@@ -11,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 
@@ -42,7 +47,6 @@ public class CartService {
     public void clearCart(String user_id) {
         cartMapper.clearCart(user_id);
     }
-
 
     public List<CartVO> getAllCart() {
         return cartMapper.getAllCart();

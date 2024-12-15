@@ -1,35 +1,35 @@
-package com.green.smarty.controller;
+    package com.green.smarty.controller;
 
 
-import com.green.smarty.mapper.UserProductMapper;
-import com.green.smarty.service.UserProductService;
-import com.green.smarty.vo.ProductAttachVO;
-import com.green.smarty.vo.ProductVO;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+    import com.green.smarty.mapper.UserProductMapper;
+    import com.green.smarty.service.UserProductService;
+    import com.green.smarty.vo.ProductAttachVO;
+    import com.green.smarty.vo.ProductVO;
+    import lombok.extern.slf4j.Slf4j;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.beans.factory.annotation.Value;
+    import org.springframework.core.io.Resource;
+    import org.springframework.core.io.UrlResource;
+    import org.springframework.http.HttpStatus;
+    import org.springframework.http.MediaType;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+    import java.nio.file.Path;
+    import java.nio.file.Paths;
+    import java.util.List;
 
     @Slf4j
     @RestController
     @RequestMapping("/api/user/products")
 
-public class UserProductController {
-    @Autowired
-    private UserProductService service;
-    @Autowired
-    private UserProductMapper productMapper;
-    @Value("upload")
-    private String uploadPath;
+    public class UserProductController {
+        @Autowired
+        private UserProductService service;
+        @Autowired
+        private UserProductMapper productMapper;
+        @Value("upload")
+        private String uploadPath;
 
         // product Data 전달
         @GetMapping("/")

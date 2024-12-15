@@ -24,6 +24,8 @@ import com.green.smarty.mapper.PaymentMapper;
 import com.green.smarty.mapper.PublicMapper;
 import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.mapper.UserProductMapper;
+import com.green.smarty.mapper.UserRentalMapper;
+import com.green.smarty.service.CartService;
 import com.green.smarty.service.SendEmailService;
 import com.green.smarty.service.UserRentalService;
 import com.green.smarty.vo.RentalVO;
@@ -33,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user/rentals")
 
 public class UserRentalController {
     @Autowired
@@ -53,7 +55,7 @@ public class UserRentalController {
     @Autowired
     private PaymentMapper paymentMapper;
 
-    @GetMapping("/rentals")
+    @GetMapping("/")
     public ResponseEntity<List<RentalDTO>> getRental() {
         try {
             List<RentalDTO> rentals = userRentalService.getAllRentals();
@@ -68,23 +70,24 @@ public class UserRentalController {
     @PostMapping("/")
     public ResponseEntity<?> postRental(@RequestBody List<RentalDTO> rentalDTOList) {
         try {
-            String user_id = (String) rentalRequest.get("user_id");
-            String product_id = (String) rentalRequest.get("product_id");
-            String rental_date = (String) rentalRequest.get("rental_date");
-            String return_date = (String) rentalRequest.get("return_date");
-            int count = (int) rentalRequest.get("count");
+            System.out.println("rentalDTOList 데이터 확인:" + rentalDTOList);
+            LocalDateTime date = LocalDateTime.now(); // 현재 날짜 및 시간 가져오기
+            List<RentalVO> rentals = new ArrayList<>();
 
-            System.out.println("대여 요청 데이터: user_id=" + user_id + ", product_id=" + product_id + ", count=" + count);
+            // 모든 Rental 데이터 가져오기
+            List<RentalVO> rentalVOList = publicMapper.getRentalAll();
+            List<RentalVO> rentalList = new ArrayList<>();
 
-            //데이터 생성
-            RentalVO vo = new RentalVO();
-            vo.setUser_id(user_id);
-            vo.setProduct_id(product_id);
-            vo.setRental_date(LocalDateTime.parse(rental_date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            vo.setReturn_date(LocalDateTime.parse(return_date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            vo.setRental_status(true);
-            vo.setCount(count);
+            for (RentalVO item : rentalVOList) {
+                String itemDate = item.getRental_id().substring(2, 10); // ID의 날짜 부분 추출
+                String currentDate = date.getYear() +
+                        String.format("%02d", date.getMonthValue()) +
+                        String.format("%02d", date.getDayOfMonth());
 
+                if (itemDate.equals(currentDate)) {
+                    rentalList.add(item);
+                }
+            }
 
             for (RentalDTO rentalDTO : rentalDTOList) {
                 // 고유 rental_id 생성
@@ -96,81 +99,58 @@ public class UserRentalController {
                 // date.getDayOfMonth())
                 System.out.println(" Rental 생성 확인 ID: " + rentalId);
 
+                // Rental 데이터 생성
+                RentalVO rentalVO = RentalVO.builder()
+                        .rental_id(rentalId)
+                        .user_id(rentalDTO.getUser_id())
+                        .product_id(rentalDTO.getProduct_id())
+                        .count(rentalDTO.getCount())
+                        .rental_date(LocalDateTime.now())
+                        .return_date(LocalDateTime.now().plusDays(1)) // 기본 반납일 설정
+                        .rental_status(true)
+                        .build();
 
+                rentals.add(rentalVO);
+                rentalList.add(rentalVO); // 새로 추가된 rental을 리스트에 포함
+                System.out.println("RentalVO 이게 맞아? : " + rentalVO);
+            }
 
-            //대여 ID 반환
-            return ResponseEntity.ok(Map.of(
-                            "message",
-                            "대여가 완료되었습니다.",
-                            "rental_id", String.valueOf(rentalId)
-                    ));
+            userRentalService.insertRentals(rentals);
+            System.out.println("Rental 데이터 생성 확인:" + rentals);
+
+            return ResponseEntity.ok("Rental 데이터 삽입 완료");
         } catch (Exception e) {
-            System.err.println("대여 등록 중 오류: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("대여 등록 중 오류가 발생했습니다." + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Rental 데이터 삽입 실패: " + e.getMessage());
         }
     }
 
-    // 대여 등록
-    // 수정 전
-    // @PostMapping("/")
-    // public ResponseEntity<?> postRental(@RequestBody Map<String, Object>
-    // rentalRequest) {
-    // try {
-    // String user_id = (String) rentalRequest.get("user_id");
-    // String product_id = (String) rentalRequest.get("product_id");
-    // String rental_date = (String) rentalRequest.get("rental_date");
-    // String return_date = (String) rentalRequest.get("return_date");
-    // int count = (int) rentalRequest.get("count");
-    //
-    // System.out.println("대여 요청 데이터: user_id=" + user_id + ", product_id=" +
-    // product_id + ", count=" + count);
-    //
-    // //데이터 생성
-    // RentalVO vo = new RentalVO();
-    // vo.setUser_id(user_id);
-    // vo.setProduct_id(product_id);
-    // vo.setRental_date(LocalDateTime.parse(rental_date,
-    // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    // vo.setReturn_date(LocalDateTime.parse(return_date,
-    // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    // vo.setRental_status(true);
-    // vo.setCount(count);
-    //
-    //
-    // //대여 생성 및 ID 반환
-    // int rentalId = userRentalService.insertRental(vo, count);
-    // System.out.println("rental_id 반환 확인: " + rentalId);
-    //
-    //
-    //
-    // //대여 ID 반환
-    // return ResponseEntity.ok(Map.of(
-    // "message",
-    // "대여가 완료되었습니다.",
-    // "rental_id", String.valueOf(rentalId)
-    // ));
-    // } catch (Exception e) {
-    // System.err.println("대여 등록 중 오류: " + e.getMessage());
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    // .body("대여 등록 중 오류가 발생했습니다." + e.getMessage());
-    // }
-    // }
-
     // 대여 반납
-    @PutMapping("/rentals/{rental_id}/return")
-    public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {
-        System.out.println("반납 요청 rental_id: " + rental_id + ", count: " + count);
+//    @PutMapping("/{rental_id}/return")
+//    public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {
+//        System.out.println("반납 요청 rental_id: " + rental_id + ", count: " + count);
+//        try {
+//            int updatedRows = userRentalService.returnRental(rental_id, count);
+//            if (updatedRows > 0) {
+//                return new ResponseEntity<>("반납 완료", HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>("반납 실패: 해당 렌탈이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception e) {
+//            System.err.println("반납 처리 오류: " + e.getMessage());
+//            return new ResponseEntity<>("반납 처리 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+    @PutMapping("/{rental_id}/return")
+    public ResponseEntity<RentalDTO> returnRental(@PathVariable String rental_id, @RequestParam int count) {
         try {
-            int updatedRows = userRentalService.returnRental(rental_id, count);
-            if (updatedRows > 0) {
-                return new ResponseEntity<>("반납 완료", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("반납 실패: 해당 렌탈이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
-            }
+            userRentalService.returnRental(rental_id, count);
+            RentalDTO updatedRental = userRentalService.getRentalById(rental_id);
+            return ResponseEntity.ok(updatedRental);
         } catch (Exception e) {
-            System.err.println("반납 처리 오류: " + e.getMessage());
-            return new ResponseEntity<>("반납 처리 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("반납 처리 오류: rental_id={}, error={}", rental_id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -216,7 +196,7 @@ public class UserRentalController {
         return result;
     }
 
-    @GetMapping("/rentals/{rental_id}")
+    @GetMapping("/{rental_id}")
     public ResponseEntity<RentalDTO> getRentalById(@PathVariable String rental_id) {
         System.out.println("특정 대여 조회 렌탈ID: " + rental_id); // 로그 추가
         try {

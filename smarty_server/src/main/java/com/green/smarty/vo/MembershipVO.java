@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class MembershipVO {
     private String membership_id;
     private String membership_level;

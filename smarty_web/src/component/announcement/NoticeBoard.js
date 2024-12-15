@@ -7,7 +7,7 @@ import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
 import Footer from '../Footer';
 import { noticeApi } from '../../api/noticeApi';
-
+import axiosInstance from '../../api/axiosInstance';
 function Announcement() {
     const navigate = useNavigate();
 
@@ -33,6 +33,9 @@ function Announcement() {
     const [searchType, setSearchType] = useState('all');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
+
+    const [user, setUser] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // 현재 페이지의 게시글 계산
     const indexOfLastPost = currentPage * postsPerPage;
@@ -74,9 +77,8 @@ function Announcement() {
         e.preventDefault();
 
         try {
-            // 세션 체크
-            const sessionResponse = await noticeApi.checkSession();
-            if (!sessionResponse || !sessionResponse.user_id) {
+            // localStorage 체크
+            if (!user) {
                 alert('로그인이 필요한 서비스입니다.');
                 return;
             }
@@ -90,7 +92,7 @@ function Announcement() {
                 title: announcements.title.trim(),
                 content: announcements.content.trim(),
                 content_type: announcements.content_type,
-                user_id: sessionResponse.user_id,  // 세션에서 받아온 user_id 사용
+                user_id: user.user_id,  // 세션에서 받아온 user_id 사용
                 view_count: 0,
                 good_btn: 0,
                 bad_btn: 0,
@@ -130,6 +132,26 @@ function Announcement() {
         fetchNotices();
     }, []);
 
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            // 서버로 상태 검증 요청
+            axiosInstance.get('/security/status')
+                .then((response) => {
+                    setIsLoggedIn(true);
+                    setUser(JSON.parse(localStorage.getItem('user')));
+                })
+                .catch((error) => {
+                    console.error('로그인 상태 확인 실패:', error);
+                    setIsLoggedIn(false);
+                    localStorage.removeItem('jwtToken'); // 토큰 제거
+                });
+        }
+    }, []);
+    useEffect(() => {
+        console.log("저장값 확인 : ", user)
+    }, [user])
+
     const toggleItem = async (board_id) => {
         try {
             await noticeApi.updateViewCount(board_id);
@@ -138,6 +160,32 @@ function Announcement() {
             console.error('조회수 업데이트 실패:', error);
         }
     }
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                axiosInstance.get('/security/status')
+                    .then((response) => {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        setUser(user);
+                        setIsLoggedIn(true);
+                        // 관리자 여부 확인
+                        if (user && user.level === 'admin') {
+                            console.log("관리자 권한이 있습니다.");
+                        } else {
+                            console.log("관리자 권한이 없습니다.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('로그인 상태 확인 실패:', error);
+                        setIsLoggedIn(false);
+                        localStorage.removeItem('jwtToken'); // 토큰 제거
+                    });
+            }
+        };
+        fetchUser();
+    }, []);
 
     const handleSearch = async (e) => {
         e.preventDefault();

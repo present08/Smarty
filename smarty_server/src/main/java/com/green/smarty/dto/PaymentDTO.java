@@ -19,7 +19,9 @@ public class PaymentDTO {
     private String reservation_id; // 예약 ID
     private String enrollment_id; // 등록 ID
     @JsonProperty("user_id")
-    private String user_id; // 대여 ID
+    private String user_id; // 사용자 ID
+//    @JsonProperty("rental_id")
+//    private String rental_id; // 대여 ID
     private float amount; // 결제 금액
     private boolean payment_status;
 

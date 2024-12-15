@@ -4,6 +4,7 @@ import '../css/nav.css';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import { checkLoginStatus, logout } from '../api/userApi';
 import { IoCartOutline } from "react-icons/io5";
+import axiosInstance from '../api/axiosInstance';
 
 const MainNav = () => {
     const [searchModal, setSearchModal] = useState(false);
@@ -19,18 +20,19 @@ const MainNav = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        checkLoginStatus().then(e => {
-            setIsLoggedIn(e.isLoggedIn);
-            localStorage.setItem('isLoggedIn', e.isLoggedIn);
-        });
-    }, []);
+    //----------------------------------세션 방식 로그인--------------------------------------//
+    // useEffect(() => {
+    //     checkLoginStatus().then(e => {
+    //         setIsLoggedIn(e.isLoggedIn);
+    //         localStorage.setItem('isLoggedIn', e.isLoggedIn);
+    //     });
+    // }, []);
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            setUser(JSON.parse(localStorage.getItem("user")));
-        }
-    }, [isLoggedIn]);
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         setUser(JSON.parse(localStorage.getItem("user")));
+    //     }
+    // }, [isLoggedIn]);
 
     const moveMypage = () => {
         navigate("/mypage", { state: { user } });
@@ -59,7 +61,7 @@ const MainNav = () => {
         if (token) {
             // 서버로 상태 검증 요청
             axiosInstance.get('/security/status')
-                .then((response) => {            
+                .then((response) => {
                     setIsLoggedIn(true);
                     setUser(JSON.parse(localStorage.getItem('user')));
                 })
@@ -71,21 +73,17 @@ const MainNav = () => {
         }
     }, []);
     useEffect(() => {
-      console.log("저장값 확인 : ", user)
+        console.log("저장값 확인 : ", user)
     }, [user])
-    
+
 
     const handleLogout = () => {
-        logout().then(() => {
-            alert("로그아웃 성공");
-            setIsLoggedIn(false);
-            localStorage.setItem('isLoggedIn', 'false');
-            localStorage.setItem('user', "");
-            window.location.reload();
-        }).catch((error) => {
-            console.error("로그인 상태 확인 중 에러 발생: ", error);
-        });
-    };
+        alert("로그아웃 성공");
+        setIsLoggedIn(false);
+        localStorage.removeItem('jwtToken'); // JWT 제거
+        navigate('/');
+    }
+    //---------------------------------------------------------------------------------------//
 
     return (
         <nav style={{ width: '100%', height: '130px', display: 'flex', flexDirection: 'column', backgroundColor: 'white', zIndex: '1000', position: 'fixed', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -93,15 +91,15 @@ const MainNav = () => {
                 <ul>
                     {isLoggedIn ? (
                         <>
-                        {user && user.level == 'admin'?
-                            (
-                                <li><Link to={"/admin"}>관리자모드</Link></li>
-                            ) : (
-                                <>
-                                    <li><span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span></li>
-                                    <li><Link to={"/"} onClick={handleLogout}>로그아웃</Link></li>
-                                </>
-                        )}
+                            {user && user.level == 'admin' ?
+                                (
+                                    <li><Link to={"/admin"}>관리자모드</Link></li>
+                                ) : (
+                                    <>
+                                        <li><span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span></li>
+                                        <li><Link to={"/"} onClick={handleLogout}>로그아웃</Link></li>
+                                    </>
+                                )}
                         </>
                     ) : (
                         <>
@@ -161,8 +159,8 @@ const MainNav = () => {
                     <div className='toggleIcon'>
                         <AiOutlineMenu onClick={toggleMenu} style={{ width: '50px', height: '50px', }} />
                     </div>
-                    <div className='iconbox' onClick = { cartPage }>
-                        <IoCartOutline className='modal-open-bt' />
+                    <div className='iconbox'>
+                        <IoCartOutline className='modal-open-bt' onClick={cartPage} />
                         <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
                         <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />
                     </div>

@@ -18,6 +18,7 @@ public class PaymentVO {
     private String reservation_id;
     private String enrollment_id;
     private String user_id;
+//    private String rental_id;
     private float amount;
     private boolean payment_status; // 1 : 결제완료 , 0 : 환불
 

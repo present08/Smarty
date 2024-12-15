@@ -3,6 +3,7 @@ package com.green.smarty.controller;
 import com.green.smarty.dto.AnnounceDTO;
 import com.green.smarty.dto.BoardDTO;
 import com.green.smarty.mapper.AnnounceMapper;
+import com.green.smarty.mapper.UserMapper;
 import com.green.smarty.service.AnnounceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class AnnounceController {
     @Autowired
     private AnnounceService announceService;
 
+    @Autowired
+    private UserMapper userMapper;
 
     //게시글 작성하기
     @PostMapping("/write")
@@ -98,6 +101,12 @@ public class AnnounceController {
     public void getAnnounceById(@PathVariable int announce_id){
         System.out.println("여기까지는 들어오는지?");
         announceService.getAnnounceById(announce_id);
+    }
+
+    // 글쓰기 버튼을 admin한테 보여주기 위해
+    @GetMapping("/writeBtn")
+    public String getLevelById(String user_id){
+        return userMapper.getLevelById(user_id);
     }
 
 }

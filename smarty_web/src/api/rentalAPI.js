@@ -48,9 +48,7 @@ export const getProductRentalUser = async (user_id) => {
     return response.data;
 }
 
-// 유저정보에 List 호출
 export const getList = async (user_id) => {
-    // const response = await axios.get(`${host}/payment/list/${user_id}`)
     const response = await axiosInstance.get(`${host}/list/${user_id}`)
     return response.data;
 }

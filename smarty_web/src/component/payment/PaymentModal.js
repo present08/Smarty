@@ -74,9 +74,6 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
     }, [postData])
 
     const enableBtn = (item) => {
-        console.log("선택된 아이템: ", item);
-
-        // rentalInfo 배열에서 올바른 product_id를 찾아 설정
         const selectedProduct = rentalInfo.find(
             (product) => product.product_id === item.product_id || product.product_id === rentalInfo[0]?.product_id
         );
@@ -102,8 +99,6 @@ const PaymentModal = ({ isOpen, onRequestClose, onPaymentComplete, amount, renta
         } else {
             setPostData(init);
         }
-
-        console.log("PostData 변경 결과: ", postData);
     };
 
     useEffect(() => {

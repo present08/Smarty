@@ -97,16 +97,13 @@ const CartPage = () => {
         try {
             setIsPaymentModal(false); // 모달 닫기
 
-            // Step 1: 장바구니 항목을 Rental 테이블에 삽입
             const rentalResponse = await cartRental(cartItems);
             console.log("렌탈 완료 응답 데이터: ", rentalResponse);            
 
-            // Step 2: Payment 테이블에 데이터 삽입
             const paymentResponse = await rentalPayment(paymentData);
             console.log("결제 완료 응답 데이터: ", paymentResponse);
 
-            // Step 3: 결제 성공 시, 장바구니 초기화 및 결제 성공 페이지로 이동
-            handleClearCart(); // 장바구니 초기화
+            handleClearCart();
             navigate("/payment/success", {
                 state: {
                     paymentId: paymentResponse.paymentId,
@@ -139,11 +136,8 @@ const CartPage = () => {
 
     return (
         <div className="cart-page-container">
-            {/* 상단 네비게이션 */}
             <MainNav />
             <Wrapper />
-
-            {/* 메인 컨텐츠 */}
             <div className="cart-container">
                 <div className="cart-items">
                     <div className="cart-header">
@@ -191,8 +185,6 @@ const CartPage = () => {
                     user_id={user_id}
                 />
             </div>
-
-            {/* 하단 푸터 */}
             <Footer />
         </div>
     );

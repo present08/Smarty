@@ -1,11 +1,9 @@
-import axios from "axios"
 import axiosInstance from "./axiosInstance";
 export const API_SERVER_HOST = "http://localhost:8080"
 const prefix = `${API_SERVER_HOST}/api/user/facilities`
 
 
 export const getList = async() => {
-    // const res = await axios.get(`${prefix}/list`)
     const res = await axiosInstance.get(`${prefix}/list`)
     return res.data
 }

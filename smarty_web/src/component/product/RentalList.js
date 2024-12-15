@@ -1,16 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getProductRentalUser } from '../../api/rentalAPI';
 import '../../css/rentalList.css';
 import axiosInstance from '../../api/axiosInstance';
+import { getProductFiles } from '../../api/productApi';
 
 const RentalList = () => {
     const [rentals, setRentals] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [rentalImages, setRentalImages] = useState({});
     const navigate = useNavigate();
 
 console.log("rentals 의 데이터 확인",rentals)
+
+    // const getUserRentals = async () => {
+    //     try {
+    //         const userStr = localStorage.getItem('user');
+    //         if (!userStr) {
+    //             alert('로그인이 필요한 서비스입니다.');
+    //             navigate('/user/login');
+    //             return;
+    //         }
+
+    //         const user = JSON.parse(userStr);
+    //         const rentals = await getProductRentalUser(user.user_id);
+    //         setRentals(rentals);
+    //     } catch (error) {
+    //         console.error('대여 목록 조회 실패:', error);
+    //         alert('대여 목록을 불러오는데 실패했습니다.');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     getUserRentals();
+    // }, []);
 
     const getUserRentals = async () => {
         try {
@@ -24,6 +49,18 @@ console.log("rentals 의 데이터 확인",rentals)
             const user = JSON.parse(userStr);
             const rentals = await getProductRentalUser(user.user_id);
             setRentals(rentals);
+
+            // 대여한 상품의 이미지를 불러오는 로직 추가
+            const filesMap = {};
+            await Promise.all(
+                rentals.map(async (rental) => {
+                    const files = await getProductFiles(rental.product_id).catch(() => []);
+                    filesMap[rental.product_id] = files.length > 0
+                        ? files.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
+                        : ['/no-image.png'];
+                })
+            );
+            setRentalImages(filesMap);
         } catch (error) {
             console.error('대여 목록 조회 실패:', error);
             alert('대여 목록을 불러오는데 실패했습니다.');
@@ -89,29 +126,34 @@ console.log("rentals 의 데이터 확인",rentals)
                     </thead>
                         <tbody>
                             {rentals.map((rental) => {
-                                // 대여일(rental_date)을 기준으로 반납 예정일 계산
                                 const rentalDate = new Date(rental.rental_date);
                                 const returnDate = new Date(rentalDate);
-                                returnDate.setDate(rentalDate.getDate() + 1); // 대여일의 다음날 계산
+                                returnDate.setDate(rentalDate.getDate() + 1);
 
                                 return (
                                     <tr key={rental.rental_id}>
                                         <td>
                                             <div className="rentalList-image-container">
                                                 <img
-                                                    src={rental.image || '/path/to/default-image.jpg'}
+                                                    src={
+                                                        rentalImages[rental.product_id]?.[0] ||
+                                                        '/path/to/default-image.jpg'
+                                                    }
                                                     alt={rental.product_name}
                                                     className="rentalList-image"
+                                                    onError={(e) => {
+                                                        e.target.src = '/no-image.png';
+                                                        e.target.onerror = null;
+                                                    }}
                                                 />
                                             </div>
                                         </td>
                                         <td>{rental.product_name}</td>
-                                        <td>{rental.size || "N/A"}</td>
+                                        <td>{rental.size }</td>
                                         <td>{new Date(rental.rental_date).toLocaleString()}</td>
                                         <td>
-                                            {/* 반납 예정일 */}
                                             {rental.return_date
-                                                ? new Date(rental.return_date).toLocaleString() // 실제 반납일이 있는 경우 표시
+                                                ? new Date(rental.return_date).toLocaleString()
                                                 : returnDate.toLocaleString()}
                                         </td>
                                         <td>{rental.count}</td>

@@ -62,12 +62,7 @@ public class CartController {
     @PostMapping("/rentals")
     public ResponseEntity<String> cartRental(@RequestBody List<CartDTO> cartDTOList) {
         try {
-            System.out.println("cartDTOList(cartRental) 데이터 확인 : " + cartDTOList);
-
             for (CartDTO cartDTO : cartDTOList) {
-                System.out.println("Count 데이터 확인 CartDTO 처리 중: " + cartDTO + ", Quantity: " + cartDTO.getQuantity());
-
-                // rental_id 생성 로직 추가
                 LocalDateTime date = LocalDateTime.now();
                 List<RentalVO> rentalVOList = publicMapper.getRentalAll();
                 List<RentalVO> rentalList = new ArrayList<>();
@@ -94,7 +89,6 @@ public class CartController {
                         .rental_status(true)
                         .build();
 
-                System.out.println("Cart에서 RentalVO 생성 데이터 확인 : " + rental);
                 userRentalService.insertRental(rental, cartDTO.getQuantity());
             }
 
@@ -107,9 +101,7 @@ public class CartController {
 
     @PostMapping("/")
     public ResponseEntity<List<String>> addCartItem(@RequestBody List<CartDTO> cartDTOList) {
-        System.out.println("cartDTOList(addCartItem) 데이터 확인: " + cartDTOList);
         List<String> createdIds = new ArrayList<>();
-
         for (CartDTO cartDTO : cartDTOList) {
             LocalDateTime date = LocalDateTime.now();
             String formatDate = date.getYear() + String.format("%02d", date.getMonthValue())
@@ -126,7 +118,6 @@ public class CartController {
             }
 
             String id = "C_" + formatDate + String.format("%03d", cartList.size() + 1);
-            System.out.println("Cart ID : " + id);
 
             CartVO cartVO = CartVO.builder()
                     .cart_id(id)

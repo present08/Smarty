@@ -3,6 +3,7 @@ package com.green.smarty.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,67 +59,10 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
-    // @PostMapping("/rentals")
-    // public ResponseEntity<String> cartRental(@RequestBody List<CartDTO>
-    // cartDTOList) {
-    // try {
-    // System.out.println("cartDTOList 데이터 확인 : " + cartDTOList);
-    //
-    // if (cartDTOList.size() == 1) {
-    // // 단일 대여 요청 처리
-    // CartDTO cartDTO = cartDTOList.get(0);
-    // System.out.println("단일 대여 처리 중: " + cartDTO);
-    //
-    // RentalVO rental = RentalVO.builder()
-    // .user_id(cartDTO.getUser_id())
-    // .product_id(cartDTO.getProduct_id())
-    // .rental_date(LocalDateTime.now())
-    // .count(cartDTO.getQuantity())
-    // .return_date(LocalDateTime.now().plusDays(1)) // 기본 반납일 (1일 뒤)
-    // .rental_status(true)
-    // .build();
-    //
-    // System.out.println("cartDTO에서 가져온 Quantity: " + cartDTO.getQuantity());
-    // // 단일 대여를 insertRental로 처리
-    // userRentalService.insertRental(rental, cartDTO.getQuantity());
-    // System.out.println("단일 대여 RentalVO 생성 데이터 확인: " + rental);
-    //
-    // } else {
-    // // 다중 대여 요청 처리
-    // System.out.println("다중 대여 처리 중");
-    //
-    // List<RentalVO> rentals = cartDTOList.stream()
-    // .map(cartDTO -> RentalVO.builder()
-    // .user_id(cartDTO.getUser_id())
-    // .product_id(cartDTO.getProduct_id())
-    // .rental_date(LocalDateTime.now())
-    // .count(cartDTO.getQuantity())
-    // .return_date(LocalDateTime.now().plusDays(1)) // 기본 반납일 (1일 뒤)
-    // .rental_status(true)
-    // .build())
-    // .collect(Collectors.toList());
-    // // 다중 대여를 insertRentals로 처리
-    // userRentalService.insertRentals(rentals);
-    // System.out.println("다중 대여 RentalVO 생성 데이터 확인: " + rentals);
-    // }
-    //
-    // return ResponseEntity.ok("Rental 데이터 삽입 완료");
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    // .body("Rental 데이터 삽입 실패: " + e.getMessage());
-    // }
-    // }
-
     @PostMapping("/rentals")
     public ResponseEntity<String> cartRental(@RequestBody List<CartDTO> cartDTOList) {
         try {
-            System.out.println("cartDTOList(cartRental) 데이터 확인 : " + cartDTOList);
-
             for (CartDTO cartDTO : cartDTOList) {
-                System.out.println("Count 데이터 확인 CartDTO 처리 중: " + cartDTO + ", Quantity: " + cartDTO.getQuantity());
-
-                // rental_id 생성 로직 추가
                 LocalDateTime date = LocalDateTime.now();
                 List<RentalVO> rentalVOList = publicMapper.getRentalAll();
                 List<RentalVO> rentalList = new ArrayList<>();
@@ -145,7 +89,6 @@ public class CartController {
                         .rental_status(true)
                         .build();
 
-                System.out.println("Cart에서 RentalVO 생성 데이터 확인 : " + rental);
                 userRentalService.insertRental(rental, cartDTO.getQuantity());
             }
 
@@ -156,41 +99,9 @@ public class CartController {
         }
     }
 
-    // @PostMapping("/rentals")
-    // public ResponseEntity<String> cartRental(@RequestBody List<CartDTO>
-    // cartDTOList) {
-    // System.out.println("cartDTOList(cartRental) 데이터 확인 : " + cartDTOList);
-    // try {
-    // // 다중 Rental 데이터 처리
-    // for (CartDTO cartDTO : cartDTOList) {
-    // System.out.println("Count 데이터 확인 CartDTO 처리 중: " + cartDTO + ", Quantity: " +
-    // cartDTO.getQuantity());
-    // RentalVO rental = RentalVO.builder()
-    // .user_id(cartDTO.getUser_id())
-    // .product_id(cartDTO.getProduct_id())
-    // .rental_date(LocalDateTime.now())
-    // .count(cartDTO.getQuantity())
-    // .return_date(LocalDateTime.now().plusDays(1)) // 기본 반납일 (1일 뒤)
-    // .rental_status(true)
-    // .build();
-    //
-    // System.out.println("Cart에서 RentalVO 생성 데이터 확인 : " + rental);
-    // userRentalService.insertRental(rental, cartDTO.getQuantity());
-    // }
-    //
-    // return ResponseEntity.ok("Rental 데이터 삽입 완료");
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Rental
-    // 데이터 삽입 실패: " + e.getMessage());
-    // }
-    // }
-
     @PostMapping("/")
     public ResponseEntity<List<String>> addCartItem(@RequestBody List<CartDTO> cartDTOList) {
-        System.out.println("cartDTOList(addCartItem) 데이터 확인: " + cartDTOList);
         List<String> createdIds = new ArrayList<>();
-
         for (CartDTO cartDTO : cartDTOList) {
             LocalDateTime date = LocalDateTime.now();
             String formatDate = date.getYear() + String.format("%02d", date.getMonthValue())
@@ -207,7 +118,6 @@ public class CartController {
             }
 
             String id = "C_" + formatDate + String.format("%03d", cartList.size() + 1);
-            System.out.println("Cart ID : " + id);
 
             CartVO cartVO = CartVO.builder()
                     .cart_id(id)
@@ -224,62 +134,11 @@ public class CartController {
         return ResponseEntity.ok(createdIds);
     }
 
-    // 수정 전
-    // @PostMapping("/")
-    // public ResponseEntity<String> addCartItem(@RequestBody CartDTO cartDTO) {
-    // System.out.println(cartDTO);
-    //
-    // LocalDateTime date = LocalDateTime.now();
-    // String formatDate = date.getYear()+String.format("%02d",
-    // date.getMonthValue())+String.format("%02d", date.getDayOfMonth());
-    //
-    // List<CartVO> allCart = cartService.getAllCart();
-    // List<CartVO> cartList = new ArrayList<>();
-    //
-    // for (CartVO item : allCart) {
-    // String cartDate = item.getCart_id().substring(2, 10);
-    // if (cartDate.equals(formatDate)) {
-    // cartList.add(item);
-    // }
-    // }
-    //
-    // String id = "C_" + formatDate + String.format("%03d", cartList.size()+1);
-    // System.out.println("Cart ID : " + id);
-    //
-    // CartVO cartVO = CartVO.builder()
-    // .cart_id(id)
-    // .user_id(cartDTO.getUser_id())
-    // .product_id(cartDTO.getProduct_id())
-    // .quantity(cartDTO.getQuantity())
-    // .created_at(LocalDateTime.now())
-    // .build();
-    //
-    // cartService.addCart(cartVO);
-    //
-    // return ResponseEntity.ok(id);
-    // }
-
-    // @PutMapping("/")
-    // public ResponseEntity<String> updateCartItem(@RequestBody CartDTO cartDTO) {
-    // if (cartDTO.getUser_id() == null || cartDTO.getProduct_id() == null) {
-    // return ResponseEntity.badRequest().body("유효한 user_id와 product_id가 필요합니다.");
-    // }
-    //
-    // CartVO cartVO = CartVO.builder()
-    // .user_id(cartDTO.getUser_id())
-    // .product_id(cartDTO.getProduct_id())
-    // .quantity(cartDTO.getQuantity())
-    // .build();
-    //
-    // cartService.updateCart(cartVO);
-    // return ResponseEntity.ok("장바구니 항목이 업데잍 되었습니다");
-    // }
-
     @PutMapping("/")
-    public ResponseEntity<String> updateCartItem(@RequestBody CartDTO cartDTO) {
+    public ResponseEntity<String> updateCartItem(@RequestBody Map<String, Object> cart) {
         CartVO cartVO = CartVO.builder()
-                .cart_id(cartDTO.getCart_id())
-                .quantity(cartDTO.getQuantity())
+                .cart_id(cart.get("cart_id").toString())
+                .quantity(Integer.parseInt(cart.get("quantity").toString()))
                 .build();
         cartService.updateCart(cartVO);
         return ResponseEntity.ok("장바구니 업데이트");
@@ -294,6 +153,7 @@ public class CartController {
     @DeleteMapping("/clear/{user_id}")
     public ResponseEntity<String> clearCart(@PathVariable String user_id) {
         cartService.clearCart(user_id);
+        System.out.println("============================="+user_id);
         return ResponseEntity.ok("장바구니 전부 비우기");
     }
 

@@ -2,13 +2,6 @@ import React from "react";
 
 const CartItem = ({ item, onUpdate, onRemove }) => {
 
-    const handleQuantityChange = (e) => {
-        const quantity = parseInt(e.target.value, 10);
-        if (quantity > 0) {
-            onUpdate(item.cart_id, quantity);
-        }
-    };
-
     const handleUpQuantity = () => {
         onUpdate(item.cart_id, item.quantity + 1)
     }

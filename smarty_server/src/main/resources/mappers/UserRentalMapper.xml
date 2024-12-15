@@ -88,14 +88,12 @@
         INSERT INTO product_status_log (
             rental_id,
             status_id,
-<!--            product_id,-->
             changed_status,
             change_quantity,
             created_at
         ) VALUES (
             #{rental_id},
             #{status_id},
-<!--            #{product_id},-->
             #{changed_status},
             #{change_quantity},
         CURRENT_TIMESTAMP
@@ -142,7 +140,7 @@
     <update id="returnRental" parameterType="com.green.smarty.vo.RentalVO">
         UPDATE rental
         SET rental_status = #{rental_status},
-        return_date = #{return_date}
+            return_date = #{return_date}
         WHERE rental_id = #{rental_id};
     </update>
 

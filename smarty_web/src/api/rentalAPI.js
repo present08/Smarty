@@ -22,7 +22,7 @@ export const createRental = async ({ amount, user_id }) => {
     try {
         console.log('API 호출 전 데이터:', amount, user_id);
         // const response = await axios.post('http://localhost:8080/api/rentals', {amount,user_id});
-        const response = await axiosInstance.post('http://localhost:8080/api/rentals', {amount,user_id});
+        const response = await axiosInstance.post('/user/rentals', {amount,user_id});
         // console.log('API 응답:', response);
         // console.log("여기를 확인: ", response.data)
         return response.data;
@@ -48,25 +48,15 @@ export const getProductRentalUser = async (user_id) => {
     return response.data;
 }
 
-// 유저정보에 List 호출
 export const getList = async (user_id) => {
-    // const response = await axios.get(`${host}/payment/list/${user_id}`)
     const response = await axiosInstance.get(`${host}/list/${user_id}`)
-    console.log("어떤게 왔나 볼까요 23111111111111111111", response.data)
     return response.data;
 }
 
 //카트에서 렌탈서버로 던지기
-// export const cartRental = async (postData) => {
-//     console.log("카트에서 렌탈 서버로 던지는 postData", postData)
-//     const response = await axios.post(`${ host }/`, postData)
-//     console.log("카트에서 렌탈 서버로 던지는 response.data", response.data)
-//     return response.data
-// }
-//카트에서 렌탈서버로 던지기
 export const cartRental = async (postData) => {
     console.log("카트에서 렌탈 서버로 던지는 postData", postData)
-    const response = await axios.post(`http://localhost:8080/api/user/cart/rentals`, postData)
+    const response = await axiosInstance.post(`/user/cart/rentals`, postData)
     console.log("카트에서 렌탈 서버로 던지는 response.data", response.data)
     return response.data
 }

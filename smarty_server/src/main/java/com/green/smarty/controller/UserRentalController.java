@@ -125,66 +125,31 @@ public class UserRentalController {
         }
     }
 
-    // 대여 등록
-    // 수정 전
-    // @PostMapping("/")
-    // public ResponseEntity<?> postRental(@RequestBody Map<String, Object>
-    // rentalRequest) {
-    // try {
-    // String user_id = (String) rentalRequest.get("user_id");
-    // String product_id = (String) rentalRequest.get("product_id");
-    // String rental_date = (String) rentalRequest.get("rental_date");
-    // String return_date = (String) rentalRequest.get("return_date");
-    // int count = (int) rentalRequest.get("count");
-    //
-    // System.out.println("대여 요청 데이터: user_id=" + user_id + ", product_id=" +
-    // product_id + ", count=" + count);
-    //
-    // //데이터 생성
-    // RentalVO vo = new RentalVO();
-    // vo.setUser_id(user_id);
-    // vo.setProduct_id(product_id);
-    // vo.setRental_date(LocalDateTime.parse(rental_date,
-    // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    // vo.setReturn_date(LocalDateTime.parse(return_date,
-    // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    // vo.setRental_status(true);
-    // vo.setCount(count);
-    //
-    //
-    // //대여 생성 및 ID 반환
-    // int rentalId = userRentalService.insertRental(vo, count);
-    // System.out.println("rental_id 반환 확인: " + rentalId);
-    //
-    //
-    //
-    // //대여 ID 반환
-    // return ResponseEntity.ok(Map.of(
-    // "message",
-    // "대여가 완료되었습니다.",
-    // "rental_id", String.valueOf(rentalId)
-    // ));
-    // } catch (Exception e) {
-    // System.err.println("대여 등록 중 오류: " + e.getMessage());
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    // .body("대여 등록 중 오류가 발생했습니다." + e.getMessage());
-    // }
-    // }
-
     // 대여 반납
+//    @PutMapping("/{rental_id}/return")
+//    public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {
+//        System.out.println("반납 요청 rental_id: " + rental_id + ", count: " + count);
+//        try {
+//            int updatedRows = userRentalService.returnRental(rental_id, count);
+//            if (updatedRows > 0) {
+//                return new ResponseEntity<>("반납 완료", HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>("반납 실패: 해당 렌탈이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception e) {
+//            System.err.println("반납 처리 오류: " + e.getMessage());
+//            return new ResponseEntity<>("반납 처리 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @PutMapping("/{rental_id}/return")
-    public ResponseEntity<String> returnRental(@PathVariable String rental_id, @RequestParam int count) {
-        System.out.println("반납 요청 rental_id: " + rental_id + ", count: " + count);
+    public ResponseEntity<RentalDTO> returnRental(@PathVariable String rental_id, @RequestParam int count) {
         try {
-            int updatedRows = userRentalService.returnRental(rental_id, count);
-            if (updatedRows > 0) {
-                return new ResponseEntity<>("반납 완료", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("반납 실패: 해당 렌탈이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
-            }
+            userRentalService.returnRental(rental_id, count);
+            RentalDTO updatedRental = userRentalService.getRentalById(rental_id);
+            return ResponseEntity.ok(updatedRental);
         } catch (Exception e) {
-            System.err.println("반납 처리 오류: " + e.getMessage());
-            return new ResponseEntity<>("반납 처리 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -206,7 +171,6 @@ public class UserRentalController {
 
     @GetMapping("/list/{user_id}")
     public UserActivityDTO getList(@PathVariable String user_id) {
-        System.out.println("여기에 getList 데이터가 들어옴 : " + user_id);
         List<ReservationVO> reservationVO = publicMapper.getReservationAll();
         List<EnrollmentClassDTO> enrollmentClassDTO = paymentMapper.getEnrollmentClass();
         List<ReservationVO> reservationList = new ArrayList<>();

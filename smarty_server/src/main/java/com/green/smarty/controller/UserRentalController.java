@@ -149,6 +149,7 @@ public class UserRentalController {
             RentalDTO updatedRental = userRentalService.getRentalById(rental_id);
             return ResponseEntity.ok(updatedRental);
         } catch (Exception e) {
+            log.error("반납 처리 오류: rental_id={}, error={}", rental_id, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

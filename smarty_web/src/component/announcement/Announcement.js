@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/announcement.css';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import MainNav from '../MainNav';
 import Wrapper from '../Wrapper';
 import BackToTopButton from '../BackToTopButton';
@@ -24,6 +24,8 @@ const NoticeBoard = () => {
     });
     const [currentPage, setCurrentPage] = useState(1);
     const noticesPerPage = 8;
+    const [user, setUser] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // 초기 로딩 시 백엔드에서 공지사항 데이터를 가져오는 함수
     useEffect(() => {
@@ -32,6 +34,33 @@ const NoticeBoard = () => {
             setNotices(data);
         };
         fetchNotices();
+    }, []);
+
+    // 사용자 정보를 가져오는 useEffect
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                axiosInstance.get('/security/status')
+                    .then((response) => {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        setUser(user);
+                        setIsLoggedIn(true);
+                        // 관리자 여부 확인
+                        if (user && user.level === 'admin') {
+                            console.log("관리자 권한이 있습니다.");
+                        } else {
+                            console.log("관리자 권한이 없습니다.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('로그인 상태 확인 실패:', error);
+                        setIsLoggedIn(false);
+                        localStorage.removeItem('jwtToken'); // 토큰 제거
+                    });
+            }
+        };
+        fetchUser();
     }, []);
 
     const toggleItem = async (id) => {
@@ -173,15 +202,19 @@ const NoticeBoard = () => {
                         </div>
 
                         {/* 글쓰기 버튼을 별도로 분리 */}
+
                         <div className="write-button-container">
+                            {isLoggedIn && user?.level === 'admin' && (
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="ann-write-button"
+                                >
+                                    글쓰기
+                                </button>
+                            )}
                         </div>
+
                     </div>
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="ann-write-button"
-                    >
-                        글쓰기
-                    </button>
                     {/* 컬럼 헤더 추가 */}
                     <div className="notice-header-columns">
                         <div className="column type">공지유형</div>
@@ -229,19 +262,23 @@ const NoticeBoard = () => {
                                                 {notice.content}
                                             </div>
                                             <div className="notice-actions" style={{ marginTop: '20px', textAlign: 'right' }}>
-                                                <button
-                                                    onClick={() => handleDeleteNotice(notice.announce_id)}
-                                                    className="ann-delete-button"
-                                                    style={{ marginRight: '10px' }}
-                                                >
-                                                    삭제
-                                                </button>
-                                                <button
-                                                    className="ann-notice-modify"
-                                                    onClick={() => navigate(`/notice/announce/modify/${notice.announce_id}`)}
-                                                >
-                                                    수정
-                                                </button>
+                                                {user && user.level === 'admin' && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleDeleteNotice(notice.announce_id)}
+                                                            className="ann-delete-button"
+                                                            style={{ marginRight: '10px' }}
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                        <button
+                                                            className="ann-notice-modify"
+                                                            onClick={() => navigate(`/notice/announce/modify/${notice.announce_id}`)}
+                                                        >
+                                                            수정
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     )}

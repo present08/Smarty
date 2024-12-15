@@ -57,7 +57,6 @@ public class PaymentController {
     @Autowired
     private UserRentalMapper userRentalMapper;
 
-
     // (영준)
     @Autowired
     private SendEmailService sendEmailService;

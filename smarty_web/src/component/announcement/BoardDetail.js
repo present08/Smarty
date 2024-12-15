@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { noticeApi } from '../../api/noticeApi';
 import "../../css/BoardDetail.css";
-import axios from "axios";
+import axiosInstance from '../../api/axiosInstance';
 
 function BoardDetail() {
   const { board_id } = useParams();
@@ -12,6 +12,8 @@ function BoardDetail() {
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,32 @@ function BoardDetail() {
     };
     fetchData();
   }, [board_id]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('jwtToken');
+      if (token) {
+        axiosInstance.get('/security/status')
+          .then((response) => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            setUser(user);
+            setIsLoggedIn(true);
+            // 관리자 여부 확인
+            if (user && user.level === 'admin') {
+              console.log("관리자 권한이 있습니다.");
+            } else {
+              console.log("관리자 권한이 없습니다.");
+            }
+          })
+          .catch((error) => {
+            console.error('로그인 상태 확인 실패:', error);
+            setIsLoggedIn(false);
+            localStorage.removeItem('jwtToken'); // 토큰 제거
+          });
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +67,7 @@ function BoardDetail() {
     const userData = JSON.parse(user);
     console.log('파싱된 사용자 정보:', userData);
 
-    
+
     console.log('사용자 ID 필드들:', {
       id: userData.id,
       userId: userData.userId,
@@ -184,16 +212,18 @@ function BoardDetail() {
             <button onClick={() => navigate('/notice/board')}>
               목록
             </button>
-            {board.user_id === JSON.parse(localStorage.getItem('user'))?.userId && (
-              <>
-                <button onClick={handleDelete}>
-                  삭제
-                </button>
-                <button onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
-                  수정
-                </button>
-              </>
-            )}
+            <>
+              {(board.user_id === user.user_id || user.level === 'admin') && (
+                <>
+                  <button onClick={handleDelete}>
+                    삭제
+                  </button>
+                  <button onClick={() => navigate(`/notice/board/modify/${board_id}`)}>
+                    수정
+                  </button>
+                </>
+              )}
+            </>
           </div>
         </>
       )}
@@ -238,12 +268,16 @@ function BoardDetail() {
                     </div>
                     <span className="comment-author">작성자: {comment.user_id}</span>
                     <div className="comment-actions">
-                      <button onClick={() => handleCommentEdit(comment.reply_id, comment.content)}>
-                        수정
-                      </button>
-                      <button onClick={() => handleCommentDelete(comment.reply_id)}>
-                        삭제
-                      </button>
+                      {(comment.user_id === user.user_id || user.level === 'admin') && (
+                        <>
+                          <button onClick={() => handleCommentEdit(comment.reply_id, comment.content)}>
+                            수정
+                          </button>
+                          <button onClick={() => handleCommentDelete(comment.reply_id)}>
+                            삭제
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </>

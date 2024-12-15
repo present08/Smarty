@@ -186,6 +186,16 @@
     <select id="getUserForSendMail" parameterType="com.green.smarty.vo.UserVO">
         SELECT user_id, user_name, email
         FROM user
+        WHERE level = 'user';
+    </select>
+
+<!--    영준-->
+    <select id="getLevelById" parameterType="String">
+        SELECT level
+        FROM user
+        WHERE level = 'admin'
+        AND
+        user_id = #{user_id};
     </select>
 
 </mapper>

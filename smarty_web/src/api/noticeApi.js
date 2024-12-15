@@ -164,6 +164,12 @@ export const noticeApi = {
             // const response = await axios.get(`${BASE_URL}/api/user/announce/getOneList/${announce_id}`);
             const response = await axiosInstance.get(`${BASE_URL}/api/user/announce/getOneList/${announce_id}`);
             return response.data;
+        },
+
+        // 글쓰기 버튼 어드민한테만 보이기
+        getCurrentUser: async (user_id) => {
+            const response = await axiosInstance.get(`${BASE_URL}/api/user/announce/writeBtn`);
+            return response.data;
         }
     },
 

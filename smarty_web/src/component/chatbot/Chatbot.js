@@ -1,6 +1,4 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
 import styled from "styled-components";
 import '../../css/Chatbot.css';
 
@@ -18,8 +16,9 @@ const Nav = styled.div`
     border-radius: 6px;
   }
   `;
-  function ChatBot(props) {
-      const [socket, setSocket] = useState(props.props)
+function ChatBot(props) {
+    const { socket, chatbotClose } = props
+    // const [socket, setSocket] = useState(socketinfo)
     //   useEffect(() => {
     //     const socket = io('http://localhost:5000', {
     //         transports: ['websocket'], // 웹소켓만 사용
@@ -115,19 +114,21 @@ const Nav = styled.div`
         return () => {
             let user_id;
             try {
-                user_id = JSON.parse(localStorage.getItem("user").user_id);
+                user_id = JSON.parse(localStorage.getItem("user")).user_id;
             } catch (error) {
                 user_id = null;
             }
-            const saveData = async () => {
-                await axios.post("http://localhost:5000/save", { messages: messagesRef.current, timestamp: new Date(), user_id });
-            };
-            if (user_id != null) {
-                saveData();
-            }
+            // const saveData = async () => {
+            //     const response = await axios.post("http://localhost:5000/save", { messages: messagesRef.current, timestamp: new Date(), user_id });
+            //     return response
+            // };
+            // if (user_id != null) {
+            //     saveData().then(e => console.log(e));
+            // }
             socket.off('receive_normal');
             socket.off('receive_quick');
-
+            console.log("231321321321312,", messagesRef.current)
+            chatbotClose({ messages: messagesRef.current, timestamp: new Date(), user_id })
         };
     }, []);
 

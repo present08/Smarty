@@ -149,7 +149,6 @@ public class UserRentalController {
             RentalDTO updatedRental = userRentalService.getRentalById(rental_id);
             return ResponseEntity.ok(updatedRental);
         } catch (Exception e) {
-            log.error("반납 처리 오류: rental_id={}, error={}", rental_id, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -172,7 +171,6 @@ public class UserRentalController {
 
     @GetMapping("/list/{user_id}")
     public UserActivityDTO getList(@PathVariable String user_id) {
-        System.out.println("여기에 getList 데이터가 들어옴 : " + user_id);
         List<ReservationVO> reservationVO = publicMapper.getReservationAll();
         List<EnrollmentClassDTO> enrollmentClassDTO = paymentMapper.getEnrollmentClass();
         List<ReservationVO> reservationList = new ArrayList<>();

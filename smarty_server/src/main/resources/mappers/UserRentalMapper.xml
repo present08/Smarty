@@ -140,7 +140,7 @@
     <update id="returnRental" parameterType="com.green.smarty.vo.RentalVO">
         UPDATE rental
         SET rental_status = #{rental_status},
-        return_date = #{return_date}
+            return_date = #{return_date}
         WHERE rental_id = #{rental_id};
     </update>
 

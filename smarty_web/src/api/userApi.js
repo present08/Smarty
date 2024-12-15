@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosInstance from "./axiosInstance";
 const host = "http://localhost:8080/api/auth";
 
@@ -66,3 +65,8 @@ export const getProductRentalUser = async (user_id) => {
     }
 };
 
+// 회원정보 수정
+export const modify_info = async(userInfo) => {
+    const response = await axiosInstance.put(`${host}/info`, userInfo);
+    return response.data
+}

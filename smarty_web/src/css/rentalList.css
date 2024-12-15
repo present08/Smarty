@@ -1,0 +1,126 @@
+/* 메인 컨테이너 */
+.rentalList-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f0f8ff; /* 연한 파란색 배경 */
+}
+
+/* 타이틀 */
+.rentalList-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+/* 그리드 컨테이너 */
+.rentalList-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 제품 카드 */
+.rentalList-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.rentalList-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 이미지 컨테이너 */
+.rentalList-image-container {
+    width: 100px;
+    /* 고정된 가로 크기 */
+    height: 100px;
+    /* 고정된 세로 크기 */
+    overflow: hidden;
+    /* 이미지를 컨테이너 내부에 유지 */
+    border-radius: 8px;
+    /* 모서리 둥글게 */
+    display: flex;
+    /* 이미지를 가운데 정렬 */
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    /* 기본 배경색 */
+}
+
+/* 이미지 */
+.rentalList-image {
+    width: 100%;
+    /* 컨테이너에 맞춤 */
+    height: 100%;
+    /* 컨테이너에 맞춤 */
+    object-fit: cover;
+    /* 이미지 비율 유지하며 잘라내기 */
+    display: block;
+}
+
+/* 반납 버튼 */
+.rentalList-return-button {
+    text-align: center;
+    background-color: #f87171; /* 빨간색 */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.rentalList-return-button:hover {
+    background-color: #dc2626;
+}
+
+/* 테이블 스타일 */
+.rentalList-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    background-color: white;
+}
+
+.rentalList-table th,
+.rentalList-table td {
+    padding: 1rem;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+}
+
+.rentalList-table th {
+    background-color: #f3f4f6;
+    font-weight: bold;
+}
+
+.rentalList-table td {
+    font-size: 0.9rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .rentalList-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .rentalList-grid {
+        grid-template-columns: 1fr;
+    }
+}

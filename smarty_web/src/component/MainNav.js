@@ -61,7 +61,7 @@ const MainNav = () => {
         if (token) {
             // 서버로 상태 검증 요청
             axiosInstance.get('/security/status')
-                .then((response) => {            
+                .then((response) => {
                     setIsLoggedIn(true);
                     setUser(JSON.parse(localStorage.getItem('user')));
                 })
@@ -73,9 +73,9 @@ const MainNav = () => {
         }
     }, []);
     useEffect(() => {
-      console.log("저장값 확인 : ", user)
+        console.log("저장값 확인 : ", user)
     }, [user])
-    
+
 
     const handleLogout = () => {
         alert("로그아웃 성공");
@@ -91,15 +91,15 @@ const MainNav = () => {
                 <ul>
                     {isLoggedIn ? (
                         <>
-                        {user && user.level == 'admin'?
-                            (
-                                <li><Link to={"/admin"}>관리자모드</Link></li>
-                            ) : (
-                                <>
-                                    <li><span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span></li>
-                                    <li><Link to={"/"} onClick={handleLogout}>로그아웃</Link></li>
-                                </>
-                        )}
+                            {user && user.level == 'admin' ?
+                                (
+                                    <li><Link to={"/admin"}>관리자모드</Link></li>
+                                ) : (
+                                    <>
+                                        <li><span onClick={moveMypage} style={{ cursor: "pointer" }}>마이페이지</span></li>
+                                        <li><Link to={"/"} onClick={handleLogout}>로그아웃</Link></li>
+                                    </>
+                                )}
                         </>
                     ) : (
                         <>
@@ -159,8 +159,8 @@ const MainNav = () => {
                     <div className='toggleIcon'>
                         <AiOutlineMenu onClick={toggleMenu} style={{ width: '50px', height: '50px', }} />
                     </div>
-                    <div className='iconbox' onClick = { cartPage }>
-                        <IoCartOutline className='modal-open-bt' />
+                    <div className='iconbox'>
+                        <IoCartOutline className='modal-open-bt' onClick={cartPage} />
                         <a href='http://pf.kakao.com/_ixcRln/chat'><AiOutlineMessage style={{ width: '30px', height: '30px', marginRight: '20px' }} /></a>
                         <AiOutlineSearch className='modal-open-bt' onClick={() => { setSearchModal(true) }} />
                     </div>

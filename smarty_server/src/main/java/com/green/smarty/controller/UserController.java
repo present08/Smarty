@@ -277,6 +277,7 @@ public class UserController {
         }
     }
 
+    // 회원정보 수정
     @PutMapping("/info")
     public ResponseEntity<UserVO> updateUserInfo(@RequestBody UserVO userVO) {
         String resultMessage = userservice.updateUserProfile(userVO);

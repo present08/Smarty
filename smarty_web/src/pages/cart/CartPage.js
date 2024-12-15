@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import cartApi from "../../api/cartApi";
+import cartApi, { updateCartItem } from "../../api/cartApi";
 import CartList from "../../component/cart/CartList";
 import { useLocation, useNavigate } from "react-router-dom";
 import PaymentModal from "../../component/payment/PaymentModal"; // 결제 모달 추가
@@ -7,6 +7,9 @@ import "../../css/cart.css";
 import axios from "axios";
 import { cartRental } from "../../api/rentalAPI";
 import { rentalPayment } from "../../api/paymentAPI";
+import MainNav from "../../component/MainNav";
+import Wrapper from "../../component/Wrapper";
+import Footer from "../../component/Footer";
 
 
 const CartPage = () => {
@@ -39,7 +42,7 @@ const CartPage = () => {
 
     const handleUpdateCart = async (cart_id, quantity) => {
         try {
-            await cartApi.updateCartItem({ cart_id, quantity });
+            await updateCartItem({ cart_id, quantity });
             loadCartItems();
         } catch (error) {
             console.error("Failed to update cart item:", error);
@@ -96,14 +99,11 @@ const CartPage = () => {
 
             // Step 1: 장바구니 항목을 Rental 테이블에 삽입
             const rentalResponse = await cartRental(cartItems);
-            console.log("렌탈 완료 응답 데이터: ", rentalResponse);
-            console.log("렌탈 완료 응답 데이터: ", rentalResponse.data);
-            
+            console.log("렌탈 완료 응답 데이터: ", rentalResponse);            
 
             // Step 2: Payment 테이블에 데이터 삽입
             const paymentResponse = await rentalPayment(paymentData);
             console.log("결제 완료 응답 데이터: ", paymentResponse);
-            console.log("결제 완료 응답 데이터: ", paymentResponse.data);
 
             // Step 3: 결제 성공 시, 장바구니 초기화 및 결제 성공 페이지로 이동
             handleClearCart(); // 장바구니 초기화
@@ -138,58 +138,62 @@ const CartPage = () => {
 
 
     return (
-        <div className="cart-container">
-            <div className="cart-items">
-                <div className="cart-header">
-                    <h1>내 장바구니</h1>
-                    <div className="cart-buttons">
-                        <button className="clear-btn" onClick={handleClearCart}>
-                            장바구니 초기화
-                        </button>
-                        <button className="back-btn" onClick={handleBack}>
-                            이전
-                        </button>
+        <div className="cart-page-container">
+            {/* 상단 네비게이션 */}
+            <MainNav />
+            <Wrapper />
+
+            {/* 메인 컨텐츠 */}
+            <div className="cart-container">
+                <div className="cart-items">
+                    <div className="cart-header">
+                        <h1>내 장바구니</h1>
+                        <div className="cart-buttons">
+                            <button className="back-btn" onClick={handleBack}>
+                                이전
+                            </button>
+                        </div>
                     </div>
+                    <CartList
+                        items={cartItems}
+                        onUpdate={handleUpdateCart}
+                        onRemove={handleRemoveCartItem}
+                    />
                 </div>
-                <CartList
-                    items={cartItems}
-                    onUpdate={handleUpdateCart}
-                    onRemove={handleRemoveCartItem}
+                <div className="cart-summary">
+                    <h2>주문 정보</h2>
+                    <div className="summary-line">
+                        <span>총 수량</span>
+                        <span>{totalQuantity} 개</span>
+                    </div>
+                    <div className="summary-line">
+                        <span>총 금액</span>
+                        <span>{totalPrice.toLocaleString()} 원</span>
+                    </div>
+                    <button className="clear-btn" onClick={handleClearCart}>
+                        장바구니 초기화
+                    </button>
+                    <button className="payment-btn" onClick={handlePaymentClick}>
+                        결제하기
+                    </button>
+                </div>
+                <PaymentModal
+                    isOpen={isPaymentModal}
+                    onRequestClose={() => setIsPaymentModal(false)}
+                    onPaymentComplete={handlePaymentComplete}
+                    amount={totalPrice}
+                    rentalInfo={cartItems.map((item) => ({
+                        product_id: item.product_id,
+                        product_name: item.product_name,
+                        count: item.quantity,
+                        price: item.price,
+                    }))}
+                    user_id={user_id}
                 />
             </div>
-            <div className="cart-summary">
-                <h2>주문 정보</h2>
-                <div className="summary-line">
-                    <span>총 수량</span>
-                    <span>{totalQuantity} 개</span>
-                </div>
-                <div className="summary-line">
-                    <span>총 금액</span>
-                    <span>{totalPrice.toLocaleString()} 원</span>
-                </div>
-                <button
-                    className="payment-btn"
-                    onClick={handlePaymentClick}
-                >
-                    결제하기
-                </button>
-            </div>
 
-            {/* 결제 모달 */}
-            <PaymentModal
-                isOpen={isPaymentModal}
-                onRequestClose={() => setIsPaymentModal(false)}
-                onPaymentComplete={handlePaymentComplete}
-                amount={totalPrice}
-                rentalInfo={cartItems.map((item) => ({ // 장바구니 정보를 가공
-                    product_id: item.product_id,
-                    product_name: item.product_name,
-                    count: item.quantity,
-                    price: item.price,
-                }))}
-                user_id={user_id}
-            />
-
+            {/* 하단 푸터 */}
+            <Footer />
         </div>
     );
 };

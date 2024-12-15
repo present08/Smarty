@@ -3,11 +3,11 @@ import RentalList from '../../component/product/RentalList';
 import MainNav from '../../component/MainNav';
 import Wrapper from '../../component/Wrapper';
 import Footer from '../../component/Footer';
-import '../../css/rentalListPage.css'; // CSS 연결
+import '../../css/rentaListPage.css'; // CSS 연결
 
 const RentalListPage = () => {
   return (
-    <div className="rental-page-container"> {/* 전체 페이지 컨테이너 */}
+    <div className="rental-page-container">
       {/* 상단 네비게이션 */}
       <MainNav />
       <Wrapper />
@@ -17,7 +17,6 @@ const RentalListPage = () => {
         <h1 className="rental-title">내 대여 목록</h1>
         <RentalList />
       </div>
-
       {/* 하단 푸터 */}
       <Footer />
     </div>

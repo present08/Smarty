@@ -14,7 +14,7 @@ const CartList = ({ items, onUpdate, onRemove }) => {
                     <th>상품 이름</th>
                     <th>수량</th>
                     <th>가격</th>
-                    <th>삭제</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

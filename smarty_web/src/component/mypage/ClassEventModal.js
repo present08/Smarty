@@ -1,21 +1,29 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { AiFillCheckCircle } from 'react-icons/ai'
+import { getUserMemberGrade } from '../../api/membershipApi'
 import { enrollpayment } from '../../api/paymentAPI'
 
 const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
     const init = {
         enrollment_id: classEvent.enrollment_id, amount: classEvent.price
     }
+
     const [enrollData, setEnrollData] = useState(init);
 
     useEffect(() => {
-        setEnrollData({ enrollment_id: classEvent.enrollment_id, amount: classEvent.price })
-    }, [classEvent])
-
-    const paymentClick = () => {
-        enrollmentPayment();
-    }
+        let price = classEvent.price;
+        getUserMemberGrade(currentUser.user_id).then(e => {
+            switch (e[0].membership_level) {
+                case "브론즈": price = (classEvent.price); break;
+                case "실버": price = (Math.floor((classEvent.price - (classEvent.price * 0.03)) / 10) * 10); break;
+                case "골드": price = (Math.floor((classEvent.price - (classEvent.price * 0.05)) / 10) * 10); break;
+                case "플래티넘": price = (Math.floor((classEvent.price - (classEvent.price * 0.07)) / 10) * 10); break;
+                case "다이아": price = (Math.floor((classEvent.price - (classEvent.price * 0.1)) / 10) * 10); break;
+            }
+            setEnrollData({ enrollment_id: classEvent.enrollment_id, amount: price })
+        })
+    }, [])
 
     //enrollment payment system
     const enrollmentPayment = () => {
@@ -27,7 +35,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
             pg: 'html5_inicis',                           // PG사
             pay_method: 'card',                           // 결제수단
             merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
-            amount: classEvent.price,                                 // 결제금액
+            amount: enrollData.amount,                                 // 결제금액
             name: classEvent.class_name,                  // 주문명
             buyer_name: currentUser.user_id,                           // 구매자 이름
         };
@@ -35,11 +43,13 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
         IMP.request_pay(data, insertEnrollment)
     }
 
-    const insertEnrollment = () => {
-        enrollpayment(enrollData).then(e => {
-            closeModal()
-            window.location.reload();
-        })
+    const insertEnrollment = (success) => {
+        if (success.success) {
+            enrollpayment(enrollData).then(e => {
+                closeModal()
+                window.location.reload();
+            })
+        }
     }
 
     return (
@@ -81,7 +91,7 @@ const ClassEventModal = ({ classEvent, currentUser, closeModal }) => {
             <div style={{ width: '100%', height: '12%', textAlign: 'left', marginTop: '2rem', backgroundColor: '#f2f2f2', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>
                 <p>현재 상태는 <strong style={classEvent.enrollment_status == "결제대기" ? { color: 'red' } : classEvent.enrollment_status == "승인대기" ? { color: '#f4d160' } : { color: "blue" }}>{classEvent.enrollment_status}</strong> 상태입니다.</p>
                 {classEvent.enrollment_status == '결제대기' ?
-                    <button onClick={paymentClick} style={{ width: '100px', height: '40px', backgroundColor: '#003f66', border: 'none', borderRadius: '7px', color: 'white', marginRight: '15px' }}>
+                    <button onClick={enrollmentPayment} style={{ width: '100px', height: '40px', backgroundColor: '#003f66', border: 'none', borderRadius: '7px', color: 'white', marginRight: '15px' }}>
                         결제하기
                     </button>
                     : <></>}

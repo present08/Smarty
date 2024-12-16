@@ -34,7 +34,7 @@
     </select>
     <select id="getNewUser" resultType="com.green.smarty.vo.UserVO">
         select * from user
-        where join_date BETWEEN #{start} and #{date}
+        where DATE(join_date) BETWEEN #{start} AND #{date}
         order by join_date desc;
     </select>
     <select id="getPermission" resultType = "com.green.smarty.dto.PermissionDTO">
@@ -50,6 +50,7 @@
         join facility f on c.facility_id = f.facility_id) A using(reservation_id)
         left join (select c.class_name, e.enrollment_id, e.user_id from enrollment e join class c on e.class_id = c.class_id) B using(enrollment_id)
         left join (select p.product_name, r.rental_id, r.user_id from rental r join product p on r.product_id = p.product_id) C on p.user_id = C.user_id
-        where p.payment_date BETWEEN #{frist_date} and #{second_date};
+        where p.payment_date BETWEEN #{frist_date} and #{second_date}
+        order by p.payment_date desc;
     </select>
 </mapper>

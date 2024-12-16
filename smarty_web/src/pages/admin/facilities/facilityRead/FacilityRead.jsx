@@ -1,11 +1,12 @@
 import "./facilityRead.css"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { API_SERVER_HOST, getOneFacility } from "../../../../api/admin/facilityApi"
+import { API_SERVER_HOST, deleteOneFacility, getOneFacility } from "../../../../api/admin/facilityApi"
 import { getListCourt, putOneCourt } from "../../../../api/admin/courtApi"
 import Modal from "../../../../component/admin/modal/Modal"
 import NewCourt from "../newCourt/NewCourt"
 import { Add } from '@mui/icons-material';
+import axiosInstance from "../../../../api/axiosInstance"
 
 const initFacility = {
     facility_name: '',
@@ -46,7 +47,7 @@ export default function FacilityRead() {
             setCurrentCourt(res)
         }).catch((error) => console.error("ERROR!", error))
     }, [currentFacility])
-
+    
     const courtPass = (court) => {
         setNewCourt(court)
         setCourtModal(false)
@@ -72,11 +73,19 @@ export default function FacilityRead() {
         })
     }
 
+    const handleRemove = () => {
+        if(window.confirm("시설과 관련된 물품, 강의, 이용 내역이 모두 삭제됩니다.\n삭제하시겠습니까?")) {
+            deleteOneFacility(facility_id).then(res => {
+                alert(res)
+                navigate("/admin")
+            }).catch((error) => console.error("ERROR!", error))
+        } else navigate({ pathname: `/admin/facilities/read/${facility_id}` })
+    }
+
     return (
         <div className="facilityRead">
             <div className="facilityReadHead">
                 <div className="facilityReadTitle">시설 조회</div>
-                <button className="facilityModifyButton" onClick={() => navigate({ pathname: `/admin/facilities/modify/${facility_id}` })}>수정</button>
             </div>
             <div className="facilityReadForm">
                 <div className="facilityReadFormLeft">
@@ -238,12 +247,15 @@ export default function FacilityRead() {
                             <div className="imageContainer">
                                 {currentFacility ? currentFacility.file_name.map((file, i) => (
                                     <div key={i}>
-                                        <img src={`${API_SERVER_HOST}/api/admin/facilities/images/s_${file}`} alt={`${i}`} />
+                                        <img src={`http://localhost:8080/api/admin/facilities/images/s_${file}`} />
                                     </div>)) : (<></>)
                                 }
                             </div>
                         </div>
-                        
+                        <div className="facilityReadButtons">
+                            <button className="facilityModifyButton" onClick={() => navigate({ pathname: `/admin/facilities/modify/${facility_id}` })}>수정</button>
+                            <button className="facilityRemoveButton" onClick={handleRemove}>삭제</button>
+                    </div>
                     </div>
                 </div>
             </div>

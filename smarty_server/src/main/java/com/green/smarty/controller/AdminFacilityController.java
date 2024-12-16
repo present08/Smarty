@@ -5,10 +5,15 @@ import com.green.smarty.vo.FacilityVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -63,7 +68,7 @@ public class AdminFacilityController {
     public String remove(@PathVariable(name = "facility_id") String facility_id) {
         System.out.println("시설 삭제! facility_id = " + facility_id);
         adminFacilityService.remove(facility_id);
-        return "시설 삭제 완료";
+        return "해당 시설이 삭제되었습니다.";
     }
 
 }

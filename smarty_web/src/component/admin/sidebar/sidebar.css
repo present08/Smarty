@@ -1,11 +1,13 @@
 .sidebar {
+    display: flex;
     background-color: white;
     border-right: 1px solid #EEEAE6;
     overflow-y: auto;
 }
 
 .sidebarWrapper {
-    width: 160px;
+    flex: 1;
+    width: 170px;
     display: flex;
     flex-direction: column;
 }
@@ -38,7 +40,7 @@
     text-align: left;
     text-indent: 45px;
     color: #555;
-    font-size: 20px;
+    font-size: 18px;
     padding: 5px 0;
 }
 
@@ -58,6 +60,6 @@
     text-align: left;
     text-indent: 55px;
     color: #555;
-    font-size: 18px;
+    font-size: 16px;
     transition: max-height 0.3s ease;
 }

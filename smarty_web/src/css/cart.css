@@ -1,25 +1,66 @@
-/* cart.css */
-.cart-container {
+/* 전체 페이지 레이아웃 */
+.cart-page-container {
     display: flex;
-    justify-content: space-between;
-    margin: 20px auto;
-    max-width: 1200px;
-    padding: 10px;
-    font-family: Arial, sans-serif;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f7f9fc;
+    font-family: 'Arial', sans-serif;
+    color: #333;
 }
 
+
+/* 메인 컨텐츠 */
+.cart-container {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    /* 2:6:2 비율 */
+    gap: 0px;
+    /* 칸 사이 여백 */
+    max-width: 1200px;
+    margin: 20px auto;
+    /* 상하 여백 조정 */
+    padding: 0;
+    /* 내부 패딩 제거 */
+}
+
+/* 장바구니 아이템 영역 */
+.cart-items {
+    flex: 3;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 20px;
+}
+
+/* 요약 정보 영역 */
+.cart-summary {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: fit-content;
+}
+
+/* 장바구니 헤더 */
 .cart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
 }
 
 .cart-header h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    color: #34495e;
+    /* 진한 텍스트 색상 */
 }
 
+/* 버튼 스타일 */
 .cart-buttons {
     display: flex;
     gap: 10px;
@@ -31,38 +72,32 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .cart-buttons .clear-btn {
-    background: #f44336;
+    background: #e74c3c;
+    /* 빨간색 */
     color: white;
 }
 
 .cart-buttons .clear-btn:hover {
-    background: #d32f2f;
+    background: #c0392b;
+    /* 어두운 빨간색 */
 }
 
 .cart-buttons .back-btn {
-    background: #2196f3;
+    background: #3498db;
+    /* 파란색 */
     color: white;
 }
 
 .cart-buttons .back-btn:hover {
-    background: #1976d2;
+    background: #2980b9;
+    /* 어두운 파란색 */
 }
 
-.cart-items {
-    width: 70%;
-}
-
-.cart-summary {
-    width: 25%;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-}
-
+/* 테이블 스타일 */
 .cart-table {
     width: 100%;
     border-collapse: collapse;
@@ -72,104 +107,25 @@
 .cart-table th,
 .cart-table td {
     border: 1px solid #ddd;
-    text-align: left;
-    padding: 10px;
-}
-
-.cart-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-.cart-item-image img {
-    max-width: 80px;
-    max-height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-}
-
-.cart-summary h2 {
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.cart-summary .summary-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.cart-summary .summary-line span {
-    font-size: 0.9rem;
-}
-
-.cart-summary .total-price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: right;
-    margin-top: 15px;
-}
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.cart-table th,
-.cart-table td {
-    border: 1px solid #ddd;
-    text-align: left;
-    padding: 10px;
-}
-
-.cart-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-.cart-item-price {
-    text-align: right;
-    font-weight: bold;
-    color: #333;
-}
-
-.cart-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.cart-items {
-    flex: 3;
-}
-
-.cart-summary {
-    flex: 1;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    height: fit-content;
-}
-
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.cart-table th,
-.cart-table td {
-    padding: 10px;
     text-align: center;
-    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.cart-table th {
+    background-color: #ecf0f1;
+    /* 연한 회색 */
+    font-weight: bold;
+    color: #34495e;
 }
 
 .cart-item-image img {
     max-width: 50px;
     max-height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
 }
 
+/* 수량 조정 버튼 */
 .cart-item-quantity {
     display: flex;
     align-items: center;
@@ -181,32 +137,183 @@
     border: 1px solid #ddd;
     background-color: #f0f0f0;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .quantity-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #dcdcdc;
 }
 
-.cart-summary h2 {
+/* 주문 정보 섹션 */
+.cart-summary {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
     margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+    width: 100%;
 }
 
 .summary-line {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.summary-line span {
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.clear-btn,
+.payment-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 48%;
+    /* 버튼 너비 조정 */
+    box-sizing: border-box;
+}
+
+.clear-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.clear-btn:hover {
+    background: #c0392b;
 }
 
 .payment-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
+    background: #2ecc71;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .payment-btn:hover {
-    background-color: #218838;
+    background: #27ae60;
+}
+
+/* 공통 버튼 스타일 */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff;
+    /* 배경색 없음 */
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background-color: #f7f7f7;
+    border-color: #aaa;
+    /* hover 시 테두리 강조 */
+}
+
+/* +, - 버튼 스타일 */
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: transparent;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background-color: #3498db;
+    /* hover 시 파란색 */
+    color: white;
+    border-color: #3498db;
+}
+
+/* 제거 버튼 스타일 */
+.remove-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    background: transparent;
+    color: #e74c3c;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* 이전 버튼 스타일 */
+.back-btn {
+    padding: 5px 15px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: transparent;
+    color: #333;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .cart-container {
+        flex-direction: column;
+    }
+
+    .cart-items {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
 }

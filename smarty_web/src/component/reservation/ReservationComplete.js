@@ -9,6 +9,7 @@ const ReservationComplete = (props) => {
     const { postData, facilityData, user, price, closeModal } = props;
     const [btnData, setBtnData] = useState([])
     const navigate = useNavigate()
+
     const closed = (e) => {
         if (e == "mypage") {
             navigate('/mypage', { state: { user } })
@@ -16,7 +17,6 @@ const ReservationComplete = (props) => {
         closeModal(false, btnData)
     }
     useEffect(() => {
-        console.log("complete ", postData)
         reserpayment(postData).then(e => setBtnData(e.btnData))
     }, [props])
 

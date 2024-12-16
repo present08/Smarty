@@ -4,6 +4,7 @@ import { AiOutlineClose, AiOutlineRuby } from 'react-icons/ai';
 import { getPaymentDetailsByUserId, getUserMemberGrade } from '../../api/membershipApi';
 
 const UserGrade = (props) => {
+    console.log("UserGrade", props)
 
     const [total, setTotal] = useState(0);
     const [membershipLevel, setMembershipLevel] = useState('');

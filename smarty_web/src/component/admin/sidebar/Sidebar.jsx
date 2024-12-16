@@ -25,11 +25,11 @@ export default function Sidebar() {
                                 대시보드
                             </Link>
                         </li>
-                        <li className="sidebarListItem">
+                        {/* <li className="sidebarListItem">
                             <Link to="/admin" className="link">
                                 통계분석
                             </Link>
-                        </li>
+                        </li> */}
                         <li className="sidebarListItem">
                             <Link to="/admin/facilities/add" className="link">
                                 시설추가

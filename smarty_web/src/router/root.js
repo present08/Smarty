@@ -25,7 +25,7 @@ const Admin = lazy(() => import("../pages/admin/IndexPage"));
 const ProductList = lazy(() => import("../pages/product/ProductPage"));
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"));
 const RentalPage = lazy(() => import("../pages/product/RentalPage"));
-const RentalList = lazy(() => import("../component/product/RentalList"));
+const RentalListPage = lazy(() => import("../pages/product/RentalListPage"));
 const UserEnrollmentPage = lazy(() => import("../pages/class/UserEnrollmentPage"));
 const CartPage = lazy(() => import("../pages/cart/CartPage"))
 const PaymentSuccessPage = lazy(() => ("../pages/payment/PaymentPage"))
@@ -95,8 +95,8 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}> <RentalPage /> </Suspense>
     },
     {
-        path: "rentals/list",
-        element: <Suspense fallback={Loading}> <RentalList /> </Suspense>
+        path: "rentals",
+        element: <Suspense fallback={Loading}> <RentalListPage /> </Suspense>
     },
     {
         path: "cart",

@@ -81,6 +81,7 @@ public class UserController {
                 membership.setMembership_id(membershipId);
                 membership.setMembership_level("브론즈");
                 membership.setUser_id(userVO.getUser_id());
+                membership.setTotal_payment_amount(0.0f);
 
                 boolean isMembershipSaved = userMembershipService.saveMembership(membership);
 
@@ -158,6 +159,7 @@ public class UserController {
     //사용자 정보 가져오기
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        System.out.println("세션 " + session.getAttribute("JSESSIONID"));
         UserVO userVO = (UserVO) session.getAttribute("user");
         if (userVO != null){
             return ResponseEntity.ok(userVO);
@@ -275,6 +277,7 @@ public class UserController {
         }
     }
 
+    // 회원정보 수정
     @PutMapping("/info")
     public ResponseEntity<UserVO> updateUserInfo(@RequestBody UserVO userVO) {
         String resultMessage = userservice.updateUserProfile(userVO);
@@ -319,3 +322,7 @@ public class UserController {
         }
     }
 }
+
+
+
+

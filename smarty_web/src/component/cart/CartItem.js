@@ -1,12 +1,6 @@
 import React from "react";
 
 const CartItem = ({ item, onUpdate, onRemove }) => {
-    const handleQuantityChange = (e) => {
-        const quantity = parseInt(e.target.value, 10);
-        if (quantity > 0) {
-            onUpdate(item.cart_id, quantity);
-        }
-    };
 
     const handleUpQuantity = () => {
         onUpdate(item.cart_id, item.quantity + 1)
@@ -23,7 +17,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
             <td className="cart-item-image">
                 {item.file_name ? (
                     <img
-                        src={`http://localhost:8080/uploads/${item.file_name}`}
+                        src={`http://localhost:8080/api/user/reservation/uploads/s_${item.file_name}`}
                         alt={item.product_name}
                         onError={(e) => {
                             e.target.src = "/no-image.png"; // 기본 이미지
@@ -45,6 +39,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                     type="number"
                     value={item.quantity}
                     readOnly
+                    className="quantity-input"
                 />
                 <button className="quantity-btn" onClick={handleDownQuantity}>
                     -
@@ -54,7 +49,9 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                 {item.price.toLocaleString()} 원
             </td>
             <td className="cart-item-remove">
-                <button onClick={() => onRemove(item.cart_id)}>삭제</button>
+                <button className="remove-btn" onClick={() => onRemove(item.cart_id)}>
+                    제거
+                </button>
             </td>
         </tr>
     );

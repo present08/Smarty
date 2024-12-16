@@ -1,18 +1,18 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const host = "http://localhost:8080/api/user/coupons";
 
 export const getCouponsByUser = async (user_id) => {
     try {
-        const response = await axios.get(`${host}/couponList`, {
-            params: { user_id }, 
+        const response = await axiosInstance.get(`${host}/couponList`, {
+            params: { user_id },
             withCredentials: true,
         });
-        console.log("회원쿠폰" + response.data); 
+        console.log("회원쿠폰" + response.data);
         return response.data;
     } catch (error) {
         console.error('쿠폰 불러오기 실패: ', error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -26,7 +26,7 @@ const isValidDate = (dateString) => {
 export const fetchCouponsWithDateCheck = async (user_id) => {
     try {
         const coupons = await getCouponsByUser(user_id);
-        
+
         // 각 쿠폰의 날짜 검증 (예: expiry_date)
         coupons.forEach(coupon => {
             if (!isValidDate(coupon.expiry_date)) {

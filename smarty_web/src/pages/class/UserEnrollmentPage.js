@@ -8,11 +8,11 @@ const UserEnrollmentPage = () => {
     const location = useLocation();
 
     const { classData, Dprice, user, e } = location.state
-    console.log(classData, "123132321321321")
     const init = {
         enrollment_id: e, amount: classData.price, user_id: user.user_id
     }
     const [enrollData, setEnrollData] = useState(init)
+    const [paybtn, setPaybtn] = useState(false)
     const navigate = useNavigate()
 
     const closed = (page) => {
@@ -25,7 +25,6 @@ const UserEnrollmentPage = () => {
         }
     }
     const enrollmentPayment = () => {
-        console.log(enrollData)
         //iamport Payment System
         const { IMP } = window
         IMP.init("imp57034437");
@@ -44,7 +43,8 @@ const UserEnrollmentPage = () => {
 
     const insertEnrollment = (success) => {
         if (success.success) {
-            enrollpayment(enrollData).then(e => alert(e))
+            setPaybtn(true)
+            enrollpayment(enrollData)
         }
     }
     return (
@@ -87,7 +87,7 @@ const UserEnrollmentPage = () => {
                 <div className='reservationInformationCheck' style={{
                     width: '50%', display: 'flex', justifyContent: 'space-around'
                 }}>
-                    <button onClick={() => closed("payment")}>결제하기</button>
+                    <button onClick={() => closed("payment")} disabled={paybtn}>결제하기</button>
                     <button onClick={() => closed("mypage")}>마이페이지로 이동</button>
                     <button onClick={() => closed("home")}>닫기</button>
                 </div>

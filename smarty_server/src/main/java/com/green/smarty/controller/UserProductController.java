@@ -45,10 +45,8 @@
             try {
                 ProductVO product = service.getProductById(product_id);
                 if (product != null) {
-    //                log.info("Found product: {}", product);
                     return ResponseEntity.ok(product);
                 } else {
-    //                log.warn("Product not found with id: {}", product_id);
                     return ResponseEntity.notFound().build();
                 }
             } catch (Exception e) {

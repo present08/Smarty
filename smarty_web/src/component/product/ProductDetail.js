@@ -2,24 +2,23 @@ import React, { useState, useEffect } from 'react';
 import '../../css/productDetail.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProductFiles } from '../../api/productApi';
-import axios from 'axios';
+import { addCartItem } from '../../api/cartApi';
 
 
 const ProductDetail = ({ product }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [quantity, setQuantity] = useState(1);
-    const [productImages, setProductImages] = useState([]); // 이미지 리스트 상태 추가
+    const [productImages, setProductImages] = useState([]);
 
-    // 이미지 데이터를 가져오기 위한 useEffect
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const images = await getProductFiles(product.product_id); // API 호출
+                const images = await getProductFiles(product.product_id);
                 setProductImages(
                     images.length > 0
-                        ? images.map((file) => `http://localhost:8080/api/user/products/images/${file}`) // 동일한 경로 사용
-                        : ['/no-image.png'] // 기본 이미지 설정
+                        ? images.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
+                        : ['/no-image.png']
                 );
             } catch (error) {
                 console.error('이미지 불러오기 실패:', error);
@@ -27,7 +26,7 @@ const ProductDetail = ({ product }) => {
         };
 
         if (product.product_id) {
-            fetchImages(); // product_id가 있을 때만 호출
+            fetchImages();
         }
     }, [product.product_id]);
 
@@ -52,27 +51,22 @@ const ProductDetail = ({ product }) => {
             navigate('/user/login');
             return;
         }
-
-        const user = JSON.parse(userStr);
-        const cartItem = [
-            {
-                user_id: user.user_id,
-                product_id: product.product_id,
-                product_name: product.product_name,
-                quantity: quantity,
-            }
-        ];
-
-        console.log("cartItem 데이터 : ", [cartItem])
+        
+        const user = JSON.parse(userStr)
+        const cartItem = {
+            user_id: user.user_id,
+            product_id: product.product_id,
+            product_name: product.product_name,
+            quantity: quantity,
+        }
         try {
-            await axios.post('http://localhost:8080/api/user/cart/', cartItem
-                );
+            const response = await addCartItem([cartItem])
+            console.log("장바구니 추가 확인", response)
             alert('장바구니에 추가되었습니다');
-            console.log("cartItem 데이터 들어가냐: ",cartItem);
 
             const confirmMovetoCart = window.confirm('장바구니로 이동 하시겠습니까?');
             if (confirmMovetoCart) {
-                navigate('/cart');
+                navigate('/cart', {replace: true});
             }
         } catch (error) {
             console.log('장바구니 담기 실패: ', error);
@@ -80,40 +74,18 @@ const ProductDetail = ({ product }) => {
         }
     };
 
-    const handleRental = () => {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        const userStr = localStorage.getItem('user');
-
-        if (isLoggedIn !== 'true' || !userStr) {
-            alert('로그인이 필요한 서비스입니다.');
-            navigate('/user/login');
-            return;
-        }
-        navigate('/rental', {
-            state: {
-                selectedFacility: location.state?.selectedFacility,
-                selectProduct: product,
-                facilityProduct: [],
-                price: totalPrice,
-                quantity: quantity,
-                rental: true,
-            },
-        });
-    };
-
     return (
         <>
             <div className="detail-container">
-                {/* 왼쪽 이미지 영역 */}
                 <div className="detail-image">
                     {productImages.length > 0 ? (
                         productImages.map((image, index) => (
                             <img
                                 key={index}
-                                src={image} // ProductGrid와 동일한 경로 처리
+                                src={image}
                                 alt={`${product.product_name} - 이미지 ${index + 1}`}
                                 onError={(e) => {
-                                    e.target.src = '/no-image.png'; // 기본 이미지로 대체
+                                    e.target.src = '/no-image.png';
                                     e.target.onerror = null;
                                 }}
                             />
@@ -123,7 +95,6 @@ const ProductDetail = ({ product }) => {
                     )}
                 </div>
 
-                {/* 오른쪽 상세 정보 영역 */}
                 <div className="detail-info">
                     <h2 className="product-title">{product.product_name}</h2>
 
@@ -136,9 +107,9 @@ const ProductDetail = ({ product }) => {
                         <div className="quantity-info">
                             <span className="label">{product.product_name}</span>
                             <div className="quantity-control">
-                                <button onClick={handleDown}>-</button>
-                                <input type="number" value={quantity} readOnly />
                                 <button onClick={handleUp}>+</button>
+                                <input type="number" value={quantity} readOnly />
+                                <button onClick={handleDown}>-</button>
                                 <span className="item-price">{product.price.toLocaleString()}원</span>
                             </div>
                         </div>
@@ -160,7 +131,6 @@ const ProductDetail = ({ product }) => {
                     </div>
                 </div>
             </div>
-            {/* 상세 설명 섹션 추가 */}
             <div className="product-description">
                 <h3 className="description-title">▶ 상세설명</h3>
                 <div className="spec-table">

@@ -1,45 +1,45 @@
-.newProduct {
-  display: flex;
-  width: 700px;
-}
-
-.addProductForm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-.addProductList {
-  flex: 1;
-}
-
-.addProductTitle {
-  font-size: 20px;
-  color: #011B2F;
-  font-weight: 500;
-}
-
-.addProductItem {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5px;
-}
-
-.addProductItem > label {
-  color: gray;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.addProductItem > input {
-  padding: 10px;
-}
-
-.addProductItem > select {
-  padding: 10px;
-}
-
+  .newProduct {
+    display: flex;
+    width: 700px;
+  }
+  
+  .addProductForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+  .addProductList {
+    flex: 1;
+  }
+  
+  .addProductTitle {
+    font-size: 20px;
+    color: #011B2F;
+    font-weight: 500;
+  }
+  
+  .addProductItem {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+  }
+  
+  .addProductItem > label {
+    color: gray;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .addProductItem > input {
+    padding: 10px;
+  }
+  
+  .addProductItem > select {
+    padding: 10px;
+  }
+  
 /* 사이즈 선택란 스타일 */
 .addProductItem .sizeOptions {
 display: grid;         /* Grid 컨테이너로 변경 */
@@ -71,32 +71,32 @@ margin-right: 5px;     /* 체크박스와 텍스트 사이 간격 */
 
 .submitProductButton,
 .resetProductButton {
-width: 80px;
-height: 30px;
-border: none;
-border-radius: 10px;
-background-color: #195E8E;
-color: white;
-font-weight: 600;
-cursor: pointer;
+  width: 80px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  background-color: #195E8E;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .addProductListButton {
-display: flex;
-flex-direction: column;
-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .addProductButton {
-background-color: #58A3BC;
-width: 50px;
-height: 30px;
-border: none;
-border-radius: 10px;
-color: white;
-font-weight: 600;
-cursor: pointer;
+  background-color: #58A3BC;
+  width: 50px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 }
 .resetProductButton {
-background-color: rgb(161, 20, 20);
+  background-color: rgb(161, 20, 20);
 }

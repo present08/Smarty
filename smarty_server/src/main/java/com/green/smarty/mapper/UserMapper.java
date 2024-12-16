@@ -75,4 +75,6 @@ public interface UserMapper {
     List<UserVO> humanSevenbefore();
     // (영준) 이메일 발송을 위해 필요한 정보만 가져오는 Get
     List<UserVO> getUserForSendMail();
+    // (영준) 글쓰기 버튼 admin만 가져오기
+    String getLevelById(String user_id);
 }

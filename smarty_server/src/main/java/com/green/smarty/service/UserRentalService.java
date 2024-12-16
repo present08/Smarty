@@ -176,7 +176,6 @@ public class UserRentalService {
 
     // 반납
     public int returnRental(String rental_id, int count) {
-        log.info("반납할 렌탈 ID: {}, count: {}", rental_id, count);
 
         // 1. 대여 정보 확인
         RentalDTO rental = userRentalMapper.getRentalById(rental_id);
@@ -187,7 +186,6 @@ public class UserRentalService {
         if (!rental.isRental_status()) {
             throw new RuntimeException("이미 반납된 대여입니다. Rental ID: " + rental_id);
         }
-
         // 2. 반납 데이터 업데이트
         RentalVO rentalVO = new RentalVO();
         rentalVO.setRental_id(rental_id);
@@ -203,7 +201,6 @@ public class UserRentalService {
         // 3. 반납 처리 - 로그 삭제 및 상태 복구
         processReturnLogs(rental_id, rental.getProduct_id(), count);
 
-        log.info("반납 처리 완료: Rental ID={}, Count={}", rental_id, count);
         return result;
     }
 

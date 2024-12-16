@@ -24,6 +24,7 @@ const UserCoupon = (props) => {
     };
 
     useEffect(() => {
+        console.log(props.user)
         if (props.user) {
             setCurrentUser(props.user);
             const fetchCoupons = async () => {

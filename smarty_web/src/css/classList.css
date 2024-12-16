@@ -61,7 +61,7 @@
 /* classFilter */
 .classFilter {
     width: 25%;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 600px;
     background-color: white;
     border-radius: 30px;

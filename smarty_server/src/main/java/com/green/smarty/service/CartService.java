@@ -37,7 +37,7 @@ public class CartService {
     }
 
     public void updateCart(CartVO cartVO) {
-        cartMapper.updateCartByUserAndProduct(cartVO);
+        cartMapper.updateCart(cartVO);
     }
 
     public void removeCart(String cart_id) {

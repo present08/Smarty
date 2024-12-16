@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { AiOutlineBook, AiOutlineCalendar, AiOutlineCheck, AiOutlineClockCircle } from 'react-icons/ai'
+import { useLocation } from 'react-router-dom'
 import { getClass } from '../../api/classAPI'
+import BackToTopButton from '../../component/BackToTopButton'
 import Footer from '../../component/Footer'
 import MainNav from '../../component/MainNav'
 import Wrapper from '../../component/Wrapper'
 import '../../css/classList.css'
 import ClassPage from './ClassPage'
-import BackToTopButton from '../../component/BackToTopButton'
-import { AiOutlineBook, AiOutlineCalendar, AiOutlineCheck, AiOutlineClockCircle } from 'react-icons/ai'
-import { useLocation } from 'react-router-dom'
 
 
 const ClassList = () => {
@@ -21,11 +21,11 @@ const ClassList = () => {
     const location = useLocation();
 
     useEffect(() => {
-        if(location.state){
+        if (location.state) {
             setClassData(location.state)
         }
     }, [location])
-    
+
 
     useEffect(() => {
         const facility = [];
@@ -79,7 +79,7 @@ const ClassList = () => {
                             <h2><AiOutlineCheck style={{ width: '30px', height: '30px', marginRight: '10px', marginLeft: '20px' }} />종목을 선택하세요.</h2>
                         </div>
                         <div className='facilityItemList'>
-                            {facilityName.map(item => (<div onClick={() => filterList(item)} className='facilityItem' key={item}>{item}</div>))}
+                            {facilityName.map(item => (<div onClick={() => filterList(item)} className='facilityItem' style={{ backgroundColor: prevItem == item ? "#f4d160" : "#8ac4d0" }} key={item}>{item}</div>))}
                         </div>
                     </div>
                     <div className='class_Content'>

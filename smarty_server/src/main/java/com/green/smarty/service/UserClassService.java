@@ -63,7 +63,7 @@ public class UserClassService {
                 enrollList.add(i);
             }
         }
-        System.out.println("Date dayofmonth        "+date.getDayOfMonth());
+
         String id = "E_" + date.getYear() + date.getMonthValue()
                 + (date.getDayOfMonth() > 9 ? date.getDayOfMonth() : "0" + date.getDayOfMonth())
                 + String.format("%03d", enrollList.size() == 0 ? 1 : enrollList.size() + 1);

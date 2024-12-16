@@ -99,13 +99,12 @@ public class UserReservationService {
 
             if ((end - start) % default_time > (end - start) - i - 1 || reservation_list.contains(start + i))
                 timeMap.put("disabled", 1);
-            else
-                timeMap.put("disabled", 0);
+            else timeMap.put("disabled", 0);
+
             timeBtn.add(timeMap);
-            if (now.compareTo(nowStart) == 0)
-                prevTime = cnt;
-            if ((i + 1) % default_time == 0)
-                cnt++;
+
+            if (now.compareTo(nowStart) == 0) prevTime = cnt;
+            if ((i + 1) % default_time == 0) cnt++;
         }
         // 현재시간 이전 Btn disabled
         if (now.toLocalDate().compareTo(LocalDate.of(Integer.parseInt(dateList[0]), Integer.parseInt(dateList[1]),
@@ -121,7 +120,7 @@ public class UserReservationService {
     public UserReservationDTO insertReservation(ReservationDTO dto) {
         List<ReservationVO> selectVO = reservationMapper.getReservationAll();
         String date = dto.getReservation_start().toString().split("T")[0];
-
+        
         // 연속예약 제한
         LocalDateTime endTime = dto.getReservation_end().truncatedTo(ChronoUnit.HOURS);
         LocalDateTime startTime = dto.getReservation_start().truncatedTo(ChronoUnit.HOURS);
@@ -130,8 +129,8 @@ public class UserReservationService {
         for (ReservationVO i : selectVO) {
             LocalDateTime reservation_end = i.getReservation_end().truncatedTo(ChronoUnit.HOURS);
             LocalDateTime reservation_start = i.getReservation_start().truncatedTo(ChronoUnit.HOURS);
-
-            if ((reservation_end.compareTo(startTime) == 0 || reservation_start.compareTo(endTime) == 0)
+            
+            if (dto.getCourt_id().equals(i.getCourt_id()) && (reservation_end.compareTo(startTime) == 0 || reservation_start.compareTo(endTime) == 0)
                     && i.getUser_id().equals(user_id)) {
                 iterable = 1;
             }

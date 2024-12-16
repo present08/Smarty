@@ -21,7 +21,7 @@ export default function WidgetSm() {
     <div className="widgetSm">
         <span className="widgetSmTitle">최근 가입 회원</span>
         <ul className="widgetSmList">
-            {userList.map((user, i) => (
+            {userList && userList.map((user, i) => (
                 <li key={i} className="widgetSmListItem">
                     <div className="widgetSmUser">
                         <span className="widgetSmUserName">{user.user_name}</span>

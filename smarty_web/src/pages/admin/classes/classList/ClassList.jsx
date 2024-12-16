@@ -64,7 +64,10 @@ export default function ClassList() {
   
   const handleRemoveButton = (class_id) => {
     if(window.confirm("해당 강의를 삭제하시겠습니까?")) {
-      deleteOneClass(class_id).then(setRemoveToggle(!removeToggle)).catch((error) => console.error("ERROR!", error))
+      deleteOneClass(class_id).then(res => {
+        alert(res)
+        setRemoveToggle(!removeToggle)
+      }).catch((error) => console.error("ERROR!", error))
     }
   }
 
@@ -85,7 +88,7 @@ export default function ClassList() {
       renderCell: (params) => {
         return (
           <div>
-            {params.row.start_date < formattedDate && formattedDate < params.row.end_date?
+            {params.row.start_date <= formattedDate && formattedDate <= params.row.end_date?
               '진행중' : 
               formattedDate > params.row.end_date?
               '종료' : '개강전'}

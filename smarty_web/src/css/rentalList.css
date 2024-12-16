@@ -1,0 +1,112 @@
+/* 대여 리스트 메인 컨테이너 */
+.rentalList-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #f7f9fc;
+    /* 연한 배경색 */
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 테이블 스타일링 */
+.rentalList-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rentalList-table th,
+.rentalList-table td {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.rentalList-table th {
+    background-color: #f3f4f6;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.rentalList-table td {
+    color: #555;
+}
+
+/* 이미지 컨테이너 */
+.rentalList-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.rentalList-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 반납 버튼 */
+.rentalList-return-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rentalList-return-button:hover {
+    background-color: #c0392b;
+}
+
+/* 상태 텍스트 */
+.rentalList-status {
+    font-weight: bold;
+    color: #3498db;
+    /* 파란색 */
+}
+
+.rentalList-status.complete {
+    color: #2ecc71;
+    /* 초록색 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+
+    .rentalList-table th,
+    .rentalList-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .rentalList-image-container {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rental-title {
+        font-size: 1.8rem;
+    }
+
+    .rentalList-table th,
+    .rentalList-table td {
+        font-size: 0.8rem;
+    }
+}

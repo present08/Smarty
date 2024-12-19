@@ -24,12 +24,17 @@ console.log("rentals 의 데이터 확인",rentals)
 
             const user = JSON.parse(userStr);
             const rentals = await getProductRentalUser(user.user_id);
-            setRentals(rentals);
+            // 대여일 기준으로 정렬
+            const sortedRentals = rentals.sort(
+                (a, b) => new Date(a.rental_date) - new Date(b.rental_date)
+            );
+
+            setRentals(sortedRentals);
 
             // 대여한 상품의 이미지를 불러오는 로직 추가
             const filesMap = {};
             await Promise.all(
-                rentals.map(async (rental) => {
+                sortedRentals.map(async (rental) => {
                     const files = await getProductFiles(rental.product_id).catch(() => []);
                     filesMap[rental.product_id] = files.length > 0
                         ? files.map((file) => `http://localhost:8080/api/user/products/images/${file}`)
@@ -136,7 +141,7 @@ console.log("rentals 의 데이터 확인",rentals)
                                         <td>
                                             {rental.rental_status && (
                                                 <button
-                                                    className="rentalList-return-button"
+                                                    className="rentalList-return-buttons"
                                                     onClick={() => handleReturn(rental.rental_id, rental.count)}
                                                 >
                                                     반납하기

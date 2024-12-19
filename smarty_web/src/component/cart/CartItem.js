@@ -32,7 +32,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                 {item.product_name}
             </td>
             <td className="cart-item-quantity">
-                <button className="quantity-btn" onClick={handleUpQuantity}>
+                <button className="quantity-btn" style={{marginRight: "10px"}} onClick={handleUpQuantity}>
                     +
                 </button>
                 <input
@@ -40,8 +40,9 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
                     value={item.quantity}
                     readOnly
                     className="quantity-input"
+                    style={{border: "1px solid gray", padding: "5px", borderRadius: "5px"}}
                 />
-                <button className="quantity-btn" onClick={handleDownQuantity}>
+                <button className="quantity-btn" style={{ marginLeft: "10px" }} onClick={handleDownQuantity}>
                     -
                 </button>
             </td>

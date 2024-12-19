@@ -57,7 +57,7 @@ const PaymentPage = () => {
                     </table>
 
                     <button onClick={handleGoHome} style={styles.button}>
-                        홈으로 가기
+                        HOME
                     </button>
                 </div>
             </div>

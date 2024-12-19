@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getList, getUserReservationList } from '../../api/facilityApi';
 import '../../css/facilitySelect.css';
+import { getListFacility } from '../../api/admin/facilityApi';
 
 const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
     const [facility, setFacility] = useState([]); 
@@ -10,37 +11,33 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
 
     useEffect(() => {
         const fetchFacilities = async () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            setIsLoggedIn(isLoggedIn);
-            console.log(isLoggedIn)
+            const token = localStorage.getItem('token'); 
+            const userStr = localStorage.getItem('user'); 
 
-            if (!isLoggedIn) {
+            if (token && userStr) {
                 try {
-                    const facilities = await getList();
-                    setFacility(facilities);
-                } catch (error) {
-                    console.error('전체 시설 목록 로드 실패:', error);
-                }
-            } else {
-                const userStr = localStorage.getItem('user');
-                if (!userStr) {
-                    alert('로그인 정보가 잘못되었습니다. 다시 로그인해주세요.');
-                    navigate('/user/login');
-                    return;
-                }
-
-                const user = JSON.parse(userStr);
-                try {
+                    const user = JSON.parse(userStr);
                     const reservedFacilities = await getUserReservationList(user.user_id);
                     setFacility(reservedFacilities);
+                    setIsLoggedIn(true); 
                 } catch (error) {
-                    console.error('예약한 시설 목록 로드 실패:', error);
+                    console.error('예약된 시설 목록을 불러오는 중 오류 발생:', error);
+                    setIsLoggedIn(false); 
+                }
+            } else {
+                try {
+                    const allFacilities = await getListFacility();
+                    console.log(allFacilities)
+                    setFacility(allFacilities);
+                    setIsLoggedIn(false); 
+                } catch (error) {
+                    console.error('시설 목록을 불러오는 중 오류 발생:', error);
                 }
             }
         };
 
         fetchFacilities();
-    }, [navigate]);
+    }, []);
 
     const handleMyRental = () => {
         if (!isLoggedIn) {
@@ -76,7 +73,7 @@ const FacilitySelect = ({ selectedFacility, handleChangeRental }) => {
                         className="rental-button"
                         onClick={handleMyRental}
                     >
-                        내 대여 목록
+                        대여 목록
                     </button>
                     </div>
                 )}

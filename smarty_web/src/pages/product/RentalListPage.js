@@ -14,7 +14,7 @@ const RentalListPage = () => {
 
       {/* 메인 컨텐츠 */}
       <div className="rental-content">
-        <h1 className="rental-title">내 대여 목록</h1>
+        <h1 className="rental-title">대여 목록</h1>
         <RentalList />
       </div>
       {/* 하단 푸터 */}

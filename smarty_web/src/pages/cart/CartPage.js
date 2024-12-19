@@ -164,8 +164,8 @@ const CartPage = () => {
                             <span>총 금액</span>
                             <span>{totalPrice.toLocaleString()} 원</span>
                         </div>
-                        <button className="clear-btn" onClick={handleClearCart}>
-                            장바구니 초기화
+                        <button className="clear-btn" style={{marginBottom: "10px", marginTop: "20px"}} onClick={handleClearCart}>
+                            Reset
                         </button>
                         <button className="payment-btn" onClick={handlePaymentClick}>
                             결제하기

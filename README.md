@@ -38,4 +38,6 @@
 ### 데이터베이스 (DBMS)
 * MySQL: 사용자 데이터 및 예약 내역 저장
 
+
+## 시스템 아키텍처
 ![시스템 아키텍처](https://eastern-citrus-892.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fef6770bf-b843-4e72-8526-4e51c7ebf7b9%2Fcfecd989-d84c-495d-b66e-6b4602dfeff1%2Fsmarty_%25EB%25B3%25B5%25ED%2595%25A9%25EB%25AC%25B8%25ED%2599%2594_%25EC%25B2%25B4%25EC%259C%25A1%25EC%258B%259C%25EC%2584%25A4_%25ED%2586%25B5%25ED%2595%25A9%25EA%25B4%2580%25EB%25A6%25AC_%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C.png?table=block&id=16f0573b-9fca-8056-b9d3-fd5bca6ea495&spaceId=ef6770bf-b843-4e72-8526-4e51c7ebf7b9&width=2000&userId=&cache=v2)
